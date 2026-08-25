@@ -177,12 +177,12 @@ $$ \mathcal{L}({\color{darkmagenta} x}, {\color{blue} \lambda}, {\color{blue} \n
 
 **Dual function**: ${\color{blue} g(\lambda, \nu)} = \inf_x \mathcal{L}(x, \lambda, \nu)$
 
-**Key property**: ${\color{blue} g(\lambda, \nu)} \leq {\color{coral} p^\star}$ (lower bound on optimal value)
+**Key property**: ${\color{blue} g(\lambda, \nu)} \leq {\color{royalblue} p^\star}$ (lower bound on optimal value)
 
 .pull-left[
-**Weak duality**: ${\color{blue} d^\star} \leq {\color{coral} p^\star}$
+**Weak duality**: ${\color{blue} d^\star} \leq {\color{royalblue} p^\star}$
 
-**Strong duality** (for convex w/ Slater's condition): ${\color{blue} d^\star} = {\color{coral} p^\star}$
+**Strong duality** (for convex w/ Slater's condition): ${\color{blue} d^\star} = {\color{royalblue} p^\star}$
 ]
 .pull-right[
 **Uses of duality**:
@@ -325,7 +325,7 @@ $$ \log\left(\sum_k e^{{\color{blue} a_k^\mathsf{T} y} + b_k}\right) \quad\text{
 $$
 \begin{array}{ll}
   \text{minimize} & {\color{darkmagenta} W_n + W_p} \\\\
-  \text{subject to} & K / {\color{darkmagenta} W_n} + K / {\color{darkmagenta} W_p} \leq {\color{coral} T} \\\\
+  \text{subject to} & K / {\color{darkmagenta} W_n} + K / {\color{darkmagenta} W_p} \leq {\color{royalblue} T} \\\\
     & {\color{darkmagenta} W_n} \geq W^{\min}, \quad {\color{darkmagenta} W_p} \geq W^{\min}
 \end{array}
 $$
@@ -357,9 +357,9 @@ $$ {\color{darkmagenta} f}(\lambda x + (1-\lambda)y) \leq \max\{{\color{darkmage
 .pull-right[
 **Solution: Bisection** 🔍
 1. Start with interval $[l, u]$ containing optimal value
-2. At midpoint ${\color{coral} \gamma} = (l+u)/2$, solve feasibility:
-   $$ {\color{darkmagenta} f_0(x)} \leq {\color{coral} \gamma}, \quad {\color{red} f_i(x)} \leq 0 $$
-3. If feasible → $u = {\color{coral} \gamma}$; else → $l = {\color{coral} \gamma}$
+2. At midpoint ${\color{royalblue} \gamma} = (l+u)/2$, solve feasibility:
+   $$ {\color{darkmagenta} f_0(x)} \leq {\color{royalblue} \gamma}, \quad {\color{red} f_i(x)} \leq 0 $$
+3. If feasible → $u = {\color{royalblue} \gamma}$; else → $l = {\color{royalblue} \gamma}$
 4. Repeat until convergence
 
 **Cutting-plane methods** also work well here.
@@ -395,10 +395,10 @@ where $F_i$ are symmetric matrices and $\succeq 0$ means positive semidefinite.
 $$
 \begin{bmatrix}
 {\color{darkcyan} A^\mathsf{T}P + PA} & {\color{darkcyan} PB} \\\\
-{\color{darkcyan} B^\mathsf{T}P} & -{\color{coral} \gamma} I
+{\color{darkcyan} B^\mathsf{T}P} & -{\color{royalblue} \gamma} I
 \end{bmatrix} \prec 0
 $$
-where ${\color{red} P} \succ 0$ is to be found, ${\color{coral} \gamma}$ relates to the gain.
+where ${\color{red} P} \succ 0$ is to be found, ${\color{royalblue} \gamma}$ relates to the gain.
 
 ---
 

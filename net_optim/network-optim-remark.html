@@ -263,7 +263,7 @@ $$\begin{array}{ll}
 |------|--------------|--------|
 | **Linear** | Linear in ${\color{darkblack}z}$ | Binary search + NCF |
 | **Convex** | Concave, subgradients | Bisection / Ellipsoid + NCF |
-| **Quasi-convex** | ${\color{purple}\Phi}_{\color{coral}\gamma}$ convex family | Bisection + NCF |
+| **Quasi-convex** | ${\color{purple}\Phi}_{\color{royalblue}\gamma}$ convex family | Bisection + NCF |
 ]
 
 **Network insight**: For fixed ${\color{darkblack}z}$, feasibility ≡ NCF. Negative cycle ${\color{lime}C}$ iff $\sum_{(i,j) \in {\color{lime}C}} {\color{purple}d_{ij}}({\color{darkblack}z}) < 0$.
@@ -276,7 +276,7 @@ $$\begin{array}{ll}
 
 $$ \text{ratio}({\color{lime}C}) = \frac{\sum {\color{green}c}(e)}{\sum {\color{green}t}(e)} $$
 
-**Parametric reduction**: ${\color{green}w_r}(e) = {\color{green}c}(e) - {\color{coral}r} \cdot {\color{green}t}(e)$ → negative cycle means ${\color{coral}r}$ too high.
+**Parametric reduction**: ${\color{green}w_r}(e) = {\color{green}c}(e) - {\color{royalblue}r} \cdot {\color{green}t}(e)$ → negative cycle means ${\color{royalblue}r}$ too high.
 
 .mermaid[
 <pre>
@@ -337,8 +337,8 @@ graph LR
 |---------|---------------|
 | **Linear MCF** | Cycle canceling with NCF |
 | **Convex MCF** | Gradient $\nabla {\color{purple}f}(x)$ as edge costs, NCF + line search |
-| **Quasi-convex MCF** | Bisection + NCF with sublevel-set $\nabla {\color{purple}\Phi}_{\color{coral}\gamma}(x)$ |
-| **Constrained MCF** ($s^\mathsf{T} {\color{green}x} \le {\color{coral}\gamma}$) | Barrier method, NCF centering with $\nabla {\color{purple}f} + \frac{1}{t} \nabla {\color{purple}\phi}$ |
+| **Quasi-convex MCF** | Bisection + NCF with sublevel-set $\nabla {\color{purple}\Phi}_{\color{royalblue}\gamma}(x)$ |
+| **Constrained MCF** ($s^\mathsf{T} {\color{green}x} \le {\color{royalblue}\gamma}$) | Barrier method, NCF centering with $\nabla {\color{purple}f} + \frac{1}{t} \nabla {\color{purple}\phi}$ |
 
 **The NCF engine scales**: From shortest paths to non-linear constrained problems — all with the same primitive! 🔑
 

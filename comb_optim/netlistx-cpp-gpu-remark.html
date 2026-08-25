@@ -82,8 +82,8 @@ class: nord-light, middle, center
 
 For each uncovered edge $(u, v)$, pick with probability **inversely proportional to weight**:
 
-$$\Pr(\text{pick } u) = \frac{{\color{coral}w}(v)}{{\color{coral}w}(u) + {\color{coral}w}(v)}, \qquad
-\Pr(\text{pick } v) = \frac{{\color{coral}w}(u)}{{\color{coral}w}(u) + {\color{coral}w}(v)}$$
+$$\Pr(\text{pick } u) = \frac{{\color{royalblue}w}(v)}{{\color{royalblue}w}(u) + {\color{royalblue}w}(v)}, \qquad
+\Pr(\text{pick } v) = \frac{{\color{royalblue}w}(u)}{{\color{royalblue}w}(u) + {\color{royalblue}w}(v)}$$
 
 - **Lighter** vertices more likely selected ✅
 - **2-approximation** in expectation
@@ -94,7 +94,7 @@ $$\Pr(\text{pick } u) = \frac{{\color{coral}w}(v)}{{\color{coral}w}(u) + {\color
 
 Run **N independent trials**, pick the cheapest:
 
-$$\text{Best cover} = \arg\min_{i=1}^{N} \sum_{v \in {\color{salmon}\text{cover}_i}} {\color{coral}w}(v)$$
+$$\text{Best cover} = \arg\min_{i=1}^{N} \sum_{v \in {\color{salmon}\text{cover}_i}} {\color{royalblue}w}(v)$$
 
 A GPU with thousands of cores can run **all N trials simultaneously** — one per CUDA thread.
 

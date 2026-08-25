@@ -104,11 +104,11 @@ graph TD
 ### Linear Programming Problem
 
 -   An LPP in standard form is:
-  $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
+  $$\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} = {\color{royalblue}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
-  -   A vector ${\color{coral}b} \in \mathbb{R}^{\color{coral}m}$
-  -   A vector ${\color{coral}c} \in \mathbb{R}^{\color{coral}n}$
+  -   An ${\color{royalblue}m} \times {\color{royalblue}n}$ matrix ${\color{royalblue}A}$, with ${\color{royalblue}n} > {\color{royalblue}m}$
+  -   A vector ${\color{royalblue}b} \in \mathbb{R}^{\color{royalblue}m}$
+  -   A vector ${\color{royalblue}c} \in \mathbb{R}^{\color{royalblue}n}$
 
 ---
 
@@ -132,8 +132,8 @@ $$
   -   Decompose ${\color{green}x}$ to two new variables
     ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable ${\color{firebrick}y} = {\color{coral}b} - {\color{coral}A} {\color{green}x} \geq 0$
-  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{coral}A'} = ({\color{coral}A}, 1)$
+  -   By putting slack variable ${\color{firebrick}y} = {\color{royalblue}b} - {\color{royalblue}A} {\color{green}x} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
@@ -142,12 +142,12 @@ $$
 ### Duality of LPP
 
 -   If the primal problem of the LPP:
-  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
+  $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} \ge {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
-  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
+  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
-  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
--   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
+  $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} = {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}\}$.
 
 ---
 
@@ -191,12 +191,12 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{ {\color{coral}n} } \mapsto R$ is convex if
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{ {\color{royalblue}n} } \mapsto R$ is convex if
   ${\color{salmon}K}$ is a convex set and
   $f({\color{firebrick}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{firebrick}y} - {\color{green}x}), \; {\color{firebrick}y},{\color{green}x} \in {\color{salmon}K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $({\color{green}x}, {\color{coral}m})$ satisfies the KKT conditions above,
+  functions. If the pair $({\color{green}x}, {\color{royalblue}m})$ satisfies the KKT conditions above,
   ${\color{green}x}$ is an optimal solution of the problem. If in addition, $f$ is
   strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
@@ -243,7 +243,7 @@ $(0, +\infty)$.
 
 Generalization:
 
--   Consider $|H({\color{coral}\omega})|^2$ (power) instead of $|H({\color{coral}\omega})|$ (magnitude).
+-   Consider $|H({\color{royalblue}\omega})|^2$ (power) instead of $|H({\color{royalblue}\omega})|$ (magnitude).
 -   square root -> Spectral factorization
 
 ---
@@ -307,9 +307,9 @@ Then: $${\color{red}X_\text{opt} } = {\color{green}Y^{-1}_\text{opt} }.$$
 
 ### Change of variables
 
-Transform: $$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
+Transform: $$({\color{royalblue}a} + {\color{royalblue}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
-into: $${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
+into: $${\color{royalblue}a} \cdot {\color{green}x} + {\color{royalblue}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
 ${\color{green}z} = {\color{red}y} {\color{green}x}$.
 
 Then: $${\color{red}y_\text{opt} } = {\color{green}z_\text{opt} } {\color{green}x}^{-1}_\text{opt}$$
@@ -319,10 +319,10 @@ Then: $${\color{red}y_\text{opt} } = {\color{green}z_\text{opt} } {\color{green}
 ### Generalize to matrix inequalities
 
 Transform:
-$$({\color{coral}A} + {\color{coral}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{coral}A} + {\color{coral}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
+$$({\color{royalblue}A} + {\color{royalblue}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{royalblue}A} + {\color{royalblue}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
 
 into:
-$${\color{coral}A} {\color{green}X} + {\color{green}X} {\color{coral}A}^T + {\color{coral}B} {\color{green} Z} + {\color{green} Z}^T {\color{coral}B}^T \prec 0, \; {\color{green}X} \succ 0$$
+$${\color{royalblue}A} {\color{green}X} + {\color{green}X} {\color{royalblue}A}^T + {\color{royalblue}B} {\color{green} Z} + {\color{green} Z}^T {\color{royalblue}B}^T \prec 0, \; {\color{green}X} \succ 0$$
 where ${\color{green}Z} = {\color{red}Y} {\color{green}X}$.
 
 Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } {\color{green}X}^{-1}_\text{opt}$$
@@ -333,8 +333,8 @@ Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } {\color{green}
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
-  -   if ${\color{coral}w}_1, \ldots, {\color{coral}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
-    convex, then so is ${\color{coral}w}_1 f_1 + \cdots + {\color{coral}w}_n f_n.$ In particular,
+  -   if ${\color{royalblue}w}_1, \ldots, {\color{royalblue}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
+    convex, then so is ${\color{royalblue}w}_1 f_1 + \cdots + {\color{royalblue}w}_n f_n.$ In particular,
     the sum of two convex functions is convex.
 -   Composition:
   -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
@@ -378,8 +378,8 @@ Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } {\color{green}
 2. **Output**: ${\color{green}x}^*$
 3. **repeat**
     1. Determine a descent direction ${\color{green}p}$.
-    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$.
-    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$
+    2. Line search. Choose a step size ${\color{royalblue}\alpha} > 0$.
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{royalblue}\alpha} {\color{green}p}$
 4. **until** stopping criterion satisfied.
 
 ---

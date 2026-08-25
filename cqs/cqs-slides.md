@@ -38,10 +38,10 @@ class: nord-dark, middle, center
 - Beyond the intersection property, certain additional properties are often desirable for fairness and efficiency in applications like distributed mutual exclusion. ⚖️
 - **A1. Site Inclusion:** Each site is in its own quorum (implicitly assumed or explicitly defined). 🏠
 - **A2. Non-empty Intersection:** The core property - any two quorums must intersect. ✖️➡️✔️
-- **A3. Equal Work:** All quorums have the same size, denoted by ${\color{coral}d}$ or ${\color{coral}k}$.
-- $|{\color{salmon}S_i}| = {\color{coral}d}$ for all $i \in \{1, 2, \dots, {\color{coral}N}\}$. ⚖️📏
+- **A3. Equal Work:** All quorums have the same size, denoted by ${\color{royalblue}d}$ or ${\color{royalblue}k}$.
+- $|{\color{salmon}S_i}| = {\color{royalblue}d}$ for all $i \in \{1, 2, \dots, {\color{royalblue}N}\}$. ⚖️📏
 - **A4. Equal Responsibility:** Each site is contained in the same number of quorums.
-- For all $P_i \in {\color{salmon}U}$, $P_i$ is contained in ${\color{coral}d}$ quorums. 🔄
+- For all $P_i \in {\color{salmon}U}$, $P_i$ is contained in ${\color{royalblue}d}$ quorums. 🔄
 - A set of quorums satisfying A3 and A4 is called **symmetric**. 🔄⚖️
 
 ---
@@ -49,12 +49,12 @@ class: nord-dark, middle, center
 ### Challenges in Designing Optimal Quorums 🏗️
 
 - Designing efficient, fair, and scalable quorum systems is challenging. 🧩
-- Goal: Minimize the quorum size ${\color{coral}d}$ while maintaining properties like equal work and equal responsibility. 🎯
-- **Theoretical Lower Bound** on quorum size ${\color{coral}d}$: approximately $O(\sqrt{ {\color{coral}N} })$ or $O(\sqrt{ {\color{coral}P} })$ for ${\color{coral}N}$ sites or ${\color{coral}P}$ processes, satisfying symmetric properties.
-- More precisely, ${\color{coral}d} \ge \lceil \sqrt{ {\color{coral}N} } \rceil$. 📉
-- Finding systems that meet this lower bound (e.g., where ${\color{coral}N} = {\color{coral}d}({\color{coral}d}-1) + 1$) is equivalent to constructing finite projective planes, which don't exist for all system sizes. 🏗️❌
-- Exhaustive search for optimal quorum systems is computationally intractable for large ${\color{coral}N}$. ⏳💻
-- Grid-based systems are simple but often result in quorum sizes roughly twice the lower bound ($2\sqrt{ {\color{coral}N} } - 1$ for square grids). 📊
+- Goal: Minimize the quorum size ${\color{royalblue}d}$ while maintaining properties like equal work and equal responsibility. 🎯
+- **Theoretical Lower Bound** on quorum size ${\color{royalblue}d}$: approximately $O(\sqrt{ {\color{royalblue}N} })$ or $O(\sqrt{ {\color{royalblue}P} })$ for ${\color{royalblue}N}$ sites or ${\color{royalblue}P}$ processes, satisfying symmetric properties.
+- More precisely, ${\color{royalblue}d} \ge \lceil \sqrt{ {\color{royalblue}N} } \rceil$. 📉
+- Finding systems that meet this lower bound (e.g., where ${\color{royalblue}N} = {\color{royalblue}d}({\color{royalblue}d}-1) + 1$) is equivalent to constructing finite projective planes, which don't exist for all system sizes. 🏗️❌
+- Exhaustive search for optimal quorum systems is computationally intractable for large ${\color{royalblue}N}$. ⏳💻
+- Grid-based systems are simple but often result in quorum sizes roughly twice the lower bound ($2\sqrt{ {\color{royalblue}N} } - 1$ for square grids). 📊
 
 ---
 
@@ -62,43 +62,43 @@ class: nord-dark, middle, center
 
 - **Cyclic Quorum Systems (CQS)** offer a structured approach to constructing quorum systems that often achieve or come very close to the desirable symmetric properties. 🏗️
 - They are based on concepts from combinatorial theory, particularly **cyclic block designs** and **cyclic difference sets**. 🧮
-- **Defining Characteristic:** The entire set of ${\color{coral}N}$ quorums can be generated **cyclically** from a single **base quorum**. 🔄
+- **Defining Characteristic:** The entire set of ${\color{royalblue}N}$ quorums can be generated **cyclically** from a single **base quorum**. 🔄
 
 ---
 
 ### CQS Definition and Construction 🏗️
 
-- Let the ${\color{coral}N}$ sites be ${\color{salmon}U} = \{0, 1, \dots, {\color{coral}N}-1\}$, viewed as elements in $\mathbb{Z}_{ {\color{coral}N} }$ (additive group modulo N). 🔢
-- **Definition:** A group of cyclic quorums $\{ {\color{salmon}B_0}, {\color{salmon}B_1}, \dots, {\color{salmon}B_{N-1} }\}$ is derived from a base quorum ${\color{salmon}B_0} = \{a_1, a_2, \dots, a_k\} \subseteq \{0, 1, \dots, {\color{coral}N}-1\}$ by adding $i$ modulo ${\color{coral}N}$ to each element.
-- ${\color{salmon}B_i} = \{a_1 + i, a_2 + i, \dots, a_k + i\} \pmod {\color{coral}N}$. 🔄
+- Let the ${\color{royalblue}N}$ sites be ${\color{salmon}U} = \{0, 1, \dots, {\color{royalblue}N}-1\}$, viewed as elements in $\mathbb{Z}_{ {\color{royalblue}N} }$ (additive group modulo N). 🔢
+- **Definition:** A group of cyclic quorums $\{ {\color{salmon}B_0}, {\color{salmon}B_1}, \dots, {\color{salmon}B_{N-1} }\}$ is derived from a base quorum ${\color{salmon}B_0} = \{a_1, a_2, \dots, a_k\} \subseteq \{0, 1, \dots, {\color{royalblue}N}-1\}$ by adding $i$ modulo ${\color{royalblue}N}$ to each element.
+- ${\color{salmon}B_i} = \{a_1 + i, a_2 + i, \dots, a_k + i\} \pmod {\color{royalblue}N}$. 🔄
 - For this collection to be a valid quorum system, it must satisfy the **non-empty intersection property**: ${\color{salmon}B_i} \cap {\color{salmon}B_j} \neq \emptyset$ for all $i, j$. ✖️➡️✔️
-- The cyclic construction **automatically ensures** the **equal work** ($|{\color{salmon}B_i}| = {\color{coral}d}$ for all $i$) and **equal responsibility** (each element appears in ${\color{coral}d}$ quorums) properties. ⚖️
+- The cyclic construction **automatically ensures** the **equal work** ($|{\color{salmon}B_i}| = {\color{royalblue}d}$ for all $i$) and **equal responsibility** (each element appears in ${\color{royalblue}d}$ quorums) properties. ⚖️
 
 ---
 
 ### CQS and Difference Sets 🔢
 
 - The existence and properties of CQS are deeply connected to the theory of **difference sets**. 🧮
-- **Definition: Cyclic $({\color{coral}N}, {\color{coral}d}, {\color{coral}\lambda})$-Difference Set**
-- A set ${\color{salmon}M} = \{a_1, \dots, a_d\} \subseteq \{0, \dots, {\color{coral}N}-1\}$ is a cyclic $({\color{coral}N}, {\color{coral}d}, {\color{coral}\lambda})$-difference set if for every $m \not\equiv 0 \pmod {\color{coral}N}$, there are exactly ${\color{coral}\lambda}$ pairs $(a_i, a_j)$ with $a_i, a_j \in {\color{salmon}M}$ such that $a_i - a_j \equiv m \pmod {\color{coral}N}$. 🔄
-- For CQS, the crucial concept is the **Relaxed Cyclic $({\color{coral}N}, {\color{coral}d})$-Difference Set**.
-- **Definition: Relaxed Cyclic $({\color{coral}N}, {\color{coral}d})$-Difference Set**
-- A set ${\color{salmon}M} = \{a_1, \dots, a_d\} \subseteq \{0, \dots, {\color{coral}N}-1\}$ is a relaxed $({\color{coral}N}, {\color{coral}d})$-difference set if for every $m \not\equiv 0 \pmod {\color{coral}N}$, there is **at least one** pair $(a_i, a_j)$ with $a_i, a_j \in {\color{salmon}M}$ such that $a_i - a_j \equiv m \pmod {\color{coral}N}$. 🔄
+- **Definition: Cyclic $({\color{royalblue}N}, {\color{royalblue}d}, {\color{royalblue}\lambda})$-Difference Set**
+- A set ${\color{salmon}M} = \{a_1, \dots, a_d\} \subseteq \{0, \dots, {\color{royalblue}N}-1\}$ is a cyclic $({\color{royalblue}N}, {\color{royalblue}d}, {\color{royalblue}\lambda})$-difference set if for every $m \not\equiv 0 \pmod {\color{royalblue}N}$, there are exactly ${\color{royalblue}\lambda}$ pairs $(a_i, a_j)$ with $a_i, a_j \in {\color{salmon}M}$ such that $a_i - a_j \equiv m \pmod {\color{royalblue}N}$. 🔄
+- For CQS, the crucial concept is the **Relaxed Cyclic $({\color{royalblue}N}, {\color{royalblue}d})$-Difference Set**.
+- **Definition: Relaxed Cyclic $({\color{royalblue}N}, {\color{royalblue}d})$-Difference Set**
+- A set ${\color{salmon}M} = \{a_1, \dots, a_d\} \subseteq \{0, \dots, {\color{royalblue}N}-1\}$ is a relaxed $({\color{royalblue}N}, {\color{royalblue}d})$-difference set if for every $m \not\equiv 0 \pmod {\color{royalblue}N}$, there is **at least one** pair $(a_i, a_j)$ with $a_i, a_j \in {\color{salmon}M}$ such that $a_i - a_j \equiv m \pmod {\color{royalblue}N}$. 🔄
 
 ---
 
 ### Connection Formalized ⚡
 
-- A base quorum ${\color{salmon}B_0}$ forms a valid CQS if and only if the set of its elements forms a **relaxed $({\color{coral}N}, {\color{coral}d})$-difference set**. 🔄
-- The intersection property ${\color{salmon}B_i} \cap {\color{salmon}B_j} \neq \emptyset$ for all $i, j$ is equivalent to requiring that for any difference $m = j - i \pmod {\color{coral}N}$, there exist $a_u, a_v \in {\color{salmon}B_0}$ such that $a_u + i \equiv a_v + j \pmod {\color{coral}N}$.
-- This simplifies to $a_u - a_v \equiv j - i \pmod {\color{coral}N} \equiv m \pmod {\color{coral}N}$.
-- Thus, **every possible non-zero difference modulo ${\color{coral}N}$ must be formed by at least one pair of elements in the base quorum's set**. 🔄
+- A base quorum ${\color{salmon}B_0}$ forms a valid CQS if and only if the set of its elements forms a **relaxed $({\color{royalblue}N}, {\color{royalblue}d})$-difference set**. 🔄
+- The intersection property ${\color{salmon}B_i} \cap {\color{salmon}B_j} \neq \emptyset$ for all $i, j$ is equivalent to requiring that for any difference $m = j - i \pmod {\color{royalblue}N}$, there exist $a_u, a_v \in {\color{salmon}B_0}$ such that $a_u + i \equiv a_v + j \pmod {\color{royalblue}N}$.
+- This simplifies to $a_u - a_v \equiv j - i \pmod {\color{royalblue}N} \equiv m \pmod {\color{royalblue}N}$.
+- Thus, **every possible non-zero difference modulo ${\color{royalblue}N}$ must be formed by at least one pair of elements in the base quorum's set**. 🔄
 
 ---
 
 ### CQS Construction Example (N=8, d=4) 📊
 
-- Let's use the base quorum ${\color{salmon}B_0} = \{0, 1, 2, 4\} \pmod 8$ for ${\color{coral}N}=8$, ${\color{coral}d}=4$.
+- Let's use the base quorum ${\color{salmon}B_0} = \{0, 1, 2, 4\} \pmod 8$ for ${\color{royalblue}N}=8$, ${\color{royalblue}d}=4$.
 - The full set of 8 quorums is generated by adding $i \in \{0, 1, \dots, 7\} \pmod 8$:
 - ${\color{salmon}B_0} = \{0, 1, 2, 4\}$
 - ${\color{salmon}B_1} = \{1, 2, 3, 5\}$
@@ -117,10 +117,10 @@ class: nord-dark, middle, center
 
 ### Finding the Optimal Base Quorum 🔍
 
-- Finding a base quorum ${\color{salmon}B_0}$ that forms a CQS with the minimum size ${\color{coral}d}$ is equivalent to finding a **relaxed $({\color{coral}N}, {\color{coral}d})$-difference set with minimum ${\color{coral}d}$**. 🎯
-- For specific ${\color{coral}N}$ values (like ${\color{coral}N} = {\color{coral}d}^2 - {\color{coral}d} + 1$ where ${\color{coral}d}-1$ is a prime power), cyclic $({\color{coral}N}, {\color{coral}d}, 1)$-difference sets (Singer difference sets) exist and form efficient CQS. �
-- For other values of ${\color{coral}N}$, finding the optimal base quorum often requires **search**. 🔍
-- The challenge is finding the base quorum $\{a_1, \dots, a_d\}$ for a given ${\color{coral}N}$ such that the resulting cyclic sets satisfy the intersection property and ${\color{coral}d}$ is minimized. 🏗️
+- Finding a base quorum ${\color{salmon}B_0}$ that forms a CQS with the minimum size ${\color{royalblue}d}$ is equivalent to finding a **relaxed $({\color{royalblue}N}, {\color{royalblue}d})$-difference set with minimum ${\color{royalblue}d}$**. 🎯
+- For specific ${\color{royalblue}N}$ values (like ${\color{royalblue}N} = {\color{royalblue}d}^2 - {\color{royalblue}d} + 1$ where ${\color{royalblue}d}-1$ is a prime power), cyclic $({\color{royalblue}N}, {\color{royalblue}d}, 1)$-difference sets (Singer difference sets) exist and form efficient CQS. �
+- For other values of ${\color{royalblue}N}$, finding the optimal base quorum often requires **search**. 🔍
+- The challenge is finding the base quorum $\{a_1, \dots, a_d\}$ for a given ${\color{royalblue}N}$ such that the resulting cyclic sets satisfy the intersection property and ${\color{royalblue}d}$ is minimized. 🏗️
 
 ---
 
@@ -128,10 +128,10 @@ class: nord-dark, middle, center
 
 - The problem of finding the base quorum for an optimal CQS is closely related to the **Difference Cover Problem**. 🔄
 - **Definition: Difference Cover**
-- Given a range of numbers from 0 to ${\color{coral}N}-1$ and a required set size ${\color{coral}d}$.
-- Task: Select ${\color{coral}d}$ numbers $\{a_1, \dots, a_d\}$ such that the **positive differences** between every unique pair of selected numbers **modulo ${\color{coral}N}$ include all possible values from 1 to ${\color{coral}N}-1$ at least once**. 🔄
-- This is equivalent to finding a relaxed $({\color{coral}N}, {\color{coral}d})$-difference set where the differences cover all non-zero residues modulo ${\color{coral}N}$.
-- Constraints for valid inputs $({\color{coral}N}, {\color{coral}d})$: ${\color{coral}N} \ge 3$, ${\color{coral}d} \ge 3$, and ${\color{coral}N} \le {\color{coral}d}({\color{coral}d}-1)+1$. 📏
+- Given a range of numbers from 0 to ${\color{royalblue}N}-1$ and a required set size ${\color{royalblue}d}$.
+- Task: Select ${\color{royalblue}d}$ numbers $\{a_1, \dots, a_d\}$ such that the **positive differences** between every unique pair of selected numbers **modulo ${\color{royalblue}N}$ include all possible values from 1 to ${\color{royalblue}N}-1$ at least once**. 🔄
+- This is equivalent to finding a relaxed $({\color{royalblue}N}, {\color{royalblue}d})$-difference set where the differences cover all non-zero residues modulo ${\color{royalblue}N}$.
+- Constraints for valid inputs $({\color{royalblue}N}, {\color{royalblue}d})$: ${\color{royalblue}N} \ge 3$, ${\color{royalblue}d} \ge 3$, and ${\color{royalblue}N} \le {\color{royalblue}d}({\color{royalblue}d}-1)+1$. 📏
 
 ---
 
@@ -261,7 +261,7 @@ graph LR
 
 ### RL Process: Episodes and State 📊
 
-- Learning occurs over many **episodes** (attempts to pick ${\color{coral}d}$ numbers). 🔄
+- Learning occurs over many **episodes** (attempts to pick ${\color{royalblue}d}$ numbers). 🔄
 - **State Representation:** In each step, the AI observes the **current situation** of the puzzle.
 - Which numbers are already picked.
 - Which mathematical differences are covered.
@@ -377,9 +377,9 @@ _Illustrative flow of the RL learning process._
 
 - The mathematical structures (CQS, Difference Covers) have broad utility:
 - **Distributed Mutual Exclusion:** CQS provide symmetric quorum sets close to the theoretical lower bound. 🔒
-- **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O({\color{coral}N}/\sqrt{ {\color{coral}P} })$ memory) and load-balanced computation with an "all-pairs property". 🔄
+- **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O({\color{royalblue}N}/\sqrt{ {\color{royalblue}P} })$ memory) and load-balanced computation with an "all-pairs property". 🔄
 - **Wireless Sensor Networks (WSNs):** CQS-Pair supports heterogeneous asynchronous wakeup scheduling. 📡
-- **Attention Computation in Deep Learning:** CQS-Attention scales standard self-attention for long sequences, offering memory efficiency ($O(1/{\color{coral}W})$ per worker) and parallelism. 🧠
+- **Attention Computation in Deep Learning:** CQS-Attention scales standard self-attention for long sequences, offering memory efficiency ($O(1/{\color{royalblue}W})$ per worker) and parallelism. 🧠
 - **Coding Theory, Cryptography, Signal Processing:** Difference Covers have practical significance in these fields. 🔐
 
 ---
@@ -399,7 +399,7 @@ _Illustrative flow of the RL learning process._
 
 ### Future Work 🔮
 
-- Continued search for optimal CQS base quorums for larger ${\color{coral}N}$. 🔍
+- Continued search for optimal CQS base quorums for larger ${\color{royalblue}N}$. 🔍
 - Further development of efficient search algorithms, potentially combining systematic and learned methods. 🛠️
 - Exploring applications in new domains. 🌍
 - Addressing potential bottlenecks in centralized components of CQS management. ⚡

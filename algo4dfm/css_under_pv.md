@@ -202,7 +202,7 @@ More advanced techniques are introduced, focusing on distributing slack along th
 
 #### 3.3.1. Slack Maximization (EVEN)
 
-The EVEN method solves the slack optimization problem using a minimum mean cycle formulation. The objective is to maximize ${\color{coral}\beta}$ subject to ${\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\mu}_{ij} - {\color{coral}\beta}$, where ${\color{coral}\beta}$ is defined as $ \frac{1}{|{\color{lime}C}|} \sum*{(i,j) \in {\color{lime}C} } {\color{coral}\mu*{ij} } $ for a critical cycle ${\color{lime}C}$. This is equivalent to the minimum mean cycle problem. This method can be solved efficiently.
+The EVEN method solves the slack optimization problem using a minimum mean cycle formulation. The objective is to maximize ${\color{royalblue}\beta}$ subject to ${\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{royalblue}\mu}_{ij} - {\color{royalblue}\beta}$, where ${\color{royalblue}\beta}$ is defined as $ \frac{1}{|{\color{lime}C}|} \sum*{(i,j) \in {\color{lime}C} } {\color{royalblue}\mu*{ij} } $ for a critical cycle ${\color{lime}C}$. This is equivalent to the minimum mean cycle problem. This method can be solved efficiently.
 
 The EVEN method involves an iterative slack optimization process:
 
@@ -290,14 +290,14 @@ The final result of the EVEN method for a sample graph might show specific skew 
 
 ### 3.3.2. Prop-Based on Gaussian Model (PROP)
 
-The PROP method assumes that ${\color{coral}n}$ gate delays follow a Gaussian distribution $N({\color{coral}\mu}, {\color{coral}\sigma}^2)$, and thus the path delay is $N({\color{coral}n}{\color{coral}\mu}, {\color{coral}n}{\color{coral}\sigma}^2)$. It aims to distribute slack along the most timing-critical cycle according to the square root of each edge's path delays.
+The PROP method assumes that ${\color{royalblue}n}$ gate delays follow a Gaussian distribution $N({\color{royalblue}\mu}, {\color{royalblue}\sigma}^2)$, and thus the path delay is $N({\color{royalblue}n}{\color{royalblue}\mu}, {\color{royalblue}n}{\color{royalblue}\sigma}^2)$. It aims to distribute slack along the most timing-critical cycle according to the square root of each edge's path delays.
 
-To achieve this, the weights of s-edges and h-edges are updated using a parameter ${\color{coral}\alpha}$:
-For s-edges: ${\color{blue}T_{CP} } - ({\color{blue}D}_{ij} + {\color{coral}\alpha} \sqrt{ {\color{blue}D}_{ij}{\color{coral}\sigma} }) - {\color{blue}T_{setup} }$
-For h-edges: $ -{\color{blue}T*{hold} } + ({\color{blue}d*{ij} } - {\color{coral}\alpha} \sqrt{ {\color{blue}d\_{ij} }{\color{coral}\sigma} }) $
-where ${\color{coral}\alpha}$ ensures a minimum timing margin for each timing constraint.
+To achieve this, the weights of s-edges and h-edges are updated using a parameter ${\color{royalblue}\alpha}$:
+For s-edges: ${\color{blue}T_{CP} } - ({\color{blue}D}_{ij} + {\color{royalblue}\alpha} \sqrt{ {\color{blue}D}_{ij}{\color{royalblue}\sigma} }) - {\color{blue}T_{setup} }$
+For h-edges: $ -{\color{blue}T*{hold} } + ({\color{blue}d*{ij} } - {\color{royalblue}\alpha} \sqrt{ {\color{blue}d\_{ij} }{\color{royalblue}\sigma} }) $
+where ${\color{royalblue}\alpha}$ ensures a minimum timing margin for each timing constraint.
 
-Given a specific clock period ${\color{blue}T_{CP} }$, ${\color{coral}\alpha}$ is gradually increased, and the Bellman-Ford algorithm is used to detect if the graph is still feasible. After finding the maximum ${\color{coral}\alpha}$, the edges along the most timing-critical cycle will have slacks equal to the pre-allocated timing margins. If many edges in a circuit have sufficiently large slack, proportional slack distribution can be performed for the most timing-critical cycle, and the rest of the skews can be assigned using the EVEN method.
+Given a specific clock period ${\color{blue}T_{CP} }$, ${\color{royalblue}\alpha}$ is gradually increased, and the Bellman-Ford algorithm is used to detect if the graph is still feasible. After finding the maximum ${\color{royalblue}\alpha}$, the edges along the most timing-critical cycle will have slacks equal to the pre-allocated timing margins. If many edges in a circuit have sufficiently large slack, proportional slack distribution can be performed for the most timing-critical cycle, and the rest of the skews can be assigned using the EVEN method.
 
 -   **Problems with PROP:** This method assumes all gate delays have the same distribution. More critically, it does not justify using the square root of path delay for timing margin.
 
@@ -330,15 +330,15 @@ In a Statistical Timing Constraint Graph (STCG), edge weights are represented as
 ### 4.2. Most Critical Cycle
 
 In traditional criteria, the most critical cycle is determined by minimizing the mean cycle weight:
-\[ \min*{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum*{(i,j) \in {\color{lime}C} } {\color{coral}\mu*{ij} } }{|{\color{lime}C}|} \]
-where ${\color{coral}\mu*{ij} }$ is the mean of the edge weight.
+\[ \min*{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum*{(i,j) \in {\color{lime}C} } {\color{royalblue}\mu*{ij} } }{|{\color{lime}C}|} \]
+where ${\color{royalblue}\mu*{ij} }$ is the mean of the edge weight.
 For statistical methods, a new criterion for the most critical cycle is introduced, which considers both mean and standard deviation:
-\[ \min*{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum*{(i,j) \in {\color{lime}C} } {\color{coral}\mu*{ij} } }{\sum*{(i,j) \in {\color{lime}C} } {\color{coral}\sigma\_{ij} } } \]
+\[ \min*{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum*{(i,j) \in {\color{lime}C} } {\color{royalblue}\mu*{ij} } }{\sum*{(i,j) \in {\color{lime}C} } {\color{royalblue}\sigma\_{ij} } } \]
 This new criterion aims to better capture the impact of variations. The correctness of this new criterion is asserted, with further proof available elsewhere.
 
 ### 4.3. Slack Maximization (C-PROP)
 
-C-PROP is a slack maximization scheduling method adapted for statistical variations. It seeks to maximize ${\color{coral}\beta}$ subject to ${\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\mu}_{ij} - {\color{coral}\sigma}_{ij}{\color{coral}\beta}$. This is equivalent to the minimum cost-to-time ratio cycle problem. The critical cycle ${\color{lime}C}$ in this context is identified as the first negative cycle.
+C-PROP is a slack maximization scheduling method adapted for statistical variations. It seeks to maximize ${\color{royalblue}\beta}$ subject to ${\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{royalblue}\mu}_{ij} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$. This is equivalent to the minimum cost-to-time ratio cycle problem. The critical cycle ${\color{lime}C}$ in this context is identified as the first negative cycle.
 
 ### 4.4. Whole Flow for Statistical Methods
 
@@ -346,8 +346,8 @@ The general flow for solving these problems iteratively involves:
 
 1. Determining the clock arrival time at each vertex in the most critical cycle.
 2. Replacing the cycle with a super vertex.
-3. Modifying in-edge $({\color{salmon}u}, {\color{salmon}v})$ from an outside vertex ${\color{salmon}u}$ to a cycle member ${\color{salmon}v}$: the weight of the new in-edge $({\color{salmon}u}, {\color{salmon}v'})$ (where ${\color{salmon}v'}$ is the super vertex) is ${\color{coral}\mu}({\color{salmon}u}, {\color{salmon}v}) - {\color{firebrick}T_v}$, where ${\color{firebrick}T_v}$ is the arrival time of ${\color{salmon}v}$ relative to the super vertex.
-4. Modifying out-edge $({\color{salmon}v}, {\color{salmon}u})$ from a cycle member ${\color{salmon}v}$ to an outside vertex ${\color{salmon}u}$: the weight of the new out-edge $({\color{salmon}v'}, {\color{salmon}u})$ is ${\color{coral}\mu}({\color{salmon}v}, {\color{salmon}u}) + {\color{firebrick}T_v}$.
+3. Modifying in-edge $({\color{salmon}u}, {\color{salmon}v})$ from an outside vertex ${\color{salmon}u}$ to a cycle member ${\color{salmon}v}$: the weight of the new in-edge $({\color{salmon}u}, {\color{salmon}v'})$ (where ${\color{salmon}v'}$ is the super vertex) is ${\color{royalblue}\mu}({\color{salmon}u}, {\color{salmon}v}) - {\color{firebrick}T_v}$, where ${\color{firebrick}T_v}$ is the arrival time of ${\color{salmon}v}$ relative to the super vertex.
+4. Modifying out-edge $({\color{salmon}v}, {\color{salmon}u})$ from a cycle member ${\color{salmon}v}$ to an outside vertex ${\color{salmon}u}$: the weight of the new out-edge $({\color{salmon}v'}, {\color{salmon}u})$ is ${\color{royalblue}\mu}({\color{salmon}v}, {\color{salmon}u}) + {\color{firebrick}T_v}$.
 5. Parallel edges can be combined.
 6. The process is repeated iteratively until the graph is reduced to a single super vertex, or the number of edges becomes zero.
 
@@ -387,17 +387,17 @@ graph TD
 
 ### 5.1. General Formulation for Clock Skew Scheduling
 
-A general formulation for clock skew scheduling problems can be expressed as maximizing a function $g({\color{coral}\beta})$ subject to constraints of the form ${\color{firebrick}t_i} - {\color{firebrick}t_j} \le f_{ij}({\color{coral}\beta})$ for all $(i,j) \in {\color{lime}E}$. The table below summarizes how different problems fit this general formulation:
+A general formulation for clock skew scheduling problems can be expressed as maximizing a function $g({\color{royalblue}\beta})$ subject to constraints of the form ${\color{firebrick}t_i} - {\color{firebrick}t_j} \le f_{ij}({\color{royalblue}\beta})$ for all $(i,j) \in {\color{lime}E}$. The table below summarizes how different problems fit this general formulation:
 
-| Problem | $g({\color{coral}\beta})$ | $f_{ij}({\color{coral}\beta})$ (setup)                    | $f_{ij}({\color{coral}\beta})$ (hold)             |
+| Problem | $g({\color{royalblue}\beta})$ | $f_{ij}({\color{royalblue}\beta})$ (setup)                    | $f_{ij}({\color{royalblue}\beta})$ (hold)             |
 | ------- | ---------- | ------------------------------------------ | ---------------------------------- |
-| Min CP  | $-{\color{coral}\beta}$   | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s}$                    | $-{\color{blue}T_h} + {\color{blue}d}_{ij}$                    |
-| EVEN    | ${\color{coral}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s} - {\color{coral}\beta}$            | $-{\color{blue}T_h} + {\color{blue}d}_{ij} - {\color{coral}\beta}$            |
-| C-PROP  | ${\color{coral}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s} - {\color{coral}\sigma}_{ij}{\color{coral}\beta}$ | $-{\color{blue}T_h} + {\color{blue}d}_{ij} - {\color{coral}\sigma}_{ij}{\color{coral}\beta}$ |
+| Min CP  | $-{\color{royalblue}\beta}$   | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s}$                    | $-{\color{blue}T_h} + {\color{blue}d}_{ij}$                    |
+| EVEN    | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s} - {\color{royalblue}\beta}$            | $-{\color{blue}T_h} + {\color{blue}d}_{ij} - {\color{royalblue}\beta}$            |
+| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_s} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ | $-{\color{blue}T_h} + {\color{blue}d}_{ij} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ |
 
 ## Table 1: General Formulation Summary
 
-It's noted that $g({\color{coral}\beta})$ and $f_{ij}({\color{coral}\beta})$ are not necessarily linear functions. A theorem states that if $g({\color{coral}\beta})$ and $f_{ij}({\color{coral}\beta})$ are monotonic decreasing functions for all ${\color{salmon}i}$ and ${\color{salmon}j}$, then there is a unique solution to the problem.
+It's noted that $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are not necessarily linear functions. A theorem states that if $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are monotonic decreasing functions for all ${\color{salmon}i}$ and ${\color{salmon}j}$, then there is a unique solution to the problem.
 
 ### 5.2. Non-Gaussian Distribution
 
@@ -409,18 +409,18 @@ Timing yield maximization can be formulated as:
 \[ \max\{\min\{\text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}\tilde{W}*{ij} }\}\}\} \]
 This formulation is not exactly a timing yield objective, but it is reasonable. It does not require correlation information among ${\color{blue}\tilde{W} }_{ij}$.
 
-This can be shown to be equivalent to maximizing ${\color{coral}\beta}$ subject to the constraints:
-\[ \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{coral}\beta} \]
-\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{coral}\beta} \]
+This can be shown to be equivalent to maximizing ${\color{royalblue}\beta}$ subject to the constraints:
+\[ \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{royalblue}\beta} \]
+\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
 Or, expressed using the inverse cumulative distribution function (CDF) $F_{ij}^{-1}$:
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - F*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{coral}\beta}) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - F*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{coral}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - F*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{royalblue}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - F*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
 A key advantage is that any CDF must be a monotonic increasing function, simplifying optimization.
 
 #### 5.3.1. Statistical Interpretations of C-PROP and EVEN
 
-C-PROP can be seen as a reduction of this general statistical problem when ${\color{blue}\tilde{W} }_{ij}$ is Gaussian. In this case, $F_{ij}({\color{blue}x}) = K(({\color{blue}x}-{\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$.
-EVEN is an identical distribution up to shifting, meaning $F_{ij}({\color{blue}x}) = H({\color{blue}x}-{\color{coral}\mu}_{ij})$. In general, C-PROP is not necessarily worse than EVEN.
+C-PROP can be seen as a reduction of this general statistical problem when ${\color{blue}\tilde{W} }_{ij}$ is Gaussian. In this case, $F_{ij}({\color{blue}x}) = K(({\color{blue}x}-{\color{royalblue}\mu}_{ij})/{\color{royalblue}\sigma}_{ij})$.
+EVEN is an identical distribution up to shifting, meaning $F_{ij}({\color{blue}x}) = H({\color{blue}x}-{\color{royalblue}\mu}_{ij})$. In general, C-PROP is not necessarily worse than EVEN.
 
 ### 5.4. Solving Methods in General
 
@@ -434,8 +434,8 @@ Three general solving methods are discussed for clock skew scheduling:
 
 Algorithms like Lawler's and Howard's are used for parametric shortest path problems, suitable for this type of optimization. Hybrid methods combining aspects of these algorithms are also used, along with improved versions of Howard's algorithm.
 
--   **Input:** The algorithms take an interval $[{\color{coral}\beta}_{min}, {\color{coral}\beta}_{max}]$ that includes the optimal ${\color{coral}\beta}^*$, and a timing graph ${\color{salmon}G}({\color{salmon}V}, {\color{lime}E})$.
--   **Output:** The optimal ${\color{coral}\beta}^*$ and its corresponding critical cycle ${\color{lime}C}$.
+-   **Input:** The algorithms take an interval $[{\color{royalblue}\beta}_{min}, {\color{royalblue}\beta}_{max}]$ that includes the optimal ${\color{royalblue}\beta}^*$, and a timing graph ${\color{salmon}G}({\color{salmon}V}, {\color{lime}E})$.
+-   **Output:** The optimal ${\color{royalblue}\beta}^*$ and its corresponding critical cycle ${\color{lime}C}$.
 
 ```mermaid
 graph TD
@@ -471,51 +471,51 @@ Hybrid methods combine features of both Lawler's (binary search) and Howard's al
 
 Modern Static Timing Analysis (STA) tools can manually assign clock arrival times to registers (defaulting to zero). They can group non-critical parts as a single unit for optimization. These tools typically handle multi-cycle paths, slew rate, clock-gating, and false paths. However, they mainly report slacks and may not provide the full probability density function or correlation information, which can be limitations for advanced statistical analysis.
 
-In statistics, unimodality refers to a probability distribution with a single peak. For continuous distributions, unimodality means the cumulative distribution function (CDF) behaves convexly for values below the mode (${\color{blue}x} < {\color{coral}m}$) and concavely for values above the mode (${\color{blue}x} > {\color{coral}m}$). Examples of unimodal distributions include Normal, Log-normal, Log-logistic, and Generalized Extreme Value (GEV) distributions.
+In statistics, unimodality refers to a probability distribution with a single peak. For continuous distributions, unimodality means the cumulative distribution function (CDF) behaves convexly for values below the mode (${\color{blue}x} < {\color{royalblue}m}$) and concavely for values above the mode (${\color{blue}x} > {\color{royalblue}m}$). Examples of unimodal distributions include Normal, Log-normal, Log-logistic, and Generalized Extreme Value (GEV) distributions.
 
-The quantile function ${\color{coral}z_p}$ of a distribution is the inverse of its cumulative distribution function $\Phi^{-1}({\color{coral}p})$. Close-form expressions for some unimodal distributions' quantile functions are available:
+The quantile function ${\color{royalblue}z_p}$ of a distribution is the inverse of its cumulative distribution function $\Phi^{-1}({\color{royalblue}p})$. Close-form expressions for some unimodal distributions' quantile functions are available:
 
--   Normal: $ {\color{coral}\mu} + {\color{coral}\sigma} \sqrt{2} \text{erf}^{-1}(2{\color{coral}p}-1) $
--   Log-normal: $ \exp({\color{coral}\mu} + {\color{coral}\sigma} \sqrt{2} \text{erf}^{-1}(2{\color{coral}p}-1)) $
--   Log-logistic: $ {\color{coral}\alpha} (\frac{ {\color{coral}p} }{1-{\color{coral}p} })^{1/{\color{coral}\beta} } $
+-   Normal: $ {\color{royalblue}\mu} + {\color{royalblue}\sigma} \sqrt{2} \text{erf}^{-1}(2{\color{royalblue}p}-1) $
+-   Log-normal: $ \exp({\color{royalblue}\mu} + {\color{royalblue}\sigma} \sqrt{2} \text{erf}^{-1}(2{\color{royalblue}p}-1)) $
+-   Log-logistic: $ {\color{royalblue}\alpha} (\frac{ {\color{royalblue}p} }{1-{\color{royalblue}p} })^{1/{\color{royalblue}\beta} } $
 
-For log-normal distribution, the mode is $\exp({\color{coral}\mu} - {\color{coral}\sigma}^2)$, and the CDF at the mode is $1/2(1+\text{erf}(-{\color{coral}\sigma}/\sqrt{2}))$.
+For log-normal distribution, the mode is $\exp({\color{royalblue}\mu} - {\color{royalblue}\sigma}^2)$, and the CDF at the mode is $1/2(1+\text{erf}(-{\color{royalblue}\sigma}/\sqrt{2}))$.
 
 ### 6. Yield-driven Optimization and Delay Models
 
-The yield-driven optimization problem, as introduced in section 5.3.3, can be further formulated for specific delay models. The general formulation is to maximize ${\color{coral}\beta}$ subject to the probability constraints of setup and hold times.
-\[ \text{maximize } {\color{coral}\beta} \]
-\[ \text{subject to } \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{coral}\beta} \]
-\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{coral}\beta} \]
+The yield-driven optimization problem, as introduced in section 5.3.3, can be further formulated for specific delay models. The general formulation is to maximize ${\color{royalblue}\beta}$ subject to the probability constraints of setup and hold times.
+\[ \text{maximize } {\color{royalblue}\beta} \]
+\[ \text{subject to } \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{royalblue}\beta} \]
+\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
 This can be expressed using the inverse CDFs as:
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \Phi*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{coral}\beta}) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - \Phi*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{coral}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \Phi*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{royalblue}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_h} - \Phi*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
 
 In general, Lawler's algorithm (binary search) can be used to solve this problem. The specific method depends on the underlying distribution of the delays.
 
 ### 6.1. Gaussian Model (Bell shape)
 
 When path delays are assumed to follow a Gaussian distribution, the formulation can be reduced to:
-\[ \text{maximize } {\color{coral}\beta} \]
-\[ \text{subject to } {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - ({\color{coral}\mu}^D*{ij} + {\color{coral}\sigma}^D*{ij} \sqrt{2} \text{erf}^{-1}(2{\color{coral}\beta} - 1)) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{coral}\mu}^H*{ij} + {\color{coral}\sigma}^H*{ij} \sqrt{2} \text{erf}^{-1}(2(1-{\color{coral}\beta}) - 1) \]
-This formulation can be linearized into a form equivalent to the minimum cost-to-time ratio (linear) problem by substituting ${\color{coral}\beta}$ with ${\color{coral}\beta}'$ and modifying the objective/constraints:
-\[ \text{maximize } {\color{coral}\beta}' \]
-\[ \text{subject to } {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{coral}\mu}^D*{ij} - {\color{coral}\sigma}^D*{ij}{\color{coral}\beta}' \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{coral}\mu}^H*{ij} - {\color{coral}\sigma}^H\_{ij}{\color{coral}\beta}' \]
+\[ \text{maximize } {\color{royalblue}\beta} \]
+\[ \text{subject to } {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - ({\color{royalblue}\mu}^D*{ij} + {\color{royalblue}\sigma}^D*{ij} \sqrt{2} \text{erf}^{-1}(2{\color{royalblue}\beta} - 1)) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{royalblue}\mu}^H*{ij} + {\color{royalblue}\sigma}^H*{ij} \sqrt{2} \text{erf}^{-1}(2(1-{\color{royalblue}\beta}) - 1) \]
+This formulation can be linearized into a form equivalent to the minimum cost-to-time ratio (linear) problem by substituting ${\color{royalblue}\beta}$ with ${\color{royalblue}\beta}'$ and modifying the objective/constraints:
+\[ \text{maximize } {\color{royalblue}\beta}' \]
+\[ \text{subject to } {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{royalblue}\mu}^D*{ij} - {\color{royalblue}\sigma}^D*{ij}{\color{royalblue}\beta}' \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{royalblue}\mu}^H*{ij} - {\color{royalblue}\sigma}^H\_{ij}{\color{royalblue}\beta}' \]
 However, actual path delay distributions are often non-Gaussian.
 
 ### 6.2. Log-normal Delay Model
 
 For log-normal delay models, the formulation is similar but involves exponential terms due to the nature of the log-normal distribution:
-\[ \text{maximize } {\color{coral}\beta} \]
-\[ \text{subject to } {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \exp({\color{coral}\mu}^D*{ij} + {\color{coral}\sigma}^D*{ij} \sqrt{2} \text{erf}^{-1}(2{\color{coral}\beta} - 1)) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge \exp({\color{coral}\mu}^H*{ij} + {\color{coral}\sigma}^H*{ij} \sqrt{2} \text{erf}^{-1}(2(1-{\color{coral}\beta}) - 1)) \]
-The error function inverse ($\text{erf}^{-1}$) is anti-symmetric and monotonic, which helps with linearization. Similar to the Gaussian model, a linear formulation using ${\color{coral}\beta}'$ can be derived:
-\[ \text{maximize } {\color{coral}\beta}' \]
-\[ \text{subject to } {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \exp({\color{coral}\mu}^D*{ij} + {\color{coral}\sigma}^D*{ij}{\color{coral}\beta}') \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge \exp({\color{coral}\mu}^H*{ij} - {\color{coral}\sigma}^H\_{ij}{\color{coral}\beta}') \]
-This allows bypassing the explicit error function, enabling efficient solution through binary search on ${\color{coral}\beta}'$.
+\[ \text{maximize } {\color{royalblue}\beta} \]
+\[ \text{subject to } {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \exp({\color{royalblue}\mu}^D*{ij} + {\color{royalblue}\sigma}^D*{ij} \sqrt{2} \text{erf}^{-1}(2{\color{royalblue}\beta} - 1)) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge \exp({\color{royalblue}\mu}^H*{ij} + {\color{royalblue}\sigma}^H*{ij} \sqrt{2} \text{erf}^{-1}(2(1-{\color{royalblue}\beta}) - 1)) \]
+The error function inverse ($\text{erf}^{-1}$) is anti-symmetric and monotonic, which helps with linearization. Similar to the Gaussian model, a linear formulation using ${\color{royalblue}\beta}'$ can be derived:
+\[ \text{maximize } {\color{royalblue}\beta}' \]
+\[ \text{subject to } {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \exp({\color{royalblue}\mu}^D*{ij} + {\color{royalblue}\sigma}^D*{ij}{\color{royalblue}\beta}') \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge \exp({\color{royalblue}\mu}^H*{ij} - {\color{royalblue}\sigma}^H\_{ij}{\color{royalblue}\beta}') \]
+This allows bypassing the explicit error function, enabling efficient solution through binary search on ${\color{royalblue}\beta}'$.
 
 ### 7. Conclusion and Future Direction
 

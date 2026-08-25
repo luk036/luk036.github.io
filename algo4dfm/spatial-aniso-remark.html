@@ -175,16 +175,16 @@ class: nord-light, middle, center
 ### 🧩 Anisotropic Kernel Formulation
 
 **Isotropic** (single distance $r$):
-$$ {\color{coral}r} = \frac{\sqrt{{\color{green}dx}^2 + {\color{orange}dy}^2}}{{\color{green} \ell}} $$
+$$ {\color{royalblue}r} = \frac{\sqrt{{\color{green}dx}^2 + {\color{orange}dy}^2}}{{\color{green} \ell}} $$
 
 **Anisotropic** (per-dimension distances):
-$$ {\color{coral}r_{12}} = \sqrt{\frac{{\color{green}dx}^2}{{\color{green} \ell_1}^2} + \frac{{\color{orange}dy}^2}{{\color{orange} \ell_2}^2}} $$
+$$ {\color{royalblue}r_{12}} = \sqrt{\frac{{\color{green}dx}^2}{{\color{green} \ell_1}^2} + \frac{{\color{orange}dy}^2}{{\color{orange} \ell_2}^2}} $$
 
 **Gaussian kernel:**
 $$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{({\color{green}x}-{\color{green}x'})^2}{{\color{green} \ell_1}^2} + \frac{({\color{orange}y}-{\color{orange}y'})^2}{{\color{orange} \ell_2}^2}\right]\right) $$
 
-**Matern kernel** (${\color{coral} \nu} = 3/2$):
-$$ k({\color{coral}r}) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, {\color{coral}r}\right) \exp\left(-\sqrt{3}\, {\color{coral}r}\right) $$
+**Matern kernel** (${\color{royalblue} \nu} = 3/2$):
+$$ k({\color{royalblue}r}) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, {\color{royalblue}r}\right) \exp\left(-\sqrt{3}\, {\color{royalblue}r}\right) $$
 
 ---
 
@@ -224,7 +224,7 @@ To test the extraction algorithm, we need **ground-truth data** — data generat
 
 **Core idea:** Use **Cholesky decomposition** to transform independent noise into correlated samples:
 
-$$ {\color{orange} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{blue} K_\theta} + {\color{coral} \sigma_n^2 I}\big) $$
+$$ {\color{orange} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{blue} K_\theta} + {\color{royalblue} \sigma_n^2 I}\big) $$
 
 .mermaid[
 <pre>
@@ -250,7 +250,7 @@ This is the **exact reverse** of the extraction problem: we know the kernel → 
 
 1. **Define** observation locations ${\color{salmon} s_1}, \dots, {\color{salmon} s_n} \in \mathbb{R}^2$ 📍
 2. **Build** true covariance matrix $K_{ij} = {\color{darkmagenta} \sigma^2}\, k({\color{green} \ell_1}, {\color{orange} \ell_2}; \|{\color{salmon}s_i} - {\color{salmon}s_j}\|)$ 🧩
-3. **Add** nugget: ${\color{blue}V} = K + {\color{coral} \sigma_n^2} I$ (ensures positive definiteness) ✅
+3. **Add** nugget: ${\color{blue}V} = K + {\color{royalblue} \sigma_n^2} I$ (ensures positive definiteness) ✅
 4. **Factor**: ${\color{blue}V} = {\color{blue} L}{\color{blue} L}^\mathsf{T}$ via Cholesky decomposition 🔷
 5. **Draw** ${\color{orange} M}$ independent samples:
    $$ \mathbf{x}_m \sim \mathcal{N}(0, I), \quad \mathbf{y}_m = {\color{blue} L} \mathbf{x}_m $$
@@ -340,10 +340,10 @@ Single realisation (one "chip"):
 ```
 
 **Test strategy:** 🎯
-1. Generate ${\color{orange} M}$ chips from known ${\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}$
+1. Generate ${\color{orange} M}$ chips from known ${\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{royalblue} \sigma_n}$
 2. Compute sample covariance ${\color{red} Y} = \frac{1}{{\color{orange}M}} \sum {\color{orange}\mathbf{y}_m} {\color{orange}\mathbf{y}_m}^\mathsf{T}$
 3. Run extraction MLE on ${\color{red} Y}$
-4. Compare estimated ${\color{coral} \hat{\theta}}$ vs true ${\color{coral} \theta}$ → **verify correctness** ✅
+4. Compare estimated ${\color{royalblue} \hat{\theta}}$ vs true ${\color{royalblue} \theta}$ → **verify correctness** ✅
 
 ---
 
@@ -351,14 +351,14 @@ Single realisation (one "chip"):
 
 .pull-left[
 **Isotropic** (3 params):
-$$ {\color{coral}\theta} = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+$$ {\color{royalblue}\theta} = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{royalblue} \sigma_n}\} $$
 
-$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{coral}X}, {\color{coral} \theta}) $$
+$$ \min_{{\color{royalblue} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{royalblue}X}, {\color{royalblue} \theta}) $$
 
 **Anisotropic** (4 params):
-$$ {\color{coral}\theta} = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+$$ {\color{royalblue}\theta} = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{royalblue} \sigma_n}\} $$
 
-$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{coral}X}, {\color{coral} \theta}) $$
+$$ \min_{{\color{royalblue} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{royalblue}X}, {\color{royalblue} \theta}) $$
 ]
 .pull-right[
 **sklearn implementation:**

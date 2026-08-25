@@ -79,13 +79,13 @@ class: nord-dark, middle, center
 ### 🧮 Robust Optimization Formulation
 
 -   Consider $$\begin{array}{ll}
-        \text{minimize}   & \sup_{{\color{coral}q} \in \mathbb{Q} } {\color{purple}f_0}({\color{darkblack}x},{\color{coral}q}), \\
-        \text{subject to} & {\color{purple}f_j}({\color{darkblack}x},{\color{coral}q}) \leq 0 \qquad \\
-        & \forall {\color{coral}q} \in \mathbb{Q} \; \text{and} \; j = 1,2,\cdots,m, \\
+        \text{minimize}   & \sup_{{\color{royalblue}q} \in \mathbb{Q} } {\color{purple}f_0}({\color{darkblack}x},{\color{royalblue}q}), \\
+        \text{subject to} & {\color{purple}f_j}({\color{darkblack}x},{\color{royalblue}q}) \leq 0 \qquad \\
+        & \forall {\color{royalblue}q} \in \mathbb{Q} \; \text{and} \; j = 1,2,\cdots,m, \\
       \end{array}$$ where
     -   ${\color{darkblack}x} \in \mathbb{R}^n$ represents a set of design variables
         (such as ${\color{blue}L}$, ${\color{blue}W}$),
-    -   ${\color{coral}q}$ represents a set of varying parameters (such as ${\color{green}T_{OX}}$)
+    -   ${\color{royalblue}q}$ represents a set of varying parameters (such as ${\color{green}T_{OX}}$)
     -   ${\color{purple}f_j} \leq 0$ represents the $j$th specification requirement (such
         as phase margin $\geq 60^\circ$).
 
@@ -93,7 +93,7 @@ class: nord-dark, middle, center
 
 ### 📜 Geometric Programming in Standard Form
 
--   We further assume that ${\color{purple}f_i}({\color{darkblack}x},{\color{coral}q})$'s are convex for all ${\color{coral}q} \in \mathbb{Q}$.
+-   We further assume that ${\color{purple}f_i}({\color{darkblack}x},{\color{royalblue}q})$'s are convex for all ${\color{royalblue}q} \in \mathbb{Q}$.
 -   Geometric programming is an optimization problem that takes the following standard form:
     $$\begin{array}{lll}
         \text{minimize}   & {\color{purple}p_0}({\color{darkblack}y}) &  \\
@@ -163,7 +163,7 @@ class: nord-light, middle, center
 .pull-left[
 
 -   GP in the convex form can be solved efficiently by interior-point methods 📈.
--   In robust version, coefficients ${\color{orange}c_s}$ are functions of ${\color{coral}q}$ 🔄.
+-   In robust version, coefficients ${\color{orange}c_s}$ are functions of ${\color{royalblue}q}$ 🔄.
 -   The robust problem is still convex. Moreover, there is an infinite number of constraints 🔁.
 -   Alternative approach: Ellipsoid Method 🔳.
 

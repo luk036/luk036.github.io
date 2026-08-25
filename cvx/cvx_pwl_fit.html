@@ -128,9 +128,9 @@ graph TD
 
 -   In PWL, fitting problem can be formulated as a quadratic
     programming:
-    -   Minimize $\sum_i ({\color{blue} f_i} - {\color{coral} p_i})^2$, subject to:
+    -   Minimize $\sum_i ({\color{blue} f_i} - {\color{royalblue} p_i})^2$, subject to:
     -   For each non-boundary vertex $v_i$
-        -   impose $(1 - {\color{orange} \lambda}) {\color{coral} p_{i-1}} + {\color{orange} \lambda} {\color{coral} p_{i+1}} \geq {\color{coral} p_i}$
+        -   impose $(1 - {\color{orange} \lambda}) {\color{royalblue} p_{i-1}} + {\color{orange} \lambda} {\color{royalblue} p_{i+1}} \geq {\color{royalblue} p_i}$
         -   where ${\color{orange} \lambda}$ can be found by solving
             -   $(1 - {\color{orange} \lambda}) v_{i-1} + {\color{orange} \lambda} v_{i+1} \geq v_i$
     -   👉 Note: linear constraint
@@ -197,7 +197,7 @@ graph TD
 -   For $n=3$, to enforce convexity:
     -   For each non-boundary triangle $(v_1, v_2, v_3)$
         -   impose
-            $(1 - {\color{orange} \lambda}) {\color{coral} p_4} + {\color{orange} \lambda} {\color{coral} p_5} \geq \sum_k {\color{green} \mu_k} {\color{coral} p_k}$,
+            $(1 - {\color{orange} \lambda}) {\color{royalblue} p_4} + {\color{orange} \lambda} {\color{royalblue} p_5} \geq \sum_k {\color{green} \mu_k} {\color{royalblue} p_k}$,
             $k=1,2,3$
         -   where ${\color{orange} \lambda}, {\color{green} \mu_k}$ can be found by solving
             -   $(1 - {\color{orange} \lambda}) v_4 + {\color{orange} \lambda} v_5 = \sum_k {\color{green} \mu_k} v_k$
@@ -218,7 +218,7 @@ graph TD
 -   In general,
     -   For each non-boundary n-simplex $(v_1, v_2, \ldots, v_n)$,
         -   impose
-            $(1 - {\color{orange} \lambda}) {\color{coral} p_a} + {\color{orange} \lambda} {\color{coral} p_b} \geq \sum_k {\color{green} \mu_k} {\color{coral} p_k}$,
+            $(1 - {\color{orange} \lambda}) {\color{royalblue} p_a} + {\color{orange} \lambda} {\color{royalblue} p_b} \geq \sum_k {\color{green} \mu_k} {\color{royalblue} p_k}$,
             $k=1,2,\ldots,n$
         -   where ${\color{orange} \lambda}, {\color{green} \mu_k}$ can be found by solving
             -   $(1 - {\color{orange} \lambda}) v_a + {\color{orange} \lambda} v_b = \sum_k {\color{green} \mu_k} v_k$

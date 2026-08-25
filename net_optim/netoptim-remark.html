@@ -72,7 +72,7 @@ class: nord-light, middle, center
 
 A **negative cycle** is a directed cycle where the sum of edge weights is negative:
 
-$$ \sum_{(i,j) \in {\color{lime}C}} {\color{coral}w}(i,j) < 0 $$
+$$ \sum_{(i,j) \in {\color{lime}C}} {\color{royalblue}w}(i,j) < 0 $$
 
 .mermaid[
 
@@ -97,7 +97,7 @@ This 3-cycle has total weight $-2 + 1 + 1 = 0$ (non-negative).
 In network optimization, negative cycles indicate **infeasibility**:
 
 - **Shortest paths**: A negative cycle means no finite shortest path exists
-- **Feasibility constraints**: ${\color{firebrick}u_j} - {\color{firebrick}u_i} \le {\color{coral}w}(i,j)$ — a negative cycle means the system has no solution
+- **Feasibility constraints**: ${\color{firebrick}u_j} - {\color{firebrick}u_i} \le {\color{royalblue}w}(i,j)$ — a negative cycle means the system has no solution
 - **Cutting-plane methods**: Finding negative cycles generates **separation cuts**
 
 .mermaid[
@@ -216,9 +216,9 @@ class: nord-light, middle, center
 
 ### Minimum Cycle Ratio Problem 🧮
 
-For a cycle ${\color{lime}C}$ with edge costs ${\color{coral}c}(e)$ and times ${\color{coral}t}(e)$:
+For a cycle ${\color{lime}C}$ with edge costs ${\color{royalblue}c}(e)$ and times ${\color{royalblue}t}(e)$:
 
-$$ \text{ratio}({\color{lime}C}) = \frac{\sum_{e \in {\color{lime}C}} {\color{coral}c}(e)}{\sum_{e \in {\color{lime}C}} {\color{coral}t}(e)} $$
+$$ \text{ratio}({\color{lime}C}) = \frac{\sum_{e \in {\color{lime}C}} {\color{royalblue}c}(e)}{\sum_{e \in {\color{lime}C}} {\color{royalblue}t}(e)} $$
 
 **Goal**: Find the cycle with the **minimum** cost-to-time ratio.
 
@@ -244,12 +244,12 @@ Ratio of this cycle: $(2 + 3 + 1) / (1 + 2 + 1) = 6 / 4 = 1.5$
 
 Convert to a **parametric feasibility problem**:
 
-For a given ratio ${\color{coral}r}$, define adjusted weights:
-$$ {\color{coral}w}_{\color{coral}r}(e) = {\color{coral}c}(e) - {\color{coral}r} \cdot {\color{coral}t}(e) $$
+For a given ratio ${\color{royalblue}r}$, define adjusted weights:
+$$ {\color{royalblue}w}_{\color{royalblue}r}(e) = {\color{royalblue}c}(e) - {\color{royalblue}r} \cdot {\color{royalblue}t}(e) $$
 
-The optimal ratio ${\color{coral}r}^*$ is the smallest ${\color{coral}r}$ such that **no negative cycle** exists with weights ${\color{coral}w}_{\color{coral}r}$.
+The optimal ratio ${\color{royalblue}r}^*$ is the smallest ${\color{royalblue}r}$ such that **no negative cycle** exists with weights ${\color{royalblue}w}_{\color{royalblue}r}$.
 
-$$ {\color{coral}r}^* = \min_{{\color{lime}C} \in \text{cycles}} \frac{\sum {\color{coral}c}(e)}{\sum {\color{coral}t}(e)} $$
+$$ {\color{royalblue}r}^* = \min_{{\color{lime}C} \in \text{cycles}} \frac{\sum {\color{royalblue}c}(e)}{\sum {\color{royalblue}t}(e)} $$
 
 ---
 
@@ -311,9 +311,9 @@ class: nord-light, middle, center
 
 ### Maximum Parametric Problem 📈
 
-**Formulation**: Maximize ${\color{coral}r}$ such that:
+**Formulation**: Maximize ${\color{royalblue}r}$ such that:
 
-$$ \text{dist}[{\color{firebrick}v}] - \text{dist}[{\color{firebrick}u}] \le \text{distance}(e, {\color{coral}r}) \quad \forall e(u,v) \in {\color{lime}E} $$
+$$ \text{dist}[{\color{firebrick}v}] - \text{dist}[{\color{firebrick}u}] \le \text{distance}(e, {\color{royalblue}r}) \quad \forall e(u,v) \in {\color{lime}E} $$
 
 .mermaid[
 
@@ -331,7 +331,7 @@ graph LR
 
 ]
 
-Where $\text{distance}(e, {\color{coral}r})$ is a **monotone decreasing** function of ${\color{coral}r}$.
+Where $\text{distance}(e, {\color{royalblue}r})$ is a **monotone decreasing** function of ${\color{royalblue}r}$.
 
 ---
 
@@ -450,11 +450,11 @@ class: nord-light, middle, center
 
 ### Problem Statement 📋
 
-Given a matrix ${\color{green}A} = ({\color{coral}a}_{ij})$, find positive diagonal scaling factors ${\color{firebrick}u}_i$ to minimize:
+Given a matrix ${\color{green}A} = ({\color{royalblue}a}_{ij})$, find positive diagonal scaling factors ${\color{firebrick}u}_i$ to minimize:
 
-$$ \min \frac{{\color{coral}\pi}}{{\color{coral}\psi}} $$
+$$ \min \frac{{\color{royalblue}\pi}}{{\color{royalblue}\psi}} $$
 
-$$ \text{s.t.} \quad {\color{coral}\psi} \le {\color{firebrick}u}_i \cdot |{\color{coral}a}_{ij}| \cdot {\color{firebrick}u}_j^{-1} \le {\color{coral}\pi}, \ \forall {\color{coral}a}_{ij} \ne 0 $$
+$$ \text{s.t.} \quad {\color{royalblue}\psi} \le {\color{firebrick}u}_i \cdot |{\color{royalblue}a}_{ij}| \cdot {\color{firebrick}u}_j^{-1} \le {\color{royalblue}\pi}, \ \forall {\color{royalblue}a}_{ij} \ne 0 $$
 
 .mermaid[
 
@@ -479,17 +479,17 @@ graph LR
 
 ### Log-Scale Transformation 📊
 
-Take logs: ${\color{green}x} = (\log {\color{coral}\pi}, \log {\color{coral}\psi})$, $\text{cost} = \log |{\color{coral}a}_{ij}|$
+Take logs: ${\color{green}x} = (\log {\color{royalblue}\pi}, \log {\color{royalblue}\psi})$, $\text{cost} = \log |{\color{royalblue}a}_{ij}|$
 
 The constraint becomes:
 
-$$ \log {\color{coral}\psi} \le \log {\color{firebrick}u}_i + \log |{\color{coral}a}_{ij}| - \log {\color{firebrick}u}_j \le \log {\color{coral}\pi} $$
+$$ \log {\color{royalblue}\psi} \le \log {\color{firebrick}u}_i + \log |{\color{royalblue}a}_{ij}| - \log {\color{firebrick}u}_j \le \log {\color{royalblue}\pi} $$
 
-Or equivalently, for each edge $(i,j)$ with cost pair $({\color{coral}a}_{ij}, {\color{coral}a}_{ji})$:
+Or equivalently, for each edge $(i,j)$ with cost pair $({\color{royalblue}a}_{ij}, {\color{royalblue}a}_{ji})$:
 
-$$ \min({\color{coral}\pi} - {\color{coral}a}_{ji},\ {\color{coral}a}_{ij} - {\color{coral}\psi}) \ge 0 $$
+$$ \min({\color{royalblue}\pi} - {\color{royalblue}a}_{ji},\ {\color{royalblue}a}_{ij} - {\color{royalblue}\psi}) \ge 0 $$
 
-Where $( {\color{coral}\pi}, {\color{coral}\psi} ) = ({\color{green}x_0}, {\color{green}x_1})$ in log scale.
+Where $( {\color{royalblue}\pi}, {\color{royalblue}\psi} ) = ({\color{green}x_0}, {\color{green}x_1})$ in log scale.
 
 ---
 
@@ -564,9 +564,9 @@ class: nord-light, middle, center
 
 In VLSI design, **clock skew** is the difference in clock arrival times between sequential elements.
 
-$$ {\color{firebrick}t}(j) - {\color{firebrick}t}(i) \le T_\text{clk} - {\color{coral}D}(i,j) $$
+$$ {\color{firebrick}t}(j) - {\color{firebrick}t}(i) \le T_\text{clk} - {\color{royalblue}D}(i,j) $$
 
-$$ {\color{firebrick}t}(i) - {\color{firebrick}t}(j) \le {\color{coral}d}(i,j) - T_\text{hold} $$
+$$ {\color{firebrick}t}(i) - {\color{firebrick}t}(j) \le {\color{royalblue}d}(i,j) - T_\text{hold} $$
 
 .mermaid[
 
@@ -599,7 +599,7 @@ This is a **difference constraints system** — solvable via negative cycle dete
 $$ F_{\max} = \frac{1}{\max\text{-cycle-ratio}} $$
 
 Find the cycle where:
-$$ {\color{coral}r} = \max_{{\color{lime}C}} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
+$$ {\color{royalblue}r} = \max_{{\color{lime}C}} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
 
 This is the **critical cycle** that limits performance. 🏎️
 

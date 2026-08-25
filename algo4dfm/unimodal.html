@@ -72,7 +72,7 @@ If you do it right,
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 📈
 
-- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{green}x} < {\color{coral}m}$ and *concave* for ${\color{green}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the *mode*. 📐
+- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{green}x} < {\color{royalblue}m}$ and *concave* for ${\color{green}x} > {\color{royalblue}m}$, then the distribution is unimodal, ${\color{royalblue}m}$ being the *mode*. 📐
 
 - 📚 Examples
   - Normal distribution
@@ -104,12 +104,12 @@ If you do it right,
 
 ### 📐 Quantile function
 
-- The quantile function ${\color{firebrick}z_p}$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
+- The quantile function ${\color{firebrick}z_p}$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{royalblue}p})$.
 
 - Close-form expression for some unimodal distributions:
-  - Normal: ${\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)$
-  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)\right)$
-  - Log-logistic: ${\color{green}\alpha}\left( \frac{{\color{coral}p}}{1-{\color{coral}p}} \right)^{1/{\color{purple}\beta}}$
+  - Normal: ${\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{royalblue}p} - 1)$
+  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{royalblue}p} - 1)\right)$
+  - Log-logistic: ${\color{green}\alpha}\left( \frac{{\color{royalblue}p}}{1-{\color{royalblue}p}} \right)^{1/{\color{purple}\beta}}$
 
 - For log-normal distribution:
   - mode: $\exp({\color{blue}\mu} - {\color{orange}\sigma}^2)$
@@ -119,37 +119,37 @@ If you do it right,
 
 ### ⏱️ Setup- and Hold-time Constraints
 
-- Let ${\color{coral}T_\text{skew}}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where
+- Let ${\color{royalblue}T_\text{skew}}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where
   - ${\color{red}t_i}$: clock signal delay at the initial register
   - ${\color{red}t_f}$: clock signal delay at the final register
-  - Assume in zero-skew, i.e. ${\color{coral}T_\text{skew}}(i,f) = 0$,
+  - Assume in zero-skew, i.e. ${\color{royalblue}T_\text{skew}}(i,f) = 0$,
       - the reported setup-time slack is ${\color{green}S_{if}}$
       - the reported hold-time slack is ${\color{orange}H_{if}}$
 - Then, in useful skew design:
-    $${\color{coral}T_\text{skew}}(i,f) \le  {\color{green}S_{if}} \implies {\color{red}t_i} - {\color{red}t_f} \le {\color{green}S_{if}}$$
-    $${\color{coral}T_\text{skew}}(i,f) \ge  -{\color{orange}H_{if}} \implies {\color{red}t_f} - {\color{red}t_i} \le {\color{orange}H_{if}} $$
-- In principle, ${\color{orange}H_{if}} \text{ and } {\color{coral}T_\text{CP}} - {\color{green}S_{if}}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
-- Let ${\color{coral}D_{if}} = {\color{coral}T_\text{CP}} - {\color{green}S_{if}}$
+    $${\color{royalblue}T_\text{skew}}(i,f) \le  {\color{green}S_{if}} \implies {\color{red}t_i} - {\color{red}t_f} \le {\color{green}S_{if}}$$
+    $${\color{royalblue}T_\text{skew}}(i,f) \ge  -{\color{orange}H_{if}} \implies {\color{red}t_f} - {\color{red}t_i} \le {\color{orange}H_{if}} $$
+- In principle, ${\color{orange}H_{if}} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{green}S_{if}}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+- Let ${\color{royalblue}D_{if}} = {\color{royalblue}T_\text{CP}} - {\color{green}S_{if}}$
 
 ---
 
 ### 🎯 Yield-driven Optimization
 
 - Max-Min Formulation:
-  - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le {\color{coral}\tilde{W}_{ij}} \}\}\}$,
-  - No need for correlation information between ${\color{coral}\tilde{W}_{ij}}$.
+  - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le {\color{royalblue}\tilde{W}_{ij}} \}\}\}$,
+  - No need for correlation information between ${\color{royalblue}\tilde{W}_{ij}}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to:
   $$\begin{array}{ll}
-    \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{Pr}\{ {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}_{ij}} \} \ge {\color{coral}\beta} \\
-    & \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le {\color{coral}\tilde{H}_{ij}} \} \ge {\color{coral}\beta}
+    \text{maximum} & {\color{royalblue}\beta} \\
+    \text{subject to} & \text{Pr}\{ {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{royalblue}\tilde{D}_{ij}} \} \ge {\color{royalblue}\beta} \\
+    & \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le {\color{royalblue}\tilde{H}_{ij}} \} \ge {\color{royalblue}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}
-    \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - \Phi^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
-      & {\color{red}t_j} - {\color{red}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{coral}\beta})
+    \text{maximum} & {\color{royalblue}\beta} \\
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - \Phi^{-1}_{D_{ij}\ }({\color{royalblue}\beta}) \\
+      & {\color{red}t_j} - {\color{red}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{royalblue}\beta})
   \end{array}$$
 
 ---
@@ -166,17 +166,17 @@ If you do it right,
 - Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - ({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu^H_{ij}} + {\color{orange}\sigma^H_{ij}} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
+  \text{maximum} & {\color{royalblue}\beta} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - ({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{royalblue}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu^H_{ij}} + {\color{orange}\sigma^H_{ij}} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{royalblue}\beta})-1)}
 \end{array}$$
 
 - Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have: 🔄
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - {\color{blue}\mu^D_{ij}} - {\color{orange}\sigma^D_{ij}} {\color{coral}\beta'} \\
-    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu^H_{ij}} - {\color{orange}\sigma^H_{ij}} {\color{coral}\beta'}
+  \text{maximum} & {\color{royalblue}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{blue}\mu^D_{ij}} - {\color{orange}\sigma^D_{ij}} {\color{royalblue}\beta'} \\
+    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu^H_{ij}} - {\color{orange}\sigma^H_{ij}} {\color{royalblue}\beta'}
 \end{array}$$
 
 - is equivalent to the minimum cost-to-time ratio cycle (linear).
@@ -190,20 +190,20 @@ $$\begin{array}{ll}
 - Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu^H_{ij}} + {\color{orange}\sigma^H_{ij}} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
+  \text{maximum} & {\color{royalblue}\beta} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - \exp({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{royalblue}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu^H_{ij}} + {\color{orange}\sigma^H_{ij}} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{royalblue}\beta})-1)})
 \end{array}$$
 
 - Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{coral}\beta'}) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu^H_{ij}} - {\color{orange}\sigma^H_{ij}} {\color{coral}\beta'})
+  \text{maximum} & {\color{royalblue}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{royalblue}T_\text{CP}} - \exp({\color{blue}\mu^D_{ij}} + {\color{orange}\sigma^D_{ij}} {\color{royalblue}\beta'}) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu^H_{ij}} - {\color{orange}\sigma^H_{ij}} {\color{royalblue}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{coral}\beta'}$. ⚡
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{royalblue}\beta'}$. ⚡
 
 ---
 
@@ -211,7 +211,7 @@ $$\begin{array}{ll}
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
-  - if ${\color{coral}w_1}, \ldots, {\color{coral}w_n} \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is ${\color{coral}w_1} f_1 + \cdots + {\color{coral}w_n} f_n.$ In particular, the sum of two convex functions is convex.
+  - if ${\color{royalblue}w_1}, \ldots, {\color{royalblue}w_n} \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is ${\color{royalblue}w_1} f_1 + \cdots + {\color{royalblue}w_n} f_n.$ In particular, the sum of two convex functions is convex.
 - Composition:
   -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex. As an example, if $f$ is convex, then so is $e^{f({\color{green}x})},$ because $e^{{\color{green}x}}$ is convex and monotonically increasing.
   -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex.

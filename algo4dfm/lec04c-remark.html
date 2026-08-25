@@ -41,7 +41,7 @@ class: nord-light, middle, center
 
 ### 📏 A Simple Area Problem
 
-- Points ${\color{coral}p}$, ${\color{coral}q}$, and ${\color{coral}r}$ vary within 3 given rectangular regions
+- Points ${\color{royalblue}p}$, ${\color{royalblue}q}$, and ${\color{royalblue}r}$ vary within 3 given rectangular regions
 - **Q**: What are the upper/lower bounds of ${\color{salmon}\triangle pqr}$ area?
 
 ![triangle](lec04.files/triangle.svg)
@@ -224,9 +224,9 @@ IA [3..4] → $3.5 + 0.5 {\color{blue}\epsilon_1}$
 
 ### ➕ Affine Arithmetic
 
-How to find $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{coral}q})$ efficiently?
+How to find $\sup_{{\color{royalblue}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{royalblue}q})$ efficiently?
 
--   $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{coral}q})$ is in general difficult to obtain.
+-   $\sup_{{\color{royalblue}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{royalblue}q})$ is in general difficult to obtain.
 -   Provided that variations are small or nearly linear, we propose using Affine Arithmetic (AA) to solve this problem.
 -   Features of AA:
     -   Handle correlation of variations by sharing *noise symbols*.
@@ -239,11 +239,11 @@ How to find $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\colo
 
 -   An uncertain quantity is represented in an affine form (AAF):
     $${\color{darkblack}\hat{a}} = {\color{orange}a_0} + {\color{darkblack}a_1} {\color{blue}\varepsilon_1} + {\color{darkblack}a_2} {\color{blue}\varepsilon_2} +
-      \cdots +  {\color{darkblack}a_k} {\color{blue}\varepsilon_k} = {\color{orange}a_0} + \sum_{i=1}^{{\color{coral}k} } {\color{darkblack}a_i} {\color{blue}\varepsilon_i},$$
+      \cdots +  {\color{darkblack}a_k} {\color{blue}\varepsilon_k} = {\color{orange}a_0} + \sum_{i=1}^{{\color{royalblue}k} } {\color{darkblack}a_i} {\color{blue}\varepsilon_i},$$
     where
     -   ${\color{blue}\varepsilon_i} \in [-1, 1]$ is called *noise symbol*.
 -   Exact results for affine operations (${\color{darkblack}\hat{a}}+{\color{darkblack}\hat{b}}$,
-    ${\color{darkblack}\hat{a}}-{\color{darkblack}\hat{b}}$ and ${\color{coral}\alpha} \cdot {\color{darkblack}\hat{a}}$)
+    ${\color{darkblack}\hat{a}}-{\color{darkblack}\hat{b}}$ and ${\color{royalblue}\alpha} \cdot {\color{darkblack}\hat{a}}$)
 -   Results of non-affine operations (such as ${\color{darkblack}\hat{a}} \cdot {\color{darkblack}\hat{b}}$, ${\color{darkblack}\hat{a}}/{\color{darkblack}\hat{b}}$, $\max({\color{darkblack}\hat{a}}, {\color{darkblack}\hat{b}}), \log({\color{darkblack}\hat{a}})$) are *approximated* in an affine form.
 -   AA has been applied to a wide range of applications recently when process variations are considered.
 
@@ -254,8 +254,8 @@ How to find $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\colo
 In our robust GP problem:
 
 AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs.
-First, represent every elements in ${\color{coral}q}$ in affine forms.
-For each ellipsoid iteration, $f({\color{green}x_c},{\color{coral}q})$ is obtained by *approximating* $f({\color{green}x_c},{\color{darkblack}\hat{q}})$ in an affine form:
+First, represent every elements in ${\color{royalblue}q}$ in affine forms.
+For each ellipsoid iteration, $f({\color{green}x_c},{\color{royalblue}q})$ is obtained by *approximating* $f({\color{green}x_c},{\color{darkblack}\hat{q}})$ in an affine form:
 
 $${\color{darkblack}\hat{f}} = {\color{orange}f_0} + {\color{darkblack}f_1} {\color{blue}\varepsilon_1} + {\color{darkblack}f_2} {\color{blue}\varepsilon_2} + \cdots +  {\color{darkblack}f_k} {\color{blue}\varepsilon_k}.$$
 
@@ -265,7 +265,7 @@ $${\color{blue}\varepsilon_j} = \left\{ \begin{array}{ll}
               +1 & \qquad \text{if} \; {\color{darkblack}f_j} > 0 \\
               -1 & \qquad \text{if} \; {\color{darkblack}f_j} < 0
             \end{array}
-  \right.   \quad j=1, \cdots, {\color{coral}k}.$$
+  \right.   \quad j=1, \cdots, {\color{royalblue}k}.$$
 
 ---
 
@@ -309,11 +309,11 @@ class: nord-light, middle, center
 
 ### 📈 Open-Loop Gain Example
 
--   Open-loop gain ${\color{coral}A_v}$ can be approximated as a monomial function:
+-   Open-loop gain ${\color{royalblue}A_v}$ can be approximated as a monomial function:
 
-    $${\color{coral}A_v} =  \frac{2 {\color{orange}C_{ox}} }{({\color{orange}\lambda_n} + {\color{orange}\lambda_p})^2} \sqrt{{\color{orange}\mu_n} {\color{orange}\mu_p} \frac{{\color{green}W_1} {\color{green}W_6}}{{\color{green}L_1} {\color{green}L_6} {\color{coral}I_1} {\color{coral}I_6} }$$
+    $${\color{royalblue}A_v} =  \frac{2 {\color{orange}C_{ox}} }{({\color{orange}\lambda_n} + {\color{orange}\lambda_p})^2} \sqrt{{\color{orange}\mu_n} {\color{orange}\mu_p} \frac{{\color{green}W_1} {\color{green}W_6}}{{\color{green}L_1} {\color{green}L_6} {\color{royalblue}I_1} {\color{royalblue}I_6} }$$
 
-    where ${\color{coral}I_1}$ and ${\color{coral}I_6}$ are monomial functions.
+    where ${\color{royalblue}I_1}$ and ${\color{royalblue}I_6}$ are monomial functions.
 
 -   Corresponding C++ code fragment:
 
@@ -339,10 +339,10 @@ class: nord-light, middle, center
 | ${\color{green}L_8}$      | μm     | 1.0     | 1.0   | 1.0    |
 | ${\color{green}L_{10}}$   | μm     | 1.0     | 1.0   | 1.0    |
 | ${\color{green}L_{13}}$   | μm     | 1.0     | 1.0   | 1.0    |
-| ${\color{coral}A}$        | N/A    | 10.4    | 10.3  | 12.0   |
-| ${\color{coral}B}$        | N/A    | 61.9    | 61.3  | 69.1   |
-| ${\color{coral}C_c}$      | pF     | 1.0     | 1.0   | 1.0    |
-| ${\color{coral}I_{bias}}$ | μA     | 6.12    | 6.19  | 5.54   |
+| ${\color{royalblue}A}$        | N/A    | 10.4    | 10.3  | 12.0   |
+| ${\color{royalblue}B}$        | N/A    | 61.9    | 61.3  | 69.1   |
+| ${\color{royalblue}C_c}$      | pF     | 1.0     | 1.0   | 1.0    |
+| ${\color{royalblue}I_{bias}}$ | μA     | 6.12    | 6.19  | 5.54   |
 
 ]
 
@@ -355,8 +355,8 @@ class: nord-light, middle, center
   | Performance (units)            | Spec.        | Std.         | Robust       |
   | ------------------------------ | ------------ | ------------ | ------------ |
   | Estimated Area ($\mu$m$^2$)    | minimize     | 5678.4       | 6119.2       |
-  | Output Range (x ${\color{coral}V_{DD}}$)      | [0.1, 0.9]   | [0.07, 0.92] | [0.07, 0.92] |
-  | Comm Inp Range (x ${\color{coral}V_{DD}}$)    | [0.45, 0.55] | [0.41, 0.59] | [0.39, 0.61] |
+  | Output Range (x ${\color{royalblue}V_{DD}}$)      | [0.1, 0.9]   | [0.07, 0.92] | [0.07, 0.92] |
+  | Comm Inp Range (x ${\color{royalblue}V_{DD}}$)    | [0.45, 0.55] | [0.41, 0.59] | [0.39, 0.61] |
   | Gain (dB)                      | $\geq 80$    | 80           | [80.0, 81.1] |
   | Unity Gain Freq. (MHz)         | $\geq 50$    | 50           | [50.0, 53.1] |
   | Phase Margin (degree)          | $\geq 60$    | 86.5         | [86.1, 86.6] |

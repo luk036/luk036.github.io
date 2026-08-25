@@ -89,7 +89,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 .pull-left[
 
--   ${\color{coral}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+-   ${\color{royalblue}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
   -   ${\color{firebrick}t_f}$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why? 🤔
@@ -106,12 +106,12 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 ### 📏 Timing Constraint
 
 -   Setup time constraint ⏱️
-    $${\color{coral}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}D}_{if} - {\color{coral}T_\text{setup}} = {\color{blue}u}_{if}$$
+    $${\color{royalblue}T_\text{skew}}(i,f) \le {\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{if} - {\color{royalblue}T_\text{setup}} = {\color{blue}u}_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint ⏳
-    $${\color{coral}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}d}_{if} = {\color{blue}l}_{if}$$ While
+    $${\color{royalblue}T_\text{skew}}(i,f) \ge {\color{royalblue}T_\text{hold}} - {\color{royalblue}d}_{if} = {\color{blue}l}_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -137,10 +137,10 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 -   Create a graph by 📈
   -   replacing the hold time constraint with a *h-edge* with cost
-        $-({\color{coral}T_\text{hold}} - {\color{coral}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+        $-({\color{royalblue}T_\text{hold}} - {\color{royalblue}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
         and
   -   replacing the setup time constraint with an s-edge with cost
-        ${\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}}$ from $\text{FF}_j$ to
+        ${\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{setup}}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition: 🔗
   -   The sum of skews for paths having the same starting and ending
@@ -176,9 +176,9 @@ graph LR
 
 .pull-left[
 
-Assume ${\color{coral}T_\text{setup}} = {\color{coral}T_\text{hold}}$ = 0 ⏱️
+Assume ${\color{royalblue}T_\text{setup}} = {\color{royalblue}T_\text{hold}}$ = 0 ⏱️
 
-Clock period ${\color{coral}T_\text{CP}}$ is feasible if and only if current graph contains no
+Clock period ${\color{royalblue}T_\text{CP}}$ is feasible if and only if current graph contains no
 negative cost cycles.
 
 ]
@@ -210,7 +210,7 @@ graph LR
 
 -   Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize} & {\color{coral}T_\text{CP} } \\
+      \text{minimize} & {\color{royalblue}T_\text{CP} } \\
       \text{subject to} & {\color{blue}l}_{ij} \leq {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq {\color{blue}u}_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
@@ -373,7 +373,7 @@ assert TCP == approx(3.0)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
-    $${\color{blue}l}_{ij} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + {\color{coral}\Delta d} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{coral}\Delta d}$$
+    $${\color{blue}l}_{ij} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + {\color{royalblue}\Delta d} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{royalblue}\Delta d}$$
 
 -   Then perform clock period optimization.
 
@@ -384,7 +384,7 @@ assert TCP == approx(3.0)
 -   The maximum timing uncertainty is too pessimistic. Lose some
     performance; ⚠️
 
--   ${\color{coral}\Delta d}$ is fixed; it does not consider data path delay
+-   ${\color{royalblue}\Delta d}$ is fixed; it does not consider data path delay
     differences between cycle edges. ⚠️
 
 ---
@@ -408,12 +408,12 @@ assert TCP == approx(3.0)
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $${\color{blue}l}_{ij} + {\color{coral}lm_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{coral}um_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
+    $${\color{blue}l}_{ij} + {\color{royalblue}lm_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{royalblue}um_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
 
     $$\begin{array}{ll}
-      \text{minimize} & \sum_k (0.5 - \min({\color{coral}lm}_k, {\color{coral}um}_k) )^2 \\
-      \text{subject to} & 0 \leq {\color{coral}lm}_k \leq 0.5 \\
-      & 0 \leq {\color{coral}um}_k \leq 0.5
+      \text{minimize} & \sum_k (0.5 - \min({\color{royalblue}lm}_k, {\color{royalblue}um}_k) )^2 \\
+      \text{subject to} & 0 \leq {\color{royalblue}lm}_k \leq 0.5 \\
+      & 0 \leq {\color{royalblue}um}_k \leq 0.5
     \end{array}$$
 
 ---
@@ -458,12 +458,12 @@ This is not optimal for yield. ⚠️
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\beta} \\
-      \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{blue}\mu}_{ij} - {\color{coral}\beta}
+      \text{maximize} & {\color{royalblue}\beta} \\
+      \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{blue}\mu}_{ij} - {\color{royalblue}\beta}
   \end{array}$$
 
 -   Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
-  $${\color{coral}\beta^*} = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij}$$
+  $${\color{royalblue}\beta^*} = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij}$$
 
     ${\color{lime}C}$: critical cycle (first negative cycle)
 
@@ -690,7 +690,7 @@ graph LR
 
 ]
 
-where $\text{Slack}_{ij} = {\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}} - \text{Skew}_{ij}$
+where $\text{Slack}_{ij} = {\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{setup}} - \text{Skew}_{ij}$
 
 ---
 
@@ -707,26 +707,26 @@ where $\text{Slack}_{ij} = {\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - 
 
 ### 📏 Prop-Based on Gaussian model (I)
 
--   Assuming there are ${\color{coral}n}$ gates with delay $N({\color{blue}\mu},{\color{blue}\sigma}^2)$ in a path,
-    then this path delay is $N({\color{coral}n}{\color{blue}\mu},{\color{coral}n}{\color{blue}\sigma}^2)$
+-   Assuming there are ${\color{royalblue}n}$ gates with delay $N({\color{blue}\mu},{\color{blue}\sigma}^2)$ in a path,
+    then this path delay is $N({\color{royalblue}n}{\color{blue}\mu},{\color{royalblue}n}{\color{blue}\sigma}^2)$
 -   Distribute slack along the most timing-critical cycle, according to
     the square root of each edge's path delays (???). 📏
 -   To achieve this, update the weights of s-edges and h-edges: ⚙️
     $$\begin{array}{ll}
-    {\color{coral}T_\text{CP}} - ({\color{coral}D}_{ij} + {\color{coral}\alpha} \sqrt{{\color{coral}D}_{ij} } {\color{blue}\sigma}) - {\color{coral}T_\text{setup}} \\
-    -{\color{coral}T_\text{hold}} + ({\color{coral}d}_{ij} - {\color{coral}\alpha} \sqrt{{\color{coral}d}_{ij} } {\color{blue}\sigma})
+    {\color{royalblue}T_\text{CP}} - ({\color{royalblue}D}_{ij} + {\color{royalblue}\alpha} \sqrt{{\color{royalblue}D}_{ij} } {\color{blue}\sigma}) - {\color{royalblue}T_\text{setup}} \\
+    -{\color{royalblue}T_\text{hold}} + ({\color{royalblue}d}_{ij} - {\color{royalblue}\alpha} \sqrt{{\color{royalblue}d}_{ij} } {\color{blue}\sigma})
     \end{array}$$
 
-    where ${\color{coral}\alpha}$ ensures a minimum timing margin for
+    where ${\color{royalblue}\alpha}$ ensures a minimum timing margin for
     each timing constraint.
 
 ---
 
 ### 📏 Prop-Based on Gaussian model (II)
 
--   Given a specific clock period ${\color{coral}T_\text{CP}}$, we gradually increase ${\color{coral}\alpha}$ and
+-   Given a specific clock period ${\color{royalblue}T_\text{CP}}$, we gradually increase ${\color{royalblue}\alpha}$ and
     use the Bellman-Ford algorithm to detect whether it is still feasible. 🔍
--   After finding the maximum ${\color{coral}\alpha}$, the edges along the most
+-   After finding the maximum ${\color{royalblue}\alpha}$, the edges along the most
     timing-critical cycle will have slacks equal to the pre-allocated
     timing margins. 🎯
 -   Many edges in a circuit have sufficiently large slack. Therefore, we
@@ -774,11 +774,11 @@ False path
 
 -   Setup time constraint
 
-    $${\color{coral}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{if} - {\color{coral}T_\text{setup}}$$
+    $${\color{royalblue}T_\text{skew}}(i,f) \le {\color{royalblue}T_\text{CP}} - {\color{royalblue}\tilde{D}}_{if} - {\color{royalblue}T_\text{setup}}$$
 
 -   Hold time constraint
 
-    $${\color{coral}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}\tilde{d}}_{if}$$
+    $${\color{royalblue}T_\text{skew}}(i,f) \ge {\color{royalblue}T_\text{hold}} - {\color{royalblue}\tilde{d}}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
     are random variable under process variations.
@@ -829,12 +829,12 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
-    \text{maximize} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{coral}\beta}
+    \text{maximize} & {\color{royalblue}\beta} \\
+    \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}
   \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-  -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
+  -   ${\color{royalblue}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
   -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 ---
@@ -941,28 +941,28 @@ Final ${\color{firebrick}T_1} = {\color{firebrick}T_1} + {\color{firebrick}T_7} 
 ### 🧮 General Formulation
 
 $$\begin{array}{ll}
-      \text{maximum} & g({\color{coral}\beta}) \\
-      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}({\color{coral}\beta}), \; \forall (i,j) \in {\color{lime}E}
+      \text{maximum} & g({\color{royalblue}\beta}) \\
+      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}({\color{royalblue}\beta}), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
-where $f_{ij}({\color{coral}\beta})$ a linear function that represents various problems defined above.
+where $f_{ij}({\color{royalblue}\beta})$ a linear function that represents various problems defined above.
 
-| Problem | $g({\color{coral}\beta})$ | $f_{ij}({\color{coral}\beta})$ (setup)                                 | $f_{ji}({\color{coral}\beta})$ (hold)                        |
+| Problem | $g({\color{royalblue}\beta})$ | $f_{ij}({\color{royalblue}\beta})$ (setup)                                 | $f_{ji}({\color{royalblue}\beta})$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min CP | $-{\color{coral}\beta}$   | ${\color{coral}\beta} - {\color{coral}D}_{ij} - {\color{coral}T_\text{s}}$                       | $-{\color{coral}T_\text{h}} + {\color{coral}d}_{ij}$                 |
-| EVEN    | ${\color{coral}\beta}$    | ${\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{s}} - {\color{coral}\beta}$         | $-{\color{coral}T_\text{h}} + {\color{coral}d}_{ij} - {\color{coral}\beta}$             |
-| C-PROP  | ${\color{coral}\beta}$    | ${\color{coral}T_\text{CP}}-{\color{coral}D}_{ij}-{\color{coral}T_\text{s}} - {\color{blue}\sigma}_{ij} {\color{coral}\beta}$ | $-{\color{coral}T_\text{h}} + {\color{coral}d}_{ij} - {\color{blue}\sigma}_{ij} {\color{coral}\beta}$ |
+| Min CP | $-{\color{royalblue}\beta}$   | ${\color{royalblue}\beta} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{s}}$                       | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij}$                 |
+| EVEN    | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{s}} - {\color{royalblue}\beta}$         | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij} - {\color{royalblue}\beta}$             |
+| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}}-{\color{royalblue}D}_{ij}-{\color{royalblue}T_\text{s}} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ |
 
 ---
 
 ### 🧮 General Formulation (cont'd)
 
--   In fact, $g({\color{coral}\beta})$ and $f_{ij}({\color{coral}\beta})$ are not necessarily linear functions.
+-   In fact, $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are not necessarily linear functions.
     Any monotonic decreasing function will do. 🔍
--   Theorem: if $g({\color{coral}\beta})$ and $f_{ij}({\color{coral}\beta})$ are *monotonic decreasing*
+-   Theorem: if $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are *monotonic decreasing*
     functions for all $i$ and $j$, then there is a unique solution to the problem. prove later). 📐
 -   Question 1: Does this generalization have any application? ❓
--   Question 2: What if $g({\color{coral}\beta})$ and $f_{ij}({\color{coral}\beta})$ are convex but not monotone? ❓
+-   Question 2: What if $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are convex but not monotone? ❓
 
 ---
 
@@ -986,18 +986,18 @@ where $f_{ij}({\color{coral}\beta})$ a linear function that represents various p
 ### 🎯 Timing Yield Maximization
 
 -   Formulation:
-  -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{coral}\tilde{W}}_{ij} \}\}\}$
+  -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{royalblue}\tilde{W}}_{ij} \}\}\}$
   -   is not exactly timing yield but reasonable.
   -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
 -   It is equivalent to: 🔄
 
     $$\begin{array}{ll}
-    \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{olive}F}^{-1}_{ji}({\color{coral}\beta}) \\
-      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}F}^{-1}_{ij}(1 - {\color{coral}\beta})
+    \text{maximum} & {\color{royalblue}\beta} \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{olive}F}^{-1}_{ji}({\color{royalblue}\beta}) \\
+      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}F}^{-1}_{ij}(1 - {\color{royalblue}\beta})
     \end{array}$$
-    where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } {\color{coral}\tilde{W}}_{ij}$
+    where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } {\color{royalblue}\tilde{W}}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function. ✅
 
@@ -1007,11 +1007,11 @@ where $f_{ij}({\color{coral}\beta})$ a linear function that represents various p
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
-    $${\color{olive}F}_{ij}({\color{coral}x}) = K(({\color{coral}x} - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
+    $${\color{olive}F}_{ij}({\color{royalblue}x}) = K(({\color{royalblue}x} - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting ⚖️
 
-    $${\color{olive}F}_{ij}({\color{coral}x}) = H({\color{coral}x} - {\color{blue}\mu}_{ij})$$
+    $${\color{olive}F}_{ij}({\color{royalblue}x}) = H({\color{royalblue}x} - {\color{blue}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -1235,7 +1235,7 @@ assert beta == approx(0.32258064516129037)
 ### Unimodality
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
--   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{coral}x} < {\color{coral}m}$ and *concave* for ${\color{coral}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the *mode*. 🔍
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{royalblue}x} < {\color{royalblue}m}$ and *concave* for ${\color{royalblue}x} > {\color{royalblue}m}$, then the distribution is unimodal, ${\color{royalblue}m}$ being the *mode*. 🔍
 -   Examples 📚
   -   Normal distribution
   -   Log-normal distribution
@@ -1246,11 +1246,11 @@ assert beta == approx(0.32258064516129037)
 
 ### Quantile function
 
--   The quantile function ${\color{coral}z_p}$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
+-   The quantile function ${\color{royalblue}z_p}$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{royalblue}p})$. 📐
 -   Close-form expression for some unimodal distributions: 🔢
-  -   Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)$
-  -   Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)\right)$
-  -   Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{coral}p}{1 - \color{coral}p} \right)^{1/{\color{blue}\beta} }$
+  -   Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{royalblue}p} - 1)$
+  -   Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{royalblue}p} - 1)\right)$
+  -   Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{royalblue}p}{1 - \color{royalblue}p} \right)^{1/{\color{blue}\beta} }$
 
 -   For log-normal distribution:
   -   mode: $\exp({\color{blue}\mu} - {\color{blue}\sigma}^2)$
@@ -1260,37 +1260,37 @@ assert beta == approx(0.32258064516129037)
 
 ### Setup- and Hold-time Constraints
 
--   Let ${\color{coral}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+-   Let ${\color{royalblue}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
   -   ${\color{firebrick}t_f}$: clock signal delay at the final register
   -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
     -   the reported setup-time slack is ${\color{blue}S}_{if}$
     -   the reported hold-time slack is ${\color{blue}H}_{if}$
 -   Then, in useful skew design:
-    $${\color{coral}T_\text{skew}}(i,f) \le {\color{blue}S}_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le {\color{blue}S}_{if}$$
-    $${\color{coral}T_\text{skew}}(i,f) \ge -{\color{blue}H}_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le {\color{blue}H}_{if} $$
--   In principle, ${\color{blue}H}_{if} \text{ and } {\color{coral}T_\text{CP}} - {\color{blue}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
--   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP}} - {\color{blue}S}_{if}$
+    $${\color{royalblue}T_\text{skew}}(i,f) \le {\color{blue}S}_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le {\color{blue}S}_{if}$$
+    $${\color{royalblue}T_\text{skew}}(i,f) \ge -{\color{blue}H}_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le {\color{blue}H}_{if} $$
+-   In principle, ${\color{blue}H}_{if} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{blue}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   Let ${\color{royalblue}D}_{if} = {\color{royalblue}T_\text{CP}} - {\color{blue}S}_{if}$
 
 ---
 
 ### Yield-driven Optimization
 
 -   Max-Min Formulation: 🎯
-  -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\tilde{W}}_{ij} \}\}\}$,
-  -   No need for correlation information between ${\color{coral}\tilde{W}}_{ij}$.
+  -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{royalblue}\tilde{W}}_{ij} \}\}\}$,
+  -   No need for correlation information between ${\color{royalblue}\tilde{W}}_{ij}$.
   -   Not exactly the timing yield objective but reasonable.
 -   Equivalent to: 🔄
   $$\begin{array}{ll}
-    \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{ij} \} \ge {\color{coral}\beta} \\
-    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\tilde{H}}_{ij} \} \ge {\color{coral}\beta}
+    \text{maximum} & {\color{royalblue}\beta} \\
+    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{royalblue}\tilde{D}}_{ij} \} \ge {\color{royalblue}\beta} \\
+    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{royalblue}\tilde{H}}_{ij} \} \ge {\color{royalblue}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}
-    \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{olive}\Phi}^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
-      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{coral}\beta})
+    \text{maximum} & {\color{royalblue}\beta} \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{olive}\Phi}^{-1}_{D_{ij}\ }({\color{royalblue}\beta}) \\
+      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{royalblue}\beta})
   \end{array}$$
 
 ---
@@ -1307,16 +1307,16 @@ assert beta == approx(0.32258064516129037)
 -   Reduce to: 🔄
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
-    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
+  \text{maximum} & {\color{royalblue}\beta} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{royalblue}\beta} - 1)} ) \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{royalblue}\beta})-1)}
 \end{array}$$
 
 -   Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'} \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'}
 \end{array}$$
 
@@ -1331,16 +1331,16 @@ $$\begin{array}{ll}
 -   Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
-    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
+  \text{maximum} & {\color{royalblue}\beta} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{royalblue}\beta} - 1)} ) \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{royalblue}\beta})-1)})
 \end{array}$$
 
 -   Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'}) \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{royalblue}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'}) \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'})
 \end{array}$$
 

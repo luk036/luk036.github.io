@@ -396,7 +396,7 @@ graph LR
 
 ### ⏰ Clock Skew Scheduling
 
-Clock skew ${\color{coral} T_\text{skew}(i,j)} = {\color{firebrick} t[i]} - {\color{firebrick} t[j]}$ can be **intentionally tuned** for better performance.
+Clock skew ${\color{royalblue} T_\text{skew}(i,j)} = {\color{firebrick} t[i]} - {\color{firebrick} t[j]}$ can be **intentionally tuned** for better performance.
 
 **Timing Constraints:**
 - **Setup:** ${\color{firebrick} t[i]} - {\color{firebrick} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j] - {\color{blue}T_\text{setup}}$
@@ -653,7 +653,7 @@ class: nord-light, middle, center
 **Key Equation:**
 $$ \begin{aligned}
 \min \quad & {\color{darkmagenta} P} \\
-\text{s.t.} \quad & {\color{firebrick} t[i]} - {\color{firebrick} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j]^c - {\color{coral} S^c} \\
+\text{s.t.} \quad & {\color{firebrick} t[i]} - {\color{firebrick} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j]^c - {\color{royalblue} S^c} \\
   & {\color{firebrick} t[i]} - {\color{firebrick} t[j]} \ge {\color{green} H^c} - {\color{blue}d}[i,j]^c \\
   & \forall c \in \text{Corners}
 \end{aligned} $$

@@ -139,7 +139,7 @@ graph LR
 ILP is used to find the optimal repair structure with minimum delay overhead.
 *   **Objective:** Minimize the maximum indegree ($\color{cyan} \lambda$) of all vertices to limit MUX input port counts:
     $$\color{cyan} \min \max_{u \in V} \{ indegree(u) \}$$.
-*   **Binary Variables:** $\color{cyan} x_{vu}^{(s,t)} = 1$ if a path from f-TSV $\color{brown} s$ to s-TSV $\color{brown} t$ passes through edge $\color{coral} (u, v)$.
+*   **Binary Variables:** $\color{cyan} x_{vu}^{(s,t)} = 1$ if a path from f-TSV $\color{brown} s$ to s-TSV $\color{brown} t$ passes through edge $\color{royalblue} (u, v)$.
 *   **Constraint:** Ensures paths are edge-disjoint (vertex-disjoint in original graph).
 
 ---

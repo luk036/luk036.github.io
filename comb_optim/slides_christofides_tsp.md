@@ -35,7 +35,7 @@ graph LR
     style D fill:#4fc,stroke:#333
 ```
 
-- **Input**: Complete graph ${\color{salmon}K}_n$ with edge weights ${\color{coral} w}_{ij}$
+- **Input**: Complete graph ${\color{salmon}K}_n$ with edge weights ${\color{royalblue} w}_{ij}$
 - **Output**: Hamiltonian cycle of minimum total weight
 - **Complexity**: **NP-hard** 🧠 — no polynomial exact algorithm (unless P = NP)
 
@@ -49,8 +49,8 @@ Our demos support **two common metrics**:
 
 | Metric | Formula | `netlistx.tsp` factory |
 |:-------|:--------|:-----------------------|
-| **L2 (Euclidean)** 🟦 | ${\color{coral} w}_{ij} = \sqrt{ {\color{coral}\Delta x}^2 + {\color{coral}\Delta y}^2}$ | `make_l2_graph(n, seed)` |
-| **L1 (Manhattan)** 🟨 | ${\color{coral} w}_{ij} = \lvert {\color{coral}\Delta x} \rvert + \lvert {\color{coral}\Delta y} \rvert$ | `make_l1_graph(n, seed)` |
+| **L2 (Euclidean)** 🟦 | ${\color{royalblue} w}_{ij} = \sqrt{ {\color{royalblue}\Delta x}^2 + {\color{royalblue}\Delta y}^2}$ | `make_l2_graph(n, seed)` |
+| **L1 (Manhattan)** 🟨 | ${\color{royalblue} w}_{ij} = \lvert {\color{royalblue}\Delta x} \rvert + \lvert {\color{royalblue}\Delta y} \rvert$ | `make_l1_graph(n, seed)` |
 
 ```python
 from netlistx.tsp import make_l2_graph, make_l1_graph
@@ -63,9 +63,9 @@ Both satisfy the **triangle inequality**, so the 3/2 guarantee holds for either!
 
 A **metric** satisfies:
 
-1. 🌐 ${\color{coral} w}_{ij} = {\color{coral} w}_{ji}$ (symmetry)
-2. 📏 ${\color{coral} w}_{ik} \le {\color{coral} w}_{ij} + {\color{coral} w}_{jk}$ (triangle inequality)
-3. ✅ ${\color{coral} w}_{ii} = 0$, ${\color{coral} w}_{ij} > 0$ for $i \ne j$
+1. 🌐 ${\color{royalblue} w}_{ij} = {\color{royalblue} w}_{ji}$ (symmetry)
+2. 📏 ${\color{royalblue} w}_{ik} \le {\color{royalblue} w}_{ij} + {\color{royalblue} w}_{jk}$ (triangle inequality)
+3. ✅ ${\color{royalblue} w}_{ii} = 0$, ${\color{royalblue} w}_{ij} > 0$ for $i \ne j$
 
 ```mermaid
 graph LR
@@ -138,7 +138,7 @@ graph TB
 
 ### Key Property 📌
 
-$${\color{coral} w}({\color{salmon}\text{MST} }) \le {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
+$${\color{royalblue} w}({\color{salmon}\text{MST} }) \le {\color{royalblue} w}(\text{OPT}_{\text{TSP} })$$
 
 Why? Removing one edge from the optimal TSP tour gives a **spanning tree**, and MST is the **minimum** spanning tree. So the MST is a **lower bound** on the optimal TSP solution! 💡
 
@@ -212,7 +212,7 @@ graph TB
 
 ### Why this works 🔑
 
-$${\color{coral} w}({\color{lime}\text{matching} }) \le \frac{1}{2} {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
+$${\color{royalblue} w}({\color{lime}\text{matching} }) \le \frac{1}{2} {\color{royalblue} w}(\text{OPT}_{\text{TSP} })$$
 
 Taking the optimal TSP tour, alternate edges form 2 perfect matchings on the odd set — one of them ≤ half the tour.
 
@@ -327,7 +327,7 @@ flowchart LR
 
 Triangle inequality guarantees:
 
-$${\color{coral} w}({\color{lime}\text{shortcut edge} }) \le {\color{coral} w}({\color{lime}\text{skipped path} })$$
+$${\color{royalblue} w}({\color{lime}\text{shortcut edge} }) \le {\color{royalblue} w}({\color{lime}\text{skipped path} })$$
 
 So skipping never **increases** total cost! The resulting tour is **no longer** than the Eulerian circuit. 🎯
 
@@ -337,7 +337,7 @@ So skipping never **increases** total cost! The resulting tour is **no longer** 
 
 ### The 3/2 Approximation Guarantee 🏅
 
-$${\color{coral} w}({\color{lime}\text{Tour} }) = {\color{coral} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{Matching} }) \le {\color{coral} w}(\text{OPT}) + \frac{1}{2}{\color{coral} w}(\text{OPT}) = \frac{3}{2} {\color{coral} w}(\text{OPT})$$
+$${\color{royalblue} w}({\color{lime}\text{Tour} }) = {\color{royalblue} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{Matching} }) \le {\color{royalblue} w}(\text{OPT}) + \frac{1}{2}{\color{royalblue} w}(\text{OPT}) = \frac{3}{2} {\color{royalblue} w}(\text{OPT})$$
 
 ```mermaid
 xychart-beta
@@ -432,14 +432,14 @@ Scaling the same comparison to 100 cities:
 
 ### Scalability 📈
 
-| ${\color{coral} n}$ (cities) | Rough time |
+| ${\color{royalblue} n}$ (cities) | Rough time |
 |:------------:|:----------:|
 | 20 | ~ms ⚡ |
 | 100 | ~seconds |
 | 1,000 | ~minutes |
 | 10,000 | ~hours (matching dominates) |
 
-> **Bottleneck**: Minimum weight perfect matching (Blossom). For huge ${\color{coral} n}$, use heuristics instead.
+> **Bottleneck**: Minimum weight perfect matching (Blossom). For huge ${\color{royalblue} n}$, use heuristics instead.
 
 ---
 
@@ -475,7 +475,7 @@ xychart-beta
 | Variant | Constraint | Christofides work? |
 |:--------|:-----------|:------------------:|
 | 🌐 **Metric TSP** | Triangle inequality | ✅ 1.5-approx |
-| 🛩 **Asymmetric TSP** | ${\color{coral} w}_{ij} \ne {\color{coral} w}_{ji}$ | ❌ |
+| 🛩 **Asymmetric TSP** | ${\color{royalblue} w}_{ij} \ne {\color{royalblue} w}_{ji}$ | ❌ |
 | 🗺 **Graphical TSP** | Distances = shortest path | ✅ |
 | 📦 **TSP with neighborhoods** | Visit regions, not points | ❌ |
 | 🚛 **Vehicle Routing (VRP)** | Multiple vehicles | ❌ (different problem) |
@@ -545,10 +545,10 @@ from netlistx.tsp import (
 
 ### Experiment Ideas 🔧
 
-1. **Vary ${\color{coral} n}$**: try 10, 50, 100, 500 cities — how does runtime scale?
+1. **Vary ${\color{royalblue} n}$**: try 10, 50, 100, 500 cities — how does runtime scale?
 2. **Compare L2 vs L1**: run both on the same random seed — how do tours differ?
 3. **Compare to Nearest Neighbor** heuristic (greedy):
-   $${\color{coral} w}({\color{lime}\text{NN} }) / {\color{coral} w}(\text{OPT}) \approx O(\log n)$$
+   $${\color{royalblue} w}({\color{lime}\text{NN} }) / {\color{royalblue} w}(\text{OPT}) \approx O(\log n)$$
 4. **Break the triangle inequality** ➡ observe ratio degrade
 5. **Visualize each step** — add `plt.pause()` between steps for an animation!
 
@@ -585,7 +585,7 @@ def nearest_neighbor_tsp(G, start=0):
 
 ### The Magic Formula 🪄
 
-$$\boxed{ {\color{coral} w}({\color{lime}\text{Christofides} }) \le \frac{3}{2} {\color{coral} w}(\text{OPT})}$$
+$$\boxed{ {\color{royalblue} w}({\color{lime}\text{Christofides} }) \le \frac{3}{2} {\color{royalblue} w}(\text{OPT})}$$
 
 ### One Sentence Summary 📝
 
@@ -601,13 +601,13 @@ $$\boxed{ {\color{coral} w}({\color{lime}\text{Christofides} }) \le \frac{3}{2} 
 
 **Proof** 🧾:
 
-1. **MST bound**: $${\color{coral} w}({\color{salmon}\text{MST} }) \le \text{OPT}$$ (remove edge from OPT → spanning tree)
+1. **MST bound**: $${\color{royalblue} w}({\color{salmon}\text{MST} }) \le \text{OPT}$$ (remove edge from OPT → spanning tree)
 
-2. **Matching bound**: Let ${\color{salmon}O}$ be odd-degree vertices. OPT tour induces 2 perfect matchings on ${\color{salmon}O}$ by taking alternating edges. The cheaper has weight $\le \frac{1}{2} {\color{coral} w}(\text{OPT})$, so: $${\color{coral} w}({\color{lime}\text{matching} }) \le \frac{1}{2} \text{OPT}$$
+2. **Matching bound**: Let ${\color{salmon}O}$ be odd-degree vertices. OPT tour induces 2 perfect matchings on ${\color{salmon}O}$ by taking alternating edges. The cheaper has weight $\le \frac{1}{2} {\color{royalblue} w}(\text{OPT})$, so: $${\color{royalblue} w}({\color{lime}\text{matching} }) \le \frac{1}{2} \text{OPT}$$
 
-3. **Combined**: $${\color{coral} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{matching} }) \le \text{OPT} + \frac{1}{2}\text{OPT} = \frac{3}{2}\text{OPT}$$
+3. **Combined**: $${\color{royalblue} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{matching} }) \le \text{OPT} + \frac{1}{2}\text{OPT} = \frac{3}{2}\text{OPT}$$
 
-4. **Eulerian + Shortcut**: Triangle inequality ensures shortcutting doesn't increase cost. $$\therefore {\color{coral} w}({\color{lime}\text{final tour} }) \le \frac{3}{2} \text{OPT} \quad \blacksquare$$
+4. **Eulerian + Shortcut**: Triangle inequality ensures shortcutting doesn't increase cost. $$\therefore {\color{royalblue} w}({\color{lime}\text{final tour} }) \le \frac{3}{2} \text{OPT} \quad \blacksquare$$
 
 ```mermaid
 graph LR

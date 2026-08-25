@@ -514,13 +514,13 @@ function BellmanFord(list vertices, list edges, vertex source)
 ### Parametric Potential Problem (PPP)
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\beta} \\
-      \text{subject to} & {\color{blue}y} \leq {\color{olive}d({\color{coral}\beta})}, \\
+      \text{maximize} & {\color{royalblue}\beta} \\
+      \text{subject to} & {\color{blue}y} \leq {\color{olive}d({\color{royalblue}\beta})}, \\
       & {\color{green}A} \cdot {\color{red}u} = {\color{blue}y}
-    \end{array}$$ where ${\color{olive}d({\color{coral}\beta})}$ is a _monotonic decreasing_
+    \end{array}$$ where ${\color{olive}d({\color{royalblue}\beta})}$ is a _monotonic decreasing_
   function.
 
--   If ${\color{olive}d({\color{coral}\beta})}$ is a linear function $(m - s {\color{coral}\beta})$ where $s$ is non-negative,
+-   If ${\color{olive}d({\color{royalblue}\beta})}$ is a linear function $(m - s {\color{royalblue}\beta})$ where $s$ is non-negative,
   the problem reduces to the well-known _minimum cost-to-time ratio problem_.
 
 -   If $s$ = constant, it further reduces to the _minimum mean cycle problem_.
@@ -529,7 +529,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ### 📚 Examples (III)
 
--   ${\color{olive}d({\color{coral}\beta})}$ is linear $(m - s {\color{coral}\beta})$:
+-   ${\color{olive}d({\color{royalblue}\beta})}$ is linear $(m - s {\color{royalblue}\beta})$:
 
   -   Optimal clock period scheduling problem
 
@@ -537,7 +537,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
   -   Yield-driven clock skew scheduling ⏰ (Gaussian)
 
--   ${\color{olive}d({\color{coral}\beta})}$ is non-linear:
+-   ${\color{olive}d({\color{royalblue}\beta})}$ is non-linear:
 
   -   Yield-driven clock skew scheduling ⏰ (non-Gaussian)
 

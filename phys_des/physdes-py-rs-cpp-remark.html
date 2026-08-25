@@ -160,13 +160,13 @@ return extend_left, raw_extend_left, delay_left  # new pure API
 
 ### 🌲 Elmore Delay Formula
 
-$$ {\color{blue} D_{\text{Elmore}}} = {\color{green} r} \cdot {\color{orange} L} \cdot \left(\frac{{\color{coral} c} \cdot {\color{orange} L}}{2} + {\color{red} C_{\text{load}}}\right) $$
+$$ {\color{blue} D_{\text{Elmore}}} = {\color{green} r} \cdot {\color{orange} L} \cdot \left(\frac{{\color{royalblue} c} \cdot {\color{orange} L}}{2} + {\color{red} C_{\text{load}}}\right) $$
 
 Tapping point ${\color{steelblue} z}$ for skew ${\color{orange} \sigma} = {\color{blue} D_{\text{right}}} - {\color{blue} D_{\text{left}}}$:
 
-$$ {\color{steelblue} z} = \frac{{\color{orange} \sigma} + {\color{blue} R} \cdot ({\color{orange} C_{\text{right}}} + \frac{{\color{coral} C_W}}{2})}{{\color{blue} R} \cdot ({\color{coral} C_W} + {\color{orange} C_{\text{right}}} + {\color{green} C_{\text{left}}})} $$
+$$ {\color{steelblue} z} = \frac{{\color{orange} \sigma} + {\color{blue} R} \cdot ({\color{orange} C_{\text{right}}} + \frac{{\color{royalblue} C_W}}{2})}{{\color{blue} R} \cdot ({\color{royalblue} C_W} + {\color{orange} C_{\text{right}}} + {\color{green} C_{\text{left}}})} $$
 
-where ${\color{blue} R} = {\color{green} r} \cdot \text{distance}$, ${\color{coral} C_W} = {\color{coral} c} \cdot \text{distance}$.
+where ${\color{blue} R} = {\color{green} r} \cdot \text{distance}$, ${\color{royalblue} C_W} = {\color{royalblue} c} \cdot \text{distance}$.
 
 **All three languages implement the exact same formula** ✅
 
@@ -375,7 +375,7 @@ class: nord-light, middle, center
 
 ### ✅ DME: Elmore Match
 
-**8 sinks**, Elmore ${\color{green} r}=0.1, {\color{coral} c}=0.1$:
+**8 sinks**, Elmore ${\color{green} r}=0.1, {\color{royalblue} c}=0.1$:
 
 | Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |--------|:-------:|:------:|:---------:|

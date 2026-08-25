@@ -232,12 +232,12 @@ def calculate_tapping_point(self, node_left, node_right, distance):
 
 #### Formula
 
-$${\color{orange} \text{delay} } = {\color{blue} R} \times \left( \frac{ {\color{coral} C_{wire} } }{2} + {\color{red} C_{load} } \right)$$
+$${\color{orange} \text{delay} } = {\color{blue} R} \times \left( \frac{ {\color{royalblue} C_{wire} } }{2} + {\color{red} C_{load} } \right)$$
 
 Where:
 
 -   ${\color{blue} R}$ = wire resistance
--   ${\color{coral} C_{wire} }$ = wire capacitance
+-   ${\color{royalblue} C_{wire} }$ = wire capacitance
 -   ${\color{red} C_{load} }$ = load capacitance
 
 #### Implementation
@@ -472,11 +472,11 @@ $${\color{blue} D_{linear} } = {\color{green} k} \cdot {\color{orange} L}$$
 
 #### Elmore Delay
 
-$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{orange} L} \cdot \left(\frac{ {\color{coral} C} \cdot {\color{orange} L} }{2} + {\color{red} C_{load} }\right)$$
+$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{orange} L} \cdot \left(\frac{ {\color{royalblue} C} \cdot {\color{orange} L} }{2} + {\color{red} C_{load} }\right)$$
 
 Or expanded:
 
-$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{coral} C} \cdot \frac{ {\color{orange} L^2} }{2} + {\color{green} R} \cdot {\color{red} C_{load} } \cdot {\color{orange} L}$$
+$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{royalblue} C} \cdot \frac{ {\color{orange} L^2} }{2} + {\color{green} R} \cdot {\color{red} C_{load} } \cdot {\color{orange} L}$$
 
 #### Complexity
 
@@ -930,11 +930,11 @@ $${\color{blue} d}((x_1, y_1), (x_2, y_2)) = |{\color{green} x_1} - {\color{gree
 
 #### Wire Capacitance
 
-$${\color{coral} C_{wire} } = {\color{green} C_{unit} } \times {\color{orange} L}$$
+$${\color{royalblue} C_{wire} } = {\color{green} C_{unit} } \times {\color{orange} L}$$
 
 #### Total Node Capacitance
 
-$${\color{blue} C_{total} } = {\color{green} C_{left} } + {\color{orange} C_{right} } + {\color{coral} C_{wire} }$$
+$${\color{blue} C_{total} } = {\color{green} C_{left} } + {\color{orange} C_{right} } + {\color{royalblue} C_{wire} }$$
 
 ---
 

@@ -191,7 +191,7 @@ graph TD
 
 **Problem**: Find the minimum-weight path between two nodes in a directed graph.
 
-$$ \min_{{\color{lime}P} \in \mathcal{P}_{st}} \sum_{e \in {\color{lime}P}} {\color{coral}w}(e) $$
+$$ \min_{{\color{lime}P} \in \mathcal{P}_{st}} \sum_{e \in {\color{lime}P}} {\color{royalblue}w}(e) $$
 
 .pull-left[
 **Bellman-Ford Algorithm** ⏱️
@@ -201,7 +201,7 @@ $$ \min_{{\color{lime}P} \in \mathcal{P}_{st}} \sum_{e \in {\color{lime}P}} {\co
 - Dynamic programming: relax edges repeatedly
 
 $$
-{\color{firebrick}\text{dist}}[v] = \min({\color{firebrick}\text{dist}}[v],\; {\color{firebrick}\text{dist}}[u] + {\color{coral}w}(u,v))
+{\color{firebrick}\text{dist}}[v] = \min({\color{firebrick}\text{dist}}[v],\; {\color{firebrick}\text{dist}}[u] + {\color{royalblue}w}(u,v))
 $$
 ]
 .pull-right[
@@ -231,13 +231,13 @@ graph LR
 
 **Definition**: A **negative cycle** is a directed cycle whose edge weights sum to a negative number:
 
-$$ \sum_{(i,j) \in {\color{lime}C}} {\color{coral}w}(i,j) < 0 $$
+$$ \sum_{(i,j) \in {\color{lime}C}} {\color{royalblue}w}(i,j) < 0 $$
 
 .pull-left[
 **Why NCF is the universal primitive** 🔑
 
 1. **Shortest paths**: a negative cycle → no finite shortest path exists
-2. **Feasibility**: ${\color{firebrick}u}_j - {\color{firebrick}u}_i \le {\color{coral}w}(i,j)$ has no solution ⇔ a negative cycle
+2. **Feasibility**: ${\color{firebrick}u}_j - {\color{firebrick}u}_i \le {\color{royalblue}w}(i,j)$ has no solution ⇔ a negative cycle
 3. **Optimality**: in min-cost flow, negative cycles = improvement directions
 4. **Cutting-plane oracles**: each negative cycle yields a cut
 5. **Parametric search**: ratio problems reduce to NCF
@@ -413,14 +413,14 @@ Min-cut = ${\color{salmon}\{s\}}$ → capacity 22 = max-flow
 
 **Minimum Cycle Ratio (MCR)**: Find cycle ${\color{lime}C}$ with minimum cost-to-time ratio:
 
-$$ \text{ratio}({\color{lime}C}) = \frac{\sum_{e \in {\color{lime}C}} {\color{coral}c}(e)}{\sum_{e \in {\color{lime}C}} {\color{coral}t}(e)} $$
+$$ \text{ratio}({\color{lime}C}) = \frac{\sum_{e \in {\color{lime}C}} {\color{royalblue}c}(e)}{\sum_{e \in {\color{lime}C}} {\color{royalblue}t}(e)} $$
 
 **Parametric Reduction** 🔎: For a candidate ratio $r$, define adjusted weights:
 
-$$ {\color{coral}w}_r(e) = {\color{coral}c}(e) - {\color{coral}r} \cdot {\color{coral}t}(e) $$
+$$ {\color{royalblue}w}_r(e) = {\color{royalblue}c}(e) - {\color{royalblue}r} \cdot {\color{royalblue}t}(e) $$
 
-- If a **negative cycle** exists with ${\color{coral}w}_r$ → ${\color{coral}r}$ is **too high** (infeasible) 🔴
-- If **no negative cycle** → ${\color{coral}r}$ is **feasible** 🟢
+- If a **negative cycle** exists with ${\color{royalblue}w}_r$ → ${\color{royalblue}r}$ is **too high** (infeasible) 🔴
+- If **no negative cycle** → ${\color{royalblue}r}$ is **feasible** 🟢
 
 .mermaid[
 <pre>
@@ -439,7 +439,7 @@ graph LR
 </pre>
 ]
 
-**The NCF engine works here too!** Binary search or Howard iteration finds the optimal ${\color{coral}r}^*$. 🔑
+**The NCF engine works here too!** Binary search or Howard iteration finds the optimal ${\color{royalblue}r}^*$. 🔑
 
 ---
 
@@ -503,7 +503,7 @@ The dual provides a **lower bound on OPT**. The primal is at most $\alpha$ times
 
 ### 📚 Primal-Dual Example: Weighted Vertex Cover
 
-**Problem**: Given $G = ({\color{salmon}V}, {\color{lime}E})$ with vertex weights ${\color{coral}w}_v \ge 0$, find min-weight vertex subset covering all edges.
+**Problem**: Given $G = ({\color{salmon}V}, {\color{lime}E})$ with vertex weights ${\color{royalblue}w}_v \ge 0$, find min-weight vertex subset covering all edges.
 
 **ILP** → **LP Relaxation** → **Dual**:
 
@@ -511,7 +511,7 @@ The dual provides a **lower bound on OPT**. The primal is at most $\alpha$ times
 **Primal LP**:
 $$
 \begin{array}{lll}
-\text{min} & \displaystyle\sum_{v} {\color{coral}w}_v {\color{green}x}_v \\
+\text{min} & \displaystyle\sum_{v} {\color{royalblue}w}_v {\color{green}x}_v \\
 \text{s.t.} & {\color{green}x}_u + {\color{green}x}_v \ge 1, & \forall uv \in {\color{lime}E} \\
 & 0 \le {\color{green}x}_v \le 1
 \end{array}
@@ -522,13 +522,13 @@ $$
 $$
 \begin{array}{lll}
 \text{max} & \displaystyle\sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \\
-\text{s.t.} & \displaystyle\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v, & \forall v \in {\color{salmon}V} \\
+\text{s.t.} & \displaystyle\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{royalblue}w}_v, & \forall v \in {\color{salmon}V} \\
 & {\color{firebrick}y}_e \ge 0
 \end{array}
 $$
 ]
 
-**Interpretation**: Each edge $e$ has a budget ${\color{firebrick}y}_e$. As we increase ${\color{firebrick}y}_e$, when $\sum_{e \ni v} {\color{firebrick}y}_e$ hits ${\color{coral}w}_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
+**Interpretation**: Each edge $e$ has a budget ${\color{firebrick}y}_e$. As we increase ${\color{firebrick}y}_e$, when $\sum_{e \ni v} {\color{firebrick}y}_e$ hits ${\color{royalblue}w}_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
 
 ---
 
@@ -553,7 +553,7 @@ def min_vertex_cover(ugraph, weight, coverset=None):
 ```
 
 **How it works** 🔍:
-- `gap[v]` = remaining slack before constraint $\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v$ becomes tight
+- `gap[v]` = remaining slack before constraint $\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{royalblue}w}_v$ becomes tight
 - For each uncovered edge, add the vertex with **smaller gap** (it will bind first)
 - Transfer the dual value to the other vertex (Bookkeeping via gap reduction)
 
@@ -719,13 +719,13 @@ This is a **difference constraints system** — a special case of the Feasible P
 
 ### ✨ Application: Optimal Matrix Scaling
 
-**Problem** (Orlin & Rothblum, 1985): Given matrix ${\color{green}A} = ({\color{coral}a}_{ij})$, find diagonal scaling ${\color{firebrick}u}_i > 0$ that minimizes the ratio spread:
+**Problem** (Orlin & Rothblum, 1985): Given matrix ${\color{green}A} = ({\color{royalblue}a}_{ij})$, find diagonal scaling ${\color{firebrick}u}_i > 0$ that minimizes the ratio spread:
 
-$$ \min \frac{{\color{coral}\pi}}{{\color{coral}\psi}} \quad\text{s.t.}\quad {\color{coral}\psi} \le {\color{firebrick}u}_i \cdot |{\color{coral}a}_{ij}| \cdot {\color{firebrick}u}_j^{-1} \le {\color{coral}\pi},\; \forall {\color{coral}a}_{ij} \ne 0 $$
+$$ \min \frac{{\color{royalblue}\pi}}{{\color{royalblue}\psi}} \quad\text{s.t.}\quad {\color{royalblue}\psi} \le {\color{firebrick}u}_i \cdot |{\color{royalblue}a}_{ij}| \cdot {\color{firebrick}u}_j^{-1} \le {\color{royalblue}\pi},\; \forall {\color{royalblue}a}_{ij} \ne 0 $$
 
-**Reduction**: Take logs: ${\color{green}x} = (\log{\color{coral}\pi},\; \log{\color{coral}\psi})$, ${\color{coral}\text{cost}} = \log|{\color{coral}a}_{ij}|$. The constraint becomes:
+**Reduction**: Take logs: ${\color{green}x} = (\log{\color{royalblue}\pi},\; \log{\color{royalblue}\psi})$, ${\color{royalblue}\text{cost}} = \log|{\color{royalblue}a}_{ij}|$. The constraint becomes:
 
-$$ \min({\color{green}x}_0 - {\color{coral}\text{cost}}_{ji},\; {\color{coral}\text{cost}}_{ij} - {\color{green}x}_1) \ge 0 $$
+$$ \min({\color{green}x}_0 - {\color{royalblue}\text{cost}}_{ji},\; {\color{royalblue}\text{cost}}_{ij} - {\color{green}x}_1) \ge 0 $$
 
 .pull-left[
 **This is a parametric potential problem!** 🎯
@@ -748,7 +748,7 @@ $$ \min({\color{green}x}_0 - {\color{coral}\text{cost}}_{ji},\; {\color{coral}\t
 
 **Minimum Cycle Ratio** determines the maximum clock frequency:
 
-$$ F_{\max} = \frac{1}{\text{MCR}},\quad {\color{coral}r}^* = \max_{{\color{lime}C}} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
+$$ F_{\max} = \frac{1}{\text{MCR}},\quad {\color{royalblue}r}^* = \max_{{\color{lime}C}} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
 
 .pull-left[
 .mermaid[

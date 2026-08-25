@@ -403,10 +403,10 @@ graph LR
 .pull-left[
 
 - **Input**: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ 📊
-- **Solution**: Color assignment ${\color{coral}c}: {\color{salmon}V} \to [1..{\color{orange}k}] \ (k=2)$ 🎨
+- **Solution**: Color assignment ${\color{royalblue}c}: {\color{salmon}V} \to [1..{\color{orange}k}] \ (k=2)$ 🎨
 - **Goal**: Minimize monochromatic edge weights ⚖️
 
-$$\min \sum_{e \in {\color{lime}E}} {\color{orange}w_e} \cdot \mathbf{1}\!\big[\,{\color{coral}c}(u) = {\color{coral}c}(v)\,\big]$$
+$$\min \sum_{e \in {\color{lime}E}} {\color{orange}w_e} \cdot \mathbf{1}\!\big[\,{\color{royalblue}c}(u) = {\color{royalblue}c}(v)\,\big]$$
 
 - Each vertex must be colored **0° or 180°** 🔄
 - A monochromatic edge = **phase conflict** = dark line lost ⚠️

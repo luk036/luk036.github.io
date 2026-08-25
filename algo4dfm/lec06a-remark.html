@@ -183,8 +183,8 @@ Remarks:
 
 - Cutting plane oracle $\Omega$
 - A search space ${\color{red}\mathcal{S} }$ initially big enough to cover $\mathcal{\color{steelblue}K}$, e.g.
-  - Polyhedron ${\color{red}\mathcal{P} }$ = $\{{\color{darkblack}z} \mid {\color{coral}C} {\color{darkblack}z} \preceq {\color{coral}d} \}$
-  - Interval ${\color{red}\mathcal{I} }$ = $[{\color{coral}l}, {\color{coral}u}]$ (for one-dimensional problem)
+  - Polyhedron ${\color{red}\mathcal{P} }$ = $\{{\color{darkblack}z} \mid {\color{royalblue}C} {\color{darkblack}z} \preceq {\color{royalblue}d} \}$
+  - Interval ${\color{red}\mathcal{I} }$ = $[{\color{royalblue}l}, {\color{royalblue}u}]$ (for one-dimensional problem)
   - Ellipsoid ${\color{red}\mathcal{E} }$ = $\{{\color{darkblack}z} \mid ({\color{darkblack}z}-{\color{orange}x_c}){\color{red}P}^{-1}({\color{darkblack}z}-{\color{orange}x_c}) \leq 1 \}$
 
 ---
@@ -259,11 +259,11 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - The optimization problem is treated as a feasibility problem with an
-    additional constraint ${\color{purple}f}_0({\color{darkblack}x}) < {\color{coral}t}$
+    additional constraint ${\color{purple}f}_0({\color{darkblack}x}) < {\color{royalblue}t}$
 
 - ${\color{purple}f}_0({\color{darkblack}x})$ could be a convex function or a quasiconvex function.
 
-- ${\color{coral}t}$ is the best-so-far value of ${\color{purple}f}_0({\color{darkblack}x})$.
+- ${\color{royalblue}t}$ is the best-so-far value of ${\color{purple}f}_0({\color{darkblack}x})$.
 
 ---
 
@@ -272,32 +272,32 @@ $$\begin{array}{ll}
 - Problem formulation:
     $$\begin{array}{ll}
               \text{find}         & {\color{darkblack}x}, \\
-              \text{subject to}   & {\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x}) < 0 \\
+              \text{subject to}   & {\color{purple}\Phi}_{\color{royalblue}t}({\color{darkblack}x}) < 0 \\
                                   & {\color{darkblack}x} \in \mathcal{\color{steelblue}K}
-    \end{array}$$ where ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x}) < 0$ is the ${\color{coral}t}$-sublevel set of ${\color{purple}f}_0({\color{darkblack}x})$.
-- 👉 Note: $\mathcal{\color{steelblue}K}_{\color{coral}t} \subseteq \mathcal{\color{steelblue}K}_{\color{coral}u}$ if and only if
-    ${\color{coral}t} \leq {\color{coral}u}$ (monotonicity)
+    \end{array}$$ where ${\color{purple}\Phi}_{\color{royalblue}t}({\color{darkblack}x}) < 0$ is the ${\color{royalblue}t}$-sublevel set of ${\color{purple}f}_0({\color{darkblack}x})$.
+- 👉 Note: $\mathcal{\color{steelblue}K}_{\color{royalblue}t} \subseteq \mathcal{\color{steelblue}K}_{\color{royalblue}u}$ if and only if
+    ${\color{royalblue}t} \leq {\color{royalblue}u}$ (monotonicity)
 
 ---
 
 ### 🥚 Convex Optimization Problem (III)
 
 - One easy way to solve the optimization problem is to apply the binary
-    search on ${\color{coral}t}$.
-- Another possible way is, to update the best-so-far ${\color{coral}t}$ whenever a
-    feasible sol'n ${\color{darkblack}x}_0$ is found such that ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x_0}) = 0$.
+    search on ${\color{royalblue}t}$.
+- Another possible way is, to update the best-so-far ${\color{royalblue}t}$ whenever a
+    feasible sol'n ${\color{darkblack}x}_0$ is found such that ${\color{purple}\Phi}_{\color{royalblue}t}({\color{darkblack}x_0}) = 0$.
 - We assume that the oracle takes the responsbility for that.
 
 ---
 
 ### ⚙️ Generic Cutting-plane method (Optim)
 
-- **Given** initial ${\color{red}\mathcal{S} }$ known to contain $\mathcal{\color{steelblue}K}_{\color{coral}t}$.
+- **Given** initial ${\color{red}\mathcal{S} }$ known to contain $\mathcal{\color{steelblue}K}_{\color{royalblue}t}$.
 - **Repeat**
   1. Choose a point ${\color{darkblack}x}_0$ in ${\color{red}\mathcal{S} }$
   2. Query the cutting-plane oracle at ${\color{darkblack}x}_0$
-  3. **If** ${\color{darkblack}x_0} \in \mathcal{\color{steelblue}K}_{\color{coral}t}$, update ${\color{coral}t}$ such that
-        ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x_0}) = 0$.
+  3. **If** ${\color{darkblack}x_0} \in \mathcal{\color{steelblue}K}_{\color{royalblue}t}$, update ${\color{royalblue}t}$ such that
+        ${\color{purple}\Phi}_{\color{royalblue}t}({\color{darkblack}x_0}) = 0$.
   4. Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
         $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{{\color{darkblack}z} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}z} - {\color{darkblack}x_0}) + {\color{green} h} \leq 0\} $$
   5. **If** ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
@@ -329,17 +329,17 @@ def cutting_plane_dc(assess, S, t, max_it, tol):
 ### 📚 Example: Profit Maximization Problem
 
 $$\begin{array}{ll}
-   \text{maximize} & {\color{coral}p}({\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta}) - {\color{coral}v_1} {\color{darkblack}x}_1 - {\color{coral}v_2} {\color{darkblack}x}_2 \\
-   \text{subject to}& {\color{darkblack}x}_1 \le {\color{coral}k}.
+   \text{maximize} & {\color{royalblue}p}({\color{royalblue}A} {\color{darkblack}x}_1^{\color{royalblue}\alpha} {\color{darkblack}x}_2^{\color{royalblue}\beta}) - {\color{royalblue}v_1} {\color{darkblack}x}_1 - {\color{royalblue}v_2} {\color{darkblack}x}_2 \\
+   \text{subject to}& {\color{darkblack}x}_1 \le {\color{royalblue}k}.
 \end{array}$$
 
-- ${\color{coral}p}({\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta})$ : Cobb-Douglas production function
-- ${\color{coral}p}$: the market price per unit
-- ${\color{coral}A}$: the scale of production
-- ${\color{coral}\alpha}, {\color{coral}\beta}$: the output elasticities
+- ${\color{royalblue}p}({\color{royalblue}A} {\color{darkblack}x}_1^{\color{royalblue}\alpha} {\color{darkblack}x}_2^{\color{royalblue}\beta})$ : Cobb-Douglas production function
+- ${\color{royalblue}p}$: the market price per unit
+- ${\color{royalblue}A}$: the scale of production
+- ${\color{royalblue}\alpha}, {\color{royalblue}\beta}$: the output elasticities
 - ${\color{darkblack}x}$: input quantity
-- ${\color{coral}v}$: output price
-- ${\color{coral}k}$: a given constant that restricts the quantity of ${\color{darkblack}x}_1$
+- ${\color{royalblue}v}$: output price
+- ${\color{royalblue}k}$: a given constant that restricts the quantity of ${\color{darkblack}x}_1$
 
 ---
 
@@ -348,9 +348,9 @@ $$\begin{array}{ll}
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form:
     $$\begin{array}{ll}
-    \text{maximize} & {\color{coral}t} \\
-    \text{subject to} & {\color{coral}t}  + {\color{coral}v_1} {\color{darkblack}x}_1  + {\color{coral}v_2} {\color{darkblack}x}_2 < {\color{coral}p} {\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta}\\
-                  & {\color{darkblack}x}_1 \le {\color{coral}k}.
+    \text{maximize} & {\color{royalblue}t} \\
+    \text{subject to} & {\color{royalblue}t}  + {\color{royalblue}v_1} {\color{darkblack}x}_1  + {\color{royalblue}v_2} {\color{darkblack}x}_2 < {\color{royalblue}p} {\color{royalblue}A} {\color{darkblack}x}_1^{\color{royalblue}\alpha} {\color{darkblack}x}_2^{\color{royalblue}\beta}\\
+                  & {\color{darkblack}x}_1 \le {\color{royalblue}k}.
     \end{array}$$
 
 ---
@@ -365,9 +365,9 @@ and take logarithm of cost and constraints.
 
 - We have the problem in a convex form:
     $$\begin{array}{ll}
-    \text{max}  & {\color{coral}t} \\
-    \text{s.t.} & \log({\color{coral}t} + {\color{coral}v_1} e^{{\color{darkblack}y_1}} + {\color{coral}v_2} e^{{\color{darkblack}y_2}}) - ({\color{coral}\alpha} {\color{darkblack}y_1} + {\color{coral}\beta} {\color{darkblack}y_2}) < \log({\color{coral}p}{\color{coral}A})  \\
-                  & {\color{darkblack}y_1} \le \log {\color{coral}k} ,
+    \text{max}  & {\color{royalblue}t} \\
+    \text{s.t.} & \log({\color{royalblue}t} + {\color{royalblue}v_1} e^{{\color{darkblack}y_1}} + {\color{royalblue}v_2} e^{{\color{darkblack}y_2}}) - ({\color{royalblue}\alpha} {\color{darkblack}y_1} + {\color{royalblue}\beta} {\color{darkblack}y_2}) < \log({\color{royalblue}p}{\color{royalblue}A})  \\
+                  & {\color{darkblack}y_1} \le \log {\color{royalblue}k} ,
     \end{array}$$
 
 ---
@@ -439,17 +439,17 @@ class: middle, center
 
 - Consider:
     $$\begin{array}{ll}
-      \text{minimize}   & \sup_{{\color{coral}q} \in {\mathbb{Q} } } {\color{purple}f_0}({\color{darkblack}x},{\color{coral}q}) \\
-      \text{subject to} & {\color{purple}f_j}({\color{darkblack}x},{\color{coral}q}) \leq 0 \qquad \\
-      & \forall {\color{coral}q} \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
-    \end{array}$$ where ${\color{coral}q}$ represents a set of varying parameters.
+      \text{minimize}   & \sup_{{\color{royalblue}q} \in {\mathbb{Q} } } {\color{purple}f_0}({\color{darkblack}x},{\color{royalblue}q}) \\
+      \text{subject to} & {\color{purple}f_j}({\color{darkblack}x},{\color{royalblue}q}) \leq 0 \qquad \\
+      & \forall {\color{royalblue}q} \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
+    \end{array}$$ where ${\color{royalblue}q}$ represents a set of varying parameters.
 
 - The problem can be reformulated as:
     $$\begin{array}{ll}
-      \text{minimize}   & {\color{coral}t} \\
-      \text{subject to} & {\color{purple}f_0}({\color{darkblack}x},{\color{coral}q}) < {\color{coral}t}  \\
-      & {\color{purple}f_j}({\color{darkblack}x},{\color{coral}q}) \leq 0 \\
-      & \forall {\color{coral}q} \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
+      \text{minimize}   & {\color{royalblue}t} \\
+      \text{subject to} & {\color{purple}f_0}({\color{darkblack}x},{\color{royalblue}q}) < {\color{royalblue}t}  \\
+      & {\color{purple}f_j}({\color{darkblack}x},{\color{royalblue}q}) \leq 0 \\
+      & \forall {\color{royalblue}q} \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
     \end{array}$$
 
 ---
@@ -457,30 +457,30 @@ class: middle, center
 ### 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
-    - If ${\color{purple}f_j}({\color{darkblack}x}_0, {\color{coral}q}) > 0$ for some $j$ and ${\color{coral}q} = {\color{coral}q}_0$, then
-        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_j}({\color{darkblack}x}_0, {\color{coral}q}_0), {\color{purple}f_j}({\color{darkblack}x}_0, {\color{coral}q}_0))$
-    - If ${\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q}) \geq {\color{coral}t}$ for some ${\color{coral}q} = {\color{coral}q}_0$, then
-        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q}_0), {\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q}_0) - {\color{coral}t})$
+    - If ${\color{purple}f_j}({\color{darkblack}x}_0, {\color{royalblue}q}) > 0$ for some $j$ and ${\color{royalblue}q} = {\color{royalblue}q}_0$, then
+        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_j}({\color{darkblack}x}_0, {\color{royalblue}q}_0), {\color{purple}f_j}({\color{darkblack}x}_0, {\color{royalblue}q}_0))$
+    - If ${\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q}) \geq {\color{royalblue}t}$ for some ${\color{royalblue}q} = {\color{royalblue}q}_0$, then
+        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q}_0), {\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q}_0) - {\color{royalblue}t})$
     - Otherwise, ${\color{darkblack}x}_0$ is feasible, then
-        - Let ${\color{coral}q}_{\max} = \argmax_{{\color{coral}q} \in {\mathbb{Q} } } {\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q})$.
-        - ${\color{coral}t} := {\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q}_{\max})$.
-        - The cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0, {\color{coral}q}_{\max}), 0)$
+        - Let ${\color{royalblue}q}_{\max} = \argmax_{{\color{royalblue}q} \in {\mathbb{Q} } } {\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q})$.
+        - ${\color{royalblue}t} := {\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q}_{\max})$.
+        - The cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0, {\color{royalblue}q}_{\max}), 0)$
 
 ---
 
 ### 📚 Example: Profit Maximization Problem (convex)
 
 $$\begin{array}{ll}
-\text{max}  & {\color{coral}t} \\
-\text{s.t.} & \log({\color{coral}t} + {\color{coral}\hat{v}}_1 e^{{\color{darkblack}y}_1} + {\color{coral}\hat{v}}_2 e^{{\color{darkblack}y}_2}) - ({\color{coral}\hat{\alpha}} {\color{darkblack}y}_1 + {\color{coral}\hat{\beta}} {\color{darkblack}y}_2) \le \log({\color{coral}\hat{p}}\,{\color{coral}A})  \\
-                  & {\color{darkblack}y}_1 \le \log {\color{coral}\hat{k}} ,
+\text{max}  & {\color{royalblue}t} \\
+\text{s.t.} & \log({\color{royalblue}t} + {\color{royalblue}\hat{v}}_1 e^{{\color{darkblack}y}_1} + {\color{royalblue}\hat{v}}_2 e^{{\color{darkblack}y}_2}) - ({\color{royalblue}\hat{\alpha}} {\color{darkblack}y}_1 + {\color{royalblue}\hat{\beta}} {\color{darkblack}y}_2) \le \log({\color{royalblue}\hat{p}}\,{\color{royalblue}A})  \\
+                  & {\color{darkblack}y}_1 \le \log {\color{royalblue}\hat{k}} ,
 \end{array}$$
 
 - Now assume that:
-  - ${\color{coral}\hat{\alpha}}$ and ${\color{coral}\hat{\beta}}$ vary ${\color{coral}\bar{\alpha}} \pm {\color{coral}e}_1$ and
-        ${\color{coral}\bar{\beta}} \pm {\color{coral}e}_2$ respectively.
-  - ${\color{coral}\hat{p}}$, ${\color{coral}\hat{k}}$, ${\color{coral}\hat{v}}_1$, and ${\color{coral}\hat{v}}_2$ all vary
-        $\pm {\color{coral}e}_3$.
+  - ${\color{royalblue}\hat{\alpha}}$ and ${\color{royalblue}\hat{\beta}}$ vary ${\color{royalblue}\bar{\alpha}} \pm {\color{royalblue}e}_1$ and
+        ${\color{royalblue}\bar{\beta}} \pm {\color{royalblue}e}_2$ respectively.
+  - ${\color{royalblue}\hat{p}}$, ${\color{royalblue}\hat{k}}$, ${\color{royalblue}\hat{v}}_1$, and ${\color{royalblue}\hat{v}}_2$ all vary
+        $\pm {\color{royalblue}e}_3$.
 
 ---
 
@@ -488,12 +488,12 @@ $$\begin{array}{ll}
 
 By detail analysis, the worst case happens when:
 
-- ${\color{coral}p} = {\color{coral}\bar{p}} + {\color{coral}e}_3$, ${\color{coral}k} = {\color{coral}\bar{k}} + {\color{coral}e}_3$
-- ${\color{coral}v}_1 = {\color{coral}\bar{v}}_1 - {\color{coral}e}_3$, ${\color{coral}v}_2 = {\color{coral}\bar{v}}_2 - {\color{coral}e}_3$,
-- if ${\color{darkblack}y}_1 > 0$, ${\color{coral}\alpha} = {\color{coral}\bar{\alpha}} - {\color{coral}e}_1$, else
-    ${\color{coral}\alpha} = {\color{coral}\bar{\alpha}} + {\color{coral}e}_1$
-- if ${\color{darkblack}y}_2 > 0$, ${\color{coral}\beta} = {\color{coral}\bar{\beta}} - {\color{coral}e}_2$, else
-    ${\color{coral}\beta} = {\color{coral}\bar{\beta}} + {\color{coral}e}_2$
+- ${\color{royalblue}p} = {\color{royalblue}\bar{p}} + {\color{royalblue}e}_3$, ${\color{royalblue}k} = {\color{royalblue}\bar{k}} + {\color{royalblue}e}_3$
+- ${\color{royalblue}v}_1 = {\color{royalblue}\bar{v}}_1 - {\color{royalblue}e}_3$, ${\color{royalblue}v}_2 = {\color{royalblue}\bar{v}}_2 - {\color{royalblue}e}_3$,
+- if ${\color{darkblack}y}_1 > 0$, ${\color{royalblue}\alpha} = {\color{royalblue}\bar{\alpha}} - {\color{royalblue}e}_1$, else
+    ${\color{royalblue}\alpha} = {\color{royalblue}\bar{\alpha}} + {\color{royalblue}e}_1$
+- if ${\color{darkblack}y}_2 > 0$, ${\color{royalblue}\beta} = {\color{royalblue}\bar{\beta}} - {\color{royalblue}e}_2$, else
+    ${\color{royalblue}\beta} = {\color{royalblue}\bar{\beta}} + {\color{royalblue}e}_2$
 
 > **Remark**: for more complicated problems, affine arithmetic could be
 > used.
@@ -575,10 +575,10 @@ $$\begin{array}{ll}
 - The oracle only needs to determine:
     - If there exists a negative cycle ${\color{lime}C}_k$ under ${\color{darkblack}x}_0$, then
         - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(-\partial {\color{purple}W}_k({\color{darkblack}x}_0), -{\color{purple}W}_k({\color{darkblack}x}_0))$
-    - If ${\color{purple}f_0}({\color{darkblack}x}_0) \geq {\color{coral}t}$, then
-        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0), {\color{purple}f_0}({\color{darkblack}x}_0) - {\color{coral}t})$
+    - If ${\color{purple}f_0}({\color{darkblack}x}_0) \geq {\color{royalblue}t}$, then
+        - the cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0), {\color{purple}f_0}({\color{darkblack}x}_0) - {\color{royalblue}t})$
     - Otherwise, ${\color{darkblack}x}_0$ is feasible, then
-        - ${\color{coral}t} := {\color{purple}f_0}({\color{darkblack}x}_0)$.
+        - ${\color{royalblue}t} := {\color{purple}f_0}({\color{darkblack}x}_0)$.
         - The cut $({\color{darkcyan} g},{\color{green} h})$ = $(\partial {\color{purple}f_0}({\color{darkblack}x}_0), 0)$
 
 
@@ -586,9 +586,9 @@ $$\begin{array}{ll}
 
 ### 📚 Example: Optimal Matrix Scaling
 
-- Given a sparse matrix ${\color{coral}A} = [{\color{coral}a}_{ij}] \in \mathbb{R}^{N\times N}$.
+- Given a sparse matrix ${\color{royalblue}A} = [{\color{royalblue}a}_{ij}] \in \mathbb{R}^{N\times N}$.
 
-- Find another matrix ${\color{coral}B} = {\color{darkblack}U} {\color{coral}A} {\color{darkblack}U}^{-1}$ where ${\color{darkblack}U}$ is a nonnegative
+- Find another matrix ${\color{royalblue}B} = {\color{darkblack}U} {\color{royalblue}A} {\color{darkblack}U}^{-1}$ where ${\color{darkblack}U}$ is a nonnegative
     diagonal matrix, such that the ratio of any two elements of $B$ in
     absolute value is as close to 1 as possible.
 
@@ -597,7 +597,7 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{minimize}   &   {\color{darkblack}\pi}/{\color{darkblack}\psi}  \\
-  \text{subject to} &   {\color{darkblack}\psi} \leq {\color{darkblack}u}_i |{\color{coral}a}_{ij}| {\color{darkblack}u}_j^{-1} \leq {\color{darkblack}\pi}, \; \forall {\color{coral}a}_{ij} \neq 0 , \\
+  \text{subject to} &   {\color{darkblack}\psi} \leq {\color{darkblack}u}_i |{\color{royalblue}a}_{ij}| {\color{darkblack}u}_j^{-1} \leq {\color{darkblack}\pi}, \; \forall {\color{royalblue}a}_{ij} \neq 0 , \\
                     &   {\color{darkblack}\pi}, \, {\color{darkblack}\psi}, {\color{darkblack}u}, \text{positive} \\
   \text{variables}  &   {\color{darkblack}\pi}, {\color{darkblack}\psi}, {\color{darkblack}u} \, .
   \end{array}$$
@@ -611,12 +611,12 @@ into:
 
 $$\begin{array}{ll}
   \text{minimize}   &   {\color{darkblack}\pi}' - {\color{darkblack}\psi}'  \\
-  \text{subject to} &   {\color{darkblack}u}_i' -  {\color{darkblack}u}_j'  \leq {\color{darkblack}\pi}' - {\color{coral}a}_{ij}', \; \forall {\color{coral}a}_{ij} \neq 0 \,, \\
-                    &   {\color{darkblack}u}_j' -  {\color{darkblack}u}_i' \leq {\color{coral}a}_{ij}' - {\color{darkblack}\psi}', \; \forall {\color{coral}a}_{ij} \neq 0 \,, \\
+  \text{subject to} &   {\color{darkblack}u}_i' -  {\color{darkblack}u}_j'  \leq {\color{darkblack}\pi}' - {\color{royalblue}a}_{ij}', \; \forall {\color{royalblue}a}_{ij} \neq 0 \,, \\
+                    &   {\color{darkblack}u}_j' -  {\color{darkblack}u}_i' \leq {\color{royalblue}a}_{ij}' - {\color{darkblack}\psi}', \; \forall {\color{royalblue}a}_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{darkblack}\pi}', {\color{darkblack}\psi}', {\color{darkblack}u}' \, .
   \end{array}$$
 
-where ${\color{coral}k}'$ denotes $\log( | {\color{coral}k} | )$ and
+where ${\color{royalblue}k}'$ denotes $\log( | {\color{royalblue}k} | )$ and
 ${\color{darkblack}x} = ({\color{darkblack}\pi}', {\color{darkblack}\psi}' )^{ \mathrm{ T } }$.
 
 ---
@@ -624,7 +624,7 @@ ${\color{darkblack}x} = ({\color{darkblack}\pi}', {\color{darkblack}\psi}' )^{ \
 ### 📚 Example: clock period & yield-driven co-optimization
 
 $$\begin{array}{cll}
-   \text{minimize} &{\color{darkblack}T_\text{CP}} - {\color{coral}w_{\beta}}{\color{darkblack}\beta} \\
+   \text{minimize} &{\color{darkblack}T_\text{CP}} - {\color{royalblue}w_{\beta}}{\color{darkblack}\beta} \\
    \text{subject to} & {\color{darkblack}u_i} - {\color{darkblack}u_j} \le {\color{darkblack}T_\text{CP}} + {\color{purple}F}_{ij}^{-1}(1-{\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
                      & {\color{darkblack}u_j} - {\color{darkblack}u_i} \le {\color{purple}F}_{ij}^{-1}(1-{\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkblack}T_\text{CP}} \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, , \\
@@ -662,15 +662,15 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - ${\color{purple}F}({\color{darkblack}x})$: a matrix-valued function
-- ${\color{coral}A} \succeq 0$ denotes ${\color{coral}A}$ is positive semidefinite.
+- ${\color{royalblue}A} \succeq 0$ denotes ${\color{royalblue}A}$ is positive semidefinite.
 
 
 ---
 
 ### 🧮 Problems With Matrix Inequalities
 
-- Recall that a matrix ${\color{coral}A}$ is positive semidefinite if and only if
-    ${\color{darkblack}v}^\mathsf{T} {\color{coral}A} {\color{darkblack}v} \ge 0$ for all ${\color{darkblack}v} \in \mathbb{R}^n$.
+- Recall that a matrix ${\color{royalblue}A}$ is positive semidefinite if and only if
+    ${\color{darkblack}v}^\mathsf{T} {\color{royalblue}A} {\color{darkblack}v} \ge 0$ for all ${\color{darkblack}v} \in \mathbb{R}^n$.
 - The problem can be transformed into:
     $$\begin{array}{ll}
             \text{minimize}      & {\color{purple}f_0}({\color{darkblack}x}), \\
@@ -679,7 +679,7 @@ $$\begin{array}{ll}
 - Consider ${\color{darkblack}v}^\mathsf{T} {\color{purple}F}({\color{darkblack}x}) {\color{darkblack}v}$ is concave for all ${\color{darkblack}v} \in \mathbb{R}^n$ w.r.t.
     ${\color{darkblack}x}$, then the above problem is a convex programming.
 - Reduce to *semidefinite programming* if ${\color{purple}f_0}({\color{darkblack}x})$ and ${\color{purple}F}({\color{darkblack}x})$
-    are linear, i.e., ${\color{purple}F}({\color{darkblack}x}) = {\color{coral}F_0} + {\color{darkblack}x}_1 {\color{coral}F_1} + \cdots + {\color{darkblack}x}_m {\color{coral}F_m}$
+    are linear, i.e., ${\color{purple}F}({\color{darkblack}x}) = {\color{royalblue}F_0} + {\color{darkblack}x}_1 {\color{royalblue}F_1} + \cdots + {\color{darkblack}x}_m {\color{royalblue}F_m}$
 
 
 ---
@@ -689,13 +689,13 @@ $$\begin{array}{ll}
 The oracle only needs to:
 
 - Perform a *row-based* Cholesky factorization such that
-    ${\color{purple}F}({\color{darkblack}x}_0) = {\color{coral}R}^\mathsf{T} {\color{coral}R}$.
-- Let ${\color{coral}A}_{:p,:p}$ denotes a submatrix
-    ${\color{coral}A}(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
+    ${\color{purple}F}({\color{darkblack}x}_0) = {\color{royalblue}R}^\mathsf{T} {\color{royalblue}R}$.
+- Let ${\color{royalblue}A}_{:p,:p}$ denotes a submatrix
+    ${\color{royalblue}A}(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
 - If Cholesky factorization fails at row $p$,
   - there exists a vector
         ${\color{darkblack}e}_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such that
-    - ${\color{darkblack}v} = {\color{coral}R}_{:p,:p}^{-1} {\color{darkblack}e}_p$, and
+    - ${\color{darkblack}v} = {\color{royalblue}R}_{:p,:p}^{-1} {\color{darkblack}e}_p$, and
     - ${\color{darkblack}v}^\mathsf{T} {\color{purple}F}_{:p,:p}({\color{darkblack}x}_0) {\color{darkblack}v} < 0$.
   - The cut $({\color{darkcyan} g},{\color{green} h})$ =
         $(-{\color{darkblack}v}^\mathsf{T} \partial {\color{purple}F}_{:p,:p}({\color{darkblack}x}_0) {\color{darkblack}v}, -{\color{darkblack}v}^\mathsf{T} {\color{purple}F}_{:p,:p}({\color{darkblack}x}_0) {\color{darkblack}v})$
@@ -733,17 +733,17 @@ class lmi_oracle:
 
 ### 📚 Example: Matrix Norm Minimization
 
-- Let ${\color{purple}A}({\color{darkblack}x}) = {\color{coral}A_0} + {\color{darkblack}x}_1 {\color{coral}A_1} + \cdots + {\color{darkblack}x}_m {\color{coral}A_m}$
+- Let ${\color{purple}A}({\color{darkblack}x}) = {\color{royalblue}A_0} + {\color{darkblack}x}_1 {\color{royalblue}A_1} + \cdots + {\color{darkblack}x}_m {\color{royalblue}A_m}$
 - Problem $\min_{{\color{darkblack}x}} \| {\color{purple}A}({\color{darkblack}x}) \|$ can be reformulated as
  $$\begin{array}{ll}
-       \text{minimize}      & {\color{coral}t}, \\
+       \text{minimize}      & {\color{royalblue}t}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    {\color{coral}t}\,I   & {\color{purple}A}({\color{darkblack}x}) \\
-    {\color{purple}A}^\mathsf{T}({\color{darkblack}x}) & {\color{coral}t}\,I
+    {\color{royalblue}t}\,I   & {\color{purple}A}({\color{darkblack}x}) \\
+    {\color{purple}A}^\mathsf{T}({\color{darkblack}x}) & {\color{royalblue}t}\,I
    \end{array} \right) \succeq 0,
  \end{array}$$
-- Binary search on ${\color{coral}t}$ can be used for this problem.
+- Binary search on ${\color{royalblue}t}$ can be used for this problem.
 
 
 ---

@@ -101,7 +101,7 @@ class: middle, center
 
 ### Phase Conflict Graph
 
--   Edge between two features with separation of $\leq {\color{coral}b}$ (dark field)
+-   Edge between two features with separation of $\leq {\color{royalblue}b}$ (dark field)
 -   Similar conflict graph for "bright field".
 -   Construction method: plane sweeping method + dynamic priority search tree
   ![image](lec08.files/005.jpg)
@@ -111,7 +111,7 @@ class: middle, center
 .pull-left[
 
 -   Instance: Graph ${\color{salmon}G} = ({\color{salmon}V}, {\color{lime}E})$
--   Solution: A color assignment $c: {\color{salmon}V} \to [1..{\color{coral}k}]$ (here ${\color{coral}k}=2$)
+-   Solution: A color assignment $c: {\color{salmon}V} \to [1..{\color{royalblue}k}]$ (here ${\color{royalblue}k}=2$)
 -   Goal: Minimize the weights of the monochromatic edges.
   (Question: How can we model the weights?)
 
@@ -125,8 +125,8 @@ class: middle, center
 ### Phase Assignment Problem
 
 -   In general, the problem is NP-hard.
--   It is solvable in polynomial time for planar graphs with ${\color{coral}k}=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
--   For planar graphs with ${\color{coral}k}=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
+-   It is solvable in polynomial time for planar graphs with ${\color{royalblue}k}=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
+-   For planar graphs with ${\color{royalblue}k}=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
 
 ### Overview of Greedy Algorithm
 
@@ -134,7 +134,7 @@ class: middle, center
   (can be found in LEDA package)
 -   Assign colors to the nodes of the MST.
 -   Reinsert edges that do not conflict.
--   Time complexity: $O({\color{coral}N} \log {\color{coral}N})$
+-   Time complexity: $O({\color{royalblue}N} \log {\color{royalblue}N})$
 -   Can be applied to non-planar graphs.
 
 ### Greedy Algorithm
@@ -208,7 +208,7 @@ class: middle, center
 
 -   Step 1: Approximate ${\color{salmon}G}$ with a planar graph ${\color{salmon}G'}$
   -   It is NP-hard.
-  -   The naive greedy algorithm takes $O({\color{coral}n}^2)$ time.
+  -   The naive greedy algorithm takes $O({\color{royalblue}n}^2)$ time.
   -   Any good suggestion?
 
 ]

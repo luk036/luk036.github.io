@@ -138,7 +138,7 @@ class: nord-light, middle, center
 The projective plane ${\color{salmon}\mathbb{P}}^2$ consists of:
 
 -   **Points**: Equivalence classes of $[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}]$ with $({\color{salmon}x},{\color{salmon}y},{\color{salmon}z}) \neq (0,0,0)$, where
-    $$[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}] \sim [{\color{coral}\lambda} {\color{salmon}x}, {\color{coral}\lambda} {\color{salmon}y}, {\color{coral}\lambda} {\color{salmon}z}] \quad ({\color{coral}\lambda} \neq 0)$$
+    $$[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}] \sim [{\color{royalblue}\lambda} {\color{salmon}x}, {\color{royalblue}\lambda} {\color{salmon}y}, {\color{royalblue}\lambda} {\color{salmon}z}] \quad ({\color{royalblue}\lambda} \neq 0)$$
 
 -   **Lines**: Also represented by homogeneous triples $[{\color{steelblue}a}, {\color{steelblue}b}, {\color{steelblue}c}]$, where
     $${\color{steelblue}a} {\color{salmon}x} + {\color{steelblue}b} {\color{salmon}y} + {\color{steelblue}c} {\color{salmon}z} = 0$$
@@ -337,9 +337,9 @@ $${\color{green}T} \cdot [{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z
 
 $$
 {\color{green}T} = \left[\begin{array}{ccc}
-    {\color{coral}a} & {\color{coral}b} & {\color{coral}c} \\
-    {\color{coral}d} & {\color{coral}e} & {\color{coral}f} \\
-    {\color{coral}g} & {\color{coral}h} & {\color{coral}i}
+    {\color{royalblue}a} & {\color{royalblue}b} & {\color{royalblue}c} \\
+    {\color{royalblue}d} & {\color{royalblue}e} & {\color{royalblue}f} \\
+    {\color{royalblue}g} & {\color{royalblue}h} & {\color{royalblue}i}
 \end{array}\right]
 $$
 
@@ -370,9 +370,9 @@ graph LR
 </pre>
 ]
 
--   **Translation** $[{\color{salmon}x} + {\color{coral}t_x}, {\color{salmon}y} + {\color{coral}t_y}, {\color{salmon}z}]$
--   **Rotation** $[{\color{salmon}x} \cos{\color{coral}\theta} - {\color{salmon}y} \sin{\color{coral}\theta}, {\color{salmon}x} \sin{\color{coral}\theta} + {\color{salmon}y} \cos{\color{coral}\theta}, {\color{salmon}z}]$
--   **Scaling** $[{\color{coral}s_x} {\color{salmon}x}, {\color{coral}s_y} {\color{salmon}y}, {\color{salmon}z}]$
+-   **Translation** $[{\color{salmon}x} + {\color{royalblue}t_x}, {\color{salmon}y} + {\color{royalblue}t_y}, {\color{salmon}z}]$
+-   **Rotation** $[{\color{salmon}x} \cos{\color{royalblue}\theta} - {\color{salmon}y} \sin{\color{royalblue}\theta}, {\color{salmon}x} \sin{\color{royalblue}\theta} + {\color{salmon}y} \cos{\color{royalblue}\theta}, {\color{salmon}z}]$
+-   **Scaling** $[{\color{royalblue}s_x} {\color{salmon}x}, {\color{royalblue}s_y} {\color{salmon}y}, {\color{salmon}z}]$
 -   **Perspective** Maps finite points to infinity and vice versa ✨
 
 ---
@@ -437,9 +437,9 @@ where ${\color{green}Q}$ is a symmetric $3 \times 3$ matrix:
 
 $$
 {\color{green}Q} = \left[\begin{array}{ccc}
-    {\color{coral}a} & {\color{coral}b}/2 & {\color{coral}d}/2 \\
-    {\color{coral}b}/2 & {\color{coral}c} & {\color{coral}e}/2 \\
-    {\color{coral}d}/2 & {\color{coral}e}/2 & {\color{coral}f}
+    {\color{royalblue}a} & {\color{royalblue}b}/2 & {\color{royalblue}d}/2 \\
+    {\color{royalblue}b}/2 & {\color{royalblue}c} & {\color{royalblue}e}/2 \\
+    {\color{royalblue}d}/2 & {\color{royalblue}e}/2 & {\color{royalblue}f}
 \end{array}\right]
 $$
 
@@ -885,7 +885,7 @@ trait ProjectivePlane<Dual, Value>: ProjectivePlanePrimitive<Dual> {
 |-------|---------|--------|
 | **Axiom 5** | Every point has a non-incident line (and vice versa) | `aux()` |
 | **Axiom 6** | Bilinear measurement $\langle {\color{salmon}P}, {\color{steelblue}l} \rangle = {\color{salmon}P} \cdot {\color{steelblue}l}$ | `dot()` |
-| **Axiom 7** | Points on line ${\color{steelblue}PQ}$ are ${\color{coral}\lambda} {\color{salmon}P} + {\color{coral}\mu} {\color{salmon}Q}$ | `parametrize()` |
+| **Axiom 7** | Points on line ${\color{steelblue}PQ}$ are ${\color{royalblue}\lambda} {\color{salmon}P} + {\color{royalblue}\mu} {\color{salmon}Q}$ | `parametrize()` |
 
 These methods enable the **cross ratio** (slide 17-22):
 

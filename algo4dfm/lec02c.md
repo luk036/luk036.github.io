@@ -48,11 +48,11 @@ descent methods, and approximation methods under constraints.
 ### Linear Programming Problem
 
 -   An LPP in standard form is:
-  $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
+  $$\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} = {\color{royalblue}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
-  -   A vector ${\color{coral}b} \in \mathbb{R}^{\color{coral}m}$
-  -   A vector ${\color{coral}c} \in \mathbb{R}^{\color{coral}n}$
+  -   An ${\color{royalblue}m} \times {\color{royalblue}n}$ matrix ${\color{royalblue}A}$, with ${\color{royalblue}n} > {\color{royalblue}m}$
+  -   A vector ${\color{royalblue}b} \in \mathbb{R}^{\color{royalblue}m}$
+  -   A vector ${\color{royalblue}c} \in \mathbb{R}^{\color{royalblue}n}$
 
 ### 📚 Example
 
@@ -72,20 +72,20 @@ $$
   -   Decompose ${\color{green}x}$ to two new variables
     ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable ${\color{firebrick}y} = {\color{coral}b} - {\color{coral}A} {\color{green}x} \geq 0$
-  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{coral}A'} = ({\color{coral}A}, 1)$
+  -   By putting slack variable ${\color{firebrick}y} = {\color{royalblue}b} - {\color{royalblue}A} {\color{green}x} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
 ### Duality of LPP
 
 -   If the primal problem of the LPP:
-  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
+  $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} \ge {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
-  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
+  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
-  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
--   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
+  $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} = {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}\}$.
 
 ### Nonlinear Programming
 
@@ -123,12 +123,12 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{\color{coral}n} \mapsto R$ is convex if
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{\color{royalblue}n} \mapsto R$ is convex if
   ${\color{salmon}K}$ is a convex set and
   $f({\color{green}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{salmon}K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $({\color{green}x}, {\color{coral}m})$ satisfies the KKT conditions above,
+  functions. If the pair $({\color{green}x}, {\color{royalblue}m})$ satisfies the KKT conditions above,
   ${\color{green}x}$ is an optimal solution of the problem. If in addition, $f$ is
   strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
@@ -167,7 +167,7 @@ $(0, +\infty)$.
 
 Generalization:
 
--   Consider $|H({\color{coral}\omega})|^2$ (power) instead of $|H({\color{coral}\omega})|$ (magnitude).
+-   Consider $|H({\color{royalblue}\omega})|^2$ (power) instead of $|H({\color{royalblue}\omega})|$ (magnitude).
 -   square root -> Spectral factorization
 
 #### Change of curvature: square
@@ -219,9 +219,9 @@ Then: $${\color{red} X}_\text{opt} = {\color{green} Y}^{-1}_\text{opt}.$$
 
 #### Change of variables
 
-Transform: $$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
+Transform: $$({\color{royalblue}a} + {\color{royalblue}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
-into: $${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
+into: $${\color{royalblue}a} \cdot {\color{green}x} + {\color{royalblue}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
 ${\color{green} z} = {\color{red} y} {\color{green}x}$.
 
 Then: $${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} {\color{green}x}^{-1}_\text{opt}$$
@@ -229,10 +229,10 @@ Then: $${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} {\color{green}
 #### Generalize to matrix inequalities
 
 Transform:
-$$({\color{coral}A} + {\color{coral}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{coral}A} + {\color{coral}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
+$$({\color{royalblue}A} + {\color{royalblue}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{royalblue}A} + {\color{royalblue}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
 
 into:
-$${\color{coral}A} {\color{green}X} + {\color{green}X} {\color{coral}A}^T + {\color{coral}B} {\color{green} Z} + {\color{green} Z}^T {\color{coral}B}^T \prec 0, \; {\color{green}X} \succ 0$$
+$${\color{royalblue}A} {\color{green}X} + {\color{green}X} {\color{royalblue}A}^T + {\color{royalblue}B} {\color{green} Z} + {\color{green} Z}^T {\color{royalblue}B}^T \prec 0, \; {\color{green}X} \succ 0$$
 where ${\color{green} Z} = {\color{red} Y} {\color{green}X}$.
 
 Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}X}^{-1}_\text{opt}$$
@@ -241,8 +241,8 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
-  -   if ${\color{coral}w}_1, \ldots, {\color{coral}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
-    convex, then so is ${\color{coral}w}_1 f_1 + \cdots + {\color{coral}w}_n f_n.$ In particular,
+  -   if ${\color{royalblue}w}_1, \ldots, {\color{royalblue}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
+    convex, then so is ${\color{royalblue}w}_1 f_1 + \cdots + {\color{royalblue}w}_n f_n.$ In particular,
     the sum of two convex functions is convex.
 -   Composition:
   -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
@@ -280,8 +280,8 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 2. **Output**: ${\color{green}x}^*$
 3. **repeat**
     1. Determine a descent direction ${\color{green}p}$.
-    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$.
-    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$
+    2. Line search. Choose a step size ${\color{royalblue}\alpha} > 0$.
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{royalblue}\alpha} {\color{green}p}$
 4. **until** stopping criterion satisfied.
 
 #### Some Common Descent Directions
@@ -332,11 +332,11 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 #### Complexity Theory
 
--   Big O-notation: O(${\color{coral}N}$), O(${\color{coral}N}\log {\color{coral}N}$), O(${\color{coral}N}^2$), O(${\color{coral}N}!$) ...
+-   Big O-notation: O(${\color{royalblue}N}$), O(${\color{royalblue}N}\log {\color{royalblue}N}$), O(${\color{royalblue}N}^2$), O(${\color{royalblue}N}!$) ...
 
--   Interest in discrete problems in which ${\color{coral}N}$ is large.
+-   Interest in discrete problems in which ${\color{royalblue}N}$ is large.
 
--   Indeed, ${\color{coral}N}$ could be very large (multi-million) in EDA problems,
+-   Indeed, ${\color{royalblue}N}$ could be very large (multi-million) in EDA problems,
   except:
 
   -   Pins of a signal net (usually < 200)
@@ -387,8 +387,8 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 -   Bad News: APX-complete.
 
 -   Comment: Admits a PTAS for _planar_ graphs \[Baker, 1994\]. The
-  generalization to ${\color{coral}k}$-hypergraphs, for ${\color{coral}k}>1$, is approximable within
-  ${\color{coral}k}$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
+  generalization to ${\color{royalblue}k}$-hypergraphs, for ${\color{royalblue}k}>1$, is approximable within
+  ${\color{royalblue}k}$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
   Implement the algorithms.)
 
 -   Garey and Johnson: GT
@@ -413,7 +413,7 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 #### Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights ${\color{coral}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
+  weights ${\color{royalblue}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
   vertices.
 
 -   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
@@ -435,17 +435,17 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 -   Good News: Admits a PTAS \[Arora, 1996\]
 
 -   Comment: Admits a PTAS for any _geometric space_ of constant
-  dimension ${\color{coral}d}$, e.g. in the rectilinear metric \[Arora, 1997\].
+  dimension ${\color{royalblue}d}$, e.g. in the rectilinear metric \[Arora, 1997\].
 
 -   Garey and Johnson: ND13
 
 #### Traveling Salesman 🧳🕴
 
--   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{coral}d(c_i, c_j)} \in N$ for
+-   Instance: Set ${\color{salmon}C}$ of ${\color{royalblue}m}$ cities, distances ${\color{royalblue}d(c_i, c_j)} \in N$ for
   each pair of cities ${\color{brown}c_i}, {\color{brown}c_j} \in {\color{salmon}C}$.
 
 -   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
-  $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
+  $\pi : [1..{\color{royalblue}m}] \mapsto [1..{\color{royalblue}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -464,11 +464,11 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 #### Minimum _Metric_ TSP
 
--   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{coral}d(c_i, c_j)} \in N$
+-   Instance: Set ${\color{salmon}C}$ of ${\color{royalblue}m}$ cities, distances ${\color{royalblue}d(c_i, c_j)} \in N$
   satisfying the _triangle inequality_
-  (i.e. ${\color{coral}d(a, b)} + {\color{coral}d(b, c)} \geq {\color{coral}d(a, c)}$)
+  (i.e. ${\color{royalblue}d(a, b)} + {\color{royalblue}d(b, c)} \geq {\color{royalblue}d(a, c)}$)
 
--   Solution: A permutation $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
+-   Solution: A permutation $\pi : [1..{\color{royalblue}m}] \mapsto [1..{\color{royalblue}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -483,17 +483,17 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 #### Minimum Geometric TSP
 
--   Instance: Set ${\color{salmon}C} \subset Z \times Z$ of ${\color{coral}m}$ points in the plane.
+-   Instance: Set ${\color{salmon}C} \subset Z \times Z$ of ${\color{royalblue}m}$ points in the plane.
 
 -   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
-  $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
+  $\pi : [1..{\color{royalblue}m}] \mapsto [1..{\color{royalblue}m}]$.
 
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length.
 
 -   Good news: Admits a PTAS \[Arora, 1996\]
 
--   Comment: In $\mathbb{R}^{\color{coral}m}$ the problem is APX-complete for any $l_p$
+-   Comment: In $\mathbb{R}^{\color{royalblue}m}$ the problem is APX-complete for any $l_p$
   metric \[Trevisan, 1997\].
 
 -   Garey and Johnson: ND23
@@ -554,7 +554,7 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 .pull-left[
 
 -   A thief 🦹 considers taking ${\color{brown}b}$ pounds of loot 💰. The loot is in the
-  form of ${\color{coral}n}$ items, each with weight ${\color{brown}a}_i$ and value ${\color{brown}p}_i$. Any
+  form of ${\color{royalblue}n}$ items, each with weight ${\color{brown}a}_i$ and value ${\color{brown}p}_i$. Any
   amount of an item can be put in the knapsack as long as the weight
   limit ${\color{brown}b}$ is not exceeded
 
@@ -572,14 +572,14 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 #### Program 1: Greedy Knapsack
 
--   **Input**: Set of ${\color{coral}n}$ items, for each ${\color{green}x}_i \in {\color{salmon}X}$, values ${\color{brown}p}_i$,
+-   **Input**: Set of ${\color{royalblue}n}$ items, for each ${\color{green}x}_i \in {\color{salmon}X}$, values ${\color{brown}p}_i$,
   ${\color{brown}a}_i$, positive integer ${\color{brown}b}$;
 -   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{brown}a}_i \leq {\color{brown}b}$;
 -   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
   ${\color{brown}p}_i$/${\color{brown}a}_i$;
 -   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
 -   ${\color{salmon}Y}$ := $0$;
--   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
+-   **for** $i$:=1 **to** ${\color{royalblue}n}$ **do**
   -   **if** ${\color{brown}b} \geq {\color{brown}a}_i$ **do**
     -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{green}x}_i \}$;
     -   ${\color{brown}b}$ := ${\color{brown}b} - {\color{brown}a}_i$;
@@ -639,7 +639,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral}c}_i {\color{green}x}_i$
+-   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{royalblue}c}_i {\color{green}x}_i$
 
 -   Subject to ${\color{green}x}_i + {\color{green}x}_j \geq 1$ for all $({\color{brown}v}_i, {\color{brown}v}_j) \in {\color{lime}E}$
 
@@ -703,13 +703,13 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 #### Program - Random WVC
 
--   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{coral}w}: {\color{salmon}V} \mapsto N$;
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{royalblue}w}: {\color{salmon}V} \mapsto N$;
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge ${\color{lime}e} = ({\color{brown}v},{\color{brown}t}) \in {\color{lime}E}$;
   -   Randomly choose ${\color{green}x}$ from $\{ {\color{brown}v},{\color{brown}t}\}$ with Pr$\{ {\color{green}x}={\color{brown}v}\}$ =
-    ${\color{coral}w}({\color{brown}t}) / ({\color{coral}w}({\color{brown}v}) + {\color{coral}w}({\color{brown}t}))$;
+    ${\color{royalblue}w}({\color{brown}t}) / ({\color{royalblue}w}({\color{brown}v}) + {\color{royalblue}w}({\color{brown}t}))$;
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green}x}\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{ {\color{lime}e} \mid {\color{green}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
@@ -742,18 +742,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 #### Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S({\color{coral}t}_j, {\color{green}x})$ denotes the optimal cost from $({\color{coral}t}_0, {\color{green}x})$ to
-    $({\color{coral}t}_j, {\color{green}x})$
-  -   then we must have S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) =
-    min<sub>j</sub> \[S(${\color{coral}t}_j$, ${\color{green}x}$) +
+  -   If $S({\color{royalblue}t}_j, {\color{green}x})$ denotes the optimal cost from $({\color{royalblue}t}_0, {\color{green}x})$ to
+    $({\color{royalblue}t}_j, {\color{green}x})$
+  -   then we must have S(${\color{royalblue}t}_{j+1}$, ${\color{green}y}$) =
+    min<sub>j</sub> \[S(${\color{royalblue}t}_j$, ${\color{green}x}$) +
     c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 #### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S(${\color{coral}t}_j, {\color{green}x}$) for each ${\color{green}x}$ in
-  A<sub>j</sub> to end with S(${\color{coral}t}_n, {\color{green}x}_n$). In the
-  proposed example, we have four stages ${\color{coral}t}_0$, ${\color{coral}t}_1$, ${\color{coral}t}_2$, ${\color{coral}t}_3$
+  determine S(${\color{royalblue}t}_j, {\color{green}x}$) for each ${\color{green}x}$ in
+  A<sub>j</sub> to end with S(${\color{royalblue}t}_n, {\color{green}x}_n$). In the
+  proposed example, we have four stages ${\color{royalblue}t}_0$, ${\color{royalblue}t}_1$, ${\color{royalblue}t}_2$, ${\color{royalblue}t}_3$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -764,13 +764,13 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S(${\color{coral}t}_1$, B) = 7, S(${\color{coral}t}_1$, C) = 4, S(${\color{coral}t}_1$, D) = 1.
+  -   S(${\color{royalblue}t}_1$, B) = 7, S(${\color{royalblue}t}_1$, C) = 4, S(${\color{royalblue}t}_1$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> \[S(${\color{coral}t}_j$,
+  -   S(${\color{royalblue}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> \[S(${\color{royalblue}t}_j$,
     ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 #### Local Search
@@ -791,7 +791,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   **Input**: Instance ${\color{green}x}$;
 -   **Output**: Solution ${\color{green}s}$
--   ${\color{coral}τ}$ := ${\color{coral}t}$;
+-   ${\color{royalblue}τ}$ := ${\color{royalblue}t}$;
 -   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   **repeat**
   -   **for** $l$ times **do**
@@ -799,9 +799,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     -   **if** ($m({\color{green}x}, {\color{green}s}')$ < $m({\color{green}x}, {\color{green}s})$)
     -   ${\color{green}s}$ := ${\color{green}s}'$;
     -   **else**
-    -   ${\color{coral}δ}$ := $m({\color{green}x}, {\color{green}s}') - m({\color{green}x}, {\color{green}s})$;
-    -   ${\color{green}s}$ := ${\color{green}s}'$ with probability exp($-{\color{coral}δ}/{\color{coral}t}$);
-  -   ${\color{coral}τ}$ := ${\color{coral}r} \cdot {\color{coral}τ}$; (\* update of temperature \*)
+    -   ${\color{royalblue}δ}$ := $m({\color{green}x}, {\color{green}s}') - m({\color{green}x}, {\color{green}s})$;
+    -   ${\color{green}s}$ := ${\color{green}s}'$ with probability exp($-{\color{royalblue}δ}/{\color{royalblue}t}$);
+  -   ${\color{royalblue}τ}$ := ${\color{royalblue}r} \cdot {\color{royalblue}τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
 -   **return** ${\color{green}s}$;
 

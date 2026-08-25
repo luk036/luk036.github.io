@@ -75,9 +75,9 @@ class: nord-light, middle, center
 
 ### What is MAX-CUT? 🤔
 
-**Definition:** Given a graph ${\color{salmon}G} = ({\color{salmon}V}, {\color{lime}E})$ with edge weights ${\color{coral}w}: {\color{lime}E} \to \mathbb{R}^+$, partition ${\color{salmon}V}$ into two sets $({\color{salmon}S}, {\color{salmon}V} \setminus {\color{salmon}S})$ to **maximize** the total weight of edges crossing between the sets.
+**Definition:** Given a graph ${\color{salmon}G} = ({\color{salmon}V}, {\color{lime}E})$ with edge weights ${\color{royalblue}w}: {\color{lime}E} \to \mathbb{R}^+$, partition ${\color{salmon}V}$ into two sets $({\color{salmon}S}, {\color{salmon}V} \setminus {\color{salmon}S})$ to **maximize** the total weight of edges crossing between the sets.
 
-$$ \text{MAX-CUT}({\color{salmon}G}) = \max_{{\color{salmon}S} \subseteq {\color{salmon}V}} \sum_{\substack{u \in {\color{salmon}S} \\ v \notin {\color{salmon}S}}} {\color{coral}w}(u, v) $$
+$$ \text{MAX-CUT}({\color{salmon}G}) = \max_{{\color{salmon}S} \subseteq {\color{salmon}V}} \sum_{\substack{u \in {\color{salmon}S} \\ v \notin {\color{salmon}S}}} {\color{royalblue}w}(u, v) $$
 
 .mermaid[
 
@@ -390,7 +390,7 @@ graph TD
 
 Compute shortest path distances between all pairs of **odd faces** in the dual graph.
 
-$$ {\color{coral}d}_{ij} = \text{shortest path distance between odd face } i \text{ and odd face } j $$
+$$ {\color{royalblue}d}_{ij} = \text{shortest path distance between odd face } i \text{ and odd face } j $$
 
 ```python
 dist = dict(nx.all_pairs_dijkstra_path_length(du_G, weight="weight"))
@@ -416,7 +416,7 @@ graph TD
 
 ]
 
-$$ {\color{coral}d}_{{\color{lime}F}_a, {\color{lime}F}_c} = \min(5,\ 2 + 3) = 5 $$
+$$ {\color{royalblue}d}_{{\color{lime}F}_a, {\color{lime}F}_c} = \min(5,\ 2 + 3) = 5 $$
 
 ---
 
@@ -561,7 +561,7 @@ graph LR
 
 **Dual:** 2 vertices connected by 3 parallel edges (weights 5, 10, 3)
 
-**Shortest paths:** ${\color{coral}d} = 3$ (the minimum weight edge)
+**Shortest paths:** ${\color{royalblue}d} = 3$ (the minimum weight edge)
 
 **MWPM:** Pair the two odd faces via weight-3 path
 
@@ -718,7 +718,7 @@ def solve_hadlock_max_cut(G, weight="weight"):
 
 **Example:** Graph split into 2 equal blocks:
 
-$$ \left(\frac{{\color{coral}n}}{2}\right)^3 + \left(\frac{{\color{coral}n}}{2}\right)^3 = \frac{{\color{coral}n}^3}{4} $$
+$$ \left(\frac{{\color{royalblue}n}}{2}\right)^3 + \left(\frac{{\color{royalblue}n}}{2}\right)^3 = \frac{{\color{royalblue}n}^3}{4} $$
 
 That's a **$4\times$ speedup** on the dominant terms! For more components, savings grow. 🚀
 
@@ -858,7 +858,7 @@ auto solve_hadlock_component(
 **Key features:**
 - Coroutine-based `Generator&lt;T&gt;` for lazy iteration
 - Dijkstra with `std::priority_queue` for shortest paths
-- Exact MWPM via DP (${\color{coral}n} \leq 18$) or greedy 2-approximation (${\color{coral}n} > 18$)
+- Exact MWPM via DP (${\color{royalblue}n} \leq 18$) or greedy 2-approximation (${\color{royalblue}n} > 18$)
 - Thread pool parallelization of BC components 🧵⚡
 - Built with **xmake** (not CMake) for the C++ project
 
@@ -868,8 +868,8 @@ auto solve_hadlock_component(
 
 | Approach | Complexity | When to Use |
 | -------- | ---------- | ----------- |
-| **Exact DP** $O(2^k \cdot k^2)$ | ${\color{coral}k} \leq 18$ | Small odd-face sets (most blocks!) |
-| **Greedy** $O(k^2 \log k)$ | ${\color{coral}k} > 18$ | Large odd-face sets |
+| **Exact DP** $O(2^k \cdot k^2)$ | ${\color{royalblue}k} \leq 18$ | Small odd-face sets (most blocks!) |
+| **Greedy** $O(k^2 \log k)$ | ${\color{royalblue}k} > 18$ | Large odd-face sets |
 
 ```cpp
 template &lt;typename Node&gt;
@@ -883,7 +883,7 @@ auto min_weight_perfect_matching(
 }
 ```
 
-> After BC decomposition, most blocks have ${\color{coral}k} \leq 18$ odd faces, enabling exact DP! 🔥
+> After BC decomposition, most blocks have ${\color{royalblue}k} \leq 18$ odd faces, enabling exact DP! 🔥
 
 ---
 
@@ -901,14 +901,14 @@ class: nord-light, middle, center
 | ---- | ---------- | ----- |
 | Planarity check | $O(n)$ | Linear-time for planar graphs |
 | Face finding | $O(n)$ | Walk half-edges |
-| Dual construction | $O(m)$ | ${\color{coral}m}$ = primal edges |
+| Dual construction | $O(m)$ | ${\color{royalblue}m}$ = primal edges |
 | **All-pairs SP** 🟡 | $\sum O(V_i^3)$ | Per bc component |
 | **MWPM** 🟡 | $\sum O(k_i^3)$ or $O(2^{k_i} \cdot k_i^2)$ | Per bc component |
 | Cut recovery | $O(m)$ | Linear scan of edges |
 
 ]
 
-**Without BC:** $O(V^3 + k^3)$ where ${\color{coral}V}$ = dual size, ${\color{coral}k}$ = odd faces
+**Without BC:** $O(V^3 + k^3)$ where ${\color{royalblue}V}$ = dual size, ${\color{royalblue}k}$ = odd faces
 
 **With BC:** $\sum O(V_i^3 + k_i^3) \ll O(V^3 + k^3)$
 

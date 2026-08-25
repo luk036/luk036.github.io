@@ -200,18 +200,18 @@ calculate_tapping_point(int distance,
 
 ### Linear Delay Model 📏
 
-$$ {\color{green} \text{extend\_left}} = \text{round}\left(\frac{({\color{orange} R} - {\color{blue} L}) / {\color{darkmagenta} \alpha} + {\color{coral} d}}{2}\right) $$
+$$ {\color{green} \text{extend\_left}} = \text{round}\left(\frac{({\color{orange} R} - {\color{blue} L}) / {\color{darkmagenta} \alpha} + {\color{royalblue} d}}{2}\right) $$
 
 $$
 \text{TappingResult} =
 \begin{cases}
 (0, {\color{blue} L}) &amp; \text{if raw} &lt; 0 \quad \text{(clamped)} \\[2pt]
-({\color{coral} d}, {\color{orange} R}) &amp; \text{if raw} &gt; {\color{coral} d} \quad \text{(clamped)} \\[2pt]
+({\color{royalblue} d}, {\color{orange} R}) &amp; \text{if raw} &gt; {\color{royalblue} d} \quad \text{(clamped)} \\[2pt]
 (\text{raw}, {\color{blue} L} + \text{raw} \cdot {\color{darkmagenta} \alpha}) &amp; \text{otherwise}
 \end{cases}
 $$
 
-where ${\color{darkmagenta} \alpha} = \text{delay\_per\_unit}$, ${\color{blue} L} = \text{left\_delay}$, ${\color{orange} R} = \text{right\_delay}$, ${\color{coral} d} = \text{distance}$.
+where ${\color{darkmagenta} \alpha} = \text{delay\_per\_unit}$, ${\color{blue} L} = \text{left\_delay}$, ${\color{orange} R} = \text{right\_delay}$, ${\color{royalblue} d} = \text{distance}$.
 
 The **raw** value is preserved so the caller can implement elongation.
 
@@ -219,14 +219,14 @@ The **raw** value is preserved so the caller can implement elongation.
 
 ### Elmore Delay Model ⚡
 
-$$ z = \frac{({\color{orange} R} - {\color{blue} L}) + {\color{green} r} \cdot ({\color{red} C_r} + {\color{coral} c_w}/2)}{{\color{green} r} \cdot ({\color{coral} c_w} + {\color{red} C_r} + {\color{darkmagenta} C_l})} $$
+$$ z = \frac{({\color{orange} R} - {\color{blue} L}) + {\color{green} r} \cdot ({\color{red} C_r} + {\color{royalblue} c_w}/2)}{{\color{green} r} \cdot ({\color{royalblue} c_w} + {\color{red} C_r} + {\color{darkmagenta} C_l})} $$
 
 $$
-\text{raw} = \text{round}(z \cdot {\color{coral} d}), \qquad
-\text{delay\_left} = {\color{blue} L} + {\color{green} r_l} \cdot \left(\frac{{\color{coral} c_l}}{2} + {\color{darkmagenta} C_l}\right)
+\text{raw} = \text{round}(z \cdot {\color{royalblue} d}), \qquad
+\text{delay\_left} = {\color{blue} L} + {\color{green} r_l} \cdot \left(\frac{{\color{royalblue} c_l}}{2} + {\color{darkmagenta} C_l}\right)
 $$
 
-with ${\color{green} r} = {\color{coral} d} \cdot R_u$, ${\color{coral} c_w} = {\color{coral} d} \cdot C_u$, ${\color{green} r_l} = \text{raw} \cdot R_u$, ${\color{coral} c_l} = \text{raw} \cdot C_u$.
+with ${\color{green} r} = {\color{royalblue} d} \cdot R_u$, ${\color{royalblue} c_w} = {\color{royalblue} d} \cdot C_u$, ${\color{green} r_l} = \text{raw} \cdot R_u$, ${\color{royalblue} c_l} = \text{raw} \cdot C_u$.
 
 Same clamping rule: raw &lt; 0 → 0, raw &gt; d → d.
 

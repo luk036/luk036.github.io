@@ -11,7 +11,7 @@
 ### 💡 The Need for Robust Timing Closure
 
 -   **Multi-Corner Timing Analysis (MCTA)** is essential to ensure circuits are robust under variations in Process, Voltage, and Temperature (PVT).
--   **Goal:** Achieve the minimum clock period (${\color{coral}TCP}$) that satisfies setup and hold constraints across all corners.
+-   **Goal:** Achieve the minimum clock period (${\color{royalblue}TCP}$) that satisfies setup and hold constraints across all corners.
 
 ### 🚧 Challenges in Multi-Corner Optimization
 
@@ -42,10 +42,10 @@ $$ {\color{lime}T\_{skew} }(i, j) = {\color{green} t}_i - {\color{green} t}_j \q
 
 ### Deterministic Constraints
 
--   **Setup Time Constraint (Max Delay ${\color{coral} D}_{ij}$):** Ensures data settles in time.
-  $$ {\color{lime}T*{skew} }(i, j) \leq {\color{coral}TCP} - {\color{coral} D}*{ij} - {\color{coral} T}\_{setup} \quad (2) $$
--   **Hold Time Constraint (Min Delay ${\color{coral} d}_{ij}$):** Ensures the register has time to latch data.
-  $$ {\color{lime}T*{skew} }(i, j) \geq {\color{coral} T}*{hold} - {\color{coral} d}\_{ij} \quad (3) $$
+-   **Setup Time Constraint (Max Delay ${\color{royalblue} D}_{ij}$):** Ensures data settles in time.
+  $$ {\color{lime}T*{skew} }(i, j) \leq {\color{royalblue}TCP} - {\color{royalblue} D}*{ij} - {\color{royalblue} T}\_{setup} \quad (2) $$
+-   **Hold Time Constraint (Min Delay ${\color{royalblue} d}_{ij}$):** Ensures the register has time to latch data.
+  $$ {\color{lime}T*{skew} }(i, j) \geq {\color{royalblue} T}*{hold} - {\color{royalblue} d}\_{ij} \quad (3) $$
 
 ### Timing Constraint Graph (TCG)
 
@@ -63,7 +63,7 @@ $$ {\color{lime}T\_{skew} }(i, j) = {\color{green} t}_i - {\color{green} t}_j \q
 
 ### Why Path Relationship Analysis (PRA) is Needed
 
--   Conventional methods often ignore the relationship between the maximum (${\color{coral} D}_{ij}$) and minimum (${\color{coral} d}_{ij}$) delay paths (e.g., shared logic or mutual influence).
+-   Conventional methods often ignore the relationship between the maximum (${\color{royalblue} D}_{ij}$) and minimum (${\color{royalblue} d}_{ij}$) delay paths (e.g., shared logic or mutual influence).
 -   **Proposed Argument:** It is more reliable to **first determine the physically feasible padding locations** using PRA, and *then* calculate the suitable delay values.
 
 ### Slide 6: Statistical Modeling using GEV Distribution (2 minutes)
@@ -81,8 +81,8 @@ $$ {\color{lime}T\_{skew} }(i, j) = {\color{green} t}_i - {\color{green} t}_j \q
 
 ### 📐 GEV Quantile Function
 
-The timing satisfaction probability ${\color{coral}\beta}$ is linked to the deterministic constraints using the GEV quantile function:
-$$ Q = {\color{coral}\mu} + \frac{\color{coral}\sigma}{\color{coral}\xi} ((-\ln{\color{coral}\beta})^{-{\color{coral}\xi} } - 1) \quad (8) $$
+The timing satisfaction probability ${\color{royalblue}\beta}$ is linked to the deterministic constraints using the GEV quantile function:
+$$ Q = {\color{royalblue}\mu} + \frac{\color{royalblue}\sigma}{\color{royalblue}\xi} ((-\ln{\color{royalblue}\beta})^{-{\color{royalblue}\xi} } - 1) \quad (8) $$
 
 ### Slide 7: Methodology: Path Relationship Analysis (PRA) (3 minutes)
 
@@ -132,9 +132,9 @@ graph LR
 
 ### DD Formulation
 
-We seek to minimize the deviation between local solutions (${\color{firebrick} y}^k$) and the global shared timing profile (${\color{firebrick} y}_{shared}$). The problem is formulated using Lagrangian multipliers (${\color{coral}\lambda}_k$) to enforce ${\color{firebrick} y}^k = {\color{firebrick} y}_{shared}$:
+We seek to minimize the deviation between local solutions (${\color{firebrick} y}^k$) and the global shared timing profile (${\color{firebrick} y}_{shared}$). The problem is formulated using Lagrangian multipliers (${\color{royalblue}\lambda}_k$) to enforce ${\color{firebrick} y}^k = {\color{firebrick} y}_{shared}$:
 
-$$ \min*{\{ {\color{firebrick} y}^k\} } \sum_{ {\color{coral}k} } {\color{coral}\lambda}_k^\top ({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) $$
+$$ \min*{\{ {\color{firebrick} y}^k\} } \sum_{ {\color{royalblue}k} } {\color{royalblue}\lambda}_k^\top ({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) $$
 
 This objective is subject to the modified TCG constraints and the statistical timing requirements (see next slide).
 
@@ -142,11 +142,11 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 ### 🔄 DD Iterative Optimization
 
-1. **Solve Subproblems:** In each iteration, all per-corner subproblems are solved independently and in parallel, treating ${\color{firebrick} y}_{shared}$ and ${\color{coral}\lambda}_k$ as fixed parameters.
-2. **Update Global Shared Variable:** The global solution is updated as the average of the local solutions (${\color{coral}K}$ is the number of corners).
-    $$ {\color{firebrick} y}*{shared} \leftarrow \frac{1}{\color{coral}K} \sum*{ {\color{coral}k}=1}^{ {\color{coral}K} } {\color{firebrick} y}^k \quad (10) $$
+1. **Solve Subproblems:** In each iteration, all per-corner subproblems are solved independently and in parallel, treating ${\color{firebrick} y}_{shared}$ and ${\color{royalblue}\lambda}_k$ as fixed parameters.
+2. **Update Global Shared Variable:** The global solution is updated as the average of the local solutions (${\color{royalblue}K}$ is the number of corners).
+    $$ {\color{firebrick} y}*{shared} \leftarrow \frac{1}{\color{royalblue}K} \sum*{ {\color{royalblue}k}=1}^{ {\color{royalblue}K} } {\color{firebrick} y}^k \quad (10) $$
 3. **Update Lagrangian Multipliers:** The multipliers are updated using subgradient ascent, penalizing deviations from the global average.
-    $$ {\color{coral}\lambda}*k \leftarrow {\color{coral}\lambda}_k + {\color{coral}\rho}({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) \quad (11) $$
+    $$ {\color{royalblue}\lambda}*k \leftarrow {\color{royalblue}\lambda}_k + {\color{royalblue}\rho}({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) \quad (11) $$
 
 -   This process repeats until the solutions converge, ensuring a robust, consistent, and feasible delay padding assignment across all corners.
 
@@ -154,19 +154,19 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 ### Probabilistic Constraint
 
-To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability ${\color{coral}\beta}$:
+To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability ${\color{royalblue}\beta}$:
 
-$$ Pr(({\color{coral}\tilde{D} } \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-{\color{lime}T*{skew} })\wedge({\color{coral}\tilde{d} } \geq {\color{coral} T}*{hold}-{\color{lime}T*{skew} })) \geq {\color{coral}\beta} \quad (14) $$
-*(Where ${\color{coral}\tilde{D} }$ and ${\color{coral}\tilde{d} }$ are GEV-modeled random variables for max and min delays)\*.
+$$ Pr(({\color{royalblue}\tilde{D} } \leq {\color{royalblue}TCP}-{\color{royalblue} T}*{setup}-{\color{lime}T*{skew} })\wedge({\color{royalblue}\tilde{d} } \geq {\color{royalblue} T}*{hold}-{\color{lime}T*{skew} })) \geq {\color{royalblue}\beta} \quad (14) $$
+*(Where ${\color{royalblue}\tilde{D} }$ and ${\color{royalblue}\tilde{d} }$ are GEV-modeled random variables for max and min delays)\*.
 
 ### Deterministic Equivalent (Quantile-based)
 
 Using the GEV quantile function $Q$, we obtain deterministic multi-corner constraints (Eq. 15):
 
--   Setup (Slow corner focus, using ${\color{coral}\beta}$ quantile):
-  $$ {\color{coral}TCP} - {\color{coral} T}*{setup} - {\color{lime}T*{skew} } \geq Q_D({\color{coral}\beta}) $$
--   Hold (Fast corner focus, using $1-{\color{coral}\beta}$ quantile):
-  $$ {\color{coral} T}*{hold} - {\color{lime}T*{skew} } \geq Q_d(1 - {\color{coral}\beta}) $$
+-   Setup (Slow corner focus, using ${\color{royalblue}\beta}$ quantile):
+  $$ {\color{royalblue}TCP} - {\color{royalblue} T}*{setup} - {\color{lime}T*{skew} } \geq Q_D({\color{royalblue}\beta}) $$
+-   Hold (Fast corner focus, using $1-{\color{royalblue}\beta}$ quantile):
+  $$ {\color{royalblue} T}*{hold} - {\color{lime}T*{skew} } \geq Q_d(1 - {\color{royalblue}\beta}) $$
 
 ### Unified Statistical DD Optimization
 
@@ -176,15 +176,15 @@ The statistical constraints replace the deterministic constraints in the DD opti
 
 ### Binary Search for Optimal TCP
 
-The flow (Fig. 4) minimizes the feasible clock period ${\color{coral}TCP}$ through a binary search, while ensuring statistical timing constraints are met.
+The flow (Fig. 4) minimizes the feasible clock period ${\color{royalblue}TCP}$ through a binary search, while ensuring statistical timing constraints are met.
 
-1. **SSTA & Constraint Extraction:** Multi-corner SSTA extracts GEV-based path delay distributions. Quantile checks ($Q({\color{coral}\beta})$) are used for constraints.
-2. **TCG Construction & Enhancement:** For a candidate ${\color{coral}TCP}$, the TCG is built. PRA is performed to identify setup/hold interactions, leading to the modified TCG.
+1. **SSTA & Constraint Extraction:** Multi-corner SSTA extracts GEV-based path delay distributions. Quantile checks ($Q({\color{royalblue}\beta})$) are used for constraints.
+2. **TCG Construction & Enhancement:** For a candidate ${\color{royalblue}TCP}$, the TCG is built. PRA is performed to identify setup/hold interactions, leading to the modified TCG.
 3. **Feasibility Check:** Bellman-Ford checks the modified TCG for negative cycles.
-   -   **Negative Cycle detected:** ${\color{coral}TCP}$ is infeasible. ${\color{coral} T}_{low}$ is updated.
-   -   **No Negative Cycles:** ${\color{coral}TCP}$ is feasible. Proceed to solving.
+   -   **Negative Cycle detected:** ${\color{royalblue}TCP}$ is infeasible. ${\color{royalblue} T}_{low}$ is updated.
+   -   **No Negative Cycles:** ${\color{royalblue}TCP}$ is feasible. Proceed to solving.
 4. **DD Solver:** The DD-based solver computes the optimal corner-aware delay configuration.
-5. **Refinement:** Binary search updates bounds until ${\color{coral} T}_{high} - {\color{coral} T}_{low} < {\color{coral}\epsilon}$.
+5. **Refinement:** Binary search updates bounds until ${\color{royalblue} T}_{high} - {\color{royalblue} T}_{low} < {\color{royalblue}\epsilon}$.
 
 ### Slide 12: Experimental Setup (1 minute)
 
@@ -192,8 +192,8 @@ The flow (Fig. 4) minimizes the feasible clock period ${\color{coral}TCP}$ throu
 -   **Technology:** ASAP 7nm process technology library.
 -   **Corners Used:** FF (Fast-Fast), SS (Slow-Slow), and TT (Typical-Typical).
 -   **Modeling:** GEV-based SSTA.
--   **Target Timing Yield (${\color{coral}\beta}$):** 0.99 (99% satisfaction probability).
--   **Optimization Goal:** Determine the minimum feasible ${\color{coral}TCP}$ through binary search, incorporating PRA and DD.
+-   **Target Timing Yield (${\color{royalblue}\beta}$):** 0.99 (99% satisfaction probability).
+-   **Optimization Goal:** Determine the minimum feasible ${\color{royalblue}TCP}$ through binary search, incorporating PRA and DD.
 
 ### Slide 13: Results: Path Relationship Analysis (1 minute)
 
@@ -220,7 +220,7 @@ This confirms that padding a critical path frequently affects the hold time cons
 
 ### Multi-Corner Optimization vs. Single Corner Baseline
 
-The approach compares the optimized ${\color{coral}TCP}$ (Unified Multi-Corner) against the minimum feasible ${\color{coral}TCP}$ found for individual corners (FF, SS, TT).
+The approach compares the optimized ${\color{royalblue}TCP}$ (Unified Multi-Corner) against the minimum feasible ${\color{royalblue}TCP}$ found for individual corners (FF, SS, TT).
 
 | Benchmark | Initial TCP (SS, ps) | Optimized TCP (ps) | Improvement (%) |
 | :-------- | :------------------- | :----------------- | :-------------- |

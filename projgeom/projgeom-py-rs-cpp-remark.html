@@ -95,7 +95,7 @@ $$
 **The fundamental building block — Plücker parametrization:**
 
 $$
-\text{plckr}({\color{coral}\lambda}, {\color{salmon}p}, {\color{coral}\mu}, {\color{salmon}q}) = {\color{coral}\lambda} {\color{salmon}p} + {\color{coral}\mu} {\color{salmon}q}
+\text{plckr}({\color{royalblue}\lambda}, {\color{salmon}p}, {\color{royalblue}\mu}, {\color{salmon}q}) = {\color{royalblue}\lambda} {\color{salmon}p} + {\color{royalblue}\mu} {\color{salmon}q}
 $$
 
 Used for: midpoints, points on lines, harmonic conjugates, everything.
@@ -282,7 +282,7 @@ assert t.apply_point(PgPoint([1, 2, 1])) == PgPoint([2, 6, 1])
 Results: 30/30 tests passed ✅
 ```
 
-**Bug found during verification:** Rust's `archimedes(1,2,3)` doc test claimed `== 0` but returns 8. The formula $4{\color{coral}a}{\color{coral}b} - ({\color{coral}a}+{\color{coral}b}-{\color{coral}c})^2 = 8 - 0 = 8$, not 0. Fixed the test to use a correct zero case: ${\color{coral}a}=1,{\color{coral}b}=4,{\color{coral}c}=9 \rightarrow 16 - 16 = 0$.
+**Bug found during verification:** Rust's `archimedes(1,2,3)` doc test claimed `== 0` but returns 8. The formula $4{\color{royalblue}a}{\color{royalblue}b} - ({\color{royalblue}a}+{\color{royalblue}b}-{\color{royalblue}c})^2 = 8 - 0 = 8$, not 0. Fixed the test to use a correct zero case: ${\color{royalblue}a}=1,{\color{royalblue}b}=4,{\color{royalblue}c}=9 \rightarrow 16 - 16 = 0$.
 
 **Run it:** `python tests/verify_consistency.py`
 

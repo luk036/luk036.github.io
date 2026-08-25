@@ -76,13 +76,13 @@ class: nord-light, middle, center
 
 ### ❓ What is Minimum Weighted Vertex Cover?
 
-Given an undirected graph $G = ({\color{salmon}V}, {\color{lime}E})$ with vertex weights ${\color{coral} w}: {\color{salmon}V} \to \mathbb{R}^+$:
+Given an undirected graph $G = ({\color{salmon}V}, {\color{lime}E})$ with vertex weights ${\color{royalblue} w}: {\color{salmon}V} \to \mathbb{R}^+$:
 
 > Find a subset ${\color{salmon}C} \subseteq {\color{salmon}V}$ of **minimum total weight** such that every edge
 > $(u, v) \in {\color{lime}E}$ has at least one endpoint in ${\color{salmon}C}$.
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{royalblue} w}_v \cdot {\color{green} x}_v \\
 \text{s.t.} \quad & {\color{green} x}_u + {\color{green} x}_v \ge 1 \quad \forall (u, v) \in {\color{lime}E} \\
 & {\color{green} x}_v \in \{0, 1\} \quad \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -125,7 +125,7 @@ class: nord-light, middle, center
 ### Primal (Covering)
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{royalblue} w}_v \cdot {\color{green} x}_v \\
 \text{s.t.} \quad & {\color{green} x}_u + {\color{green} x}_v \ge 1 \quad \forall (u, v) \in {\color{lime}E} \\
 & {\color{green} x}_v \ge 0
 \end{array}$$
@@ -134,7 +134,7 @@ $$\begin{array}{lll}
 
 $$\begin{array}{lll}
 \max \quad & \sum_{e \in {\color{lime}E}} {\color{firebrick} y}_e \\
-\text{s.t.} \quad & \sum_{e \ni v} {\color{firebrick} y}_e \le {\color{coral} w}_v \quad \forall v \in {\color{salmon}V} \\
+\text{s.t.} \quad & \sum_{e \ni v} {\color{firebrick} y}_e \le {\color{royalblue} w}_v \quad \forall v \in {\color{salmon}V} \\
 & {\color{firebrick} y}_e \ge 0
 \end{array}$$
 
@@ -146,7 +146,7 @@ The algorithm maintains **dual variables (gaps)** alongside the **primal solutio
 
 .pull-left[
 #### Dual Variables (Gaps)
-Each vertex $v$ has a **gap** $g_v$ initialized to ${\color{coral} w}_v$
+Each vertex $v$ has a **gap** $g_v$ initialized to ${\color{royalblue} w}_v$
 
 - Gaps decrease as vertices are "paid for"
 - When $g_v = 0$, the vertex is fully paid 🔄
@@ -253,8 +253,8 @@ class: nord-light, middle, center
 
 For each uncovered edge $(u, v)$, pick an endpoint with **biased random selection**:
 
-$$ P(\text{pick } u) = \frac{{\color{coral} w}(v)}{{\color{coral} w}(u) + {\color{coral} w}(v)} \qquad
-P(\text{pick } v) = \frac{{\color{coral} w}(u)}{{\color{coral} w}(u) + {\color{coral} w}(v)} $$
+$$ P(\text{pick } u) = \frac{{\color{royalblue} w}(v)}{{\color{royalblue} w}(u) + {\color{royalblue} w}(v)} \qquad
+P(\text{pick } v) = \frac{{\color{royalblue} w}(u)}{{\color{royalblue} w}(u) + {\color{royalblue} w}(v)} $$
 
 ```python
 for (u, v) in graph.edges():
@@ -297,10 +297,10 @@ $$ \mathbb{E}[\text{cost}] = 100 \cdot \frac{1}{101} + 1 \cdot \frac{100}{101} =
 
 ### 📊 Approximation Guarantee
 
-**Lemma**: For each edge $(u, v)$, the expected cost contribution $\le 2 \cdot \min({\color{coral} w}_u, {\color{coral} w}_v)$.
+**Lemma**: For each edge $(u, v)$, the expected cost contribution $\le 2 \cdot \min({\color{royalblue} w}_u, {\color{royalblue} w}_v)$.
 
-$$ \mathbb{E}[\text{cost}] = {\color{coral} w}_u \cdot \frac{{\color{coral} w}_v}{{\color{coral} w}_u + {\color{coral} w}_v} + {\color{coral} w}_v \cdot \frac{{\color{coral} w}_u}{{\color{coral} w}_u + {\color{coral} w}_v} $$
-$$ = \frac{2 {\color{coral} w}_u {\color{coral} w}_v}{{\color{coral} w}_u + {\color{coral} w}_v} \le 2 \cdot \min({\color{coral} w}_u, {\color{coral} w}_v) $$
+$$ \mathbb{E}[\text{cost}] = {\color{royalblue} w}_u \cdot \frac{{\color{royalblue} w}_v}{{\color{royalblue} w}_u + {\color{royalblue} w}_v} + {\color{royalblue} w}_v \cdot \frac{{\color{royalblue} w}_u}{{\color{royalblue} w}_u + {\color{royalblue} w}_v} $$
+$$ = \frac{2 {\color{royalblue} w}_u {\color{royalblue} w}_v}{{\color{royalblue} w}_u + {\color{royalblue} w}_v} \le 2 \cdot \min({\color{royalblue} w}_u, {\color{royalblue} w}_v) $$
 
 **Therefore**: $\mathbb{E}[\text{total cost}] \le 2 \cdot \text{OPT}$ ✅
 
@@ -482,7 +482,7 @@ class: nord-light, middle, center
 
 ### 📊 Weighted Graph Behavior
 
-**Single edge**: ${\color{coral} w}(0) = 100$, ${\color{coral} w}(1) = 1$
+**Single edge**: ${\color{royalblue} w}(0) = 100$, ${\color{royalblue} w}(1) = 1$
 
 
 | Algorithm | Pick Light (1) | Pick Heavy (0) | Expected Cost |
@@ -594,7 +594,7 @@ $$ \text{For each net } {\color{salmon}S}: \quad \sum_{v \in {\color{salmon}S}} 
 
 **Generalized Pitt rule** for hyperedges $\{v_1, \ldots, v_k\}$:
 
-$$ P(\text{pick } v_i) = \frac{1/{\color{coral} w}(v_i)}{\sum_{j=1}^k 1/{\color{coral} w}(v_j)} $$
+$$ P(\text{pick } v_i) = \frac{1/{\color{royalblue} w}(v_i)}{\sum_{j=1}^k 1/{\color{royalblue} w}(v_j)} $$
 
 <div class="mermaid">
 <pre>

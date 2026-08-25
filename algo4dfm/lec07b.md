@@ -22,27 +22,27 @@ Consider:
 
 $$
 \begin{array}{ll}
-\text{maximize} & {\color{olive}g}({\color{coral}\beta}), \\
-\text{subject to} & {\color{blue}y} \leq {\color{olive}d}({\color{coral}\beta}), \\
+\text{maximize} & {\color{olive}g}({\color{royalblue}\beta}), \\
+\text{subject to} & {\color{blue}y} \leq {\color{olive}d}({\color{royalblue}\beta}), \\
 & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
 \end{array}
 $$
 
-where ${\color{olive}g}({\color{coral}\beta})$ and ${\color{olive}d}({\color{coral}\beta})$ are concave.
+where ${\color{olive}g}({\color{royalblue}\beta})$ and ${\color{olive}d}({\color{royalblue}\beta})$ are concave.
 
 👉 Note: the parametric flow problems can be defined in a similar way.
 
 #### Network flow says
 
--   For fixed ${\color{coral}\beta}$, the problem is feasible precisely when there exists no negative cycle
+-   For fixed ${\color{royalblue}\beta}$, the problem is feasible precisely when there exists no negative cycle
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
 
--   If a negative cycle ${\color{lime}C}$ is found, then $\sum_{(i,j)\in {\color{lime}C} } {\color{olive}d}_{ij}({\color{coral}\beta}) < 0$
+-   If a negative cycle ${\color{lime}C}$ is found, then $\sum_{(i,j)\in {\color{lime}C} } {\color{olive}d}_{ij}({\color{royalblue}\beta}) < 0$
 
 #### 🥚 Convex Optimization says
 
--   If both sub-gradients of ${\color{olive}g}({\color{coral}\beta})$ and ${\color{olive}d}({\color{coral}\beta})$ are known, then the _bisection method_ can be used for solving the problem efficiently.
+-   If both sub-gradients of ${\color{olive}g}({\color{royalblue}\beta})$ and ${\color{olive}d}({\color{royalblue}\beta})$ are known, then the _bisection method_ can be used for solving the problem efficiently.
 
 -   Also, for multi-parameter problems, the _ellipsoid method_ can be used.
 
@@ -52,13 +52,13 @@ Consider:
 
 $$
     \begin{array}{ll}
-        \text{maximize} & {\color{olive}f}({\color{coral}\beta}), \\
-        \text{subject to}    & {\color{blue}y} \leq {\color{olive}d}({\color{coral}\beta}), \\
+        \text{maximize} & {\color{olive}f}({\color{royalblue}\beta}), \\
+        \text{subject to}    & {\color{blue}y} \leq {\color{olive}d}({\color{royalblue}\beta}), \\
                              & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}
 $$
 
-where ${\color{olive}f}({\color{coral}\beta})$ is _quasi-convex_ and ${\color{olive}d}({\color{coral}\beta})$ are concave.
+where ${\color{olive}f}({\color{royalblue}\beta})$ is _quasi-convex_ and ${\color{olive}d}({\color{royalblue}\beta})$ are concave.
 
 #### 📚 Example of Quasi-Convex Functions
 
@@ -70,31 +70,31 @@ where ${\color{olive}f}({\color{coral}\beta})$ is _quasi-convex_ and ${\color{ol
 
 -   Linear-fractional function:
 
-  -   ${\color{olive}f}({\color{green}x})$ = $({\color{coral}a}^\mathsf{T} {\color{green}x} + {\color{coral}b})/({\color{coral}c}^\mathsf{T} {\color{green}x} + {\color{coral}d})$
+  -   ${\color{olive}f}({\color{green}x})$ = $({\color{royalblue}a}^\mathsf{T} {\color{green}x} + {\color{royalblue}b})/({\color{royalblue}c}^\mathsf{T} {\color{green}x} + {\color{royalblue}d})$
 
-  -   dom ${\color{olive}f}$ = $\{ {\color{green}x} \,|\, {\color{coral}c}^\mathsf{T} {\color{green}x} + {\color{coral}d} > 0 \}$
+  -   dom ${\color{olive}f}$ = $\{ {\color{green}x} \,|\, {\color{royalblue}c}^\mathsf{T} {\color{green}x} + {\color{royalblue}d} > 0 \}$
 
 -   Distance ratio function:
 
-  -   ${\color{olive}f}({\color{green}x})$ = $\| {\color{green}x} - {\color{coral}a}\|_2 / \| {\color{green}x} - {\color{coral}b} \|_2$
+  -   ${\color{olive}f}({\color{green}x})$ = $\| {\color{green}x} - {\color{royalblue}a}\|_2 / \| {\color{green}x} - {\color{royalblue}b} \|_2$
 
-  -   dom ${\color{olive}f}$ = $\{ {\color{green}x} \,|\, \| {\color{green}x} - {\color{coral}a}\|_2 \le \| {\color{green}x} - {\color{coral}b} \|_2 \}$
+  -   dom ${\color{olive}f}$ = $\{ {\color{green}x} \,|\, \| {\color{green}x} - {\color{royalblue}a}\|_2 \le \| {\color{green}x} - {\color{royalblue}b} \|_2 \}$
 
 #### 🥚 Convex Optimization says
 
-If ${\color{olive}f}$ is quasi-convex, there exists a family of functions ${\color{olive}\phi}_{ {\color{coral}t} }$ such that:
+If ${\color{olive}f}$ is quasi-convex, there exists a family of functions ${\color{olive}\phi}_{ {\color{royalblue}t} }$ such that:
 
--   ${\color{olive}\phi}_{ {\color{coral}t} }({\color{coral}\beta})$ is convex w.r.t. ${\color{coral}\beta}$ for fixed ${\color{coral}t}$
+-   ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{royalblue}\beta})$ is convex w.r.t. ${\color{royalblue}\beta}$ for fixed ${\color{royalblue}t}$
 
--   ${\color{olive}\phi}_{ {\color{coral}t} }({\color{coral}\beta})$ is non-increasing w.r.t. ${\color{coral}t}$ for fixed ${\color{coral}\beta}$
+-   ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{royalblue}\beta})$ is non-increasing w.r.t. ${\color{royalblue}t}$ for fixed ${\color{royalblue}\beta}$
 
--   ${\color{coral}t}$-sublevel set of ${\color{olive}f}$ is $0$-sublevel set of ${\color{olive}\phi}_{ {\color{coral}t} }$, i.e., ${\color{olive}f}({\color{coral}\beta}) \le {\color{coral}t}$ iff ${\color{olive}\phi}_{ {\color{coral}t} }({\color{coral}\beta}) \le 0$
+-   ${\color{royalblue}t}$-sublevel set of ${\color{olive}f}$ is $0$-sublevel set of ${\color{olive}\phi}_{ {\color{royalblue}t} }$, i.e., ${\color{olive}f}({\color{royalblue}\beta}) \le {\color{royalblue}t}$ iff ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{royalblue}\beta}) \le 0$
 
 For example:
 
--   ${\color{olive}f}({\color{coral}\beta}) = {\color{olive}p}({\color{coral}\beta})/{\color{olive}q}({\color{coral}\beta})$ with ${\color{olive}p}$ convex, ${\color{olive}q}$ concave ${\color{olive}p}({\color{coral}\beta}) \ge 0$, ${\color{olive}q}({\color{coral}\beta}) > 0$ on dom ${\color{olive}f}$,
+-   ${\color{olive}f}({\color{royalblue}\beta}) = {\color{olive}p}({\color{royalblue}\beta})/{\color{olive}q}({\color{royalblue}\beta})$ with ${\color{olive}p}$ convex, ${\color{olive}q}$ concave ${\color{olive}p}({\color{royalblue}\beta}) \ge 0$, ${\color{olive}q}({\color{royalblue}\beta}) > 0$ on dom ${\color{olive}f}$,
 
--   can take ${\color{olive}\phi}_{ {\color{coral}t} }({\color{coral}\beta})$ = ${\color{olive}p}({\color{coral}\beta}) - {\color{coral}t} \cdot {\color{olive}q}({\color{coral}\beta})$
+-   can take ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{royalblue}\beta})$ = ${\color{olive}p}({\color{royalblue}\beta}) - {\color{royalblue}t} \cdot {\color{olive}q}({\color{royalblue}\beta})$
 
 #### 🥚 Convex Optimization says
 
@@ -103,19 +103,19 @@ Consider a convex feasibility problem:
 $$
 
     \begin{array}{ll}
-        \text{find}      & {\color{olive}f}({\color{coral}\beta}), \\
-        \text{s. t.}     & {\color{olive}\phi}_{ {\color{coral}t} }({\color{coral}\beta}) \le 0, \\
-                         & {\color{blue}y} \leq {\color{olive}d}({\color{coral}\beta}),  {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
+        \text{find}      & {\color{olive}f}({\color{royalblue}\beta}), \\
+        \text{s. t.}     & {\color{olive}\phi}_{ {\color{royalblue}t} }({\color{royalblue}\beta}) \le 0, \\
+                         & {\color{blue}y} \leq {\color{olive}d}({\color{royalblue}\beta}),  {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}
 
 
 $$
 
--   If feasible, we conclude that ${\color{coral}t} \ge {\color{coral}p^*}$;
+-   If feasible, we conclude that ${\color{royalblue}t} \ge {\color{royalblue}p^*}$;
 
--   If infeasible, ${\color{coral}t} < {\color{coral}p^*}$.
+-   If infeasible, ${\color{royalblue}t} < {\color{royalblue}p^*}$.
 
-Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*}$.
+Binary search on ${\color{royalblue}t}$ can be used for obtaining ${\color{royalblue}p^*}$.
 
 #### Quasi-convex Network Problem
 
@@ -140,13 +140,13 @@ Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*
 
   $$
   \begin{array}{ll}
-    \text{maximize} & {\color{coral}\beta}, \\
-    \text{subject to} & {\color{blue}y} \leq {\color{olive}f}^{-1}({\color{coral}\beta}), \\
+    \text{maximize} & {\color{royalblue}\beta}, \\
+    \text{subject to} & {\color{blue}y} \leq {\color{olive}f}^{-1}({\color{royalblue}\beta}), \\
     & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
   \end{array}
   $$
 
-    where ${\color{olive}f}^{-1}({\color{coral}\beta})$ is non-deceasing w.r.t. ${\color{coral}\beta}$.
+    where ${\color{olive}f}^{-1}({\color{royalblue}\beta})$ is non-deceasing w.r.t. ${\color{royalblue}\beta}$.
 
 #### E.g. Yield-driven Optimization
 
@@ -165,13 +165,13 @@ Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*
 
   $$
   \begin{array}{ll}
-    \text{maximize} & {\color{coral}\beta}, \\
-    \text{subject to} & {\color{coral}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\tilde{d} }_{ij}), \\
+    \text{maximize} & {\color{royalblue}\beta}, \\
+    \text{subject to} & {\color{royalblue}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\tilde{d} }_{ij}), \\
     & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
   \end{array}
   $$
 
-    where ${\color{olive}f}_{ij}^{-1}({\color{coral}\beta})$ is non-deceasing w.r.t. ${\color{coral}\beta}$.
+    where ${\color{olive}f}_{ij}^{-1}({\color{royalblue}\beta})$ is non-deceasing w.r.t. ${\color{royalblue}\beta}$.
 
 #### E.g. Yield-driven Optimization (II)
 
@@ -181,9 +181,9 @@ Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*
 
   $$
   \begin{array}{lll}
-  & & {\color{coral}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\tilde{d} }_{ij}) \leq {\color{coral}t} \\
-  & \Rightarrow & {\color{coral}\beta} \leq 1 - {\color{olive}F}_{ij}({\color{blue}y}_{ij}) \\
-  & \Rightarrow & {\color{blue}y}_{ij} \leq {\color{olive}F}_{ij}^{-1}(1 - {\color{coral}\beta})
+  & & {\color{royalblue}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\tilde{d} }_{ij}) \leq {\color{royalblue}t} \\
+  & \Rightarrow & {\color{royalblue}\beta} \leq 1 - {\color{olive}F}_{ij}({\color{blue}y}_{ij}) \\
+  & \Rightarrow & {\color{blue}y}_{ij} \leq {\color{olive}F}_{ij}^{-1}(1 - {\color{royalblue}\beta})
   \end{array}
   $$
 
@@ -191,8 +191,8 @@ Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*
 
   $$
   \begin{array}{ll}
-    \text{maximize} & {\color{coral}\beta}, \\
-    \text{subject to} & {\color{blue}y}_{ij} \leq {\color{olive}F}_{ij}^{-1}(1 - {\color{coral}\beta}), \\
+    \text{maximize} & {\color{royalblue}\beta}, \\
+    \text{subject to} & {\color{blue}y}_{ij} \leq {\color{olive}F}_{ij}^{-1}(1 - {\color{royalblue}\beta}), \\
     & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
   \end{array}
   $$
@@ -227,8 +227,8 @@ $$
   -   Stop when there is no flow to inject into the path.
 -   Cycle cancelling based:
   -   Start with a feasible solution ${\color{green}x_0}$
-  -   find a better sol'n ${\color{green}x_1} = {\color{green}x_0} + {\color{coral}\alpha} {\color{green}\triangle x}$, where
-    ${\color{coral}\alpha}$ is positive and ${\color{green}\triangle x}$ is a negative cycle indicator.
+  -   find a better sol'n ${\color{green}x_1} = {\color{green}x_0} + {\color{royalblue}\alpha} {\color{green}\triangle x}$, where
+    ${\color{royalblue}\alpha}$ is positive and ${\color{green}\triangle x}$ is a negative cycle indicator.
 
 #### General Descent Method
 
@@ -236,8 +236,8 @@ $$
 2. **Output**: ${\color{green}x^*}$
 3. **repeat**
     1. Determine a descent direction ${\color{green}p}$.
-    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$.
-    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$
+    2. Line search. Choose a step size ${\color{royalblue}\alpha} > 0$.
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{royalblue}\alpha} {\color{green}p}$
 4. **until** a stopping criterion is satisfied.
 
 #### Some Common Descent Directions
@@ -254,9 +254,9 @@ $$
 #### Network flow says (II)
 
 -   Here, there is a better way to choose ${\color{green}p}$!
--   Let ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$, then we have: $$\begin{array}{lll}
-      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + {\color{coral}\alpha} {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} < 0 \\
-      \text{s. t.} & -{\color{green}x_0} \leq {\color{coral}\alpha} {\color{green}p} \leq {\color{green}c}-{\color{green}x_0} & \Rightarrow \text{residual graph} \\
+-   Let ${\color{green}x} := {\color{green}x} + {\color{royalblue}\alpha} {\color{green}p}$, then we have: $$\begin{array}{lll}
+      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + {\color{royalblue}\alpha} {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} < 0 \\
+      \text{s. t.} & -{\color{green}x_0} \leq {\color{royalblue}\alpha} {\color{green}p} \leq {\color{green}c}-{\color{green}x_0} & \Rightarrow \text{residual graph} \\
       & {\color{blue}A}^\mathsf{T} {\color{green}p} = 0 & \Rightarrow {\color{green}p} \text{ is a cycle!}
     \end{array}$$
 -   In other words, choose ${\color{green}p}$ to be a negative cycle with cost ${\color{blue}d}$!
@@ -266,10 +266,10 @@ $$
 #### Network flow says (III)
 
 -   Step size is limited by the capacity constraints:
-  -   ${\color{coral}\alpha}_1 = \min_{ij} \{ {\color{green}c^+} - {\color{green}x_0}\}$, for ${\color{green}\triangle x}_{ij} > 0$
-  -   ${\color{coral}\alpha}_2 = \min_{ij} \{ {\color{green}x_0} - {\color{green}c^-}\}$, for ${\color{green}\triangle x}_{ij} < 0$
-  -   ${\color{coral}\alpha}_\mathrm{lin}$ = min$\{ {\color{coral}\alpha}_1, {\color{coral}\alpha}_2\}$
--   If ${\color{coral}\alpha}_\mathrm{lin} = +\infty$, the problem is unbounded.
+  -   ${\color{royalblue}\alpha}_1 = \min_{ij} \{ {\color{green}c^+} - {\color{green}x_0}\}$, for ${\color{green}\triangle x}_{ij} > 0$
+  -   ${\color{royalblue}\alpha}_2 = \min_{ij} \{ {\color{green}x_0} - {\color{green}c^-}\}$, for ${\color{green}\triangle x}_{ij} < 0$
+  -   ${\color{royalblue}\alpha}_\mathrm{lin}$ = min$\{ {\color{royalblue}\alpha}_1, {\color{royalblue}\alpha}_2\}$
+-   If ${\color{royalblue}\alpha}_\mathrm{lin} = +\infty$, the problem is unbounded.
 
 #### Network flow says (IV)
 
@@ -289,16 +289,16 @@ $$
 
 #### Common Types of Line Search
 
--   Exact line search: ${\color{coral}t} = \argmin_{ {\color{coral}t}>0} {\color{olive}f}({\color{green}x} + {\color{coral}t}{\color{green}\triangle x})$
--   Backtracking line search (with parameters ${\color{coral}\alpha} \in (0,1/2), {\color{coral}\beta} \in (0,1)$)
-  -   starting from ${\color{coral}t} = 1$, repeat ${\color{coral}t} := {\color{coral}\beta} {\color{coral}t}$ until
-    $${\color{olive}f}({\color{green}x} + {\color{coral}t}{\color{green}\triangle x}) < {\color{olive}f}({\color{green}x}) + {\color{coral}\alpha} {\color{coral}t} \nabla {\color{olive}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x}$$
-  -   graphical interpretation: backtrack until ${\color{coral}t} \leq {\color{coral}t_0}$
+-   Exact line search: ${\color{royalblue}t} = \argmin_{ {\color{royalblue}t}>0} {\color{olive}f}({\color{green}x} + {\color{royalblue}t}{\color{green}\triangle x})$
+-   Backtracking line search (with parameters ${\color{royalblue}\alpha} \in (0,1/2), {\color{royalblue}\beta} \in (0,1)$)
+  -   starting from ${\color{royalblue}t} = 1$, repeat ${\color{royalblue}t} := {\color{royalblue}\beta} {\color{royalblue}t}$ until
+    $${\color{olive}f}({\color{green}x} + {\color{royalblue}t}{\color{green}\triangle x}) < {\color{olive}f}({\color{green}x}) + {\color{royalblue}\alpha} {\color{royalblue}t} \nabla {\color{olive}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x}$$
+  -   graphical interpretation: backtrack until ${\color{royalblue}t} \leq {\color{royalblue}t_0}$
 
 #### Network flow says (V)
 
 -   The step size is further limited by the following:
-  -   ${\color{coral}\alpha}_\mathrm{cvx} = \min\{ {\color{coral}\alpha}_\mathrm{lin}, {\color{coral}t}\}$
+  -   ${\color{royalblue}\alpha}_\mathrm{cvx} = \min\{ {\color{royalblue}\alpha}_\mathrm{lin}, {\color{royalblue}t}\}$
 -   In each iteration, choose ${\color{green}\triangle x}$ as a negative cycle of ${\color{lime}G}_{ {\color{green}x} }$,
   with cost $\nabla {\color{olive}f}({\color{green}x})$ such that $\nabla {\color{olive}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x} < 0$
 
@@ -311,8 +311,8 @@ $$
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}t} \\
-      \text{s. t.} & {\color{olive}f}({\color{green}x}) \leq {\color{coral}t}, \\
+      \text{min} & {\color{royalblue}t} \\
+      \text{s. t.} & {\color{olive}f}({\color{green}x}) \leq {\color{royalblue}t}, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
@@ -321,31 +321,31 @@ $$
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & {\color{olive}\phi}_{ {\color{coral}t} }({\color{green}x}) \leq 0, \\
+      \text{s. t.} & {\color{olive}\phi}_{ {\color{royalblue}t} }({\color{green}x}) \leq 0, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}t} \ge {\color{coral}p^*}$;
-  -   If infeasible, ${\color{coral}t} < {\color{coral}p^*}$.
--   Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*}$.
+  -   If feasible, we conclude that ${\color{royalblue}t} \ge {\color{royalblue}p^*}$;
+  -   If infeasible, ${\color{royalblue}t} < {\color{royalblue}p^*}$.
+-   Binary search on ${\color{royalblue}t}$ can be used for obtaining ${\color{royalblue}p^*}$.
 
 #### Network flow says (VI)
 
--   Choose ${\color{green}\triangle x}$ as a negative cycle of ${\color{lime}G}_{ {\color{green}x} }$ with cost $\nabla {\color{olive}\phi}_{ {\color{coral}t} }({\color{green}x})$
--   If no negative cycle is found, and ${\color{olive}\phi}_{ {\color{coral}t} }({\color{green}x}) > 0$, we conclude that the problem is infeasible.
--   Iterate until ${\color{green}x}$ becomes feasible, i.e. ${\color{olive}\phi}_{ {\color{coral}t} }({\color{green}x}) \leq 0$.
+-   Choose ${\color{green}\triangle x}$ as a negative cycle of ${\color{lime}G}_{ {\color{green}x} }$ with cost $\nabla {\color{olive}\phi}_{ {\color{royalblue}t} }({\color{green}x})$
+-   If no negative cycle is found, and ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{green}x}) > 0$, we conclude that the problem is infeasible.
+-   Iterate until ${\color{green}x}$ becomes feasible, i.e. ${\color{olive}\phi}_{ {\color{royalblue}t} }({\color{green}x}) \leq 0$.
 
 #### E.g. Linear-Fractional Cost
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min} & ({\color{coral}e}^\mathsf{T} {\color{green}x} + {\color{coral}f}) / ({\color{coral}g}^\mathsf{T} {\color{green}x} + {\color{coral}h}) \\
+      \text{min} & ({\color{royalblue}e}^\mathsf{T} {\color{green}x} + {\color{royalblue}f}) / ({\color{royalblue}g}^\mathsf{T} {\color{green}x} + {\color{royalblue}h}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}t} \\
-      \text{s. t.} & ({\color{coral}e}^\mathsf{T} {\color{green}x} + {\color{coral}f}) - {\color{coral}t}({\color{coral}g}^\mathsf{T} {\color{green}x} + {\color{coral}h}) \leq 0 \\
+      \text{min} & {\color{royalblue}t} \\
+      \text{s. t.} & ({\color{royalblue}e}^\mathsf{T} {\color{green}x} + {\color{royalblue}f}) - {\color{royalblue}t}({\color{royalblue}g}^\mathsf{T} {\color{green}x} + {\color{royalblue}h}) \leq 0 \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
@@ -354,19 +354,19 @@ $$
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & ({\color{coral}e} - {\color{coral}t}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x} + ({\color{coral}f} - {\color{coral}t}\cdot {\color{coral}h}) \leq 0, \\
+      \text{s. t.} & ({\color{royalblue}e} - {\color{royalblue}t}\cdot {\color{royalblue}g})^\mathsf{T} {\color{green}x} + ({\color{royalblue}f} - {\color{royalblue}t}\cdot {\color{royalblue}h}) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
                    & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}t} \ge {\color{coral}p^*}$;
-  -   If infeasible, ${\color{coral}t} < {\color{coral}p^*}$.
--   Binary search on ${\color{coral}t}$ can be used for obtaining ${\color{coral}p^*}$.
+  -   If feasible, we conclude that ${\color{royalblue}t} \ge {\color{royalblue}p^*}$;
+  -   If infeasible, ${\color{royalblue}t} < {\color{royalblue}p^*}$.
+-   Binary search on ${\color{royalblue}t}$ can be used for obtaining ${\color{royalblue}p^*}$.
 
 #### Network flow says (VII)
 
--   Choose ${\color{green}\triangle x}$ to be a negative cycle of ${\color{lime}G}_{ {\color{green}x} }$ with cost $({\color{coral}e} - {\color{coral}t}\cdot {\color{coral}g})$, i.e. $({\color{coral}e} - {\color{coral}t}\cdot {\color{coral}g})^\mathsf{T}{\color{green}\triangle x} < 0$
--   If no negative cycle is found, and $({\color{coral}e} - {\color{coral}t}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x_0} + ({\color{coral}f} - {\color{coral}t}\cdot {\color{coral}h}) > 0$, we conclude that the problem is infeasible.
--   Iterate until $({\color{coral}e} - {\color{coral}t}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x_0} + ({\color{coral}f} - {\color{coral}t}\cdot {\color{coral}h}) \leq 0$.
+-   Choose ${\color{green}\triangle x}$ to be a negative cycle of ${\color{lime}G}_{ {\color{green}x} }$ with cost $({\color{royalblue}e} - {\color{royalblue}t}\cdot {\color{royalblue}g})$, i.e. $({\color{royalblue}e} - {\color{royalblue}t}\cdot {\color{royalblue}g})^\mathsf{T}{\color{green}\triangle x} < 0$
+-   If no negative cycle is found, and $({\color{royalblue}e} - {\color{royalblue}t}\cdot {\color{royalblue}g})^\mathsf{T} {\color{green}x_0} + ({\color{royalblue}f} - {\color{royalblue}t}\cdot {\color{royalblue}h}) > 0$, we conclude that the problem is infeasible.
+-   Iterate until $({\color{royalblue}e} - {\color{royalblue}t}\cdot {\color{royalblue}g})^\mathsf{T} {\color{green}x_0} + ({\color{royalblue}f} - {\color{royalblue}t}\cdot {\color{royalblue}h}) \leq 0$.
 
 #### E.g. Statistical Optimization
 
@@ -374,34 +374,34 @@ $$
 
   $$
   \begin{array}{ll}
-    \text{min} & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \\
+    \text{min} & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{royalblue}\alpha}) \\
     \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
     & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
   \end{array}
   $$
 
   -   ${\color{blue}\mathbf{d} }$ is random vector with mean ${\color{blue}d}$ and covariance
-    ${\color{coral}\Sigma}$.
+    ${\color{royalblue}\Sigma}$.
   -   Hence, ${\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x}$ is a random variable with mean
-    ${\color{blue}d}^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} {\color{coral}\Sigma} {\color{green}x}$.
+    ${\color{blue}d}^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} {\color{royalblue}\Sigma} {\color{green}x}$.
 
 #### 📈 Statistical Optimization
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}t} \\
-      \text{s. t.} & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \leq {\color{coral}t} \\
+      \text{min} & {\color{royalblue}t} \\
+      \text{s. t.} & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{royalblue}\alpha}) \leq {\color{royalblue}t} \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      & & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \leq {\color{coral}t} \\
-      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{olive}F}^{-1}(1-{\color{coral}t}) \| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2 \leq {\color{coral}\alpha}
+      & & \Pr({\color{blue}\mathbf{d} }^\mathsf{T} {\color{green}x} > {\color{royalblue}\alpha}) \leq {\color{royalblue}t} \\
+      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{olive}F}^{-1}(1-{\color{royalblue}t}) \| {\color{royalblue}\Sigma}^{1/2} {\color{green}x} \|_2 \leq {\color{royalblue}\alpha}
     \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
 #### Recall
 
-Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{olive}F}^{-1}(1-{\color{coral}t}) \| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2$ is ${\color{blue}d} + {\color{olive}F}^{-1}(1-{\color{coral}t}) (\| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2)^{-1} {\color{coral}\Sigma} {\color{green}x}$.
+Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{olive}F}^{-1}(1-{\color{royalblue}t}) \| {\color{royalblue}\Sigma}^{1/2} {\color{green}x} \|_2$ is ${\color{blue}d} + {\color{olive}F}^{-1}(1-{\color{royalblue}t}) (\| {\color{royalblue}\Sigma}^{1/2} {\color{green}x} \|_2)^{-1} {\color{royalblue}\Sigma} {\color{green}x}$.
 
 #### Problem w/ additional Constraints (new)
 
@@ -415,13 +415,13 @@ Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\col
 #### E.g. Yield-driven Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\gamma}\,{\color{coral}\beta} - {\color{coral}c}^\mathsf{T} {\color{green}p}, \\
-      \text{subject to} & {\color{coral}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\mathbf{d} }_{ij} + {\color{green}p}_{ij}), \\
+      \text{maximize} & {\color{royalblue}\gamma}\,{\color{royalblue}\beta} - {\color{royalblue}c}^\mathsf{T} {\color{green}p}, \\
+      \text{subject to} & {\color{royalblue}\beta} \leq \Pr({\color{blue}y}_{ij} \leq {\color{blue}\mathbf{d} }_{ij} + {\color{green}p}_{ij}), \\
        & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}, \; {\color{green}p} \geq 0
     \end{array}$$
 
   -   ${\color{green}p}$: delay padding
-  -   ${\color{coral}\gamma}$: weight (determined by a trade-off curve of yield and buffer cost)
+  -   ${\color{royalblue}\gamma}$: weight (determined by a trade-off curve of yield and buffer cost)
   -   ${\color{blue}\mathbf{d} }_{ij}$: Gaussian random variable with mean ${\color{blue}d}_{ij}$ and variance ${\color{blue}s}_{ij}$.
 
 #### E.g. Yield-driven Delay Padding (II)
@@ -429,7 +429,7 @@ Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\col
 .pull-left[
 
 -   The problem is equivalent to: $$\begin{array}{ll}
-       \text{max} & {\color{green}\gamma\,\beta} - {\color{coral}c}^\mathsf{T} {\color{green}p}, \\
+       \text{max} & {\color{green}\gamma\,\beta} - {\color{royalblue}c}^\mathsf{T} {\color{green}p}, \\
        \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} {\color{green}- \beta s} + {\color{green}p}, \\
           & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}, {\color{green}p} \geq 0
     \end{array}$$
@@ -450,13 +450,13 @@ Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\col
 #### Recall
 
 -   Yield drive CSS: $$\begin{array}{ll}
-      \text{max} & {\color{coral}\beta}, \\
-      \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{coral}\beta} {\color{blue}s}, \\
+      \text{max} & {\color{royalblue}\beta}, \\
+      \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{royalblue}\beta} {\color{blue}s}, \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}$$
 
 -   Delay padding $$\begin{array}{ll}
-      \text{max} & -{\color{coral}c}^\mathsf{T} {\color{green}p}, \\
+      \text{max} & -{\color{royalblue}c}^\mathsf{T} {\color{green}p}, \\
       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} + {\color{green}p}, \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}, \; {\color{green}p} \geq 0
     \end{array}$$
@@ -467,25 +467,25 @@ Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\col
 
   $$
   \begin{array}{ll}
-    \text{min} & {\color{olive}f}({\color{green}x}) + (1/{\color{coral}t}) {\color{olive}\phi}({\color{green}x})\\
+    \text{min} & {\color{olive}f}({\color{green}x}) + (1/{\color{royalblue}t}) {\color{olive}\phi}({\color{green}x})\\
     \text{s.t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
     & {\color{blue}A}^\mathsf{T} {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0 \\
   \end{array}
   $$
 
-  -   where ${\color{olive}\phi}({\color{green}x}) = -\log ({\color{coral}\gamma} - {\color{blue}s}^\mathsf{T} {\color{green}x})$
-  -   Approximation improves as ${\color{coral}t} \rightarrow \infty$
-  -   Here, $\nabla {\color{olive}\phi}({\color{green}x}) = {\color{blue}s} / ({\color{coral}\gamma} - {\color{blue}s}^\mathsf{T} {\color{green}x})$
+  -   where ${\color{olive}\phi}({\color{green}x}) = -\log ({\color{royalblue}\gamma} - {\color{blue}s}^\mathsf{T} {\color{green}x})$
+  -   Approximation improves as ${\color{royalblue}t} \rightarrow \infty$
+  -   Here, $\nabla {\color{olive}\phi}({\color{green}x}) = {\color{blue}s} / ({\color{royalblue}\gamma} - {\color{blue}s}^\mathsf{T} {\color{green}x})$
 
 #### Barrier Method
 
--   **Input**: a feasible ${\color{green}x}$, ${\color{coral}t} := {\color{coral}t}^{(0)}$, ${\color{firebrick}\mu} > 1$, tolerance ${\color{coral}\varepsilon} > 0$
+-   **Input**: a feasible ${\color{green}x}$, ${\color{royalblue}t} := {\color{royalblue}t}^{(0)}$, ${\color{firebrick}\mu} > 1$, tolerance ${\color{royalblue}\varepsilon} > 0$
 -   **Output**: ${\color{green}x^*}$
 -   **repeat**
-  1. Centering step. Compute ${\color{green}x^*}({\color{coral}t})$ by minimizing ${\color{coral}t}\,{\color{olive}f} + {\color{olive}\phi}$
-  2. Update ${\color{green}x} := {\color{green}x^*}({\color{coral}t})$.
-  3. Increase ${\color{coral}t}$. ${\color{coral}t} := {\color{firebrick}\mu} {\color{coral}t}$
--   **until** $1/{\color{coral}t} < {\color{coral}\varepsilon}$.
+  1. Centering step. Compute ${\color{green}x^*}({\color{royalblue}t})$ by minimizing ${\color{royalblue}t}\,{\color{olive}f} + {\color{olive}\phi}$
+  2. Update ${\color{green}x} := {\color{green}x^*}({\color{royalblue}t})$.
+  3. Increase ${\color{royalblue}t}$. ${\color{royalblue}t} := {\color{firebrick}\mu} {\color{royalblue}t}$
+-   **until** $1/{\color{royalblue}t} < {\color{royalblue}\varepsilon}$.
 
 👉 Note: Centering is usually done by Newton's method in general.
 
@@ -621,21 +621,21 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
 #### Timing Constraint
 
 -   Setup time constraint
-  $${\color{blue}y}_\text{skew}(i,f) \le {\color{coral}T}_\text{CP} - {\color{blue}D}_{if} - {\color{coral}T}_\text{setup} = {\color{firebrick}u}_{if}$$
+  $${\color{blue}y}_\text{skew}(i,f) \le {\color{royalblue}T}_\text{CP} - {\color{blue}D}_{if} - {\color{royalblue}T}_\text{setup} = {\color{firebrick}u}_{if}$$
   While this constraint destroyed, cycle time violation (zero
   clocking) occurs.
 -   Hold time constraint
-  $${\color{blue}y}_\text{skew}(i,f) \ge {\color{coral}T}_\text{hold} - {\color{blue}d}_{if} = {\color{blue}l}_{if}$$ While
+  $${\color{blue}y}_\text{skew}(i,f) \ge {\color{royalblue}T}_\text{hold} - {\color{blue}d}_{if} = {\color{blue}l}_{if}$$ While
   this constraint destroyed, race condition (double clocking) occurs.
 
 #### Timing Constraint Graph
 
 -   Create a graph (network) by
   -   replacing the hold time constraint with an _h-edge_ with cost
-    $-({\color{coral}T}_\text{hold} - {\color{blue}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+    $-({\color{royalblue}T}_\text{hold} - {\color{blue}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
     and
   -   replacing the setup time constraint with an s-edge with cost
-    ${\color{coral}T}_\text{CP} - {\color{blue}D}_{ij} - {\color{coral}T}_\text{setup}$ from $\text{FF}_j$ to
+    ${\color{royalblue}T}_\text{CP} - {\color{blue}D}_{ij} - {\color{royalblue}T}_\text{setup}$ from $\text{FF}_j$ to
     $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition:
   -   The sum of skews for paths having the same starting and ending
@@ -655,7 +655,7 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
 
 ### Meet all timing constraints
 
--   Find ${\color{blue}y}$ in $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{coral}n} } \mid {\color{blue}y} \leq {\color{blue}d}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$
+-   Find ${\color{blue}y}$ in $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{royalblue}n} } \mid {\color{blue}y} \leq {\color{blue}d}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$
 -   How to solve:
   1. Find a negative cycle, fix it.
   2. Iterate until no negative cycle is found.
@@ -674,7 +674,7 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
   intentionally **solely** "increasing" delays.
 -   Usually formulated as:
   -   Find ${\color{green}p}, {\color{blue}y}$ in
-    $\{ {\color{green}p}, {\color{blue}y} \in \mathbb{R}^{ {\color{coral}n} } \mid {\color{blue}y} \leq {\color{blue}d} + {\color{green}p}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, {\color{green}p} \geq 0\}$
+    $\{ {\color{green}p}, {\color{blue}y} \in \mathbb{R}^{ {\color{royalblue}n} } \mid {\color{blue}y} \leq {\color{blue}d} + {\color{green}p}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, {\color{green}p} \geq 0\}$
 -   If the objective is to minimize the sum of ${\color{green}p}$, then the problem is
   the dual of the standard _min-cost flow_ problem, which can be
   solved efficiently by the _network simplex_ algorithm (publicly
@@ -728,7 +728,7 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
 -   If there exists a negative cycle in the modified timing graph, it
   implies that the timing problem cannot be fixed by simply the delay
   padding technique.
-  -   Then, try decrease ${\color{blue}D}_{ij}$, or increase ${\color{coral}T}_\text{CP}$
+  -   Then, try decrease ${\color{blue}D}_{ij}$, or increase ${\color{royalblue}T}_\text{CP}$
 -   Be aware of the min-delay path is still the min-delay path after a
   certain amount of delay is inserted (how???).
 
@@ -741,7 +741,7 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
 -   According to the critical-first principle, we seek for the most
   critical cycle first.
 -   The problem can be formulated as:
-  -   $\max\{ {\color{coral}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}d} - {\color{coral}\beta}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$.
+  -   $\max\{ {\color{royalblue}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}d} - {\color{royalblue}\beta}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$.
 -   It is equivalent to the _minimum mean cycle_ problem, which can be
   solved efficiently by for example _Howard's algorithm_ (publicly
   available).
@@ -846,7 +846,7 @@ The most vulnerable timing constraint
 -   Now assume that SSTA (or STA+OCV, POCV, AOCV) is performed.
 -   Let (${\color{blue}\bar{d} }$, ${\color{blue}s}$) be the (mean, variance) of ${\color{blue}\mathbf{d} }$
 -   The most critical cycle can be obtained by solving:
-  -   $\max\{ {\color{coral}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}\bar{d} } - {\color{coral}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$
+  -   $\max\{ {\color{royalblue}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}\bar{d} } - {\color{royalblue}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}\}$
 -   It is equivalent to the minimum cost-to-time ratio cycle problem,
   which can be solved efficiently by for example Howard's algorithm
   (publicly available).
@@ -867,9 +867,9 @@ The most vulnerable timing constraint
 
 -   Assume no Adjustable Delay Buffer (ADB)
 -   Find ${\color{blue}y}$ in
-  $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{coral}n} } \mid {\color{blue}y} \leq {\color{blue}d}^{(k)}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, \forall k\in[1..{\color{salmon}K}]\}$
+  $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{royalblue}n} } \mid {\color{blue}y} \leq {\color{blue}d}^{(k)}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, \forall k\in[1..{\color{salmon}K}]\}$
 -   Equivalent to finding ${\color{blue}y}$ in
-  $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{coral}n} } \mid {\color{blue}y} \leq \min_k\{ {\color{blue}d}^{(k)}\}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y} \}$
+  $\{ {\color{blue}y} \in \mathbb{R}^{ {\color{royalblue}n} } \mid {\color{blue}y} \leq \min_k\{ {\color{blue}d}^{(k)}\}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y} \}$
 -   Feasibility problem
 -   How to solve:
   1. Find a negative cycle, fix it.
@@ -902,7 +902,7 @@ The most vulnerable timing constraint
 
 #### Yield-driven Clock Skew Scheduling
 
--   $\max\{ {\color{coral}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}d}^{(k)} - {\color{coral}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, \forall k\in[1..{\color{salmon}K}]\}$
+-   $\max\{ {\color{royalblue}\beta} \in \mathbb{R} \mid {\color{blue}y} \leq {\color{blue}d}^{(k)} - {\color{royalblue}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u} = {\color{blue}y}, \forall k\in[1..{\color{salmon}K}]\}$
 -   More or less the same as in Single Corner.
 
 ## Clock-Tree 🕓🌳 Issue
@@ -940,7 +940,7 @@ The most vulnerable timing constraint
 #### Meet timing constraint in Multi-Mode
 
 -   find ${\color{blue}y}^{(m)}$ in
-  $\{ {\color{blue}y}^{(m)} \in \mathbb{R}^{ {\color{coral}n} } \mid {\color{blue}y}^{(m)} \leq {\color{blue}d}^{(m)}, {\color{green}A}\,{\color{firebrick}u}^{(m)} = {\color{blue}y}^{(m)}, \forall m\in[1..{\color{salmon}M}]\}$
+  $\{ {\color{blue}y}^{(m)} \in \mathbb{R}^{ {\color{royalblue}n} } \mid {\color{blue}y}^{(m)} \leq {\color{blue}d}^{(m)}, {\color{green}A}\,{\color{firebrick}u}^{(m)} = {\color{blue}y}^{(m)}, \forall m\in[1..{\color{salmon}M}]\}$
 -   Can be done in parallel.
 -   find a negative cycle, fix it (do not need to know all ${\color{blue}d}_i^{(m)}$
   at the beginning) for every mode in parallel.
@@ -954,11 +954,11 @@ The most vulnerable timing constraint
   -   Initial feasible solution obtained by the single-mode method
     -   A negative cycle =\> problem cannot be fixed by DP
 -   Not converge =\> problem cannot be fixed by DP
-  -   Try decrease ${\color{blue}D}_{ij}$, or increase ${\color{coral}T}_\text{CP}$
+  -   Try decrease ${\color{blue}D}_{ij}$, or increase ${\color{royalblue}T}_\text{CP}$
 
 #### Yield-driven Clock Skew Scheduling
 
--   $\max\{ {\color{coral}\beta} \in \mathbb{R} \mid {\color{blue}y}^{(m)} \leq {\color{blue}d}^{(m)} - {\color{coral}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u}^{(m)} = {\color{blue}y}^{(m)}, \forall m\in[1..{\color{salmon}M}]\}$
+-   $\max\{ {\color{royalblue}\beta} \in \mathbb{R} \mid {\color{blue}y}^{(m)} \leq {\color{blue}d}^{(m)} - {\color{royalblue}\beta} {\color{blue}s}, {\color{green}A}\,{\color{firebrick}u}^{(m)} = {\color{blue}y}^{(m)}, \forall m\in[1..{\color{salmon}M}]\}$
 -   Pretty much the same as Single-Mode.
 
 #### Difficulty in ADB Multi-Mode Design

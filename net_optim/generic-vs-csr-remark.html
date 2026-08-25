@@ -78,7 +78,7 @@ $$ {\color{salmon}G} = ({\color{salmon}V}, {\color{lime}E}), \quad |{\color{salm
 
 The core operation is **edge relaxation**:
 
-$$ {\color{coral}d_v} \gets \min({\color{coral}d_v},\; {\color{coral}d_u} + {\color{coral}w_{uv}}), \quad \forall (u,v) \in {\color{lime}E} $$
+$$ {\color{royalblue}d_v} \gets \min({\color{royalblue}d_v},\; {\color{royalblue}d_u} + {\color{royalblue}w_{uv}}), \quad \forall (u,v) \in {\color{lime}E} $$
 
 The perf difference between hash-map and CSR grows with the graph:
 
@@ -219,8 +219,8 @@ class: nord-light, middle, center
 |-----------|-------|
 | **Compiler** | MSVC 2026, `/O2 -GL -LTCG` |
 | **Build System** | XMake, release mode |
-| **Graph Model** | Ring graph, ${\color{coral}k}=3$ neighbors |
-| **Negative Cycle** | ${\color{lime}0 \to 1 \to 2 \to 0}$, ${\color{coral}w} = -5$ each |
+| **Graph Model** | Ring graph, ${\color{royalblue}k}=3$ neighbors |
+| **Negative Cycle** | ${\color{lime}0 \to 1 \to 2 \to 0}$, ${\color{royalblue}w} = -5$ each |
 | **Runs** | 5 per configuration |
 | **System** | Windows x64, GCC 15.2.0 |
 
@@ -230,9 +230,9 @@ class: nord-light, middle, center
 
 ### Ring Graph Topology 📐
 
-Each node connects to ${\color{coral}k} = 3$ forward neighbors with positive pseudo-random weights:
+Each node connects to ${\color{royalblue}k} = 3$ forward neighbors with positive pseudo-random weights:
 
-$$ {\color{coral}w_{ij}} = ((i+1) \times 7 + (j+1) \times 13) \bmod 100 + 1 $$
+$$ {\color{royalblue}w_{ij}} = ((i+1) \times 7 + (j+1) \times 13) \bmod 100 + 1 $$
 
 Plus three forced negative edges forming cycle ${\color{lime}0 \to 1 \to 2 \to 0}$:
 
@@ -309,16 +309,16 @@ Speedup vs Graph Size (NegCycleFinder)
 
 **digraphx-cpp** (hash-map):
 
-$$ T(n) \propto O\left(\frac{{\color{coral}V} \cdot {\color{coral}E}}{\text{cache\_line}}\right) + \text{hash\_overhead} $$
+$$ T(n) \propto O\left(\frac{{\color{royalblue}V} \cdot {\color{royalblue}E}}{\text{cache\_line}}\right) + \text{hash\_overhead} $$
 
-- Each relaxation pass: ${\color{coral}n}$ hash map lookups for distances
-- ${\color{coral}E}$ hash map lookups for neighbors and edge data
-- ${\color{coral}V}$ hash map insertions for predecessor updates
+- Each relaxation pass: ${\color{royalblue}n}$ hash map lookups for distances
+- ${\color{royalblue}E}$ hash map lookups for neighbors and edge data
+- ${\color{royalblue}V}$ hash map insertions for predecessor updates
 - Cycle finding: hash map for visited tracking
 
 **digraphx-fast** (CSR):
 
-$$ T(n) \propto O({\color{coral}V} + {\color{coral}E}) $$
+$$ T(n) \propto O({\color{royalblue}V} + {\color{royalblue}E}) $$
 
 - Distance: `vector<double>` direct index
 - Neighbors: `targets[e]` direct array access
@@ -375,7 +375,7 @@ The `NetworkOracle` wrapper **amplifies** the differences:
 
 | Overhead | Hash-map | CSR |
 |----------|----------|-----|
-| **Distance init** | `flat_hash_map::operator[]` ${\color{coral}n}$ times | `vector<double>(n, 0.0)` |
+| **Distance init** | `flat_hash_map::operator[]` ${\color{royalblue}n}$ times | `vector<double>(n, 0.0)` |
 | **Weight per edge** | Callable + hash lookups | Pre-computed `vector` |
 | **Predecessor map** | `flat_hash_map` insert_or_assign | Pre-allocated `vector` |
 | **Visited tracking** | `flat_hash_map` reserve + contains | `vector` + epoch sentinel |
@@ -396,7 +396,7 @@ class: nord-light, middle, center
 Hash-map access is **random** — each lookup may miss cache:
 
 $$
-P(\text{cache\_hit}) \approx \frac{\text{cache\_size}}{{\color{coral}n} \cdot \text{sizeof(entry)}}
+P(\text{cache\_hit}) \approx \frac{\text{cache\_size}}{{\color{royalblue}n} \cdot \text{sizeof(entry)}}
 $$
 
 CSR access is **sequential** — prefetcher-friendly:
@@ -416,8 +416,8 @@ graph TD
 </pre>
 ]
 
-- **CSR**: $O({\color{coral}E})$ sequential reads, $O({\color{coral}V})$ sequential writes
-- **Hash-map**: $O({\color{coral}E})$ random reads (cache misses ~ 100ns each), $O({\color{coral}V})$ random writes
+- **CSR**: $O({\color{royalblue}E})$ sequential reads, $O({\color{royalblue}V})$ sequential writes
+- **Hash-map**: $O({\color{royalblue}E})$ random reads (cache misses ~ 100ns each), $O({\color{royalblue}V})$ random writes
 
 At $10^6$ edges, that's $10^6$ potential cache misses $\approx$ **100ms wasted** 💸
 
@@ -451,7 +451,7 @@ Per howard() call in CSR:
 
 Hash-map visited: **O(V)** per call to `clear()` + re-allocation:
 
-$$ \text{Cost} = \underbrace{O({\color{coral}V})}_{\text{rehash}} + \underbrace{O({\color{coral}V})}_{\text{re-insert}} $$
+$$ \text{Cost} = \underbrace{O({\color{royalblue}V})}_{\text{rehash}} + \underbrace{O({\color{royalblue}V})}_{\text{re-insert}} $$
 
 CSR epoch visited: **O(1)** — just increment a counter:
 
@@ -490,13 +490,13 @@ class: nord-light, middle, center
 ### When to Use Which 🤔
 
 **Use generic (hash-map) when:**
-- Graphs are small ($|{\color{coral}V}| < 10^4$)
+- Graphs are small ($|{\color{royalblue}V}| < 10^4$)
 - Node IDs are sparse or non-integer
 - Development speed matters more than runtime
 - Graph structure changes frequently
 
 **Use CSR when:**
-- Graphs are large ($|{\color{coral}V}| > 10^4$)
+- Graphs are large ($|{\color{royalblue}V}| > 10^4$)
 - Performance-critical inner loop
 - Static or incrementally-built graphs
 - Cache efficiency is a concern

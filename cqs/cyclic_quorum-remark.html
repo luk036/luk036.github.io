@@ -157,18 +157,18 @@ graph TD
 
 We want **fairness** and **efficiency**:
 
-1. **Equal Work:** All quorums have the same size, ${\color{coral}d}$.
+1. **Equal Work:** All quorums have the same size, ${\color{royalblue}d}$.
 2. **Equal Responsibility:** Every node belongs to the same number of quorums.
 
 A system with these properties is called **symmetric** ⚖️
 
-**The Goal:** Find a symmetric system with the smallest possible quorum size ${\color{coral}d}$.
+**The Goal:** Find a symmetric system with the smallest possible quorum size ${\color{royalblue}d}$.
 
 The theoretical optimum is:
 
-$$ {\color{coral}d} \approx \sqrt{{\color{coral}N}} $$
+$$ {\color{royalblue}d} \approx \sqrt{{\color{royalblue}N}} $$
 
-where ${\color{coral}N}$ is the total number of nodes.
+where ${\color{royalblue}N}$ is the total number of nodes.
 
 ---
 
@@ -188,7 +188,7 @@ CQS provides a simple, structured way to build powerful, symmetric quorum system
 2. Generate all other quorums by **cyclically shifting** the base quorum.
 
 $$
-{\color{salmon}B_i} = {\color{salmon}B_0} + i \pmod {\color{coral}N} = \{{\color{green}a_1}+i, {\color{green}a_2}+i, \dots, {\color{green}a_d}+i\} \pmod {\color{coral}N}
+{\color{salmon}B_i} = {\color{salmon}B_0} + i \pmod {\color{royalblue}N} = \{{\color{green}a_1}+i, {\color{green}a_2}+i, \dots, {\color{green}a_d}+i\} \pmod {\color{royalblue}N}
 $$
 
 > This **automatically** guarantees the "Equal Work" and "Equal Responsibility" properties! 🎉
@@ -220,17 +220,17 @@ This boils down to a fascinating combinatorial puzzle:
 
 > ${\color{salmon}B_0}$ must be a **Difference Cover**! 🎯
 
-**Definition:** The set of all possible differences between pairs of elements in ${\color{salmon}B_0}$ (modulo N) must include **every** number from $1$ to ${\color{coral}N}-1$.
+**Definition:** The set of all possible differences between pairs of elements in ${\color{salmon}B_0}$ (modulo N) must include **every** number from $1$ to ${\color{royalblue}N}-1$.
 
 $$
-\forall {\color{green}m} \in \{1, ..., {\color{coral}N}-1\}, \exists {\color{green}a_i}, {\color{green}a_j} \in {\color{salmon}B_0} \text{ s.t. } {\color{green}a_i} - {\color{green}a_j} \equiv {\color{green}m} \pmod {\color{coral}N}
+\forall {\color{green}m} \in \{1, ..., {\color{royalblue}N}-1\}, \exists {\color{green}a_i}, {\color{green}a_j} \in {\color{salmon}B_0} \text{ s.t. } {\color{green}a_i} - {\color{green}a_j} \equiv {\color{green}m} \pmod {\color{royalblue}N}
 $$
 
 ---
 
 ### Difference Cover Example ✅
 
-For ${\color{coral}N}=7$, ${\color{coral}d}=3$, the base quorum ${\color{salmon}B_0} = \{0, 1, 3\}$:
+For ${\color{royalblue}N}=7$, ${\color{royalblue}d}=3$, the base quorum ${\color{salmon}B_0} = \{0, 1, 3\}$:
 
 .font-sm.mb-xs[
 | Difference | Calculation | Result |
@@ -251,15 +251,15 @@ Every remainder $0$ through $6$ is covered! **This is a valid difference cover.*
 
 ### The Feasibility Constraint 📐
 
-Not every $({\color{coral}N}, {\color{coral}d})$ pair works. The fundamental theorem:
+Not every $({\color{royalblue}N}, {\color{royalblue}d})$ pair works. The fundamental theorem:
 
-$$ {\color{coral}N} \leq {\color{coral}d}({\color{coral}d}-1) + 1 $$
+$$ {\color{royalblue}N} \leq {\color{royalblue}d}({\color{royalblue}d}-1) + 1 $$
 
-There are only ${\color{coral}d}({\color{coral}d}-1)$ possible non-zero differences, plus the zero difference.
+There are only ${\color{royalblue}d}({\color{royalblue}d}-1)$ possible non-zero differences, plus the zero difference.
 
-**Singer Difference Sets:** When ${\color{coral}N} = {\color{coral}q}^2 + {\color{coral}q} + 1$ and ${\color{coral}d} = {\color{coral}q} + 1$ for prime power ${\color{coral}q}$, we get perfect difference sets! ✨
+**Singer Difference Sets:** When ${\color{royalblue}N} = {\color{royalblue}q}^2 + {\color{royalblue}q} + 1$ and ${\color{royalblue}d} = {\color{royalblue}q} + 1$ for prime power ${\color{royalblue}q}$, we get perfect difference sets! ✨
 
-> **This is the hard part!** How do we find these magic sets for arbitrary ${\color{coral}N}$? 🤔
+> **This is the hard part!** How do we find these magic sets for arbitrary ${\color{royalblue}N}$? 🤔
 
 ---
 
@@ -303,9 +303,9 @@ If a partial set can't possibly form a full difference cover, **abandon that pat
 
 The algorithm tracks the count of unique differences covered. It prunes when:
 
-$$ \text{count} < \frac{{\color{coral}N}}{2} - \frac{{\color{coral}d}({\color{coral}d}-1)}{2} + \frac{{\color{coral}t}({\color{coral}t}+1)}{2} $$
+$$ \text{count} < \frac{{\color{royalblue}N}}{2} - \frac{{\color{royalblue}d}({\color{royalblue}d}-1)}{2} + \frac{{\color{royalblue}t}({\color{royalblue}t}+1)}{2} $$
 
-where ${\color{coral}t}$ is the current depth.
+where ${\color{royalblue}t}$ is the current depth.
 
 ---
 
@@ -315,7 +315,7 @@ where ${\color{coral}t}$ is the current depth.
 The problem has rotational and reflection symmetries. Using Joe Sawada's **bracelet generation** algorithm, we avoid checking equivalent solutions.
 
 $$
-{\color{salmon}B_0} \text{ vs } {\color{salmon}B_0} + {\color{coral}k} \pmod {\color{coral}N} \text{ vs } -{\color{salmon}B_0} \pmod {\color{coral}N}
+{\color{salmon}B_0} \text{ vs } {\color{salmon}B_0} + {\color{royalblue}k} \pmod {\color{royalblue}N} \text{ vs } -{\color{salmon}B_0} \pmod {\color{royalblue}N}
 $$
 
 These are all the same problem — why solve them multiple times?
@@ -323,7 +323,7 @@ These are all the same problem — why solve them multiple times?
 **3. Parallelism ⚡**
 We use a **thread pool** to divide the search space. Each thread searches from a different starting value:
 
-$$ \text{start} = \frac{{\color{coral}N}+1}{2},\quad \text{end} = \frac{{\color{coral}N}-1}{{\color{coral}d}}+1 $$
+$$ \text{start} = \frac{{\color{royalblue}N}+1}{2},\quad \text{end} = \frac{{\color{royalblue}N}-1}{{\color{royalblue}d}}+1 $$
 
 > ✅ **Guarantee:** This method is **guaranteed** to find the optimal solution if one exists!
 
@@ -412,7 +412,7 @@ All three find the same solution set — the difference is **how many redundant 
 
 ### When Does Symmetry Matter? 🔄
 
-The search space has **dihedral symmetry**: the binary necklace representation of a base quorum can be rotated (${\color{coral}N}$ ways) and reflected (${\color{coral}N}$ ways).
+The search space has **dihedral symmetry**: the binary necklace representation of a base quorum can be rotated (${\color{royalblue}N}$ ways) and reflected (${\color{royalblue}N}$ ways).
 
 **Example:** N=7, d=3, diff_cover3 outputs 3 solutions:
 
@@ -420,13 +420,13 @@ The search space has **dihedral symmetry**: the binary necklace representation o
 0 1 3    0 2 3    0 2 4
 ```
 
-diff_cover2 outputs **all rotations** of each — 21 lines. Every solution `{a₁, a₂, ...}` has 7 rotations $\{{\color{green}a_i} + {\color{coral}k} \bmod {\color{coral}N}\}$, all equivalent for building quorum systems.
+diff_cover2 outputs **all rotations** of each — 21 lines. Every solution `{a₁, a₂, ...}` has 7 rotations $\{{\color{green}a_i} + {\color{royalblue}k} \bmod {\color{royalblue}N}\}$, all equivalent for building quorum systems.
 
 **Is the symmetry related to prime numbers?** ❌
 
-Primality of ${\color{coral}N}$ or ${\color{coral}d}$ doesn't eliminate the symmetry. The dihedral group has order $2{\color{coral}N}$ **regardless** of ${\color{coral}N}$'s factorization. The only change: for composite ${\color{coral}N}$, binary strings can have period dividing ${\color{coral}N}$, which adds extra structure. For prime ${\color{coral}N}$, the rotation orbit always has full size ${\color{coral}N}$ — but the symmetry itself is always present.
+Primality of ${\color{royalblue}N}$ or ${\color{royalblue}d}$ doesn't eliminate the symmetry. The dihedral group has order $2{\color{royalblue}N}$ **regardless** of ${\color{royalblue}N}$'s factorization. The only change: for composite ${\color{royalblue}N}$, binary strings can have period dividing ${\color{royalblue}N}$, which adds extra structure. For prime ${\color{royalblue}N}$, the rotation orbit always has full size ${\color{royalblue}N}$ — but the symmetry itself is always present.
 
-> **The symmetry breaking always does work** for every valid input. There are no "symmetry-free" cases for $3 \leq {\color{coral}d} \leq {\color{coral}N}-2$.
+> **The symmetry breaking always does work** for every valid input. There are no "symmetry-free" cases for $3 \leq {\color{royalblue}d} \leq {\color{royalblue}N}-2$.
 
 ---
 
@@ -442,10 +442,10 @@ A completely different idea: let's teach an AI to solve the puzzle through **tri
 
 **Framework:** REINFORCE (Policy Gradient) 🎯
 
-- **State:** Which numbers are chosen + which residues are covered ($2{\color{coral}N}$ features)
-- **Action:** Pick the next number (from ${\color{coral}N}$ choices)
+- **State:** Which numbers are chosen + which residues are covered ($2{\color{royalblue}N}$ features)
+- **Action:** Pick the next number (from ${\color{royalblue}N}$ choices)
 - **Reward:** How many **new** residue differences are covered
-- **Policy:** A 3-layer neural network $2{\color{coral}N} \rightarrow 256 \rightarrow 128 \rightarrow {\color{coral}N}$
+- **Policy:** A 3-layer neural network $2{\color{royalblue}N} \rightarrow 256 \rightarrow 128 \rightarrow {\color{royalblue}N}$
 
 ---
 
@@ -501,7 +501,7 @@ graph LR
 
 **Xavier initialization** for balanced gradient flow:
 
-$$ {\color{green}W_{ij}} \sim \mathcal{U}\left(-\sqrt{\frac{6}{{\color{coral}n_{in}}+{\color{coral}n_{out}}}}, \sqrt{\frac{6}{{\color{coral}n_{in}}+{\color{coral}n_{out}}}}\right) $$
+$$ {\color{green}W_{ij}} \sim \mathcal{U}\left(-\sqrt{\frac{6}{{\color{royalblue}n_{in}}+{\color{royalblue}n_{out}}}}, \sqrt{\frac{6}{{\color{royalblue}n_{in}}+{\color{royalblue}n_{out}}}}\right) $$
 
 ---
 
@@ -537,7 +537,7 @@ graph LR
 
 ]
 
-Each episode = ${\color{coral}d}-1$ steps (position 0 is fixed). Up to **1 billion** episodes with $10$ threads!
+Each episode = ${\color{royalblue}d}-1$ steps (position 0 is fixed). Up to **1 billion** episodes with $10$ threads!
 
 ---
 
@@ -565,8 +565,8 @@ where ${\color{firebrick}\beta} = 0.01$ and $\mathbb{H} = -\sum_i {\color{green}
 |:------:|:----------------------:|:------------------------:|
 | **Method** | Systematic backtracking | Trial &amp; error |
 | **Guarantee** | ✅ Optimal solution | ❌ No guarantee |
-| **Speed** | Slow for large ${\color{coral}N}$ | Fast exploration |
-| **Scalability** | ${\color{coral}N} \leq 150$ optimal | ${\color{coral}N} > 150$ feasible |
+| **Speed** | Slow for large ${\color{royalblue}N}$ | Fast exploration |
+| **Scalability** | ${\color{royalblue}N} \leq 150$ optimal | ${\color{royalblue}N} > 150$ feasible |
 | **Parallelism** | Thread pool per start value | 10 shared-network agents |
 | **Memory** | Minimal (stack arrays) | Neural network weights |
 
@@ -582,16 +582,16 @@ class: nord-light, middle, center
 
 ### What We Accomplished 🏆
 
-**Combinatorial Search:** Extended the known table of optimal quorums from ${\color{coral}N} = 111$ up to ${\color{coral}N} = 150$! 🚀
+**Combinatorial Search:** Extended the known table of optimal quorums from ${\color{royalblue}N} = 111$ up to ${\color{royalblue}N} = 150$! 🚀
 
-| ${\color{coral}N}$ | Optimal Base Quorum (1-based) | ${\color{coral}d}$ |
+| ${\color{royalblue}N}$ | Optimal Base Quorum (1-based) | ${\color{royalblue}d}$ |
 |:---:|:-----------------------------|:---:|
 | 112 | 39 52 56 62 64 76 81 90 97 108 111 112 | 12 |
 | 120 | 55 56 66 68 75 82 90 97 114 115 118 119 120 | 13 |
 | 132 | 66 69 72 76 80 84 88 92 96 101 129 130 131 132 | 14 |
 | 150 | 51 63 66 69 70 96 98 106 111 119 128 130 144 150 | 14 |
 
-**Reinforcement Learning:** Found high-quality solutions for ${\color{coral}N} > 150$ where combinatorial search becomes too slow.
+**Reinforcement Learning:** Found high-quality solutions for ${\color{royalblue}N} > 150$ where combinatorial search becomes too slow.
 
 ---
 
@@ -605,7 +605,7 @@ Recent code improvements:
 | Proper gradient backprop | ∞ (was random search) |
 | Entropy regularization | Better convergence |
 | Local gradient accumulation | ~5× less lock contention |
-| Chosen-list tracking | $O({\color{coral}d}^2)$ vs $O({\color{coral}N} \times {\color{coral}d})$ |
+| Chosen-list tracking | $O({\color{royalblue}d}^2)$ vs $O({\color{royalblue}N} \times {\color{royalblue}d})$ |
 | Thread pool physical cores | ~20% throughput |
 
 ---
@@ -651,7 +651,7 @@ On an **Alderlake** CPU (AVX2, FMA), this enables:
 **Short answer: Not worth it for this codebase.**
 
 **Why the RL network is too small:**
-The policy network has only 3 layers ($2{\color{coral}N} \rightarrow 256 \rightarrow 128 \rightarrow {\color{coral}N}$). A forward pass is ~130K multiply-adds — about **5 μs on CPU** with AVX2.
+The policy network has only 3 layers ($2{\color{royalblue}N} \rightarrow 256 \rightarrow 128 \rightarrow {\color{royalblue}N}$). A forward pass is ~130K multiply-adds — about **5 μs on CPU** with AVX2.
 
 GPU kernel launch latency is **10–100 μs** — the GPU spends more time starting than computing!
 
@@ -758,7 +758,7 @@ class: nord-light, middle, center
 - Distributed mutual exclusion needs **quorum systems**
 - **Cyclic Quorum Systems** elegantly generate all quorums from one base set
 - The base set must be a **difference cover**
-- Hard combinatorial problem: ${\color{coral}N} \leq {\color{coral}d}({\color{coral}d}-1)+1$
+- Hard combinatorial problem: ${\color{royalblue}N} \leq {\color{royalblue}d}({\color{royalblue}d}-1)+1$
 
 ]
 

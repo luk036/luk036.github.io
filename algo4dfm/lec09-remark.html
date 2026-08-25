@@ -201,7 +201,7 @@ Conflicting: $({\color{salmon}A},{\color{salmon}C})$, $({\color{salmon}B},{\colo
 
 ### 📝 Formulation of the Layout Decomposition Problem
 
-- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{coral}w}:{\color{lime}E} \to Z$
+- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{royalblue}w}:{\color{lime}E} \to Z$
 - SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
 - MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{red} w(e)}$ where ${\color{lime}E}_c = \{({\color{salmon}u},{\color{salmon}v}) : {\color{salmon}u},{\color{salmon}v} \in  {\color{salmon}V_0}$ or ${\color{salmon}u},{\color{salmon}v} \in  {\color{salmon}V_1}, ({\color{salmon}u},{\color{salmon}v}) \in {\color{lime}E}\}$ 💰
 
@@ -315,7 +315,7 @@ class: nord-light, middle, center
 - A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 👻
 - A skeleton was classified into four types:
   - Series (S): the skeleton is a cycle graph. 🔄
-  - Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{coral}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{coral}k} \ge 3$. ↔️
+  - Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{royalblue}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{royalblue}k} \ge 3$. ↔️
   - Trivial (Q): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$,
     and two parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$, one of which is virtual and the other is real. 👻
   - Rigid (R): the skeleton is a tri-connected graph of a type other than the above. 🏗️

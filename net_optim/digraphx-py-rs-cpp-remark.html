@@ -100,7 +100,7 @@ The core negative cycle detection algorithm:
 
 **Relaxation** — Bellman-Ford style:
 
-$${\color{blue}d[v]} > {\color{blue}d[u]} + {\color{coral}w}(u,v) \quad\Longrightarrow\quad {\color{blue}d[v]} \gets {\color{blue}d[u]} + {\color{coral}w}(u,v)$$
+$${\color{blue}d[v]} > {\color{blue}d[u]} + {\color{royalblue}w}(u,v) \quad\Longrightarrow\quad {\color{blue}d[v]} \gets {\color{blue}d[u]} + {\color{royalblue}w}(u,v)$$
 
 **Cycle Detection** — Find cycles in predecessor graph:
 
@@ -335,15 +335,15 @@ graph LR
 
 ### 💰 Residual Graph Construction
 
-For each edge $({\color{firebrick}u},{\color{firebrick}v})$ with flow ${\color{green}f}$, capacity ${\color{coral}c}$, weight ${\color{coral}w}$:
+For each edge $({\color{firebrick}u},{\color{firebrick}v})$ with flow ${\color{green}f}$, capacity ${\color{royalblue}c}$, weight ${\color{royalblue}w}$:
 
 .pull-left[
 
 **Forward edge** (can send more flow):
-$$ \text{cost} = {\color{coral}w},\quad \text{capacity} = {\color{coral}c} - {\color{green}f} $$
+$$ \text{cost} = {\color{royalblue}w},\quad \text{capacity} = {\color{royalblue}c} - {\color{green}f} $$
 
 **Backward edge** (can cancel flow):
-$$ \text{cost} = -{\color{coral}w},\quad \text{capacity} = {\color{green}f} $$
+$$ \text{cost} = -{\color{royalblue}w},\quad \text{capacity} = {\color{green}f} $$
 
 ]
 .pull-right[
@@ -368,7 +368,7 @@ $$ \text{residual}[{\color{firebrick}u}][{\color{firebrick}v}] = \min_{\text{edg
 
 ### 💰 Bellman-Ford Negative Cycle Detection
 
-Runs $|{\color{coral}V}|$ passes. In the ${\color{coral}V}$-th pass, nodes whose distance still improves are part of a **negative cycle**.
+Runs $|{\color{royalblue}V}|$ passes. In the ${\color{royalblue}V}$-th pass, nodes whose distance still improves are part of a **negative cycle**.
 
 $$ {\color{blue}\text{dist}[v]^{k+1}} = \min\!\left({\color{blue}\text{dist}[v]^k},\; \min_{({\color{firebrick}u},{\color{firebrick}v})\in {\color{lime}E}}\!\big({\color{blue}\text{dist}[u]^k} + \text{cost}({\color{firebrick}u},{\color{firebrick}v})\big)\right) $$
 
@@ -439,8 +439,8 @@ let mut pred: HashMap<Node, (Node, &ResidualEdge)> = HashMap::new();
 Python `int(dist * 100)` truncates; Rust `.round()` rounds — a **1-unit cost difference**! Fixed with `.trunc()`.
 
 **4. Eta formula:**
-$$ \text{Python: } {\color{coral}\eta} = \frac{1.6}{\lfloor\sqrt{{\color{coral}T}}\rfloor - 1},\quad
-\text{Rust/C++ (init): } {\color{coral}\eta} = \frac{1.6}{\sqrt{{\color{coral}T}} - 1} $$
+$$ \text{Python: } {\color{royalblue}\eta} = \frac{1.6}{\lfloor\sqrt{{\color{royalblue}T}}\rfloor - 1},\quad
+\text{Rust/C++ (init): } {\color{royalblue}\eta} = \frac{1.6}{\sqrt{{\color{royalblue}T}} - 1} $$
 
 ---
 

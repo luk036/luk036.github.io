@@ -76,7 +76,7 @@ class: nord-light, middle, center
 
 -   Bad News: APX-complete. 😟
 
--   Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to ${\color{coral}k}$-hypergraphs, for ${\color{coral}k}>1$, is approximable within ${\color{coral}k}$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a]. 📖
+-   Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to ${\color{royalblue}k}$-hypergraphs, for ${\color{royalblue}k}>1$, is approximable within ${\color{royalblue}k}$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a]. 📖
 
 -   Garey and Johnson: GT1 📚
 
@@ -106,7 +106,7 @@ Requirements:
 
 The Weighted Vertex Cover problem extends the basic vertex cover by assigning weights to vertices.
 
--   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
+-   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}: {\color{salmon}V} ↦ N$ 🏷️
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}U}$ such that, for each edge $(u,v) ∈ {\color{lime}E}$, at least one of ${\color{salmon}u}$ and ${\color{salmon}v}$ belongs to ${\color{salmon}U}$ 🛡️
 
     ![img](./lec02.files/vertex_cover.svg)
@@ -120,7 +120,7 @@ This problem has applications in network monitoring, resource allocation, and co
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{subject to} & {\color{green} x}_u + {\color{green} x}_v \geq 1, & \forall (u, v) \in {\color{lime}E} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -130,7 +130,7 @@ LP Relaxation:
 .pull-left[
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{s.t.} & {\color{green} x}_u + {\color{green} x}_v \geq 1, & \forall (u, v) \in {\color{lime}E} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -141,7 +141,7 @@ $$\begin{array}{lll}
 Dual LP:
 $$\begin{array}{lll}
   \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e \\
-  \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
+  \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{royalblue} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E}
 \end{array}$$
 
@@ -171,7 +171,7 @@ $$\begin{array}{lll}
 
 ### ⚙️ Primal-dual WVC
 
--   **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}$
+-   **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}$
 -   **Output** Vertex cover ${\color{salmon}U}$ of $G$ 🛡️
 -   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub> ⚖️
@@ -315,7 +315,7 @@ class: nord-light, middle, center
 
 A hypergraph extends the concept of a graph by allowing edges to connect any number of vertices. The vertex cover problem for hypergraphs requires finding a minimum weight set of vertices that intersects with every hyperedge, making it more complex than the standard graph version.
 
--   Instance: $H = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
+-   Instance: $H = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}: {\color{salmon}V} ↦ N$ 🏷️
 -   Solution: A vertex cover for $H$, i.e., a subset ${\color{salmon}U}$ such that, for each edge ${\color{lime}e} ∈ {\color{lime}E}$, at least one of adj(${\color{lime}e}$) belongs to ${\color{salmon}U}$ 🛡️
 
     ![img](./lec02.files/hyper_vertex_cover.svg)
@@ -327,7 +327,7 @@ A hypergraph extends the concept of a graph by allowing edges to connect any num
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in \text{adj}(e)} {\color{green} x}_v \geq 1, & \forall e \in {\color{lime}E} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -337,7 +337,7 @@ LP Relaxation:
 .pull-left[
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in \text{adj}(e)} {\color{green} x}_v \geq 1, & \forall e \in {\color{lime}E} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -347,7 +347,7 @@ $$\begin{array}{lll}
 Dual LP:
 $$\begin{array}{lll}
   \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e \\
-  \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
+  \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{royalblue} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E}
 \end{array}$$
 ]
@@ -378,7 +378,7 @@ def min_hyper_vertex_cover(
 
 Find a minimum weight set of vertices that intersects with every cycle in the graph. This problem has applications in breaking feedback loops in systems and ensuring acyclic dependencies.
 
--   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
+-   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}: {\color{salmon}V} ↦ N$ 🏷️
 -   Define: a cycle ${\color{lime}c}$ is a subset of ${\color{salmon}V}$ ... , ${\color{lime}C}$ is a set of all cycles 🔄
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}U}$ such that, for each cycle ${\color{lime}c} ∈ {\color{lime}C}$, at least one of vertices belongs to ${\color{salmon}U}$ 🛡️
 
@@ -391,7 +391,7 @@ Find a minimum weight set of vertices that intersects with every cycle in the gr
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in {\color{lime}C} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -402,7 +402,7 @@ LP Relaxation:
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in {\color{lime}C} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -412,7 +412,7 @@ $$\begin{array}{lll}
 Dual LP:
 $$\begin{array}{lll}
   \text{max} & \sum_{c \in {\color{lime}C} } {\color{firebrick} y}_c \\
-  \text{s.t.} & \sum_{c: v \in c} {\color{firebrick} y}_c \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
+  \text{s.t.} & \sum_{c: v \in c} {\color{firebrick} y}_c \leq {\color{royalblue} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_c \geq 0, & \forall c \in {\color{lime}C}
 \end{array}$$
 ]
@@ -449,7 +449,7 @@ def min_cycle_cover(
 
 Find a minimum weight set of vertices that intersects with every odd-length cycle. This problem is equivalent to making a graph bipartite by removing vertices and has applications in conflict resolution.
 
--   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
+-   Instance: $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}: {\color{salmon}V} ↦ N$ 🏷️
 -   Define: an odd cycle ${\color{lime}c}$ is a subset of ${\color{salmon}V}$ ... , ${\color{lime}C_\text{odd}}$ is a set of all odd cycles 1️⃣3️⃣5️⃣
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}U}$ such that, for each odd cycle ${\color{lime}c} ∈ {\color{lime}C_\text{odd}}$, at least one of vertices belongs to ${\color{salmon}U}$ 🛡️
 
@@ -462,7 +462,7 @@ Find a minimum weight set of vertices that intersects with every odd-length cycl
 ILP Formulation of WOCC:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in {\color{lime}C_\text{odd}} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -473,7 +473,7 @@ LP Relaxation:
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{royalblue} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in {\color{lime}C_\text{odd}} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -483,7 +483,7 @@ $$\begin{array}{lll}
 Dual LP:
 $$\begin{array}{lll}
   \text{max} & \sum_{c \in {\color{lime}C_\text{odd} } } {\color{firebrick} y}_c \\
-  \text{s.t.} & \sum_{c: v \in c} {\color{firebrick} y}_c \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
+  \text{s.t.} & \sum_{c: v \in c} {\color{firebrick} y}_c \leq {\color{royalblue} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_c \geq 0, & \forall c \in {\color{lime}C_\text{odd}}
 \end{array}$$
 ]
@@ -539,7 +539,7 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 ### 🧩 Weighted Maximal Matching (WMM) for Hypergraph
 
--   Instance: $H = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
+-   Instance: $H = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{royalblue} w}: {\color{salmon}V} ↦ N$ 🏷️
 
     ![img](./lec02.files/maximal_matching.svg)
 
@@ -551,7 +551,7 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{e \in {\color{lime}E} } {\color{coral} w}_e {\color{green} x}_e \\
+  \text{min} & \sum_{e \in {\color{lime}E} } {\color{royalblue} w}_e {\color{green} x}_e \\
   \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{green} x}_e \leq 1, & \forall v \in {\color{salmon}V} \\
    & {\color{green} x}_e + \sum_{v \in \text{adj}(e)} \sum_{f \in \text{adj}(v)} {\color{green} x}_f \geq 1, & \forall e \in {\color{lime}E} \\
    & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
@@ -561,7 +561,7 @@ Dual LP:
 
 $$\begin{array}{lll}
   \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e - \sum_{v \in {\color{salmon}V} } {\color{firebrick} z}_v \\
-  \text{s.t.} & {\color{firebrick} y}_e + \sum_{v \in \text{adj}(e)} (-{\color{firebrick} z}_v + \sum_{f \in \text{adj}(v)} {\color{firebrick} y}_f) \leq {\color{coral} w}_e, & \forall e \in {\color{lime}E} \\
+  \text{s.t.} & {\color{firebrick} y}_e + \sum_{v \in \text{adj}(e)} (-{\color{firebrick} z}_v + \sum_{f \in \text{adj}(v)} {\color{firebrick} y}_f) \leq {\color{royalblue} w}_e, & \forall e \in {\color{lime}E} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E} \\
     & {\color{firebrick} z}_v \geq 0, & \forall v \in {\color{salmon}V}
 \end{array}$$

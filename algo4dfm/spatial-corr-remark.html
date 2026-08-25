@@ -111,7 +111,7 @@ class: nord-light, middle, center
 
 .pull-left[
 - Effective channel length 📏
-- Threshold voltage (${\color{coral} V_\mathrm{TH}}$) ⚡
+- Threshold voltage (${\color{royalblue} V_\mathrm{TH}}$) ⚡
 - Interconnect width/height 🧵
 - Dielectric thickness 🛡️
 
@@ -138,7 +138,7 @@ Given measurement data at 2D locations, **extract the spatial correlation struct
 **Outputs:** Kernel hyperparameters:
 - Length scale ${\color{green} \ell}$ (correlation range)
 - Signal amplitude ${\color{orange} \sigma}$ 🔊
-- Noise level ${\color{coral} \sigma_n}$ (nugget effect) ⚪
+- Noise level ${\color{royalblue} \sigma_n}$ (nugget effect) ⚪
 ]
 .pull-right[
 ![Correlation function](lec03a.files/fig016.png)
@@ -156,7 +156,7 @@ $$ {\color{blue} f(\mathbf{x})} \sim \mathcal{GP}\big({\color{orange} m(\mathbf{
 
 For zero-mean GP with kernel ${\color{green} k_\theta}$:
 
-$$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\theta} + {\color{coral} \sigma_n^2 I}\big) $$
+$$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\theta} + {\color{royalblue} \sigma_n^2 I}\big) $$
 
 **Key insight:** The kernel ${\color{green} k_\theta(\mathbf{x},\mathbf{x'})}$ **is** the spatial correlation function. Fitting the GP = extracting the correlation. 🔑
 
@@ -166,16 +166,16 @@ $$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\
 
 .pull-left[
 **Gaussian** (infinitely smooth) ✨:
-$$ k({\color{coral}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{coral}r}^2}{2{\color{green} \ell}^2}\right) $$
+$$ k({\color{royalblue}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{royalblue}r}^2}{2{\color{green} \ell}^2}\right) $$
 
 **Matérn-3/2** (once diff.) ✅:
-$$ k({\color{coral}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{3}{\color{coral}r}}{\color{green} \ell}\right) \exp\left(-\frac{\sqrt{3}{\color{coral}r}}{\color{green} \ell}\right) $$
+$$ k({\color{royalblue}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{3}{\color{royalblue}r}}{\color{green} \ell}\right) \exp\left(-\frac{\sqrt{3}{\color{royalblue}r}}{\color{green} \ell}\right) $$
 
 **Matérn-5/2** (twice diff.) 🔄:
-$$ k({\color{coral}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{5}{\color{coral}r}}{\color{green} \ell}+\frac{5{\color{coral}r}^2}{3{\color{green} \ell}^2}\right)\, \exp\left(-\frac{\sqrt{5}{\color{coral}r}}{\color{green} \ell}\right) $$
+$$ k({\color{royalblue}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{5}{\color{royalblue}r}}{\color{green} \ell}+\frac{5{\color{royalblue}r}^2}{3{\color{green} \ell}^2}\right)\, \exp\left(-\frac{\sqrt{5}{\color{royalblue}r}}{\color{green} \ell}\right) $$
 
 **Exponential** (rough) 🌊:
-$$ k({\color{coral}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{coral}r}}{\color{green} \ell}\right) $$
+$$ k({\color{royalblue}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{royalblue}r}}{\color{green} \ell}\right) $$
 ]
 .pull-right[
 **Smoothness spectrum:**
@@ -193,7 +193,7 @@ graph LR
 </pre>
 ]
 
-${\color{coral}r} = \|{\color{blue} s_i} - {\color{blue} s_j}\|$ is Euclidean distance 📏
+${\color{royalblue}r} = \|{\color{blue} s_i} - {\color{blue} s_j}\|$ is Euclidean distance 📏
 ]
 
 ---
@@ -289,7 +289,7 @@ gp = GaussianProcessRegressor(
 gp.fit(X, y)  # X: (n, 2), y: (n,)
 ```
 
-**Optimization:** L-BFGS-B minimizes $-\log p({\color{darkmagenta} \mathbf{y}} \mid {\color{coral}X}, {\color{coral}\theta})$ 🔄
+**Optimization:** L-BFGS-B minimizes $-\log p({\color{darkmagenta} \mathbf{y}} \mid {\color{royalblue}X}, {\color{royalblue}\theta})$ 🔄
 
 **Pros:** Fast, no sample covariance needed ⚡
 **Cons:** Single realisation → noisier estimate 📊
@@ -300,9 +300,9 @@ gp.fit(X, y)  # X: (n, 2), y: (n,)
 
 For ${\color{red} M}$ independent realizations ${\color{darkmagenta} \mathbf{y}_1}, \dots, {\color{darkmagenta} \mathbf{y}_M}$:
 
-$$ \log L = {\color{coral} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + {\color{red}n}\log(2\pi)\Big] $$
+$$ \log L = {\color{royalblue} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + {\color{red}n}\log(2\pi)\Big] $$
 
-where ${\color{blue} V} = {\color{green} K_\theta} + {\color{coral} \sigma_n^2 I}$ and sample covariance:
+where ${\color{blue} V} = {\color{green} K_\theta} + {\color{royalblue} \sigma_n^2 I}$ and sample covariance:
 
 $$ {\color{orange} Y} = \frac{1}{{\color{red}M}}\sum_{m=1}^{{\color{red}M}} {\color{darkmagenta} \mathbf{y}_m}{\color{darkmagenta} \mathbf{y}_m}^\mathsf{T} $$
 
@@ -383,7 +383,7 @@ class: nord-light, middle, center
 
 ### 📊 Parameter Estimation Accuracy
 
-**MLE results at ${\color{red} n=200}$** (true ${\color{green} \ell}=2.0$, ${\color{orange} \sigma}=2.0$, ${\color{coral} \sigma_n}=0.01$):
+**MLE results at ${\color{red} n=200}$** (true ${\color{green} \ell}=2.0$, ${\color{orange} \sigma}=2.0$, ${\color{royalblue} \sigma_n}=0.01$):
 
 ```
 Kernel       Est ℓ   ℓ error    σ error    σₙ error

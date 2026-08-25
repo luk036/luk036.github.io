@@ -50,7 +50,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ### Conflict Detection
 
--   Rule 1: If the distance between two rectangles is $\geq {\color{coral}b}$, then the two rectangles are _not_ in conflict.
+-   Rule 1: If the distance between two rectangles is $\geq {\color{royalblue}b}$, then the two rectangles are _not_ in conflict.
 
 -   Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
 
@@ -58,7 +58,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   -   Definition: A polygon is said to be _rectilinearly convex_ if it is both _x-monotone_ and _y-monotone_.
 
-  -   Two rectangles ${\color{salmon}X}$ and ${\color{salmon}Y}$ are in conflict if they are $\leq {\color{coral}b}$ apart and there is a path from ${\color{salmon}X}$ to ${\color{salmon}Y}$ that reconstructs a "concave" polygon.
+  -   Two rectangles ${\color{salmon}X}$ and ${\color{salmon}Y}$ are in conflict if they are $\leq {\color{royalblue}b}$ apart and there is a path from ${\color{salmon}X}$ to ${\color{salmon}Y}$ that reconstructs a "concave" polygon.
 
   -   Conflicting: $({\color{salmon}A},{\color{salmon}C})$, $({\color{salmon}B},{\color{salmon}D})$, but not $({\color{salmon}A},{\color{salmon}B})$, $({\color{salmon}A},{\color{salmon}D})$ and $({\color{salmon}B},{\color{salmon}C})$.
 
@@ -73,9 +73,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ### Formulation of the Layout Decomposition Problem
 
--   INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{coral}w}: {\color{lime}E} \to Z$
+-   INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{royalblue}w}: {\color{lime}E} \to Z$
 -   SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap {\color{salmon}V_1} = \emptyset$.
--   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{coral}w}(e)$ where ${\color{lime}E}_c = \{({\color{salmon}u},{\color{salmon}v}) : {\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_0}$ or ${\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_1}, ({\color{salmon}u},{\color{salmon}v}) \in {\color{lime}E}\}$
+-   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{royalblue}w}(e)$ where ${\color{lime}E}_c = \{({\color{salmon}u},{\color{salmon}v}) : {\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_0}$ or ${\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_1}, ({\color{salmon}u},{\color{salmon}v}) \in {\color{lime}E}\}$
 
 👉 Note: the problem is
 
@@ -153,7 +153,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   -   Series (S): the skeleton is a cycle graph.
 
-  -   Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{coral}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{coral}k} \ge 3$.
+  -   Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{royalblue}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{royalblue}k} \ge 3$.
 
   -   Trivial (Q): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$,
     and two parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$, one of which is virtual and the other is real.

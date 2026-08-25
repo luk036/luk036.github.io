@@ -75,7 +75,7 @@ Given a set of **elements** ${\color{salmon}V}$ and a collection of **constraint
 > $S \in \mathcal{S}$ has at least one element in ${\color{salmon}C}$.
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{royalblue} w}_v \cdot {\color{green} x}_v \\
 \text{s.t.} \quad & \sum_{v \in S} {\color{green} x}_v \ge 1 \quad \forall S \in \mathcal{S} \\
 & {\color{green} x}_v \in \{0,1\}
 \end{array}$$
@@ -165,7 +165,7 @@ class: nord-light, middle, center
 ### Primal (Covering LP)
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{royalblue} w}_v \cdot {\color{green} x}_v \\
 \text{s.t.} \quad & \sum_{v \in S} {\color{green} x}_v \ge 1 \quad \forall S \in \mathcal{S} \\
 & {\color{green} x}_v \ge 0
 \end{array}$$
@@ -174,7 +174,7 @@ $$\begin{array}{lll}
 
 $$\begin{array}{lll}
 \max \quad & \sum_{S \in \mathcal{S}} {\color{firebrick} y}_S \\
-\text{s.t.} \quad & \sum_{S \ni v} {\color{firebrick} y}_S \le {\color{coral} w}_v \quad \forall v \in {\color{salmon}V} \\
+\text{s.t.} \quad & \sum_{S \ni v} {\color{firebrick} y}_S \le {\color{royalblue} w}_v \quad \forall v \in {\color{salmon}V} \\
 & {\color{firebrick} y}_S \ge 0
 \end{array}$$
 
@@ -186,7 +186,7 @@ The algorithm maintains **complementary slackness**:
 
 .pull-left[
 #### Dual Variables (Gaps)
-Each vertex $v$ has a **gap** $g_v$ initialized to ${\color{coral} w}_v$
+Each vertex $v$ has a **gap** $g_v$ initialized to ${\color{royalblue} w}_v$
 
 - Gaps decrease over time as vertices are "paid for"
 - When $g_v = 0$, the vertex is **fully paid** 🔄
@@ -266,7 +266,7 @@ Vertex 2 was added to cover edge (1,2), but removing it leaves edge (1,2) still 
 
 $$ \text{total\_dual\_cost} \le \text{final\_primal\_cost} $$
 
-The dual cost provides a **lower bound** on the optimal solution. Since each vertex's gap is reduced at most to ${\color{coral} w}_v$, the total dual is at most the total primal.
+The dual cost provides a **lower bound** on the optimal solution. Since each vertex's gap is reduced at most to ${\color{royalblue} w}_v$, the total dual is at most the total primal.
 
 ---
 

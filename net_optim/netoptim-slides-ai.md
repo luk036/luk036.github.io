@@ -266,13 +266,13 @@
 
 #### Parametric Potential Problem (PPP) ⚡️🎛️
 
--   Consider parameter ${\color{coral}\beta}$, maximize ${\color{coral}\beta}$ subject to:
-  -   ${\color{blue}y} \le {\color{olive}d}({\color{coral}\beta})$ and ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
-  -   ${\color{olive}d}({\color{coral}\beta})$ is a monotonic decreasing function.
--   If ${\color{olive}d}({\color{coral}\beta}) = m - s{\color{coral}\beta}$ (linear, $s \ge 0$) -> **minimum cost-to-time ratio problem**.
+-   Consider parameter ${\color{royalblue}\beta}$, maximize ${\color{royalblue}\beta}$ subject to:
+  -   ${\color{blue}y} \le {\color{olive}d}({\color{royalblue}\beta})$ and ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
+  -   ${\color{olive}d}({\color{royalblue}\beta})$ is a monotonic decreasing function.
+-   If ${\color{olive}d}({\color{royalblue}\beta}) = m - s{\color{royalblue}\beta}$ (linear, $s \ge 0$) -> **minimum cost-to-time ratio problem**.
 -   If $s$ is constant -> **minimum mean cycle problem**.
 
--   Algorithms for linear ${\color{olive}d}({\color{coral}\beta})$:
+-   Algorithms for linear ${\color{olive}d}({\color{royalblue}\beta})$:
   -   **Howard's algorithm** (cycle cancellation): "Best guess" for single-parameter PPP.
   -   **Lawler's algorithm** (binary search).
   -   **Young's algorithm** (path based).
@@ -295,7 +295,7 @@
       %% Caption: Delay insertion with parametric costs related to beta.
     ```
 
--   **Multi-domain clock skew scheduling** (non-linear ${\color{coral}\sigma} {\color{olive}d}({\color{coral}\beta})$).
+-   **Multi-domain clock skew scheduling** (non-linear ${\color{royalblue}\sigma} {\color{olive}d}({\color{royalblue}\beta})$).
 
 -   Feasibility problems often subproblems in parametric algorithms, solved many times.
 -   Data structures (Fibonacci heaps, spanning trees) improve efficiency for finding negative cycles.

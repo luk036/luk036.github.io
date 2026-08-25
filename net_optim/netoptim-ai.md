@@ -18,7 +18,7 @@ The concept of a graph can be generalized to a _complex_, involving nodes, edges
 
 Abstract mathematical concepts are also introduced, building upon the basic elements. A **chain** is defined as an edge or node $M/N$-tuple of scalars that assigns a coefficient to each edge/node. It can be viewed as an oriented indicator vector representing a set of edges or nodes.
 
-The **Discrete Boundary Operator**, denoted by ${\color{blue}\partial}$, is defined as ${\color{blue} A^T }$. A chain ${\color{green}\tau}$ is a **cycle** if it is in the null-space of the boundary operator, meaning ${\color{blue} A^T } {\color{green}\tau} = 0$. Conversely, a chain ${\color{coral}\beta}$ is a **boundary** if it is in the range of the boundary operator, meaning ${\color{coral}\beta} = {\color{blue} A^T } {\color{green}\tau}$ for some chain ${\color{green}\tau}$.
+The **Discrete Boundary Operator**, denoted by ${\color{blue}\partial}$, is defined as ${\color{blue} A^T }$. A chain ${\color{green}\tau}$ is a **cycle** if it is in the null-space of the boundary operator, meaning ${\color{blue} A^T } {\color{green}\tau} = 0$. Conversely, a chain ${\color{royalblue}\beta}$ is a **boundary** if it is in the range of the boundary operator, meaning ${\color{royalblue}\beta} = {\color{blue} A^T } {\color{green}\tau}$ for some chain ${\color{green}\tau}$.
 
 The **Co-boundary Operator**, denoted by ${\color{green}d}$, is defined as $({\color{blue} A^T })^* = {\color{green} A}$. This operator, also called the differential operator, is essentially the incidence matrix ${\color{green} A}$ itself. The null-space of ${\color{green} A}$ corresponds to the number of components in the graph.
 
@@ -140,14 +140,14 @@ A significant class of network optimization problems involves optimizing a param
 
 ### 5.1 Parametric Potential Problem (PPP)
 
-The **Parametric Potential Problem (PPP)** involves considering a parameter ${\color{coral}\beta}$ and optimizing it subject to potential constraints that depend on ${\color{coral}\beta}$. The problem is to **maximize ${\color{coral}\beta}$ subject to:**
-$$ {\color{blue}y} \le {\color{olive}d}({\color{coral}\beta}) $$
+The **Parametric Potential Problem (PPP)** involves considering a parameter ${\color{royalblue}\beta}$ and optimizing it subject to potential constraints that depend on ${\color{royalblue}\beta}$. The problem is to **maximize ${\color{royalblue}\beta}$ subject to:**
+$$ {\color{blue}y} \le {\color{olive}d}({\color{royalblue}\beta}) $$
 $$ {\color{green}A} {\color{firebrick}u} = {\color{blue}y} $$
-where ${\color{olive}d}({\color{coral}\beta})$ is a monotonic decreasing function.
+where ${\color{olive}d}({\color{royalblue}\beta})$ is a monotonic decreasing function.
 
-If the function ${\color{olive}d}({\color{coral}\beta})$ is linear, i.e., ${\color{olive}d}({\color{coral}\beta}) = m - s{\color{coral}\beta}$, where $s$ is non-negative, the problem reduces to the well-known **minimum cost-to-time ratio problem**. If $s$ is a constant, the problem further reduces to the **minimum mean cycle problem**.
+If the function ${\color{olive}d}({\color{royalblue}\beta})$ is linear, i.e., ${\color{olive}d}({\color{royalblue}\beta}) = m - s{\color{royalblue}\beta}$, where $s$ is non-negative, the problem reduces to the well-known **minimum cost-to-time ratio problem**. If $s$ is a constant, the problem further reduces to the **minimum mean cycle problem**.
 
-Several algorithms exist for solving PPPs with linear ${\color{olive}d}({\color{coral}\beta})$:
+Several algorithms exist for solving PPPs with linear ${\color{olive}d}({\color{royalblue}\beta})$:
 
 -   **Howard's algorithm:** This algorithm is based on cycle cancellation. It is suggested as the "best guess" algorithm for single-parameter PPP.
 -   **Lawler's algorithm:** This algorithm uses a binary search approach.
@@ -164,8 +164,8 @@ Examples of PPPs primarily come from circuit timing analysis:
 -   **Optimal clock period scheduling problem:** This aims to find the maximum clock frequency (or minimum clock period) for a circuit.
 -   **Slack maximization problem:** This involves maximizing the "slack" or timing margin in a circuit.
 -   **Yield-driven clock skew scheduling:** This addresses timing optimization considering manufacturing variations, presented for both Gaussian and non-Gaussian scenarios.
--   **Yield-driven delay padding:** Similar to yield-driven clock skew scheduling, but involves optimizing inserted delays. The sources show how delay can be inserted with parametric costs related to ${\color{coral}\beta}$ and ${\color{coral}\sigma_{ij} }$. This problem can be reduced to the standard PPP form by modifying the underlying constraint graph.
--   **Multi-domain clock skew scheduling:** This is an example where ${\color{olive}d}({\color{coral}\beta})$ might be non-linear or involve multiple parameters.
+-   **Yield-driven delay padding:** Similar to yield-driven clock skew scheduling, but involves optimizing inserted delays. The sources show how delay can be inserted with parametric costs related to ${\color{royalblue}\beta}$ and ${\color{royalblue}\sigma_{ij} }$. This problem can be reduced to the standard PPP form by modifying the underlying constraint graph.
+-   **Multi-domain clock skew scheduling:** This is an example where ${\color{olive}d}({\color{royalblue}\beta})$ might be non-linear or involve multiple parameters.
 
 Solving feasibility problems, which are often subproblems in parametric algorithms, may need to be done many times. Data structures like Fibonacci heaps or spanning tree/forest structures can be used to improve efficiency, particularly in finding negative cycles.
 

@@ -83,7 +83,7 @@ functional TSVs (f-TSVs).
 **Fault-tolerance structure:**
 - One s-TSV can repair one f-TSV in its group
 - Upon fault, signal is **rerouted** through the s-TSV
-- Rerouting distance must not exceed timing budget ${\color{coral}D_{\max}}$
+- Rerouting distance must not exceed timing budget ${\color{royalblue}D_{\max}}$
 ]
 .pull-right[
 .mermaid[
@@ -116,13 +116,13 @@ graph LR
 **Graph model:**
 - Each f-TSV → primal node (demand $-1$, supply 1 unit)
 - Each s-TSV → spare node (transit, demand $0$)
-- Super-sink → collects all flow (demand ${\color{coral}N}$)
+- Super-sink → collects all flow (demand ${\color{royalblue}N}$)
 - Edge $(u,v)$ if within mutual rerouting distance
-- Edge weight ${\color{coral}w_{uv}} = \lfloor\text{dist}(u,v) \times 100\rfloor$ (wirelength)
-- Edge capacity $\ge$ ${\color{coral}N}/{\color{coral}M}$ per spare
+- Edge weight ${\color{royalblue}w_{uv}} = \lfloor\text{dist}(u,v) \times 100\rfloor$ (wirelength)
+- Edge capacity $\ge$ ${\color{royalblue}N}/{\color{royalblue}M}$ per spare
 ]
 .pull-right[
-$$ \text{Minimize} \sum_{(u,v)} {\color{coral}w_{uv}} \cdot {\color{green}x_{uv}} $$
+$$ \text{Minimize} \sum_{(u,v)} {\color{royalblue}w_{uv}} \cdot {\color{green}x_{uv}} $$
 
 Subject to flow conservation at each node and capacity constraints.
 
@@ -217,12 +217,12 @@ class: nord-light, middle, center
 
 ### 🏗️ Residual Graph
 
-For each edge $(u,v)$ with flow ${\color{green}x}$, capacity ${\color{coral}c}$, cost ${\color{coral}w}$:
+For each edge $(u,v)$ with flow ${\color{green}x}$, capacity ${\color{royalblue}c}$, cost ${\color{royalblue}w}$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | ${\color{brown}u} \to {\color{brown}v}$ | ${\color{coral}c} - {\color{green}x}$ | ${\color{coral}+w}$ |
-| Backward | ${\color{brown}v} \to {\color{brown}u}$ | ${\color{green}x}$ | ${\color{coral}-w}$ |
+| Forward | ${\color{brown}u} \to {\color{brown}v}$ | ${\color{royalblue}c} - {\color{green}x}$ | ${\color{royalblue}+w}$ |
+| Backward | ${\color{brown}v} \to {\color{brown}u}$ | ${\color{green}x}$ | ${\color{royalblue}-w}$ |
 
 ```python
 def _build_residual(g, flow):
@@ -241,8 +241,8 @@ When both $(a,b)$ and $(b,a)$ exist in the original graph:
 
 | Source | Target | Kind | Cost |
 |--------|--------|------|------|
-| ${\color{brown}a}$ | ${\color{brown}b}$ | forward of $(a,b)$ | ${\color{coral}+W}$ |
-| ${\color{brown}a}$ | ${\color{brown}b}$ | backward of $(b,a)$ | ${\color{coral}-W}$ |
+| ${\color{brown}a}$ | ${\color{brown}b}$ | forward of $(a,b)$ | ${\color{royalblue}+W}$ |
+| ${\color{brown}a}$ | ${\color{brown}b}$ | backward of $(b,a)$ | ${\color{royalblue}-W}$ |
 
 Second write **overwrites** the first → negative cycle edges lost.
 

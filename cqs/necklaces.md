@@ -26,7 +26,7 @@ Further constraints on these circular arrangements lead to specialized objects l
 
 - Linear Strings 📏
 
-  A string is a sequence of symbols from an alphabet. For length ${\color{coral}n}$ and ${\color{coral}k}$ colors, there are ${\color{coral}k}^{ {\color{coral}n} }$ possible linear strings. 🎨
+  A string is a sequence of symbols from an alphabet. For length ${\color{royalblue}n}$ and ${\color{royalblue}k}$ colors, there are ${\color{royalblue}k}^{ {\color{royalblue}n} }$ possible linear strings. 🎨
 
   Example: For alphabet {◼,◻} and length 3, there are 8 strings: ◼◼◼, ◼◼◻, ◼◻◼, ◼◻◻, ◻◼◼, ◻◼◻, ◻◻◼, ◻◻◻.
 
@@ -57,7 +57,7 @@ graph LR
 
 ---
 
-    A necklace is formally defined as an equivalence class of ${\color{coral}n}$-character strings over an alphabet of size ${\color{coral}k}$, where strings are considered equivalent if one can be obtained from the other by rotation. 🔄
+    A necklace is formally defined as an equivalence class of ${\color{royalblue}n}$-character strings over an alphabet of size ${\color{royalblue}k}$, where strings are considered equivalent if one can be obtained from the other by rotation. 🔄
 
 ---
 
@@ -71,16 +71,16 @@ graph LR
 
 - Counting Challenge 🧮
 
-  Simply dividing ${\color{coral}k}^{ {\color{coral}n} }$ by ${\color{coral}n}$ doesn't work because group sizes vary. Some necklaces have only one representation, while others have ${\color{coral}n}$. 🤔
+  Simply dividing ${\color{royalblue}k}^{ {\color{royalblue}n} }$ by ${\color{royalblue}n}$ doesn't work because group sizes vary. Some necklaces have only one representation, while others have ${\color{royalblue}n}$. 🤔
 
   Example: "◼◼◼◼" has only one distinct rotation, while "◼◻◼◻" has two.
 
 - Burnside's Lemma 🔥
 
-  This powerful technique helps count objects considered the same "up to" some kind of symmetry. The number of ${\color{coral}k}$-ary necklaces of length ${\color{coral}n}$ is denoted ${\color{salmon}N_k}({\color{coral}n})$. 🧮
+  This powerful technique helps count objects considered the same "up to" some kind of symmetry. The number of ${\color{royalblue}k}$-ary necklaces of length ${\color{royalblue}n}$ is denoted ${\color{salmon}N_k}({\color{royalblue}n})$. 🧮
 
-  Example: For 4-bead necklaces with ${\color{coral}k}$ colors: ${\color{salmon}N_k}(4) = (1/4)({\color{coral}k}^4 + {\color{coral}k}^2 + 2{\color{coral}k})$.
-  For ${\color{coral}k}=2$: ${\color{salmon}N_2}(4) = (16+4+4)/4 = 6$ necklaces.
+  Example: For 4-bead necklaces with ${\color{royalblue}k}$ colors: ${\color{salmon}N_k}(4) = (1/4)({\color{royalblue}k}^4 + {\color{royalblue}k}^2 + 2{\color{royalblue}k})$.
+  For ${\color{royalblue}k}=2$: ${\color{salmon}N_2}(4) = (16+4+4)/4 = 6$ necklaces.
 
 ---
 
@@ -164,7 +164,7 @@ graph LR
 
 Investigated by Roger Lyndon (who called them standard lexicographic sequences) and Anatoly Shirshov (regular words). 👨‍🎓
 
-Within the set of necklaces, aperiodic necklaces are those where all ${\color{coral}n}$ rotations of the string are distinct. Each aperiodic necklace contains exactly one string that is lexicographically smallest among all its rotations - this unique string is a Lyndon word. 🏆
+Within the set of necklaces, aperiodic necklaces are those where all ${\color{royalblue}n}$ rotations of the string are distinct. Each aperiodic necklace contains exactly one string that is lexicographically smallest among all its rotations - this unique string is a Lyndon word. 🏆
 
 Example: For length 3 binary strings, the Lyndon words are "◼◼◻", "◼◻◻", and "◻◻◻".
 
@@ -209,7 +209,7 @@ For example, the string "🅰🅰🅱🅰🅱🅲🅰🅱🅲🅿" might be fact
 
 ### Mathematical Relationships ➗
 
-The relationship between Lyndon words and necklaces is fundamental: Lyndon words are the canonical representatives of aperiodic necklaces. The number of ${\color{coral}k}$-ary Lyndon words of length ${\color{coral}n}$, denoted ${\color{salmon}L_k}({\color{coral}n})$, is related to the number of necklaces ${\color{salmon}N_k}({\color{coral}n})$ and aperiodic necklaces ${\color{salmon}M_k}({\color{coral}n})$ through formulas involving the Möbius function (${\color{firebrick}\mu}$) and Euler's totient function (${\color{firebrick}\varphi}$). 🔗
+The relationship between Lyndon words and necklaces is fundamental: Lyndon words are the canonical representatives of aperiodic necklaces. The number of ${\color{royalblue}k}$-ary Lyndon words of length ${\color{royalblue}n}$, denoted ${\color{salmon}L_k}({\color{royalblue}n})$, is related to the number of necklaces ${\color{salmon}N_k}({\color{royalblue}n})$ and aperiodic necklaces ${\color{salmon}M_k}({\color{royalblue}n})$ through formulas involving the Möbius function (${\color{firebrick}\mu}$) and Euler's totient function (${\color{firebrick}\varphi}$). 🔗
 
 Example: For binary strings of length 4:
 
@@ -230,9 +230,9 @@ These mathematical relationships reveal the deep structure underlying these comb
 
 - Lyndon Connection ⛓️
 
-  Concatenating all Lyndon words whose lengths divide ${\color{coral}n}$ in lexicographic order results in the lexicographically smallest de Bruijn sequence 🏆
+  Concatenating all Lyndon words whose lengths divide ${\color{royalblue}n}$ in lexicographic order results in the lexicographically smallest de Bruijn sequence 🏆
 
-  Example: For ${\color{coral}n}=3$, concatenating "◼" and "◼◼◼◻" and "◼◼◻◻" etc. forms the sequence.
+  Example: For ${\color{royalblue}n}=3$, concatenating "◼" and "◼◼◼◻" and "◼◼◻◻" etc. forms the sequence.
 
 - Ranking Algorithms 📊
 
@@ -286,7 +286,7 @@ The study of necklaces and Lyndon words has led to the exploration of many relat
 
 ---
 
-Efficient algorithms have been developed for tasks such as generating these combinatorial objects, finding their standard factorization, and determining their rank in a lexicographically sorted list. These algorithms often have polynomial time complexity, specifically noted as $O({\color{coral}n}^2)$ for ranking necklaces/Lyndon words, $O({\color{coral}n}^3 \log {\color{coral}k})$ for unranking, and $O({\color{coral}n}^2)$ for ranking de Bruijn sequences. ⏱️
+Efficient algorithms have been developed for tasks such as generating these combinatorial objects, finding their standard factorization, and determining their rank in a lexicographically sorted list. These algorithms often have polynomial time complexity, specifically noted as $O({\color{royalblue}n}^2)$ for ranking necklaces/Lyndon words, $O({\color{royalblue}n}^3 \log {\color{royalblue}k})$ for unranking, and $O({\color{royalblue}n}^2)$ for ranking de Bruijn sequences. ⏱️
 
 These algorithms have practical implementations in areas such as data compression, cryptography, computational biology, and computer graphics, demonstrating how these theoretical structures find real-world applications. 🌍
 

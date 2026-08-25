@@ -178,9 +178,9 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
   -   ${\color{darkblack}z}_{det}$: deterministic component
   -   ${\color{darkblack}\tilde{z}}_{cor}$: correlated random component
   -   ${\color{darkblack}\tilde{z}}_{rnd}$: purely random component
--   📊 Given ${\color{coral}M}$ samples $({\color{darkblack}z}_1, {\color{darkblack}z}_2, \ldots, {\color{darkblack}z}_M) \in \mathbb{R}^n$.
+-   📊 Given ${\color{royalblue}M}$ samples $({\color{darkblack}z}_1, {\color{darkblack}z}_2, \ldots, {\color{darkblack}z}_M) \in \mathbb{R}^n$.
 -   📏 Measured covariance matrix ${\color{red}Y}$:
-  -   ${\color{red}Y} = (1/{\color{coral}M}) \sum_{i=1}^{{\color{coral}M}} {\color{darkblack}z}_i {\color{darkblack}z}_i^\mathsf{T}$ (unlikely PD)
+  -   ${\color{red}Y} = (1/{\color{royalblue}M}) \sum_{i=1}^{{\color{royalblue}M}} {\color{darkblack}z}_i {\color{darkblack}z}_i^\mathsf{T}$ (unlikely PD)
 -   💻 In MATLAB, simply call `cov(Zs',1)` to obtain ${\color{red}Y}$.
 -   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain ${\color{red}Y}$.
 
@@ -362,7 +362,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
   -   $\log \det {\color{darkmagenta}\Sigma}^{-1} \geq \log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0))$
   -   minimize:
         $-\log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0)) + \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
--   At each iteration ${\color{coral}k}$, the following convex problem is solved:
+-   At each iteration ${\color{royalblue}k}$, the following convex problem is solved:
     $$\begin{array}{ll}
         \min & \mathrm{Tr}({\color{darkmagenta}\Sigma}_k^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_k)) + \mathrm{Tr}({\color{darkmagenta}S} {\color{red}Y}) \\
         \text{s.t.} & \left(

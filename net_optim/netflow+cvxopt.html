@@ -131,21 +131,21 @@ where ${\color{purple}f}({\color{darkblack}z})$ is *quasi-convex* and ${\color{p
 
 ### Convex Optimization insights: 🧠
 
-If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\color{purple}\Phi}_{\color{coral}\gamma}$ such that:
+If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\color{purple}\Phi}_{\color{royalblue}\gamma}$ such that:
 
--   ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z})$ is convex w.r.t. ${\color{darkblack}z}$ for fixed ${\color{coral}\gamma}$ 📈
+-   ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}z})$ is convex w.r.t. ${\color{darkblack}z}$ for fixed ${\color{royalblue}\gamma}$ 📈
 
--   ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z})$ is non-increasing w.r.t. ${\color{coral}\gamma}$ for fixed ${\color{darkblack}z}$
+-   ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}z})$ is non-increasing w.r.t. ${\color{royalblue}\gamma}$ for fixed ${\color{darkblack}z}$
 
--   ${\color{coral}\gamma}$-sublevel set of ${\color{purple}f}$ is $0$-sublevel set of ${\color{purple}\Phi}_{\color{coral}\gamma}$,
+-   ${\color{royalblue}\gamma}$-sublevel set of ${\color{purple}f}$ is $0$-sublevel set of ${\color{purple}\Phi}_{\color{royalblue}\gamma}$,
 
-  -   i.e., ${\color{purple}f}({\color{darkblack}z}) \le {\color{coral}\gamma}$ iff ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z}) \le 0$ ↔️
+  -   i.e., ${\color{purple}f}({\color{darkblack}z}) \le {\color{royalblue}\gamma}$ iff ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}z}) \le 0$ ↔️
 
 For example:
 
 -   ${\color{purple}f}({\color{darkblack}z}) = {\color{purple}p}({\color{darkblack}z})/{\color{purple}q}({\color{darkblack}z})$ with $p$ convex, $q$ concave ${\color{purple}p}({\color{darkblack}z}) \ge 0$, ${\color{purple}q}({\color{darkblack}z}) > 0$ on dom ${\color{purple}f}$,
 
--   can take ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z})$ = ${\color{purple}p}({\color{darkblack}z}) - {\color{coral}\gamma} \cdot {\color{purple}q}({\color{darkblack}z})$
+-   can take ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}z})$ = ${\color{purple}p}({\color{darkblack}z}) - {\color{royalblue}\gamma} \cdot {\color{purple}q}({\color{darkblack}z})$
 
 ---
 
@@ -155,15 +155,15 @@ Consider a convex feasibility problem:
 $$
     \begin{array}{ll}
         \text{find} & {\color{darkblack}z}, \\
-        \text{s. t.} & {\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z}) \le 0, \\
+        \text{s. t.} & {\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}z}) \le 0, \\
                          & {\color{blue}y} \leq {\color{purple}d}({\color{darkblack}z}), {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}
 $$
 
--   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
--   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
+-   If feasible, we conclude that ${\color{royalblue}\gamma} \ge p^*$; ✅
+-   If infeasible, ${\color{royalblue}\gamma} < p^*$. ❌
 
-Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
@@ -185,12 +185,12 @@ Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
     where ${\color{olive}f}_{ij}({\color{blue}y}_{ij})$ is non-decreasing. 📈
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\beta}, \\
-      \text{subject to} & {\color{blue}y} \leq {\color{olive}f^{-1} }({\color{coral}\beta}), \\
+      \text{maximize} & {\color{royalblue}\beta}, \\
+      \text{subject to} & {\color{blue}y} \leq {\color{olive}f^{-1} }({\color{royalblue}\beta}), \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}$$
 
-    where ${\color{olive}f^{-1} }({\color{coral}\beta})$ is non-decreasing w.r.t. ${\color{coral}\beta}$. 🔄
+    where ${\color{olive}f^{-1} }({\color{royalblue}\beta})$ is non-decreasing w.r.t. ${\color{royalblue}\beta}$. 🔄
 
 ---
 
@@ -208,8 +208,8 @@ Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
 -   Equivalent to the problem:
 
     $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\beta}, \\
-      \text{subject to} & {\color{coral}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}), \\
+      \text{maximize} & {\color{royalblue}\beta}, \\
+      \text{subject to} & {\color{royalblue}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}), \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}$$
 
@@ -220,16 +220,16 @@ Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
 -   Let ${\color{olive}F}(x)$ is the cdf of $\tilde{\color{blue}d}$.
 
 -   Then: $$\begin{array}{lll}
-      & & {\color{coral}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}) \\
-      & \Rightarrow & {\color{coral}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
-      & \Rightarrow & {\color{blue}y}_{ij} \leq {\color{olive}F_{ij}^{-1} }(1 - {\color{coral}\beta})
+      & & {\color{royalblue}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}) \\
+      & \Rightarrow & {\color{royalblue}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
+      & \Rightarrow & {\color{blue}y}_{ij} \leq {\color{olive}F_{ij}^{-1} }(1 - {\color{royalblue}\beta})
       \end{array}$$
 
 -   The problem becomes:
 
     $$\begin{array}{ll}
-      \text{maximize} & {\color{coral}\beta}, \\
-      \text{subject to} & {\color{blue}y}_{ij} \leq {\color{olive}F_{ij}^{-1} }(1 - {\color{coral}\beta}), \\
+      \text{maximize} & {\color{royalblue}\beta}, \\
+      \text{subject to} & {\color{blue}y}_{ij} \leq {\color{olive}F_{ij}^{-1} }(1 - {\color{royalblue}\beta}), \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}$$
 
@@ -267,8 +267,8 @@ The problem can be reformulated as:
 
 $$
 \begin{array}{cll}
-   \text{minimize} & {\color{coral}\gamma} \\
-   \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{coral}\gamma} {\color{darkblack}\beta} \le 0\\
+   \text{minimize} & {\color{royalblue}\gamma} \\
+   \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{royalblue}\gamma} {\color{darkblack}\beta} \le 0\\
                      & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{purple}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E_s} \,,\\
                      & {\color{blue}y_{ji} } \le {\color{purple}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E_h} \,, \\
                      & {\color{darkblack}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkblack}\beta} \le 1 \, .
@@ -417,8 +417,8 @@ $$\begin{array}{ll}
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}\gamma} \\
-      \text{s. t.} & {\color{purple}f}({\color{green}x}) \leq {\color{coral}\gamma}, \\
+      \text{min} & {\color{royalblue}\gamma} \\
+      \text{s. t.} & {\color{purple}f}({\color{green}x}) \leq {\color{royalblue}\gamma}, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
@@ -429,22 +429,22 @@ $$\begin{array}{ll}
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & {\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x}) \leq 0, \\
+      \text{s. t.} & {\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{green}x}) \leq 0, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
-  -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
--   Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+  -   If feasible, we conclude that ${\color{royalblue}\gamma} \ge p^*$; ✅
+  -   If infeasible, ${\color{royalblue}\gamma} < p^*$. ❌
+-   Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
 ### Network Flow insights (VI) 🌐
 
 -   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
-  -   with cost $\nabla {\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x})$ 🔄
--   If no negative cycle is found, and ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible. 🚫
--   Iterate until ${\color{green}x}$ becomes feasible, i.e. ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x}) \leq 0$. ✅
+  -   with cost $\nabla {\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{green}x})$ 🔄
+-   If no negative cycle is found, and ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible. 🚫
+-   Iterate until ${\color{green}x}$ becomes feasible, i.e. ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{green}x}) \leq 0$. ✅
 
 ---
 
@@ -457,8 +457,8 @@ $$\begin{array}{ll}
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}\gamma} \\
-      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{coral}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
+      \text{min} & {\color{royalblue}\gamma} \\
+      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{royalblue}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
@@ -469,22 +469,22 @@ $$\begin{array}{ll}
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & (e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{coral}\gamma}\cdot h) \leq 0, \\
+      \text{s. t.} & (e - {\color{royalblue}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{royalblue}\gamma}\cdot h) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
                    & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
-  -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
--   Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+  -   If feasible, we conclude that ${\color{royalblue}\gamma} \ge p^*$; ✅
+  -   If infeasible, ${\color{royalblue}\gamma} < p^*$. ❌
+-   Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
 ### Network Flow insights (VII) 🌐
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
-  -   with cost $(e - {\color{coral}\gamma}\cdot g)$, i.e. $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
--   If no negative cycle is found, and $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{coral}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible. 🚫
--   Iterate until $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{coral}\gamma}\cdot h) \leq 0$. ✅
+  -   with cost $(e - {\color{royalblue}\gamma}\cdot g)$, i.e. $(e - {\color{royalblue}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
+-   If no negative cycle is found, and $(e - {\color{royalblue}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{royalblue}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible. 🚫
+-   Iterate until $(e - {\color{royalblue}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{royalblue}\gamma}\cdot h) \leq 0$. ✅
 
 ---
 
@@ -508,20 +508,20 @@ $$\begin{array}{ll}
 ### Statistical Optimization 📈
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{coral}\gamma} \\
-      \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{coral}\gamma} \\
+      \text{min} & {\color{royalblue}\gamma} \\
+      \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{royalblue}\gamma} \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      & & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{coral}\gamma} \\
-      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
+      & & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{royalblue}\gamma} \\
+      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{purple}F^{-1} }(1-{\color{royalblue}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
     \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
--   Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
+-   Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{purple}F^{-1} }(1-{\color{royalblue}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
 
-    $${\color{blue}d} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
+    $${\color{blue}d} + {\color{purple}F^{-1} }(1-{\color{royalblue}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
 
 ---
 

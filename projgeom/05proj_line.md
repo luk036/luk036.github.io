@@ -68,8 +68,8 @@ class: nord-light, middle, center
 
 -   The cross product is also used as a basic measure between two points.
 
--   The cross ratio of four points ${\color{coral}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d})$ is given by:
-  $${\color{coral}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d}) = ({\color{salmon}a} \times {\color{salmon}c})({\color{salmon}b} \times {\color{salmon}d})/({\color{salmon}a} \times {\color{salmon}d})({\color{salmon}b} \times {\color{salmon}c})$$
+-   The cross ratio of four points ${\color{royalblue}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d})$ is given by:
+  $${\color{royalblue}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d}) = ({\color{salmon}a} \times {\color{salmon}c})({\color{salmon}b} \times {\color{salmon}d})/({\color{salmon}a} \times {\color{salmon}d})({\color{salmon}b} \times {\color{salmon}c})$$
 
 ---
 
@@ -110,9 +110,9 @@ class: nord-light, middle, center
 ### 📚 Example 2: Elliptic Geometry
 
 -   "Point": projection of 2D vector $[{\color{salmon}x}, {\color{salmon}y}]$ to the unit circle. ⭕
-  $$({\color{salmon}{x'} }, {\color{salmon}{y'} }) = ({\color{salmon}x}/{\color{coral}r}, {\color{salmon}y}/{\color{coral}r})$$
+  $$({\color{salmon}{x'} }, {\color{salmon}{y'} }) = ({\color{salmon}x}/{\color{royalblue}r}, {\color{salmon}y}/{\color{royalblue}r})$$
 
-    where ${\color{coral}r}^2 = {\color{salmon}x}^2 + {\color{salmon}y}^2$.
+    where ${\color{royalblue}r}^2 = {\color{salmon}x}^2 + {\color{salmon}y}^2$.
 
 -   Two points on the opposite poles are considered the same point here.
 
@@ -156,13 +156,13 @@ $$
 
 ### Projective Transformation
 
--   Given a nonsingular matrix ${\color{green}T}$ = $\begin{bmatrix} {\color{coral}a} & {\color{coral}b} \\\\ {\color{coral}c} & {\color{coral}d} \end{bmatrix}$. The transformation
-  $$[{\color{salmon}{x'} }, {\color{salmon}{y'} }] = {\color{green}\tau}([{\color{salmon}x}, {\color{salmon}y}]) = [{\color{coral}a} {\color{salmon}x} + {\color{coral}b} {\color{salmon}y}, {\color{coral}c} {\color{salmon}x} + {\color{coral}d} {\color{salmon}y}]$$
+-   Given a nonsingular matrix ${\color{green}T}$ = $\begin{bmatrix} {\color{royalblue}a} & {\color{royalblue}b} \\\\ {\color{royalblue}c} & {\color{royalblue}d} \end{bmatrix}$. The transformation
+  $$[{\color{salmon}{x'} }, {\color{salmon}{y'} }] = {\color{green}\tau}([{\color{salmon}x}, {\color{salmon}y}]) = [{\color{royalblue}a} {\color{salmon}x} + {\color{royalblue}b} {\color{salmon}y}, {\color{royalblue}c} {\color{salmon}x} + {\color{royalblue}d} {\color{salmon}y}]$$
 
--   Let ${\color{coral}z} = {\color{salmon}x}/{\color{salmon}y}$, the formula becomes:
-  $${\color{coral}{z'} } = ({\color{coral}a} {\color{coral}z} + {\color{coral}b})/({\color{coral}c} {\color{coral}z} + {\color{coral}d})$$
+-   Let ${\color{royalblue}z} = {\color{salmon}x}/{\color{salmon}y}$, the formula becomes:
+  $${\color{royalblue}{z'} } = ({\color{royalblue}a} {\color{royalblue}z} + {\color{royalblue}b})/({\color{royalblue}c} {\color{royalblue}z} + {\color{royalblue}d})$$
 
--   This is exactly the Möbius transformation, where ${\color{coral}z}$ is a complex number.
+-   This is exactly the Möbius transformation, where ${\color{royalblue}z}$ is a complex number.
 
 -   Möbius transformation plays an important role in the electromagetic theory.
 

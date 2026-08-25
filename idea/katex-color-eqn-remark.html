@@ -143,7 +143,7 @@ Canonical palette, derived from `algo4dfm/primal_dual.html`:
 |-------|------|---------|
 | `\color{salmon}` | Vertex / site sets | ${\color{salmon}V}$, ${\color{salmon}U}$, ${\color{salmon}S}$ |
 | `\color{lime}` | Edge sets / cycles / paths | ${\color{lime}E}$, ${\color{lime}C}$, ${\color{lime}P}$ |
-| `\color{coral}` | Weights & parameters | ${\color{coral}w}$, ${\color{coral}k}$, ${\color{coral}n}$, ${\color{coral}d}$ |
+| `\color{royalblue}` | Weights & parameters | ${\color{royalblue}w}$, ${\color{royalblue}k}$, ${\color{royalblue}n}$, ${\color{royalblue}d}$ |
 | `\color{green}` | Primal variables | ${\color{green}x}$ |
 | `\color{firebrick}` | Dual variables | ${\color{firebrick}y}$, ${\color{firebrick}z}$ |
 
@@ -159,11 +159,11 @@ $$ \text{min} \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1, \
 
 **After** — roles pop out instantly:
 
-$$ \text{minimize} \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \qquad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1, \ \forall (u, v) \in {\color{lime}E} $$
+$$ \text{minimize} \sum_{v \in {\color{salmon}V}} {\color{royalblue}w}_v {\color{green}x}_v \qquad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1, \ \forall (u, v) \in {\color{lime}E} $$
 
 Dual LP — firebrick for dual variables:
 
-$$ \text{max} \sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \qquad \text{s.t.} \quad \sum_{e \in \text{adj}(v)} {\color{firebrick}y}_e \leq {\color{coral}w}_v, \ \forall v \in {\color{salmon}V} $$
+$$ \text{max} \sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \qquad \text{s.t.} \quad \sum_{e \in \text{adj}(v)} {\color{firebrick}y}_e \leq {\color{royalblue}w}_v, \ \forall v \in {\color{salmon}V} $$
 
 ---
 
@@ -208,7 +208,7 @@ $$ {\color{purple}\int}_{\color{lime}S} {\color{green}\mathrm{d}}\,\tilde{\color
 |-------|------|---------|
 | `\color{salmon}` | **Points** | ${\color{salmon}p}$, ${\color{salmon}q}$, coords ${\color{salmon}(x, y, z)}$ |
 | `\color{steelblue}` | **Lines** | ${\color{steelblue}l}$, ${\color{steelblue}m}$, coords ${\color{steelblue}(a, b, c)}$, ${\color{steelblue}AB}$ |
-| `\color{coral}` | Parameters | ${\color{coral}\lambda}$, ${\color{coral}\mu}$, ${\color{coral}k}$, ${\color{coral}n}$ |
+| `\color{royalblue}` | Parameters | ${\color{royalblue}\lambda}$, ${\color{royalblue}\mu}$, ${\color{royalblue}k}$, ${\color{royalblue}n}$ |
 | `\color{green}` | Functions / variables | ${\color{green}T}$, ${\color{green}\tau}$ |
 | `\color{firebrick}` | Special values | ${\color{firebrick}-1}$, ${\color{firebrick}\perp}$ |
 
@@ -440,7 +440,7 @@ $$\min \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1$$
 .pull-right[
 **After** 🎨
 
-$$\min \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \quad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1 $$
+$$\min \sum_{v \in {\color{salmon}V}} {\color{royalblue}w}_v {\color{green}x}_v \quad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1 $$
 
 - Roles visible instantly
 - Sets / weights / variables separated

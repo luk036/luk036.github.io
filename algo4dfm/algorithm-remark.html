@@ -89,10 +89,10 @@ graph TD
 
 .pull-left[
 
--   A thief considers taking ${\color{coral}b}$ pounds of loot 💰. The loot is in the
-  form of ${\color{coral}n}$ items, each with weight ${\color{coral}a}_i$ and value ${\color{purple}p}_i$. Any
+-   A thief considers taking ${\color{royalblue}b}$ pounds of loot 💰. The loot is in the
+  form of ${\color{royalblue}n}$ items, each with weight ${\color{royalblue}a}_i$ and value ${\color{purple}p}_i$. Any
   amount of an item can be put in the knapsack as long as the weight
-  limit ${\color{coral}b}$ is not exceeded
+  limit ${\color{royalblue}b}$ is not exceeded
 
 ] .pull-right[
 
@@ -105,25 +105,25 @@ graph TD
 ### 🤑 Greedy Approach
 
 -   Take as much of the item with the highest value per pound
-  (${\color{purple}p}_i$/${\color{coral}a}_i$) as you can. If you run out of that item, take from the
-  next highest (${\color{purple}p}_i$/${\color{coral}a}_i$) item. Continue until knapsack is full.
+  (${\color{purple}p}_i$/${\color{royalblue}a}_i$) as you can. If you run out of that item, take from the
+  next highest (${\color{purple}p}_i$/${\color{royalblue}a}_i$) item. Continue until knapsack is full.
 
 ---
 
 ### 💻 Program 1: Greedy Knapsack
 
--   **Input**: Set of ${\color{coral}n}$ items, for each ${\color{darkblack}x}_i \in {\color{salmon}X}$,
-  values ${\color{purple}p}_i$, ${\color{coral}a}_i$, positive integer ${\color{coral}b}$;
--   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{coral}a}_i \leq {\color{coral}b}$;
+-   **Input**: Set of ${\color{royalblue}n}$ items, for each ${\color{darkblack}x}_i \in {\color{salmon}X}$,
+  values ${\color{purple}p}_i$, ${\color{royalblue}a}_i$, positive integer ${\color{royalblue}b}$;
+-   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{royalblue}a}_i \leq {\color{royalblue}b}$;
 -   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
-  ${\color{purple}p}_i$/${\color{coral}a}_i$;
+  ${\color{purple}p}_i$/${\color{royalblue}a}_i$;
 -   Let (${\color{darkblack}x}_1$, ${\color{darkblack}x}_2$, ...,
   ${\color{darkblack}x}_n$) be the sorted sequence
 -   ${\color{salmon}Y}$ := $0$;
--   **for** ${\color{coral}i}$:=1 **to** ${\color{coral}n}$ **do**
-  -   **if** ${\color{coral}b} \geq {\color{coral}a}_i$ **do**
+-   **for** ${\color{royalblue}i}$:=1 **to** ${\color{royalblue}n}$ **do**
+  -   **if** ${\color{royalblue}b} \geq {\color{royalblue}a}_i$ **do**
     -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{darkblack}x}_i \}$;
-    -   ${\color{coral}b}$ := ${\color{coral}b} - {\color{coral}a}_i$;
+    -   ${\color{royalblue}b}$ := ${\color{royalblue}b} - {\color{royalblue}a}_i$;
 -   **return** ${\color{salmon}Y}$
 
 ---
@@ -190,7 +190,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral}c_i} {\color{darkblack}x}_i$
+-   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{royalblue}c_i} {\color{darkblack}x}_i$
 
 -   Subject to ${\color{darkblack}x}_i + {\color{darkblack}x}_j \geq 1$
   for all $({\color{salmon}v_i}, {\color{salmon}v_j}) \in {\color{lime}E}$
@@ -272,7 +272,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   -   Select an edge ${\color{lime}e} = ({\color{salmon}v},{\color{salmon}t}) \in {\color{lime}E}$;
   -   Randomly choose ${\color{darkblack}x}$ from $\{{\color{salmon}v},{\color{salmon}t}\}$ with
     Pr$\{{\color{darkblack}x}={\color{salmon}v}\}$ =
-    ${\color{coral}w}({\color{salmon}t}) / ({\color{coral}w}({\color{salmon}v}) + {\color{coral}w}({\color{salmon}t}))$;
+    ${\color{royalblue}w}({\color{salmon}t}) / ({\color{royalblue}w}({\color{salmon}v}) + {\color{royalblue}w}({\color{salmon}t}))$;
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{darkblack}x}\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{{\color{lime}e} \mid {\color{darkblack}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
@@ -311,20 +311,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 ### 🧮 Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S({\color{coral}t}_j, {\color{darkblack}x})$ denotes the optimal cost from $({\color{coral}t}_0, {\color{darkblack}x})$ to
-    $({\color{coral}t}_j, {\color{darkblack}x})$
-  -   then we must have S(${\color{coral}t}_{j+1}$, ${\color{firebrick}y}$) =
-    min<sub>j</sub> \[S(${\color{coral}t}_j$, ${\color{darkblack}x}$) +
-    c(${\color{coral}j}$,${\color{darkblack}x}$,${\color{firebrick}y}$)\]
+  -   If $S({\color{royalblue}t}_j, {\color{darkblack}x})$ denotes the optimal cost from $({\color{royalblue}t}_0, {\color{darkblack}x})$ to
+    $({\color{royalblue}t}_j, {\color{darkblack}x})$
+  -   then we must have S(${\color{royalblue}t}_{j+1}$, ${\color{firebrick}y}$) =
+    min<sub>j</sub> \[S(${\color{royalblue}t}_j$, ${\color{darkblack}x}$) +
+    c(${\color{royalblue}j}$,${\color{darkblack}x}$,${\color{firebrick}y}$)\]
 
 ---
 
 ### 🧮 Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S(${\color{coral}t}_j, {\color{darkblack}x}$) for each ${\color{darkblack}x}$ in
-  A<sub>j</sub> to end with S(${\color{coral}t}_n, {\color{darkblack}x}_n$). In the
-  proposed example, we have four stages ${\color{coral}t}_0$, ${\color{coral}t}_1$, ${\color{coral}t}_2$, ${\color{coral}t}_3$
+  determine S(${\color{royalblue}t}_j, {\color{darkblack}x}$) for each ${\color{darkblack}x}$ in
+  A<sub>j</sub> to end with S(${\color{royalblue}t}_n, {\color{darkblack}x}_n$). In the
+  proposed example, we have four stages ${\color{royalblue}t}_0$, ${\color{royalblue}t}_1$, ${\color{royalblue}t}_2$, ${\color{royalblue}t}_3$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -335,14 +335,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S(${\color{coral}t}_1$, B) = 7, S(${\color{coral}t}_1$, C) = 4, S(${\color{coral}t}_1$, D) = 1.
+  -   S(${\color{royalblue}t}_1$, B) = 7, S(${\color{royalblue}t}_1$, C) = 4, S(${\color{royalblue}t}_1$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S(${\color{coral}t}_{j+1}$, ${\color{firebrick}y}$) = min<sub>j</sub> \[S(${\color{coral}t}_j$,
-    ${\color{darkblack}x}$) + c(${\color{coral}j}$,${\color{darkblack}x}$,${\color{firebrick}y}$)\]
+  -   S(${\color{royalblue}t}_{j+1}$, ${\color{firebrick}y}$) = min<sub>j</sub> \[S(${\color{royalblue}t}_j$,
+    ${\color{darkblack}x}$) + c(${\color{royalblue}j}$,${\color{darkblack}x}$,${\color{firebrick}y}$)\]
 
 ---
 
@@ -366,17 +366,17 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   **Input**: Instance ${\color{darkblack}x}$;
 -   **Output**: Solution ${\color{darkblack}s}$
--   ${\color{brown}\tau}$ := ${\color{coral}t}$;
+-   ${\color{brown}\tau}$ := ${\color{royalblue}t}$;
 -   ${\color{darkblack}s}$ := initial feasible solution ${\color{darkblack}s_0}$;
 -   **repeat**
-  -   **for** ${\color{coral}l}$ times **do**
+  -   **for** ${\color{royalblue}l}$ times **do**
     -   Select any unvisited ${\color{darkblack}s'} \in \mathcal{N}(x, {\color{darkblack}s})$
     -   **if** (${\color{purple}m}(x, {\color{darkblack}s'})$ < ${\color{purple}m}(x, {\color{darkblack}s})$)
     -   ${\color{darkblack}s}$ := ${\color{darkblack}s'}$;
     -   **else**
-    -   ${\color{coral}δ}$ := ${\color{purple}m}(x, {\color{darkblack}s'}) - {\color{purple}m}(x, {\color{darkblack}s})$;
-    -   ${\color{darkblack}s}$ := ${\color{darkblack}s'}$ with probability exp($-{\color{coral}δ}/{\color{coral}t}$);
-  -   ${\color{brown}\tau}$ := ${\color{coral}r} \cdot {\color{brown}\tau}$; (\* update of temperature \*)
+    -   ${\color{royalblue}δ}$ := ${\color{purple}m}(x, {\color{darkblack}s'}) - {\color{purple}m}(x, {\color{darkblack}s})$;
+    -   ${\color{darkblack}s}$ := ${\color{darkblack}s'}$ with probability exp($-{\color{royalblue}δ}/{\color{royalblue}t}$);
+  -   ${\color{brown}\tau}$ := ${\color{royalblue}r} \cdot {\color{brown}\tau}$; (\* update of temperature \*)
 -   **until** FROZEN;
 -   **return** $s$;
 

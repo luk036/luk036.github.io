@@ -56,7 +56,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
--   A thief 🦹 considers taking ${\color{brown}b}$ pounds of loot 💰. The loot is in the form of ${\color{coral}n}$ items, each with weight ${\color{brown}a}_i$ and value ${\color{brown}p}_i$. Any amount of an item can be put in the knapsack as long as the weight limit ${\color{brown}b}$ is not exceeded
+-   A thief 🦹 considers taking ${\color{brown}b}$ pounds of loot 💰. The loot is in the form of ${\color{royalblue}n}$ items, each with weight ${\color{brown}a}_i$ and value ${\color{brown}p}_i$. Any amount of an item can be put in the knapsack as long as the weight limit ${\color{brown}b}$ is not exceeded
 
 ]
 .pull-right[
@@ -75,12 +75,12 @@ class: nord-dark, middle, center
 
 ### Program 1: Greedy Knapsack
 
--   **Input**: Set of ${\color{coral}n}$ items, for each ${\color{green}x}_i \in {\color{salmon}X}$, values ${\color{brown}p}_i$, ${\color{brown}a}_i$, positive integer ${\color{brown}b}$;
+-   **Input**: Set of ${\color{royalblue}n}$ items, for each ${\color{green}x}_i \in {\color{salmon}X}$, values ${\color{brown}p}_i$, ${\color{brown}a}_i$, positive integer ${\color{brown}b}$;
 -   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{brown}a}_i \leq {\color{brown}b}$;
 -   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio ${\color{brown}p}_i$/${\color{brown}a}_i$;
 -   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
 -   ${\color{salmon}Y}$ := $0$;
--   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
+-   **for** $i$:=1 **to** ${\color{royalblue}n}$ **do**
   -   **if** ${\color{brown}b} \geq {\color{brown}a}_i$ **do**
     -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{green}x}_i \}$;
     -   ${\color{brown}b}$ := ${\color{brown}b} - {\color{brown}a}_i$;
@@ -138,7 +138,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover (MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral}c}_i {\color{green}x}_i$
+-   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{royalblue}c}_i {\color{green}x}_i$
 
 -   Subject to ${\color{green}x}_i + {\color{green}x}_j \geq 1$ for all $({\color{brown}v}_i, {\color{brown}v}_j) \in {\color{lime}E}$
 
@@ -176,7 +176,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
   -   Let $({\color{brown}v}_i, {\color{brown}v}_j)$ be an edge not covered by ${\color{salmon}V'}$;
   -   Increase ${\color{firebrick}y}_{ij}$ until a constraint of DLP<sub>VC</sub> becomes tight for either $i$ or $j$;
-  -   **if** $\sum_{({\color{brown}v}_i,{\color{brown}v}_j) \in {\color{lime}E} } {\color{firebrick}y}_{ij} = {\color{coral}c}_i$ **then**
+  -   **if** $\sum_{({\color{brown}v}_i,{\color{brown}v}_j) \in {\color{lime}E} } {\color{firebrick}y}_{ij} = {\color{royalblue}c}_i$ **then**
     -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{brown}v}_i\}$ (\* the i-th dual constraint is tight \*)
   -   **else**
     -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{brown}v}_j\}$ (\* the j-th dual constraint is tight \*)
@@ -196,12 +196,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ### Program - Random WVC
 
--   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{coral}w}: {\color{salmon}V} \mapsto N$;
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{royalblue}w}: {\color{salmon}V} \mapsto N$;
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge ${\color{lime}e} = ({\color{brown}v},{\color{brown}t}) \in {\color{lime}E}$;
-  -   Randomly choose ${\color{green}x}$ from $\{ {\color{brown}v},{\color{brown}t}\}$ with Pr$\{ {\color{green}x}={\color{brown}v}\}$ = ${\color{coral}w}({\color{brown}t}) / ({\color{coral}w}({\color{brown}v}) + {\color{coral}w}({\color{brown}t}))$;
+  -   Randomly choose ${\color{green}x}$ from $\{ {\color{brown}v},{\color{brown}t}\}$ with Pr$\{ {\color{green}x}={\color{brown}v}\}$ = ${\color{royalblue}w}({\color{brown}t}) / ({\color{royalblue}w}({\color{brown}v}) + {\color{royalblue}w}({\color{brown}t}))$;
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green}x}\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{ {\color{lime}e} \mid {\color{green}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
@@ -233,24 +233,24 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 ### Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S({\color{coral}t}_j, {\color{green}x})$ denotes the optimal cost from $({\color{coral}t}_0, {\color{green}x})$ to $({\color{coral}t}_j, {\color{green}x})$
-  -   then we must have S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> [S(${\color{coral}t}_j$, ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)]
+  -   If $S({\color{royalblue}t}_j, {\color{green}x})$ denotes the optimal cost from $({\color{royalblue}t}_0, {\color{green}x})$ to $({\color{royalblue}t}_j, {\color{green}x})$
+  -   then we must have S(${\color{royalblue}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> [S(${\color{royalblue}t}_j$, ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)]
 
 ---
 
 ### Dynamic Programming (III)
 
--   According to Proposition 5.24, we must proceed successively to determine S(${\color{coral}t}_j, {\color{green}x}$) for each ${\color{green}x}$ in A<sub>j</sub> to end with S(${\color{coral}t}_n, {\color{green}x}_n$). In the proposed example, we have four stages ${\color{coral}t}_0$, ${\color{coral}t}_1$, ${\color{coral}t}_2$, ${\color{coral}t}_3$ with associated sets of feasible states
+-   According to Proposition 5.24, we must proceed successively to determine S(${\color{royalblue}t}_j, {\color{green}x}$) for each ${\color{green}x}$ in A<sub>j</sub> to end with S(${\color{royalblue}t}_n, {\color{green}x}_n$). In the proposed example, we have four stages ${\color{royalblue}t}_0$, ${\color{royalblue}t}_1$, ${\color{royalblue}t}_2$, ${\color{royalblue}t}_3$ with associated sets of feasible states
 
   -   A<sub>0</sub> = {A}, A<sub>1</sub> = {B, C, D}, A<sub>2</sub> = {E,F,G}, A<sub>3</sub> = {H}
 
 -   For each city in A<sub>1</sub>, there is a unique path from A, so that it must be optimal, and
 
-  -   S(${\color{coral}t}_1$, B) = 7, S(${\color{coral}t}_1$, C) = 4, S(${\color{coral}t}_1$, D) = 1.
+  -   S(${\color{royalblue}t}_1$, B) = 7, S(${\color{royalblue}t}_1$, C) = 4, S(${\color{royalblue}t}_1$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the optimal cost based on the fundamental property of dynamic programming,
 
-  -   S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> [S(${\color{coral}t}_j$, ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)]
+  -   S(${\color{royalblue}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> [S(${\color{royalblue}t}_j$, ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)]
 
 ---
 
@@ -273,7 +273,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   **Input**: Instance ${\color{green}x}$;
 -   **Output**: Solution ${\color{green}s}$
--   ${\color{coral}τ}$ := ${\color{coral}t}$;
+-   ${\color{royalblue}τ}$ := ${\color{royalblue}t}$;
 -   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   **repeat**
   -   **for** $l$ times **do**
@@ -281,9 +281,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     -   **if** ($m({\color{green}x}, {\color{green}s}') \lt m({\color{green}x}, {\color{green}s})$)
     -   ${\color{green}s}$ := ${\color{green}s}'$;
     -   **else**
-    -   ${\color{coral}δ}$ := $m({\color{green}x}, {\color{green}s}') - m({\color{green}x}, {\color{green}s})$;
-    -   ${\color{green}s}$ := ${\color{green}s}'$ with probability exp($-{\color{coral}δ}/{\color{coral}t}$);
-  -   ${\color{coral}τ}$ := ${\color{coral}r} \cdot {\color{coral}τ}$; (\* update of temperature \*)
+    -   ${\color{royalblue}δ}$ := $m({\color{green}x}, {\color{green}s}') - m({\color{green}x}, {\color{green}s})$;
+    -   ${\color{green}s}$ := ${\color{green}s}'$ with probability exp($-{\color{royalblue}δ}/{\color{royalblue}t}$);
+  -   ${\color{royalblue}τ}$ := ${\color{royalblue}r} \cdot {\color{royalblue}τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
 -   **return** ${\color{green}s}$;
 

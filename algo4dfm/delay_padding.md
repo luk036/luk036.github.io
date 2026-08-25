@@ -142,25 +142,25 @@ graph LR
   -   Adopted to characterize the statistical behavior of path delays.
   -   **Better captures the tail distribution** critical to worst-case timing than Gaussian assumptions.
   -   Allows minimizing the achievable clock period under a specified timing yield target.
-  -   Focuses on GEV distributions with ${\color{coral}\xi} \ne 0$ to reflect the **heavy-tailed nature** observed in actual timing data, as circuit delays are strictly positive.
+  -   Focuses on GEV distributions with ${\color{royalblue}\xi} \ne 0$ to reflect the **heavy-tailed nature** observed in actual timing data, as circuit delays are strictly positive.
 
 ---
 
 ### Slide 9: GEV Distribution Parameters & Functions 📊
 
 -   The GEV distribution is defined by three parameters:
-  -   **Location parameter (${\color{coral}\mu}$)** 📍
-  -   **Scale parameter (${\color{coral}\sigma} > 0$)** 📏
-  -   **Shape parameter (${\color{coral}\xi}$)** 🔄
+  -   **Location parameter (${\color{royalblue}\mu}$)** 📍
+  -   **Scale parameter (${\color{royalblue}\sigma} > 0$)** 📏
+  -   **Shape parameter (${\color{royalblue}\xi}$)** 🔄
 -   **Probability Density Function (PDF)** 📉:
-  -   $$f({\color{blue}x}) = \frac{1}{ {\color{coral}\sigma} } t({\color{blue}x})^{ {\color{coral}\xi}+1} e^{-t({\color{blue}x})}$$ (8)
-  -   Where $$t({\color{blue}x}) = \left[ 1 + {\color{coral}\xi} \left( \frac{ {\color{blue}x}-{\color{coral}\mu} }{ {\color{coral}\sigma} } \right) \right]^{-1/{\color{coral}\xi} }$$ if $${\color{coral}\xi} \ne 0$$
+  -   $$f({\color{blue}x}) = \frac{1}{ {\color{royalblue}\sigma} } t({\color{blue}x})^{ {\color{royalblue}\xi}+1} e^{-t({\color{blue}x})}$$ (8)
+  -   Where $$t({\color{blue}x}) = \left[ 1 + {\color{royalblue}\xi} \left( \frac{ {\color{blue}x}-{\color{royalblue}\mu} }{ {\color{royalblue}\sigma} } \right) \right]^{-1/{\color{royalblue}\xi} }$$ if $${\color{royalblue}\xi} \ne 0$$
 -   **Cumulative Distribution Function (CDF)** 📊:
   -   $$F({\color{blue}x}) = e^{-t({\color{blue}x})}$$ (9)
-  -   Defined for $${\color{blue}x} \in [{\color{coral}\mu}-\frac{ {\color{coral}\sigma} }{ {\color{coral}\xi} }, \infty)$$ when $${\color{coral}\xi} > 0$$, and $${\color{blue}x} \in (-\infty, {\color{coral}\mu}-\frac{ {\color{coral}\sigma} }{ {\color{coral}\xi} }]$$ when $${\color{coral}\xi} < 0$$.
+  -   Defined for $${\color{blue}x} \in [{\color{royalblue}\mu}-\frac{ {\color{royalblue}\sigma} }{ {\color{royalblue}\xi} }, \infty)$$ when $${\color{royalblue}\xi} > 0$$, and $${\color{blue}x} \in (-\infty, {\color{royalblue}\mu}-\frac{ {\color{royalblue}\sigma} }{ {\color{royalblue}\xi} }]$$ when $${\color{royalblue}\xi} < 0$$.
 -   **Quantile Function (${\color{blue}Q}$)** 🔢: The inverse of the CDF, used for statistical timing checks.
-  -   $${\color{blue}Q} = {\color{coral}\mu} + \frac{ {\color{coral}\sigma} }{ {\color{coral}\xi} } ( (-\ln{\color{coral}\beta})^{-{\color{coral}\xi} } - 1)$$ (10)
-  -   ${\color{coral}\beta} \in$ represents the timing satisfaction probability.
+  -   $${\color{blue}Q} = {\color{royalblue}\mu} + \frac{ {\color{royalblue}\sigma} }{ {\color{royalblue}\xi} } ( (-\ln{\color{royalblue}\beta})^{-{\color{royalblue}\xi} } - 1)$$ (10)
+  -   ${\color{royalblue}\beta} \in$ represents the timing satisfaction probability.
 
 ---
 
@@ -170,12 +170,12 @@ graph LR
 -   **Setup Constraint (Statistical)** ⏳:
   -   $${\color{blue}T_{skew} } \le {\color{blue}T_\text{CP} } - {\color{blue}\tilde{D} } - {\color{blue}T_{setup} }$$ (15)
   -   Quantifies the timing margin for data to settle. Setup failures are more likely under slow process conditions, making this constraint sensitive to the **tail of the delay distribution**.
-  -   Deterministic equivalent: $${\color{blue}T_\text{CP} } - {\color{blue}T_{setup} } - {\color{blue}T_{skew} } \ge {\color{blue}Q}_D({\color{coral}\beta})$$
+  -   Deterministic equivalent: $${\color{blue}T_\text{CP} } - {\color{blue}T_{setup} } - {\color{blue}T_{skew} } \ge {\color{blue}Q}_D({\color{royalblue}\beta})$$
 -   **Hold Constraint (Statistical)** ⏲️:
   -   $${\color{blue}T_{skew} } \ge {\color{blue}T_{hold} } - {\color{blue}\tilde{d} }$$ (16)
   -   Ensures data does not arrive too early. Hold violations are typically triggered in fast process corners, making this constraint sensitive to the **lower end of the delay distribution**.
-  -   Deterministic equivalent: $${\color{blue}T_{hold} } - {\color{blue}T_{skew} } \ge {\color{blue}Q}_d(1- {\color{coral}\beta})$$ (18)
-  -   ${\color{blue}Q}_D({\color{coral}\beta})$ and ${\color{blue}Q}_d(1-{\color{coral}\beta})$ are the ${\color{coral}\beta}$ quantiles of the maximum and minimum delay distributions, respectively.
+  -   Deterministic equivalent: $${\color{blue}T_{hold} } - {\color{blue}T_{skew} } \ge {\color{blue}Q}_d(1- {\color{royalblue}\beta})$$ (18)
+  -   ${\color{blue}Q}_D({\color{royalblue}\beta})$ and ${\color{blue}Q}_d(1-{\color{royalblue}\beta})$ are the ${\color{royalblue}\beta}$ quantiles of the maximum and minimum delay distributions, respectively.
 -   The statistical delay padding process accounts for process-induced variations by operating on the **statistical properties of delays**, ensuring robustness rather than relying on worst-case margins.
 
 ---
@@ -253,25 +253,25 @@ graph TD
 -   **Iterative Steps** 🔄:
   1. **Solve Subproblems** 🧩: In each iteration, all subproblems (one for each corner) are solved **independently and in parallel**, treating ${\color{blue}y_{shared} }$ and ${\color{firebrick}\lambda_k}$ as fixed parameters.
   2. **Update Global Shared Variable** 🌐: Once all local solutions ${\color{blue}y_k}$ are obtained, the global shared variable is updated as the **average**:
-     -   $${\color{blue}y_{shared} } \leftarrow \frac{1}{ {\color{coral}K} } \sum_{k=1}^{ {\color{coral}K} } {\color{blue}y_k}$$ (13)
-     -   Where ${\color{coral}K}$ is the total number of corners.
+     -   $${\color{blue}y_{shared} } \leftarrow \frac{1}{ {\color{royalblue}K} } \sum_{k=1}^{ {\color{royalblue}K} } {\color{blue}y_k}$$ (13)
+     -   Where ${\color{royalblue}K}$ is the total number of corners.
   3. **Update Lagrange Multipliers** 🔄: Via **sub-gradient ascent**:
-     -   $${\color{firebrick}\lambda_k} \leftarrow {\color{firebrick}\lambda_k} + {\color{coral}\rho}({\color{blue}y_k} - {\color{blue}y_{shared} })$$ (14)
-     -   ${\color{coral}\rho} > 0$ is a step size controlling the convergence rate.
+     -   $${\color{firebrick}\lambda_k} \leftarrow {\color{firebrick}\lambda_k} + {\color{royalblue}\rho}({\color{blue}y_k} - {\color{blue}y_{shared} })$$ (14)
+     -   ${\color{royalblue}\rho} > 0$ is a step size controlling the convergence rate.
 -   **Convergence** ✅: This iterative process continues until the discrepancy between local solutions and the global average vanishes (e.g., all ${\color{blue}y_k}$ converge to a consistent ${\color{blue}y_{shared} }$).
 -   **Statistical Formulation** 📊: In GEV-based delay padding, deterministic delay values are replaced with **random variables modeled by the GEV distribution**.
   -   This allows the padding process to account for process-induced variations, ensuring probabilistic satisfaction of timing constraints.
   -   The updated statistical formulation for the optimization problem is:
     -   $$\min_{\{ {\color{blue}y_k}\} } \sum_k {\color{firebrick}\lambda_k}^\top({\color{blue}y_k} - {\color{blue}y_{shared} })$$
     -   Subject to: $${\color{green}A} \cdot {\color{firebrick}u} = {\color{blue}y}$$
-    -   $${\color{blue}y}_{kij} \le {\color{blue}T_\text{CP} } - {\color{blue}Q}_{D}^k({\color{coral}\beta}) - {\color{blue}T_{setup} }, \forall(i,j),\forall k$$
-    -   $${\color{blue}y}_{kij} \ge {\color{blue}T_{hold} } - {\color{blue}Q}_{d}^k(1- {\color{coral}\beta}), \forall(i,j),\forall k$$ (19)
+    -   $${\color{blue}y}_{kij} \le {\color{blue}T_\text{CP} } - {\color{blue}Q}_{D}^k({\color{royalblue}\beta}) - {\color{blue}T_{setup} }, \forall(i,j),\forall k$$
+    -   $${\color{blue}y}_{kij} \ge {\color{blue}T_{hold} } - {\color{blue}Q}_{d}^k(1- {\color{royalblue}\beta}), \forall(i,j),\forall k$$ (19)
 
 ---
 
 ### Slide 15: Complete Timing Optimization Flow 🚀
 
--   **Objective** 🎯: Minimize the feasible clock period (T\_\text{CP}) while ensuring setup and hold time constraints are **statistically satisfied** across all corners with a target timing yield (${\color{coral}\beta}$).
+-   **Objective** 🎯: Minimize the feasible clock period (T\_\text{CP}) while ensuring setup and hold time constraints are **statistically satisfied** across all corners with a target timing yield (${\color{royalblue}\beta}$).
 -   The flow combines **dual decomposition, slack modeling, and binary search**.
 
 ```mermaid
@@ -295,12 +295,12 @@ graph TD
 ```
 
 -   **Key Process Steps** 🔑:
-  1. **Multi-Corner SSTA** 🌐: Perform GEV-based SSTA to extract path delay distributions. Timing constraints are checked using a quantile-based formulation with a target yield ${\color{coral}\beta}$.
+  1. **Multi-Corner SSTA** 🌐: Perform GEV-based SSTA to extract path delay distributions. Timing constraints are checked using a quantile-based formulation with a target yield ${\color{royalblue}\beta}$.
   2. **Binary Search** 🔍: Used to find the minimum feasible TCP by iterating through candidate clock periods.
   3. **Path Relationship Analysis (PRA) & TCG Enhancement** 🧩: Identify setup/hold path interactions and enhance the TCG with auxiliary nodes and coupling edges to capture physical and logical relationships.
   4. **Negative Cycle Check** ❌: On the enhanced TCG. If detected, the current TCP is infeasible, and the lower bound of the binary search is updated.
   5. **Dual Decomposition Solver** 🤖: If no negative cycles, compute an explicit corner-aware delay configuration, ensuring consistency across corners via Lagrangian multipliers.
-  6. **Convergence** ✅: The binary search refines bounds until the interval ${\color{blue}T_{high} } - {\color{blue}T_{low} }$ falls below a defined tolerance ${\color{coral}\epsilon}$, returning the optimal TCP.
+  6. **Convergence** ✅: The binary search refines bounds until the interval ${\color{blue}T_{high} } - {\color{blue}T_{low} }$ falls below a defined tolerance ${\color{royalblue}\epsilon}$, returning the optimal TCP.
 
 ---
 
@@ -314,7 +314,7 @@ graph TD
   -   **TT (Typical-Typical)** ⚖️
   -   These capture a broad range of variation scenarios in advanced technology nodes.
 -   **Statistical Modeling** 📊: Statistical delay distributions extracted using **GEV-based SSTA**.
--   **Timing Yield Target** 🎯: Timing constraints evaluated using quantile-based checks under a target yield threshold **${\color{coral}\beta} = 0.99$**, ensuring high probability satisfaction.
+-   **Timing Yield Target** 🎯: Timing constraints evaluated using quantile-based checks under a target yield threshold **${\color{royalblue}\beta} = 0.99$**, ensuring high probability satisfaction.
 -   **Optimization Process** ⚙️: Binary search over candidate clock periods. CSS applied first. If negative cycles persist, the dual-decomposition delay padding solver is invoked. Each subproblem is formulated as a min-cost potential problem and solved using the **CVXPY** convex optimization method.
 
 ---

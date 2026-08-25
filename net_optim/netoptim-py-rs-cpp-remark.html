@@ -254,7 +254,7 @@ graph LR
 
 **Problem:** Given a point ${\color{green}x}$, is it feasible w.r.t. network constraints?
 
-$$ \text{find } {\color{green}x}, {\color{firebrick}u} \quad \text{s.t.} \quad {\color{firebrick}u_j} - {\color{firebrick}u_i} \le {\color{coral}h}(\text{edge}_{ij}, {\color{green}x}) \; \forall (i, j) \in {\color{lime}E} $$
+$$ \text{find } {\color{green}x}, {\color{firebrick}u} \quad \text{s.t.} \quad {\color{firebrick}u_j} - {\color{firebrick}u_i} \le {\color{royalblue}h}(\text{edge}_{ij}, {\color{green}x}) \; \forall (i, j) \in {\color{lime}E} $$
 
 **Solution:** Use Howard's negative cycle detection as a separation oracle.
 
@@ -268,7 +268,7 @@ pub trait OracleFn&lt;D&gt; {
 }
 ```
 
-**Returns:** $(\text{gradient}, \text{intercept}) = \left(-\sum_{e \in {\color{lime}C}} {\color{green}\nabla h}(e, {\color{green}x}),\; -\sum_{e \in {\color{lime}C}} {\color{coral}h}(e, {\color{green}x})\right)$
+**Returns:** $(\text{gradient}, \text{intercept}) = \left(-\sum_{e \in {\color{lime}C}} {\color{green}\nabla h}(e, {\color{green}x}),\; -\sum_{e \in {\color{lime}C}} {\color{royalblue}h}(e, {\color{green}x})\right)$
 
 ---
 
@@ -276,7 +276,7 @@ pub trait OracleFn&lt;D&gt; {
 
 **Problem** (Orlin & Rothblum 1985): Find diagonal scaling factors minimizing ratio:
 
-$$ \min \frac{{\color{firebrick}\pi}}{{\color{firebrick}\phi}} \quad \text{s.t.} \quad {\color{firebrick}\phi} \le {\color{firebrick}u_i} |{\color{coral}a_{ij}}| {\color{firebrick}u_j}^{-1} \le {\color{firebrick}\pi} \; \forall {\color{coral}a_{ij}} \neq 0 $$
+$$ \min \frac{{\color{firebrick}\pi}}{{\color{firebrick}\phi}} \quad \text{s.t.} \quad {\color{firebrick}\phi} \le {\color{firebrick}u_i} |{\color{royalblue}a_{ij}}| {\color{firebrick}u_j}^{-1} \le {\color{firebrick}\pi} \; \forall {\color{royalblue}a_{ij}} \neq 0 $$
 
 **Rust implementation:**
 ```rust
@@ -299,7 +299,7 @@ impl OracleFn&lt;f64&gt; for Ratio&lt;F&gt; {
 
 ### ⏱ min_cycle_ratio: Wrapper Function
 
-**Problem:** Find the cycle minimizing $\displaystyle {\color{coral}r}^* = \min_{{\color{lime}C} \in \text{cycles}(G)} \frac{\sum_{e \in {\color{lime}C}} \text{cost}(e)}{\sum_{e \in {\color{lime}C}} \text{time}(e)}$
+**Problem:** Find the cycle minimizing $\displaystyle {\color{royalblue}r}^* = \min_{{\color{lime}C} \in \text{cycles}(G)} \frac{\sum_{e \in {\color{lime}C}} \text{cost}(e)}{\sum_{e \in {\color{lime}C}} \text{time}(e)}$
 
 **Rust implementation** (wraps `MaxParametricSolver`):
 ```rust
@@ -415,7 +415,7 @@ class: nord-light, middle, center
 
 **Same algorithm:** `NegCycleFinder::howard()` / `howard()`
 
-**Same graph topology:** Directed cycle $0 \rightarrow 1 \rightarrow 2 \rightarrow \dots \rightarrow (n-1) \rightarrow 0$, with one negative edge ${\color{coral}w}(n-1 \rightarrow 0) = -3$, all others ${\color{coral}w} = 1$.
+**Same graph topology:** Directed cycle $0 \rightarrow 1 \rightarrow 2 \rightarrow \dots \rightarrow (n-1) \rightarrow 0$, with one negative edge ${\color{royalblue}w}(n-1 \rightarrow 0) = -3$, all others ${\color{royalblue}w} = 1$.
 
 **Same weight type:** `int` / `i32`
 

@@ -52,7 +52,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | #   | Topic                    | Materials                                                                                                                 |
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | 0   | Course Overview          | [slides](lec00-remark.html), [intro](intro-algo4dfm-remark.html)                                                          |
-| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
+| 1   | DFM Introduction         | [slides](dfm4dummies-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
 | 2   | Software Development     | [slides](../swdev/swdev-flow-ai-remark.html), [AI Coding](ai-coding-remark.html) |
 | 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [spatial corr](spatial-corr-remark.html), [aniso](spatial-aniso-remark.html), [GP](gp.pdf), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7) |
 | 4   | Convex Optimization      | [math-prog](../cvx/intro-cvx-remark.html), [slides](lec02c-remark.html), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
@@ -75,7 +75,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 | #   | Topic                | Materials                                                           |
 | --- | -------------------- | ------------------------------------------------------------------- |
-| 10  | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html)        |
+| 10  | Phase Shifting Mask  | [slides](psm-opc-remark.html), [primal-dual](primal_dual.html)        |
 | 11  | Layout Decomposition | [slides](lec09-remark.html)                                                 |
 | 12  | 1D Layout Design     | [network flow](netflow+cvxopt.html)                                 |
 
@@ -174,17 +174,16 @@ algo4dfm/
 ├── index.html               # Slide viewer
 ├── intro-algo4dfm-remark.html # Course Introduction
 ├── lec00-remark.html        # Course Overview
-├── lec01-remark.html        # DFM Introduction
-├── cvx-prog-remark.html     # Convex Programming
+├── dfm4dummies-remark.html   # DFM For Dummies
+├── lec02c-remark.html       # Convex Programming
 ├── spatial-corr-remark.html # Spatial Correlation via GP
 ├── spatial-aniso-remark.html # Anisotropic Spatial Correlation
 ├── lec04-remark.html        # Robust Analog Circuit Sizing
 ├── lec06a-remark.html       # Cutting-plane Method
 ├── lec06b-remark.html       # Ellipsoid Method Revisited
-├── lec08-remark.html        # Phase Shifting Mask
+├── psm-opc-remark.html      # PSM & OPC
 ├── lec09-remark.html        # Layout Decomposition
 ├── complexity.html          # Complexity Theory
-├── complexity-remark.html   # Complexity Theory (alt)
 ├── algorithm-remark.html    # Algorithmic Paradigms
 ├── max-k-cut.html          # MAX-k-CUT Problem
 ├── swdevflow.html          # Software Development Flow

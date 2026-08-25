@@ -550,7 +550,7 @@ class: nord-light, middle, center
 - Layout decomposition for multiple patterning
 ]
 .pull-right[
-**Key files:** `lec05a-remark.html`, `lec05b-remark.html`, `delay_padding-remark.html`, `lec08-remark.html`, `lec09-remark.html`
+**Key files:** `lec05a-remark.html`, `lec05b-remark.html`, `delay_padding-remark.html`, `psm-opc-remark.html`, `lec09-remark.html`
 
 > 📖 See: [`algo4dfm/`](algo4dfm/index.html)
 ]

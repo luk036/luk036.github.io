@@ -87,12 +87,12 @@ graph LR
     copy --> check{"Converged?"}
     check -- "No" --> snap
     check -- "Yes" --> done["Roots found ✅"]
-    style snap fill:#f44336
-    style tasks fill:#ff9800
-    style sync fill:#ff9800
-    style copy fill:#f44336
-    style check fill:#f9e79f
-    style done fill:#4caf50
+    style snap fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style tasks fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style sync fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style copy fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style check fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -121,8 +121,8 @@ graph LR
         rat["aberth_atomic\npbairstow_even_atomic\npbairstow_autocorr_atomic\n(rayon pool + seqlock)"]
         rst --> rmt --> rat
     end
-    style at fill:#4caf50
-    style rat fill:#4caf50
+    style at fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style rat fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -186,12 +186,12 @@ graph LR
     t1 -. "load() others" .-> s2
     t2 -- "store() own slot" --> s2
     t2 -. "load() others" .-> s0
-    style t0 fill:#4caf50
-    style t1 fill:#2196f3
-    style t2 fill:#ff9800
-    style s0 fill:#4caf50
-    style s1 fill:#2196f3
-    style s2 fill:#ff9800
+    style t0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style t1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style t2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style s0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style s1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style s2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -282,10 +282,10 @@ graph TD
     ca -- "yes → exit" --> join["join all\n(max niter, all converged)"]
     cb -- "yes → exit" --> join
     cc -- "yes → exit" --> join
-    style ta fill:#4caf50
-    style tb fill:#2196f3
-    style tc fill:#ff9800
-    style join fill:#f9e79f
+    style ta fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style tb fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style tc fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style join fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -379,12 +379,12 @@ graph LR
         b1["Thread 1 → reads 2 3 4 0"]
         b2["Thread 2 → reads 3 4 0 1"]
     end
-    style a0 fill:#f44336
-    style a1 fill:#f44336
-    style a2 fill:#f44336
-    style b0 fill:#4caf50
-    style b1 fill:#2196f3
-    style b2 fill:#ff9800
+    style a0 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style a1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style a2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style b0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style b1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style b2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]

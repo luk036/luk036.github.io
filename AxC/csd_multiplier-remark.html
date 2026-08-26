@@ -149,9 +149,9 @@ graph LR
     A2 --> Y
 
     style Y fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style S7 fill:#bbdefb,stroke:#1565c0
-    style S4 fill:#bbdefb,stroke:#1565c0
-    style S1 fill:#bbdefb,stroke:#1565c0
+    style S7 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style S4 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style S1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -221,8 +221,8 @@ graph LR
         O1["wire _pat = x_shift7 - x_shift5;"]
         O2["assign result = _pat + (_pat &gt;&gt;&gt; 4);"]
     end
-    style F1 fill:#ffcdd2,stroke:#c62828
-    style O1 fill:#e8f5e9,stroke:#2e7d32
+    style F1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style O1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
     style O2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -257,9 +257,9 @@ graph LR
     G --> H["assign result =\n_pat + (_pat &gt;&gt;&gt; 4)"]
     F --> I["assign result =\nx_shift7 - x_shift5 +\nx_shift3 - x_shift1"]
 
-    style D fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style D fill:#fff9c4,stroke:#f9a825,stroke-width:3px
     style H fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style I fill:#ffcdd2,stroke:#c62828
+    style I fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -292,7 +292,7 @@ graph LR
         OPT["_pat wire (2 adders)\n+ (>>>4)\n+ (>>>8)"]
     end
     FLAT -->|"67% fewer adders"| OPT
-    style FLAT fill:#ffcdd2,stroke:#c62828
+    style FLAT fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style OPT fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -356,10 +356,10 @@ graph LR
         H3 --> SUM
         SUM --> YN["y[n]"]
     end
-    style H0 fill:#bbdefb,stroke:#1565c0
-    style H1 fill:#bbdefb,stroke:#1565c0
-    style H2 fill:#bbdefb,stroke:#1565c0
-    style H3 fill:#bbdefb,stroke:#1565c0
+    style H0 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style H1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style H2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style H3 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
     style SUM fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -426,7 +426,7 @@ graph LR
     CSE -.-> U2
 
     style CSE fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style PAT fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style PAT fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 
 ]
@@ -515,7 +515,7 @@ graph LR
     J --> K
     K --> OUT["✓ Verilog output"]
 
-    style H fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style H fill:#fff9c4,stroke:#f9a825,stroke-width:3px
     style OUT fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -719,9 +719,9 @@ graph LR
     AREA --> CSD
     TIMING --> CSD
 
-    style COEFF fill:#bbdefb,stroke:#1565c0
+    style COEFF fill:#bbdefb,stroke:#1565c0,stroke-width:3px
     style GEN fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style SYNTH fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style SYNTH fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 
 ]

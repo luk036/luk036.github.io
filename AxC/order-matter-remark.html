@@ -104,12 +104,12 @@ graph TD
   AB --> ABG["Gauss-Seidel: live state\norder-dependent"]
   BS --> BSJ["Jacobi (_mt): frozen snapshot\norder-independent"]
   BS --> BSG["Gauss-Seidel (ST): live array\norder-dependent"]
-  style AB fill:#2196f3
-  style BS fill:#ff9800
-  style ABJ fill:#4caf50
-  style BSJ fill:#4caf50
-  style ABG fill:#f44336
-  style BSG fill:#f44336
+  style AB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style BS fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style ABJ fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style BSJ fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style ABG fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style BSG fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -199,10 +199,10 @@ graph LR
   CODE[Actual ginger-rs code] --> SUPP["Sequential 2×2 solves\nsuppress_old(j1) then suppress_old(j2)"]
   MULT --> |commutative, trivially| TRIV[~1e-14 diff ✅]
   SUPP --> |order-dependence?| Q[UNVERIFIED ❓]
-  style MULT fill:#ff9800
-  style SUPP fill:#f44336
-  style TRIV fill:#4caf50
-  style Q fill:#f44336
+  style MULT fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style SUPP fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style TRIV fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Q fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -266,8 +266,8 @@ graph TD
     S --> J1["Job 1 ← snapshot"]
     S --> J2["Job 2 ← snapshot"]
   end
-  style GS fill:#f44336
-  style JC fill:#4caf50
+  style GS fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style JC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -450,8 +450,8 @@ graph TD
   A1 --> B2["suppression exactly commutative (E1)"]
   A2 --> B3["next-state diff ~ 9.8 (E4)"]
   A2 --> B4["iteration count varies 6–10 (E5)"]
-  style A1 fill:#4caf50
-  style A2 fill:#f44336
+  style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style A2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

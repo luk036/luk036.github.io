@@ -91,6 +91,7 @@ graph TD
 
 ### Part I: Foundations
 
+.font-sm[
 | #   | Topic                | Materials                                                                                   |
 | --- | -------------------- | ------------------------------------------------------------------------------------------- |
 | 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html), [Py→Rust→C++](ckpttn-py-rs-cpp-remark.html), [rust-ckpttn](rust-ckpttn-remark.html) |
@@ -100,6 +101,7 @@ graph TD
 | 2a  | Voronoi Diagrams     | [L1 Voronoi Fix](l1-voronoi-remark.html), [Debugging Day 2](l1-voronoi-day2-remark.html)     |
 | 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval, [Py→Rust→C++](physdes-py-rs-cpp-remark.html) |
 | 3a  | Rust Port            | [Porting physdes C++ → Rust](rust-porting-remark.html)                                      |
+]
 
 ---
 

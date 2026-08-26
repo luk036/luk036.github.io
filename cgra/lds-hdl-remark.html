@@ -230,18 +230,18 @@ graph LR
 
 ### 📐 Quadrant Reduction
 
-Fold [0, 2*pi) into [0, pi/2] using symmetry:
+Fold [0, 2π) into [0, π/2] using symmetry:
 
 | Bits[15:14] | Quadrant | Reduced z | cos sign | sin sign |
 |:-----------:|:--------:|:----------|:--------:|:--------:|
-| 00 | Q1 [0, pi/2) | angle[13:0] | + | + |
-| 01 | Q2 [pi/2, pi) | pi/2 - sub | - | + |
-| 10 | Q3 [pi, 3pi/2) | sub | - | - |
-| 11 | Q4 [3pi/2, 2pi) | pi/2 - sub | + | - |
+| 00 | Q1 [0, π/2) | angle[13:0] | + | + |
+| 01 | Q2 [π/2, π) | π/2 - sub | - | + |
+| 10 | Q3 [π, 3π/2) | sub | - | - |
+| 11 | Q4 [3π/2, 2π) | π/2 - sub | + | - |
 
 where sub = angle[13:0].
 
-⚠️ **Pitfall:** pi/2 - sub can equal 0x4000 (15-bit).
+⚠️ **Pitfall:** π/2 - sub can equal 0x4000 (15-bit).
 Must use full 16-bit z, NOT 14-bit truncation!
 
 ---
@@ -274,6 +274,7 @@ Hyperbolic gain K_h = 0.828... 🔄
 
 ### ⚔️ Circular vs Hyperbolic CORDIC
 
+.font-sm[
 | Property | 🔄 Circular | 🌊 Hyperbolic |
 |:---------|:----------:|:------------:|
 | Purpose | sin / cos | sqrt(x) |
@@ -283,6 +284,7 @@ Hyperbolic gain K_h = 0.828... 🔄
 | Initial x | 1/K | w + 0.25 |
 | Initial y | 0 | w - 0.25 |
 | Output scale | x >> 2 | x * 1/K_h >> 16 |
+]
 
 **Same hardware structure** 🔧 — only constants and mode differ!
 
@@ -519,6 +521,7 @@ Netlist simulation with simlib.v: **all tests pass** ✅
 
 ### 🎉 Verification Results: 88 Tests All Pass
 
+.font-sm[
 | Module | Tests | RTL | Synth | Max Error |
 |:-------|:-----:|:---:|:-----:|:---------:|
 | vdc_16 (bit-reversal) | 20 | ✅ | ✅ | 0 (exact) |
@@ -528,6 +531,7 @@ Netlist simulation with simlib.v: **all tests pass** ✅
 | circle_3_16 | 12 | ✅ | ✅ | 6 LSB |
 | disk_23 | 10 | ✅ | -- | 11 LSB |
 | sphere_23 | 10 | ✅ | -- | 11 LSB |
+]
 
 **Flow:** C++ -> Python -> Verilog (iverilog) -> Yosys -> JSON -> netlist sim 🔄
 
@@ -561,9 +565,9 @@ z <= {2'b00, 16'h4000 - angle[13:0]};
 z <= 16'h4000 - {2'b00, angle[13:0]};
 ```
 
-For angle = 0xC000 (3*pi/2): 0x4000 - 0 = 0x4000 = 16384.
+For angle = 0xC000 (3*π/2): 0x4000 - 0 = 0x4000 = 16384.
 BUT 0x4000 is 15 bits! {2'b00, 14-bit} drops bit 14.
-z becomes 0 instead of pi/2. 😱
+z becomes 0 instead of π/2. 😱
 
 ---
 
@@ -656,8 +660,10 @@ always @(posedge clk) begin
 
 ## 📝 Summary
 
+.pull-left[
 ### 🔑 Key Techniques
 
+.font-sm[
 | Technique | Application | Area Impact |
 |:-----------|:------------|:-----------:|
 | 🪄 Bit reversal | Base-2 VdC | **0 logic cells** 🔥 |
@@ -666,13 +672,16 @@ always @(posedge clk) begin
 | 🔄 Circular CORDIC | sin / cos | ~1000 cells |
 | 🌊 Hyperbolic CORDIC | sqrt(x) | ~1000 cells |
 | 🧩 Module reuse | Circle/Disk/Sphere | cascaded |
-
+]
+]
+.pull-right[
 ### 🎯 Accuracy
 All errors < 0.04% (CORDIC approximation + fixed-point truncation).
 Z-axis (Sphere): **exact** ✅
 
 ### 💾 Zero ROM
 No lookup tables anywhere. Pure shift-add computation! 💪
+]
 
 ---
 
@@ -691,16 +700,8 @@ class: nord-dark, middle, center
 
         </textarea>
     <script src="../js/remark.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
-        ],
-      });
       var slideshow = remark.create({
         ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',

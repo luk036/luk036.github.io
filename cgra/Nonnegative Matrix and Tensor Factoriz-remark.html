@@ -58,9 +58,9 @@ class: nord-dark, middle, center
 -   **Informal Description:** Given a nonnegative matrix $Y$ (size $I \times T$), find two nonnegative matrices $A$ (size $I \times J$) and $X$ (size $J \times T$) such that their product $AX$ approximates $Y$.
   -   $J$ is usually much smaller than $I$ and $T$.
   -   **In general, it's an approximation:** $Y \approx AX$ (or $Y = AX + E$, where $E$ is the approximation error).
--   **Formal Definition:** Given $Y \in \mathbb{R}^{I \times T}_{+}$ and a positive integer $J$, find $A \in \mathbb{R}^{I \times J}_{+}$ and $X \in \mathbb{R}^{J \times T}_{+}$ that minimize the functional:
+-   **Formal Definition:** Given $Y \in \mathbb{R+}^{I \times T}$ and a positive integer $J$, find $A \in \mathbb{R+}^{I \times J}$ and $X \in \mathbb{R+}^{J \times T}$ that minimize the functional:
   $$ f(A,X) = \frac{1}{2} \|Y - AX\|^2_F $$
-  -   $\|M\|_F$ is the Frobenius norm, defined as $\sqrt{\sum_{i=1}^I \sum_{t=1}^T m^2_{i,t} }$.
+  -   $\|M\|_F$ is the Frobenius norm, defined as $\sqrt{\sum^I \sum^T m^2(i,t) }$.
   -   Other measures like Kullback-Leibler divergence or Alpha/Beta-divergences can also be used.
 
 ---

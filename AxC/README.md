@@ -51,11 +51,11 @@ graph TD
   ML --> CSD[Canonical<br/>Signed Digit]
   CSD --> DF[Digital<br/>Filters]
   DF --> RF[Root<br/>Finding]
-  style AA fill:#4caf50
-  style ML fill:#ff9800
-  style CSD fill:#2196f3
-  style DF fill:#9c27b0
-  style RF fill:#f44336
+  style AA fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style ML fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style CSD fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style DF fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+  style RF fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -149,6 +149,8 @@ graph TD
 | Topic                                | Description              |
 | ------------------------------------ | ------------------------ |
 | [ginger Package](ginger-remark.html) | Finding polynomial roots |
+| [ginger-cpp: Root Finding & Reconstruction](ginger-cpp-remark.html) | C++ root-finding & reconstruction |
+| [Spectral Factorization](spectral_fact-remark.html) | FFT vs root-finding |
 | [Root Finding: Py→Rust→C++](py-rs-cpp-ginger-remark.html) | Cross-language root-finding performance |
 
 ---
@@ -186,9 +188,9 @@ print(decimal)  # 28.5
 graph LR
   csdigit[csdigit<br/>CSD Conversion] <--> ml[multiplierless<br/>FIR Filter]
   ml <--> ginger[ginger<br/>Root Finding]
-  style csdigit fill:#4caf50
-  style ml fill:#ff9800
-  style ginger fill:#2196f3
+  style csdigit fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style ml fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style ginger fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -210,10 +212,12 @@ AxC/
 ├── direct-transpose-remark.html           # Direct-Form vs Transpose-Form FIR
 ├── FIR-IIR-remark.html                    # Digital Filters: FIR & IIR
 ├── ginger-remark.html                     # ginger Polynomial Root Finding Package
+├── ginger-cpp-remark.html                 # ginger-cpp Root Finding & Reconstruction
 ├── multiplier-free-remark.html            # Multiplierless Designs
 ├── multiplierless-remark.html             # Multiplierless FIR Filter Design
 ├── multiplierless-py-rs-cpp-remark.html   # Multiplierless FIR: Py→Rust→C++
 ├── py-rs-cpp-ginger-remark.html           # Root Finding: Py→Rust→C++
+├── spectral_fact-remark.html              # Spectral Factorization
 │
 ├── ### Remark.js Markdown Sources (loaded via sourceUrl)
 ├── AxC.md                                 # Source for AxC-remark.html
@@ -259,10 +263,10 @@ graph TD
   Algorithms --> Goldschmidt[Goldschmidt<br/>Division]
   Algorithms --> CSE[CSE<br/>Elimination]
   Algorithms --> CORDIC[CORDIC<br/>Trigonometric]
-  style Mitchell fill:#4caf50
-  style Goldschmidt fill:#ff9800
-  style CSE fill:#2196f3
-  style CORDIC fill:#9c27b0
+  style Mitchell fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Goldschmidt fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style CSE fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style CORDIC fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]

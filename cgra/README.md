@@ -132,8 +132,6 @@ This section covers hardware acceleration techniques for high-performance and en
 | ------------------------------------------------------------------------------ | ------------------------- |
 | [Hardware Approximation](Hardware Approximation.md)                            | Approximation techniques  |
 | [Digital Design](advanced_digital.md)                                          | Advanced digital circuits |
-| [Spectral Factorization](spectral_fact-remark.html)                            | FFT vs root-finding       |
-| [Polynomial Root Finding](ginger-remark.html)                                  | ginger package            |
 | [Non-negative Matrix Factorization](Nonnegative Matrix and Tensor Factoriz.md) | Low-rank approximations   |
 
 ---
@@ -166,10 +164,8 @@ cgra/
 ├── coffe2-remark.html                     # COFFE2
 ├── flatten-remark.html                    # Flatten Mode in Yosys
 ├── FPGA-remark.html                       # FPGA Overview
-├── ginger-remark.html                     # Polynomial Root Finding
 ├── lds-hdl-remark.html                    # LDS HDL Hardware Generators
 ├── MLIR-remark.html                       # LLVM IR & MLIR
-├── spectral_fact-remark.html              # Spectral Factorization
 │
 ├── ### Remark.js Markdown Sources
 ├── CGRA.md                                # Source for CGRA-remark.html

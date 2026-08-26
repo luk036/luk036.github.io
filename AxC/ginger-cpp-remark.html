@@ -97,10 +97,10 @@ graph LR
     A("Roots from\nAberth Method") --> B{"Which order\n to multiply?"}
     B --> C("Naive Order\n ❌ Large errors")
     B --> D("Leja Order\n ✅ Stable")
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#fff9c4,stroke:#f9a825
-    style C fill:#ffcdd2,stroke:#c62828
-    style D fill:#c8e6c9,stroke:#2e7d32
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -180,11 +180,11 @@ graph TD
         C -.- R1
         C -.- R1r
     end
-    style R1 fill:#bbdefb,stroke:#1565c0
-    style R2 fill:#bbdefb,stroke:#1565c0
-    style R1r fill:#fce4ec,stroke:#c62828
-    style R2r fill:#fce4ec,stroke:#c62828
-    style C fill:#e8f5e9,stroke:#2e7d32,stroke-dasharray: 5 5
+    style R1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style R2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style R1r fill:#fce4ec,stroke:#c62828,stroke-width:3px
+    style R2r fill:#fce4ec,stroke:#c62828,stroke-width:3px
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px,stroke-dasharray: 5 5
 </pre>
 
 ]
@@ -253,7 +253,7 @@ graph LR
         B3 --> B4("(x - 100)")
         B4 --> B5("❗ Catastrophic\ncancellation")
     end
-    style BadOrder fill:#fce4ec,stroke:#c62828
+    style BadOrder fill:#fce4ec,stroke:#c62828,stroke-width:3px
     style B5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
@@ -317,10 +317,10 @@ graph LR
     L5 -. "⏪ last remaining" .- L5
     style L1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
     style L2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
-    style L3 fill:#a5d6a7,stroke:#2e7d32,stroke-width:2px
-    style L4 fill:#81c784,stroke:#2e7d32,stroke-width:2px
-    style L5 fill:#66bb6a,stroke:#2e7d32,stroke-width:1px
-    style Leja fill:#e8f5e9
+    style L3 fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+    style L4 fill:#81c784,stroke:#2e7d32,stroke-width:3px
+    style L5 fill:#66bb6a,stroke:#2e7d32,stroke-width:3px
+    style Leja fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -403,11 +403,11 @@ graph TD
         V3["n=3: 0.11₂ = 0.75 → 270°"]
         V4["n=4: 0.001₂ = 0.125 → 45°"]
     end
-    style V1 fill:#e3f2fd,stroke:#1565c0
-    style V2 fill:#bbdefb,stroke:#1565c0
-    style V3 fill:#90caf9,stroke:#1565c0
-    style V4 fill:#64b5f6,stroke:#1565c0
-    style VdC fill:#e3f2fd
+    style V1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style V2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style V3 fill:#90caf9,stroke:#1565c0,stroke-width:3px
+    style V4 fill:#64b5f6,stroke:#1565c0,stroke-width:3px
+    style VdC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -563,12 +563,12 @@ graph TD
     C --> F("Quadratic Factors 🔲")
     D --> G("Palindromic\nPolynomials 🔄")
     style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#bbdefb,stroke:#1565c0
-    style D fill:#bbdefb,stroke:#1565c0
-    style E fill:#e8f5e9,stroke:#2e7d32
-    style F fill:#e8f5e9,stroke:#2e7d32
-    style G fill:#fff9c4,stroke:#f9a825
+    style B fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style C fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style D fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 
 ]
@@ -604,16 +604,16 @@ graph LR
         F5["5. No SIMD compiler flags"]
         F6["6. Deprecated benchmark API"]
     end
-    style Critical fill:#fce4ec,stroke:#c62828
-    style Medium fill:#fff9c4,stroke:#f9a825
-    style Low fill:#e8f5e9,stroke:#2e7d32
-    style F1 fill:#ffcdd2,stroke:#c62828
-    style F2 fill:#ffcdd2,stroke:#c62828
-    style F3 fill:#fff9c4,stroke:#f9a825
-    style F4 fill:#fff9c4,stroke:#f9a825
-    style F5 fill:#c8e6c9,stroke:#2e7d32
-    style F6 fill:#c8e6c9,stroke:#2e7d32
-    style F7 fill:#fff9c4,stroke:#f9a825
+    style Critical fill:#fce4ec,stroke:#c62828,stroke-width:3px
+    style Medium fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style Low fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style F1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F3 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style F4 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style F5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F6 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F7 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 
 ]
@@ -903,19 +903,19 @@ graph TD
         B1 --> BT4["Pbairstow reconstruction: 1e-8"]
         BA1["poly_from_autocorr_factors(vrs)"] --> BAT1["Degree-8 autocorr: 1e-8"]
     end
-    style Aberth fill:#e3f2fd,stroke:#1565c0
-    style AutocorrAberth fill:#fff9c4,stroke:#f9a825
-    style Bairstow fill:#e8f5e9,stroke:#2e7d32
-    style T1 fill:#c8e6c9,stroke:#2e7d32
-    style T2 fill:#c8e6c9,stroke:#2e7d32
-    style T3 fill:#c8e6c9,stroke:#2e7d32
-    style AT1 fill:#c8e6c9,stroke:#2e7d32
-    style AT2 fill:#c8e6c9,stroke:#2e7d32
-    style BT1 fill:#c8e6c9,stroke:#2e7d32
-    style BT2 fill:#c8e6c9,stroke:#2e7d32
-    style BT3 fill:#c8e6c9,stroke:#2e7d32
-    style BT4 fill:#c8e6c9,stroke:#2e7d32
-    style BAT1 fill:#c8e6c9,stroke:#2e7d32
+    style Aberth fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style AutocorrAberth fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style Bairstow fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style T1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style AT1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style AT2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BT1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BT2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BT3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BT4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BAT1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -955,15 +955,15 @@ graph TD
     ROOTEX2 --> RECIP2("Add 1/z per root")
     RECIP2 --> PFR
     style PFR fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style LO fill:#bbdefb,stroke:#1565c0
-    style CONV fill:#bbdefb,stroke:#1565c0
-    style PQPF fill:#fff9c4,stroke:#f9a825
-    style PFAR fill:#fce4ec,stroke:#c62828
-    style PFAF fill:#f3e5f5,stroke:#7b1fa2
-    style ROOTEX fill:#e1d5e7,stroke:#7b1fa2
-    style ROOTEX2 fill:#e1d5e7,stroke:#7b1fa2
-    style RECIP fill:#ffcdd2,stroke:#c62828
-    style RECIP2 fill:#e1bee7,stroke:#7b1fa2
+    style LO fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style CONV fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style PQPF fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style PFAR fill:#fce4ec,stroke:#c62828,stroke-width:3px
+    style PFAF fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style ROOTEX fill:#e1d5e7,stroke:#7b1fa2,stroke-width:3px
+    style ROOTEX2 fill:#e1d5e7,stroke:#7b1fa2,stroke-width:3px
+    style RECIP fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style RECIP2 fill:#e1bee7,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -1051,12 +1051,12 @@ graph LR
     D --> G("Real-Time\nSignal Processing 🔴")
     E --> H("Production-Grade\nRoot Finder 🏭")
     style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#bbdefb,stroke:#1565c0
-    style D fill:#bbdefb,stroke:#1565c0
-    style E fill:#e8f5e9,stroke:#2e7d32
-    style F fill:#e8f5e9,stroke:#2e7d32
-    style G fill:#e8f5e9,stroke:#2e7d32
+    style B fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style C fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style D fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
     style H fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 

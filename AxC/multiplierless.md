@@ -71,9 +71,9 @@ graph TD
     end
     LQ --> SF
     LQ --> SK
-    style LQ fill:#4caf50
-    style SF fill:#2196f3
-    style SK fill:#ff9800
+    style LQ fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style SF fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SK fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -97,13 +97,13 @@ graph TD
     E --> F("Further\nOptimization")
     F --> G("Return Results")
     C -->|"Retry"| F
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
-    style F fill:#2196f3
-    style G fill:#4caf50
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -140,12 +140,12 @@ graph LR
     C --> D("Spectral\nFactorization")
     D --> E("Optimize\nAdder Cost")
     E --> F("Multiplierless\nFIR Filter")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
-    style F fill:#4caf50
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]

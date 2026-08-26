@@ -103,14 +103,14 @@ graph TD
   Redesign[Redesigning<br/>Logic Circuits] --> Det[Deterministic<br/>Errors]
   Simplification[Simplification<br/>Algorithms] --> LowerAcc[Lower Accuracy<br/>Higher Efficiency]
   Hybrid[Hybrid<br/>Circuits] --> Combined[Combined<br/>Techniques]
-  style VOS fill:#f44336
-  style Nondet fill:#f44336
-  style Redesign fill:#4caf50
-  style Det fill:#4caf50
-  style Simplification fill:#ff9800
-  style LowerAcc fill:#ff9800
-  style Hybrid fill:#2196f3
-  style Combined fill:#2196f3
+  style VOS fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style Nondet fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style Redesign fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Det fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Simplification fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style LowerAcc fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style Hybrid fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style Combined fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -147,9 +147,9 @@ graph TD
   Circuit --> Power[Power]
   Circuit --> Delay[Delay]
   Circuit --> PDP[Power-Delay<br/>Product]
-  style Metrics fill:#9c27b0
-  style Error fill:#f44336
-  style Circuit fill:#4caf50
+  style Metrics fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+  style Error fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style Circuit fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -222,14 +222,14 @@ graph TD
   AxC --> CORDIC[CORDIC]
   Multipliers --> Unsigned[Unsigned]
   Multipliers --> Booth[Booth Signed]
-  style AxC fill:#9c27b0
-  style Adders fill:#4caf50
-  style Multipliers fill:#ff9800
-  style Dividers fill:#f44336
-  style MAC fill:#2196f3
-  style CORDIC fill:#4caf50
-  style Unsigned fill:#ff9800
-  style Booth fill:#ff9800
+  style AxC fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+  style Adders fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Multipliers fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style Dividers fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style MAC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style CORDIC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Unsigned fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style Booth fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -357,12 +357,12 @@ graph LR
   HighAcc[High Accuracy] --> HighEnergy[High Energy]
   LowAcc[Low Accuracy] --> LowEnergy[Low Energy]
   Pareto[Pareto Optimal] --> Tradeoff[Best Tradeoff<br/>Region]
-  style HighAcc fill:#4caf50
-  style HighEnergy fill:#f44336
-  style LowAcc fill:#f44336
-  style LowEnergy fill:#4caf50
-  style Pareto fill:#ff9800
-  style Tradeoff fill:#ff9800
+  style HighAcc fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style HighEnergy fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style LowAcc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style LowEnergy fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Pareto fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style Tradeoff fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]

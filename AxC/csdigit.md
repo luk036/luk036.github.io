@@ -53,10 +53,10 @@ graph TD
   cli[cli<br/>Command Line] --> csd[csd<br/>Core Conversion]
   csd --> lcsre[lcsre<br/>Longest Repeated<br/>Substring]
   testing[Testing<br/>Doctest] --> csd
-  style cli fill:#4caf50
-  style csd fill:#ff9800
-  style lcsre fill:#2196f3
-  style testing fill:#9c27b0
+  style cli fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style csd fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style lcsre fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style testing fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -176,10 +176,10 @@ graph TD
 graph LR
   Binary[Binary<br/>0 and 1] -->|More non-zero| Switch1[Higher<br/>Switching Activity]
   CSD[Canonical SD<br/>0 + -] -->|Fewer non-zero| Switch2[Lower<br/>Switching Activity]
-  style Binary fill:#f44336
-  style Switch1 fill:#f44336
-  style CSD fill:#4caf50
-  style Switch2 fill:#4caf50
+  style Binary fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style Switch1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+  style CSD fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+  style Switch2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]

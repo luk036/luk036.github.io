@@ -52,12 +52,12 @@ graph LR
     C --> E("➕ Addition")
     D --> E
     E --> F("y = (x &lt;&lt; 2) + x")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#ff9800
-    style E fill:#f44336
-    style F fill:#4caf50
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -101,12 +101,12 @@ graph TD
     C --> D("Common Subexpression\nElimination (CSE)")
     D --> E("Shared Adder Network")
     E --> F("Multiplierless\nImplementation")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
-    style F fill:#4caf50
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -131,11 +131,11 @@ graph TD
     B --> E("Hardware-Efficient\nDSP Systems")
     C --> E
     D --> E
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -176,11 +176,11 @@ graph TD
     V --> S
     G --> S
     S --> R("Reduced Adder Cost")
-    style H fill:#2196f3
-    style V fill:#ff9800
-    style G fill:#4caf50
-    style S fill:#9c27b0
-    style R fill:#f44336
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style V fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style S fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style R fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

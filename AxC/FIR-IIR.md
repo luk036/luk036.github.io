@@ -76,10 +76,10 @@ graph LR
     A("Specifications") --> B("Coefficient\nOptimization")
     B --> C("Multiplierless\nImplementation")
     C --> D("Hardware\nSynthesis")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -102,9 +102,9 @@ graph LR
     A("Direct Form") --> B("Transposed Form")
     B --> C("Hybrid Forms")
     A --> C
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -126,11 +126,11 @@ graph TD
     C --> D("Hybrid GA/QN")
     D --> E("ILP")
     B --> E
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -158,12 +158,12 @@ graph LR
     C --> E("Allpass Networks")
     D --> F("Comparison")
     E --> F
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#9c27b0
-    style F fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

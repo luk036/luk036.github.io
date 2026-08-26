@@ -65,11 +65,11 @@ graph TD
     C --> D{"Converged?"}
     D -->|"No"| B
     D -->|"Yes"| E("Converged Roots")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -130,13 +130,13 @@ graph TD
     D -->|"Yes"| E("Quadratic Factors")
     E --> F("Solve x² - rx + q = 0")
     F --> G("Polynomial Roots")
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
-    style F fill:#f44336
-    style G fill:#4caf50
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -228,11 +228,11 @@ graph TD
     R --> H1
     R --> H2
     R --> H3
-    style A fill:#4caf50
-    style R fill:#2196f3
-    style H1 fill:#ff9800
-    style H2 fill:#9c27b0
-    style H3 fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style H2 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style H3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

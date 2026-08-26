@@ -147,6 +147,23 @@ graph TD
 
 ---
 
+### LLVM IR: SSA Phi Merge
+
+.mermaid[
+<pre>
+graph TD
+    BBA["Basic Block A"] --> PHI["%x.1 = phi\n[ %x.0, BB-A ], [ %x.2, BB-B ]"]
+    BBB["Basic Block B"] --> PHI
+    PHI --> USE["%result = add i32 %x.1, %y.1"]
+    style BBA fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style BBB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PHI fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style USE fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+</pre>
+]
+
+---
+
 ### LLVM IR: Aggregates & Other Operations 🏗️🧩
 
 *   **Aggregate Types:** 🧱
@@ -231,6 +248,26 @@ graph TD
 
 ---
 
+### MLIR Hierarchy
+
+.mermaid[
+<pre>
+graph TD
+    MOD[ModuleOp] --> FUNC{Operation\ne.g., FuncOp}
+    FUNC --> REG[Region\nordered list of blocks]
+    REG --> BLK[Block\nentry block + args]
+    BLK --> OP[Operation\n...]
+    OP -.->|"can contain"| REG
+    style MOD fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FUNC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style REG fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style BLK fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style OP fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+</pre>
+]
+
+---
+
 ### MLIR Core Concepts: Dialects ✨🗣️
 
 *   **The Key to Extensibility:** Dialects are MLIR's primary mechanism for extensibility. 🔑
@@ -275,6 +312,23 @@ graph TD
   *   Separates concerns, allowing each layer to focus on a dedicated task.
   *   Avoids lowering too early and losing high-level information. ⏳
   *   Allows mixing levels of abstraction (e.g., Toy dialect ops cohabiting with affine and other ops in the same function). 🤝
+
+---
+
+### MLIR: Progressive Lowering Flow
+
+.mermaid[
+<pre>
+graph LR
+    HL["High-Level\nDialect Ops"] -->|"Dialect Conversion\n(Dag-to-Dag rewrites)"| ML["Mid-Level\nDialect Ops"]
+    ML -->|"Partial / Full Conversion"| LL["Low-Level\nDialect Ops"]
+    LL -->|"Type Conversion"| TGT["Target\n(e.g., LLVM IR)"]
+    style HL fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ML fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style LL fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style TGT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 

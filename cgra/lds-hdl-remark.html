@@ -97,8 +97,8 @@ graph LR
         R["vdc_out = 1100 0000 0000 0000 = 0xC000"]
     end
     C -->|"wire permutation"| R
-    style C fill:#2e3440,stroke:#88c0d0,color:#eceff4
-    style R fill:#2e3440,stroke:#a3be8c,color:#eceff4
+    style C fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style R fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -135,8 +135,8 @@ graph TD
         S --> A["10 + 10 + 10 + 11 + 11 + 11 + 11 + 10"]
         A --> R["result = sum mod 3"]
     end
-    style X fill:#2e3440,stroke:#88c0d0,color:#eceff4
-    style R fill:#2e3440,stroke:#a3be8c,color:#eceff4
+    style X fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style R fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -197,7 +197,7 @@ graph LR
     I["x0 = 1/K\ny0 = 0"] --> C
     C --> CO["cos(z)"]
     C --> SI["sin(z)"]
-    style C fill:#2e3440,stroke:#ebcb8b,color:#eceff4
+    style C fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -213,10 +213,10 @@ graph LR
     ITER -->|"iter &lt; 15"| ITER
     ITER -->|"iter = 15"| DONE["✅ DONE\ncos = x[17:2]\nsin = y[17:2]"]
     DONE --> IDLE
-    style IDLE fill:#3b4252,stroke:#88c0d0,color:#eceff4
-    style LOAD fill:#2e3440,stroke:#ebcb8b,color:#eceff4
-    style ITER fill:#2e3440,stroke:#a3be8c,color:#eceff4
-    style DONE fill:#2e3440,stroke:#bf616a,color:#eceff4
+    style IDLE fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style LOAD fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style ITER fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style DONE fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -308,8 +308,8 @@ graph LR
     en["en 🚀"] --> V["vdc_16\nVdC&lt;2&gt;\nbit-rev"]
     V -->|"angle 0-65535"| C["cordic_16\nCORDIC\nsin/cos"]
     C -->|"cos, sin"| CO["cos, sin"]
-    style V fill:#2e3440,stroke:#88c0d0,color:#eceff4
-    style C fill:#2e3440,stroke:#a3be8c,color:#eceff4
+    style V fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -340,8 +340,8 @@ graph LR
     C2 -->|"cos, sin"| M["×"]
     SQ -->|"radius"| M
     M --> OUT["x, y"]
-    style SQ fill:#2e3440,stroke:#bf616a,color:#eceff4
-    style M fill:#2e3440,stroke:#ebcb8b,color:#eceff4
+    style SQ fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style M fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -379,8 +379,8 @@ graph LR
     MX --> X["x"]
     MY --> Y["y"]
     Z --> ZO["z"]
-    style SQ fill:#2e3440,stroke:#bf616a,color:#eceff4
-    style CP fill:#2e3440,stroke:#ebcb8b,color:#eceff4
+    style SQ fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style CP fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -402,12 +402,12 @@ graph TD
     C316 --> SPH
     SQRT --> DISK
     SQRT --> SPH
-    style V16 fill:#5e81ac,stroke:#88c0d0,color:#eceff4
-    style V3I fill:#5e81ac,stroke:#88c0d0,color:#eceff4
-    style C16 fill:#5e81ac,stroke:#a3be8c,color:#eceff4
-    style SQRT fill:#5e81ac,stroke:#bf616a,color:#eceff4
-    style C216 fill:#4c566a,stroke:#ebcb8b,color:#eceff4
-    style C316 fill:#4c566a,stroke:#ebcb8b,color:#eceff4
+    style V16 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style V3I fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C16 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style SQRT fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C216 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style C316 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -431,8 +431,8 @@ graph TD
         CMP -->|"error &lt; 10"| PASS["✅ PASS"]
         CMP -->|"error > 10"| FAIL["❌ FAIL"]
     end
-    style PASS fill:#2e3440,stroke:#a3be8c,color:#eceff4
-    style FAIL fill:#2e3440,stroke:#bf616a,color:#eceff4
+    style PASS fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style FAIL fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -636,7 +636,7 @@ graph TD
         EN["🚀 en (2nd pulse)"] -.-> DONE1
         DONE1 -.->|"❌ S_IDLE never runs"| NO["Flags never reset!"]
     end
-    style NO fill:#3b4252,stroke:#bf616a,color:#eceff4
+    style NO fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

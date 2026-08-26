@@ -52,6 +52,26 @@ class: nord-dark, middle, center
 
 ---
 
+### CGRA Positioning: Flexibility vs. Efficiency
+
+.mermaid[
+
+<pre>
+graph LR
+    CPU["General-Purpose CPU\nunlimited flexibility\nlow efficiency"]
+    ASIC["Domain-Specific ASIC\nzero flexibility\nhigh efficiency"]
+    CGRA["CGRA\nreconfigurable\nhigh efficiency"]
+    CPU -->|"software flexibility"| CGRA
+    ASIC -->|"hardware efficiency"| CGRA
+    style CPU fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ASIC fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CGRA fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
 ### CGRAs vs. FPGAs ⚔️
 
 -   **Field-Programmable Gate Arrays (FPGAs):**
@@ -80,6 +100,36 @@ class: nord-dark, middle, center
   -   **On-chip Data Memory (SPM):** Feeds data to the PE array 🍽️
     -   Data transfer with off-chip memory via DMA 🚚
   -   **Configuration Memory:** Stores per-cycle directives for PE modules (ALU, switches, RF ports) 🗂️
+
+---
+
+### CGRA: Basic Architecture
+
+.mermaid[
+
+<pre>
+graph TD
+    OFF["Off-Chip Memory"] <-->|"DMA"| SPM["On-Chip Data Memory (SPM)\nmulti-bank scratchpad"]
+    SPM --> NET["On-Chip Network"]
+    NET <--> PE0["PE 0\nFU + RF + switch"]
+    NET <--> PE1["PE 1"]
+    NET <--> PE2["PE ..."]
+    NET <--> PE3["PE N"]
+    CMEM["Configuration Memory\nper-cycle directives"] --> PE0
+    CMEM --> PE1
+    CMEM --> PE2
+    CMEM --> PE3
+    style OFF fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style SPM fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style NET fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PE0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PE1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PE2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PE3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CMEM fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+</pre>
+
+]
 
 ---
 
@@ -180,6 +230,29 @@ class: nord-dark, middle, center
   -   Nodes = operations, Edges = dependencies ↔️
   -   Exposes computations and data flow 🌊
 -   Mapping involves finding **spatio-temporal coordinates** for computations and **routing data dependencies** 🗺️
+
+---
+
+### Compilation for CGRAs: Overview
+
+.mermaid[
+
+<pre>
+graph LR
+    LOOP["Loop Kernel"] --> DFG["Dataflow Graph (DFG)\nnodes = operations\nedges = dependencies"]
+    DFG --> MAP["Mapping\nspatio-temporal coordinates"]
+    ARCH["CGRA Architecture\nPE count + network"] --> MAP
+    MAP --> CONF["Configurations\nper-cycle directives"]
+    CONF --> RUN["Runtime\nrepeated cyclically"]
+    style LOOP fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ARCH fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style DFG fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style MAP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CONF fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style RUN fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
 
 ---
 

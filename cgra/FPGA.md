@@ -35,6 +35,24 @@ class: nord-dark, middle, center
 
 ---
 
+### FPGA vs. CPU vs. ASIC
+
+.mermaid[
+
+<pre>
+graph LR
+    CPU["CPU / GPU\nfixed architecture\nflexible software"] -->|"bit-level reconfigurability"| FPGA["FPGA\nreconfigurable hardware"]
+    ASIC["ASIC\nfixed hardware\nmax efficiency"]
+    FPGA -->|"flexibility cost\n35x larger / 4x slower"| ASIC
+    style CPU fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FPGA fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style ASIC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
 ### 📈 FPGAs vs. Alternatives ⚖️
 
 -   **Bit-level reconfigurability** allows FPGAs to implement the exact hardware needed for an application (customizable datapath, pipeline, memory, etc.) 🎛️.
@@ -106,6 +124,36 @@ class: nord-light, middle, center
 -   BLEs are typically clustered in **Logic Blocks (LBs)** 🏢.
   -   An LB contains N BLEs and **local interconnect** (multiplexers) 🔌.
   -   Local interconnect forms a local full or partial crossbar.
+
+---
+
+### LUTs and BLEs
+
+.mermaid[
+
+<pre>
+graph LR
+    IN["K inputs"] --> LUT["K-LUT\n2^K SRAM truth table\npass-transistor mux"]
+    LUT --> MUX["Bypass MUX"]
+    CLK["Clock"] --> FF["Flip-Flop"]
+    MUX --> FF
+    FF --> OUT["Registered Output"]
+    LUT --> OUT2["Unregistered Output"]
+    subgraph BLE["Basic Logic Element"]
+        LUT
+        MUX
+        FF
+    end
+    style IN fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style LUT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style MUX fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style FF fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CLK fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style OUT fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style OUT2 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+</pre>
+
+]
 
 ---
 
@@ -197,6 +245,37 @@ class: nord-light, middle, center
 -   Programmable routing is **critical**, commonly accounting for **over 50%** of both fabric area and critical path delay ⚠️.
 -   Composed of **pre-fabricated wiring segments** and **programmable switches** 🔌.
 -   Allows connecting any function block output to any input by programming switches ⚙️.
+
+---
+
+### Programmable Routing: Island-Style
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph FPGA["FPGA Fabric"]
+        LB1["Logic Block"]
+        LB2["Logic Block"]
+        CB["Connection Block\nblock pins to wires"]
+        SB["Switch Block\nwire to wire"]
+        W1["Wire Segment"]
+        W2["Wire Segment"]
+        LB1 -->|"Fc connectivity"| CB
+        CB -->|"to routing channel"| W1
+        W1 --> SB
+        SB --> W2
+        W2 --> LB2
+    end
+    style LB1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style LB2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style W1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style W2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
 
 ---
 
@@ -317,6 +396,29 @@ class: nord-light, middle, center
 
 ---
 
+### BRAM Architecture
+
+.mermaid[
+
+<pre>
+graph TD
+    SUB["Write Data"] --> PERIPH["Peripheral Circuitry\nrow/col decoders, write drivers,\nsense amplifiers"]
+    ADDR["Address"] --> PERIPH
+    CORE["SRAM Memory Core\n2D array of cells"] <--> PERIPH
+    PERIPH --> OUT["Read Data"]
+    CFG["Configurability\nwidth/depth muxes"] --> PERIPH
+    style SUB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ADDR fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PERIPH fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CORE fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CFG fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style OUT fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+</pre>
+
+]
+
+---
+
 ### Configurable BRAMs & Routing Interface ⚙️
 
 -   Extra configurability is added to BRAMs to adapt to diverse application needs 🔄.
@@ -400,6 +502,27 @@ class: nord-light, middle, center
 -   **Hardening multipliers** became necessary due to inefficiency in soft logic ✅.
 -   Xilinx Virtex-II (2000s): Introduced industry's first **18x18 bit hard multiplier blocks** 🚀. Arranged in columns next to BRAMs. Shared interconnect resources to reduce cost, limiting BRAM width.
 -   Multiple hard multipliers could be combined for bigger multipliers or FIR filters using soft logic 🔗.
+
+---
+
+### DSP Block Evolution
+
+.mermaid[
+
+<pre>
+graph LR
+    SOFT["Soft Multipliers\nLUTs + carry chains\nlarge area/delay"] -->|"hardening"| HARD["Hard Multiplier Blocks\nVirtex-II 18x18"]
+    HARD -->|"full-featured"| DSP["DSP Blocks\nStratix: adders, registers,\ncascades for FIR"]
+    DSP -->|"fp32 support"| HPC["HPC DSPs\nArria 10 fp32"]
+    DSP -->|"low-precision MAC"| DL["DL DSPs\nint8/int4 MAC density"]
+    style SOFT fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style HARD fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style DSP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style HPC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style DL fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
 
 ---
 

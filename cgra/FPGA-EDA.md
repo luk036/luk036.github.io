@@ -55,6 +55,30 @@ class: nord-dark, middle, center
 
 ---
 
+### FPGA Application Design Flow
+
+.mermaid[
+
+<pre>
+graph LR
+    HLS["High-Level Synthesis\nC/C++/Python to HDL"] --> LS["Logic Synthesis\nHDL to netlist\n(LUTs, FFs)"]
+    LS --> PI["Physical Implementation\npack → place → route"]
+    PI --> BC["Bitstream Configuration\nprogram the FPGA"]
+    SIM["Simulation / Debugging\ncarried out throughout"] -.-> HLS
+    SIM -.-> LS
+    SIM -.-> PI
+    SIM -.-> BC
+    style HLS fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style LS fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PI fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style BC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style SIM fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+</pre>
+
+]
+
+---
+
 ### High-Level Synthesis (HLS) - From C/C++ to Hardware ✨
 
 -   **Role**: Converts user's high-level abstract description (like C++, Python, etc.) into a lower-level hardware description (HDL, e.g., Verilog, VHDL). 🔄
@@ -88,6 +112,27 @@ class: nord-dark, middle, center
   1. **Packing**: Grouping logical elements into physical FPGA blocks (e.g., clustering logic into CLBs). Input is a synthesized netlist, output is a clustered netlist. 📦
   2. **Placement**: Assigning packed blocks to specific locations on the FPGA fabric. Input is a clustered netlist, output is a placed netlist. 📍
   3. **Routing**: Connecting the placed blocks by finding paths through the FPGA's interconnect resources. Input is a placed netlist, output is a routed netlist. 🛣️
+
+---
+
+### Physical Implementation Stages
+
+.mermaid[
+
+<pre>
+graph LR
+    SYN["Synthesized Netlist"] --> PACK["Packing\ncluster logic into CLBs"]
+    PACK --> PLACE["Placement\nassign packed blocks\nto fabric locations"]
+    PLACE --> ROUTE["Routing\nconnect placed blocks\nvia interconnect"]
+    ROUTE --> ROUTED["Routed Netlist"]
+    style SYN fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PACK fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PLACE fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style ROUTE fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style ROUTED fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
 
 ---
 

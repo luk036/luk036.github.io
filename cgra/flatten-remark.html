@@ -120,6 +120,17 @@ graph TD
     mul_x-->x
     mul_y-->y
     vdc2-->z
+    style en fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style vdc2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style circle3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style sqrt fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style mul_x fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style mul_y fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style cx fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style cy fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style x fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style y fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style z fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 ]
@@ -135,6 +146,13 @@ graph TD
     cordic-->|cosxi|w
     sphere-->|sx,sy,sz|mul
     mul-->xyz["x, y, z"]
+    style en fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style vdc7 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style sphere fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style cordic fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style mul fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style w fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style xyz fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 ]
@@ -196,6 +214,11 @@ graph TD
         dff1-->abc1["abc (8 modules separately)"]
         abc1-->out1["153,154 cells"]
     end
+    style RTL1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style coarse1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style dff1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style abc1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style out1 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -209,6 +232,12 @@ graph TD
         dff2-->abc2["abc (1 flat module)"]
         abc2-->out2["159,111 cells"]
     end
+    style RTL2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style coarse2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style flat fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style dff2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style abc2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style out2 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -323,6 +352,11 @@ graph LR
     subgraph "Flat (159K)"
         BIG[One huge module\n→ greedy mapper\n→ AND + NOT + MUX only\n= more cells]
     end
+    style M1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style M2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style M3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R1 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style BIG fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 ]

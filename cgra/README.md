@@ -17,10 +17,12 @@ class: nord-dark, center, middle
 .pull-left[
 
 **CGRA & FPGA** 🏗
+
 - CGRA
 - FPGA
 
 **Compilers & HDL** 💻
+
 - LLVM/MLIR
 - LDS HDL
 - Yosys
@@ -29,6 +31,7 @@ class: nord-dark, center, middle
 .pull-right[
 
 **Advanced** 🔬
+
 - Approx Mult
 - Digital Design
 
@@ -50,9 +53,9 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Key Concepts:**
 
--   **Bridging ASICs and CPUs**: Hardware-like efficiency with software-like flexibility
--   **Word-level Processing Elements (PEs)**: Connected via on-chip network
--   **Per-cycle reconfiguration**: Both PE operations and routing are reconfigurable
+- **Bridging ASICs and CPUs**: Hardware-like efficiency with software-like flexibility
+- **Word-level Processing Elements (PEs)**: Connected via on-chip network
+- **Per-cycle reconfiguration**: Both PE operations and routing are reconfigurable
 
 > 📖 See: [CGRA.md](CGRA.md)
 
@@ -66,15 +69,15 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Motivation:**
 
--   Neural networks are error-tolerant
--   Approximate multipliers save energy
--   Trade-off between accuracy and efficiency
+- Neural networks are error-tolerant
+- Approximate multipliers save energy
+- Trade-off between accuracy and efficiency
 
 **Techniques:**
 
--   Voltage overscaling
--   Simplified multiplication units
--   Accuracy-configurable designs
+- Voltage overscaling
+- Simplified multiplication units
+- Accuracy-configurable designs
 
 ---
 
@@ -86,11 +89,11 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Key Concepts:**
 
--   **LLVM IR**: Strongly typed, well-documented IR
-  -   `@` for globals/functions
-  -   `%` for local registers
-  -   `iN` for integers
--   **MLIR**: Multi-Level IR for domain-specific optimization
+- **LLVM IR**: Strongly typed, well-documented IR
+- `@` for globals/functions
+- `%` for local registers
+- `iN` for integers
+- **MLIR**: Multi-Level IR for domain-specific optimization
 
 > 📖 See: [MLIR.md](MLIR.md)
 
@@ -105,34 +108,35 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Key Concepts:**
 
--   Configurable logic blocks
--   Programmable routing
--   Trade-off between flexibility and efficiency
+- Configurable logic blocks
+- Programmable routing
+- Trade-off between flexibility and efficiency
 
 **Tools:**
 
--   HDL synthesis
--   Place and route
--   Timing analysis
+- HDL synthesis
+- Place and route
+- Timing analysis
 
 ---
 
 ### 5. HDL & Synthesis
 
-| Topic                                                           | Description                                  |
-| --------------------------------------------------------------- | -------------------------------------------- |
-| [LDS HDL Hardware Generators](lds-hdl-remark.html)             | Low Discrepancy Sequence HDL generation      |
-| [Flatten Mode in Yosys](flatten-remark.html)                    | Yosys synthesis case study                   |
+| Topic                                              | Description                             |
+| -------------------------------------------------- | --------------------------------------- |
+| [LDS HDL Hardware Generators](lds-hdl-remark.html) | Low Discrepancy Sequence HDL generation |
+| [Flatten Mode in Yosys](flatten-remark.html)       | Yosys synthesis case study              |
 
 ---
 
 ### 6. Advanced Topics
 
-| Topic                                                                          | Description               |
-| ------------------------------------------------------------------------------ | ------------------------- |
-| [Hardware Approximation](Hardware Approximation.md)                            | Approximation techniques  |
-| [Digital Design](advanced_digital.md)                                          | Advanced digital circuits |
-| [Non-negative Matrix Factorization](Nonnegative Matrix and Tensor Factoriz.md) | Low-rank approximations   |
+| Topic                                                                                     | Description                  |
+| ----------------------------------------------------------------------------------------- | ---------------------------- |
+| [Hardware Approximation](Hardware Approximation-remark.html)                              | Approximation techniques     |
+| [Approx Multiplier Design Challenges](Approximate Multiplier Design Challeng-remark.html) | Approx multiplier challenges |
+| [Digital Design](advanced_digital.md)                                                     | Advanced digital circuits    |
+| [Non-negative Matrix Factorization](Nonnegative Matrix and Tensor Factoriz-remark.html)   | Low-rank approximations      |
 
 ---
 
@@ -140,13 +144,13 @@ This section covers hardware acceleration techniques for high-performance and en
 
 ### Compilers
 
--   **LLVM/Clang**: C/C++ compiler
--   **MLIR**: Multi-level IR framework
+- **LLVM/Clang**: C/C++ compiler
+- **MLIR**: Multi-level IR framework
 
 ### Design Tools
 
--   **Verilog/VHDL**: HDL for FPGA design
--   **Vivado**: Xilinx FPGA toolchain
+- **Verilog/VHDL**: HDL for FPGA design
+- **Vivado**: Xilinx FPGA toolchain
 
 ---
 
@@ -159,13 +163,16 @@ cgra/
 │
 ├── ### Remark.js HTML Slides
 ├── advanced_digital-remark.html           # Advanced Digital Design
+├── Approximate Multiplier Design Challeng-remark.html  # Approx multiplier challenges
 ├── AxM-remark.html                        # Approximate Multipliers
 ├── CGRA-remark.html                       # CGRA Architecture
 ├── coffe2-remark.html                     # COFFE2
 ├── flatten-remark.html                    # Flatten Mode in Yosys
 ├── FPGA-remark.html                       # FPGA Overview
+├── Hardware Approximation-remark.html     # Hardware approximation techniques
 ├── lds-hdl-remark.html                    # LDS HDL Hardware Generators
 ├── MLIR-remark.html                       # LLVM IR & MLIR
+├── Nonnegative Matrix and Tensor Factoriz-remark.html  # Matrix factorization
 │
 ├── ### Remark.js Markdown Sources
 ├── CGRA.md                                # Source for CGRA-remark.html
@@ -192,9 +199,9 @@ cgra/
 
 ### Books & Papers
 
--   "Handbook of Computer Architecture" - CGRAs
--   LLVM Documentation (llvm.org/docs)
--   MLIR Documentation (mlir.llvm.org)
+- "Handbook of Computer Architecture" - CGRAs
+- LLVM Documentation (llvm.org/docs)
+- MLIR Documentation (mlir.llvm.org)
 
 ---
 

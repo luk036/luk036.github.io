@@ -24,6 +24,17 @@ _(Approx. 90 minutes) ⏳_
 -   The digital sub-systems achieve the **processing** 🧠.
 -   An **optimized implementation of a digital system** is crucial to improve the overall Integrated Circuit (IC) performance ⚙️.
 
+.mermaid[
+<pre>
+graph LR
+    A[Analog\nSignal Acquisition] --> B[Digital\nProcessing]
+    B --> C[Optimized\nIC Implementation]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Optimization Objectives
@@ -34,6 +45,19 @@ _(Approx. 90 minutes) ⏳_
   -   **Area** (to save cost) 💰.
   -   **Performance** (speed) 🚀.
 -   Optimization can happen at various levels of the design hierarchy.
+
+.mermaid[
+<pre>
+graph TD
+    P[Power\nbattery life] --> O[Optimized\nImplementation]
+    A[Area\ncost] --> O
+    F[Performance\nspeed] --> O
+    style P fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style O fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -56,6 +80,25 @@ _(Approx. 90 minutes) ⏳_
   -   **Structural Modelling** (Gate-Level, Hierarchical) 🏗️.
   -   **Mixed Modelling** 🔄.
 -   Test bench writing technique is also discussed.
+
+.mermaid[
+<pre>
+graph TD
+    V[Verilog HDL] --> D[Data Flow\nModelling]
+    V --> B[Behavioural\nModelling]
+    V --> S[Structural\nModelling]
+    S --> G[Gate-Level]
+    S --> H[Hierarchical]
+    V --> M[Mixed\nModelling]
+    style V fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style S fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style G fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style H fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style M fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -90,6 +133,17 @@ _(Approx. 90 minutes) ⏳_
   -   **Half Adder (HA)**: computes sum (s) and carry-out (cout) for two bits. `s = a XOR b`, `cout = a AND b`.
   -   **Full Adder (FA)**: computes sum (s) and carry-out (cout) for three bits (two inputs and a carry-in).
 
+.mermaid[
+<pre>
+graph TD
+    ADD[Adders] --> HA[Half Adder\ns = a XOR b\ncout = a AND b]
+    ADD --> FA[Full Adder\n3 inputs a, b, cin]
+    style ADD fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style HA fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style FA fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Basic Combinational Circuits - Comparators
@@ -119,6 +173,17 @@ _(Approx. 90 minutes) ⏳_
 -   **SR Flip-Flop**: Most basic, has set (S) and reset (R) inputs. Truth table shows present (Q) and next (Q\*) states. Output goes to an undefined state with S=1, R=1 input.
 -   **D Flip-Flop**: Data (D) input, output (Q) follows D on the clock edge. Useful for storing a single bit. Often includes enable (ce) and reset signals.
 
+.mermaid[
+<pre>
+graph TD
+    FF[Flip-Flops] --> SR[SR Flip-Flop\nSet / Reset]
+    FF --> DFF[D Flip-Flop\nD input, Q output\nenable + reset]
+    style FF fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SR fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style DFF fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Basic Sequential Circuits - Clocking & Division
@@ -128,6 +193,19 @@ _(Approx. 90 minutes) ⏳_
 -   **Clock Division**: Circuits to generate clocks with frequencies that are fractions of the main clock.
 -   Example: Clock division by a power of two can be achieved with a cascade of flip-flops toggling on opposite edges or via T flip-flops. Clock division by N can also be implemented.
 
+.mermaid[
+<pre>
+graph LR
+    F0[Clock f] --> F1[Divide by 2]
+    F1 --> F2[Divide by 2]
+    F2 --> F3[f/4]
+    style F0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Advanced Digital Arithmetic - Fast Adders 🚀
@@ -135,6 +213,18 @@ _(Approx. 90 minutes) ⏳_
 -   Speed of an adder is a very important parameter for performance ⚡
 -   Ripple Carry Adder: Simple, but carry propagates bit by bit, leading to delay for large numbers 🐢
 -   Carry Look-Ahead Adder (CLA): A common fast adder. Based on computing all carries in parallel 🌀. Uses "propagate" (P) and "generate" (G) terms
+
+.mermaid[
+<pre>
+graph LR
+    A[Ripple Carry Adder] --> B[Simple\ncarry propagates bit-by-bit]
+    C[Carry Look-Ahead] --> D[Parallel carries\nP and G terms]
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -144,6 +234,19 @@ _(Approx. 90 minutes) ⏳_
 -   Alternative methods like shift and add are common 🔄
 -   In shift and add, the multiplicand is added to zero if the multiplier bit is 0, otherwise the multiplicand is added. The result is augmented in a register bank and shifted right after each addition ⬇️
 -   Booth's Radix-4 algorithm is discussed for multiplying signed binary numbers 🔢. It aims to reduce the number of partial products
+
+.mermaid[
+<pre>
+graph LR
+    A[Multiplicand] --> M[Shift and Add]
+    B[Multiplier bits] --> M
+    M --> P[Product]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -155,6 +258,17 @@ _(Approx. 90 minutes) ⏳_
 -   Reducing logic elements (hardware complexity) 🏗️
 -   Reducing the number of levels in the tree of partial products (for high speed) ⚡
 -   Wallace tree is a well-known technique for fast partial product accumulation 🌲
+
+.mermaid[
+<pre>
+graph TD
+    A[Partial Products] --> W[Wallace Tree\nparallel reduction]
+    W --> R[Result\nfewer levels = faster]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style W fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -179,6 +293,19 @@ _(Approx. 90 minutes) ⏳_
   -   **Unsigned Mantissa (M)** ✏️📏
 -   Architectures for floating point arithmetic operations are presented 🏗️💻
 
+.mermaid[
+<pre>
+graph LR
+    FP[Floating Point] --> S[Sign\nBit S]
+    FP --> E[Biased\nExponent E]
+    FP --> M[Unsigned\nMantissa M]
+    style FP fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style M fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Memory Design - Introduction 💾
@@ -198,6 +325,21 @@ _(Approx. 90 minutes) ⏳_
 -   Timing diagram shows data loading when enable is high ⬆️⏱️
 -   Holds value when enable is low ⬇️⏸️
 -   Reset signal can clear the output 🧹🔄
+
+.mermaid[
+<pre>
+graph LR
+    D[Data] --> R[Register]
+    CE[Enable ce] --> R
+    CLK[Clock] --> R
+    R --> Q[Output Q]
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CE fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CLK fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Q fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -219,6 +361,19 @@ _(Approx. 90 minutes) ⏳_
 -   Enables **concurrent data acquisition and processing** ⚡🧠
 -   DPRAMs are mostly used to implement algorithms 🛠️💡
 
+.mermaid[
+<pre>
+graph TD
+    RAM[RAM] --> SP[Single Port RAM\none port]
+    RAM --> DP[Dual Port RAM\ntwo independent ports]
+    DP --> C[Concurrent\nacquisition + processing]
+    style RAM fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style DP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Finite State Machines (FSMs) - Basics 🚦🤖
@@ -232,6 +387,17 @@ _(Approx. 90 minutes) ⏳_
   -   **Mealy Machine**: Output depends on state+input ⚡🤸
   -   **Moore Machine**: Output depends only on state⏱️
 
+.mermaid[
+<pre>
+graph TD
+    FSM[FSM] --> M["Mealy\noutput = f(state, input)"]
+    FSM --> O["Moore\noutput = f(state)"]
+    style FSM fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style O fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### FSMs - Design Process 🎨
@@ -240,6 +406,18 @@ _(Approx. 90 minutes) ⏳_
 -   Represented by a state diagram
 -   Translated into a state table showing present state, next state, and output based on inputs 📋
 -   Requires sequential elements (like D flip-flops) to hold the state
+
+.mermaid[
+<pre>
+graph LR
+    S0((S0)) -->|input| S1((S1))
+    S1 -->|input| S2((S2))
+    S2 -->|input| S0
+    style S0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style S2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -285,6 +463,27 @@ _(Approx. 90 minutes) ⏳_
   -   Most modern FPGAs are SRAM Based, using static memory cells for programming logic and connectivity
   -   Advanced FPGAs may also contain SRAM blocks (BRAMs), DSP Blocks, PLLs, Clock Managers, GPIOs, SERDES, Hard Processor Cores, Peripherals
 
+.mermaid[
+<pre>
+graph TD
+    FPGA[FPGA] --> CLB[Configurable\nLogic Blocks]
+    FPGA --> IOB[Input/Output\nBlocks]
+    FPGA --> INT[Programmable\nInterconnect]
+    INT --> L[Long Lines]
+    INT --> H[Hex Lines]
+    INT --> DD[Double Lines]
+    INT --> DR[Direct Lines]
+    style FPGA fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CLB fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style IOB fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style INT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style L fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style H fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style DD fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style DR fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### FPGA Implementation - Flow 🌊
@@ -293,6 +492,19 @@ _(Approx. 90 minutes) ⏳_
 -   Design Entry: Writing the design description (e.g., Verilog HDL) ⌨️. HDL-based entry is common and faster for complex designs
 -   Synthesis: Translates HDL code into a netlist using actual hardware elements (gates, flip-flops) ⚙️. Checks syntax/hierarchy, performs logic optimization. Generates an NGC file. Provides an estimate of hardware utilization
 -   Implementation: Consists of Translate, Map, and Place & Route 🗺️
+
+.mermaid[
+<pre>
+graph LR
+    A[Design Entry\nVerilog HDL] --> B[Synthesis\nnetlist + NGC]
+    B --> C[Implementation\nTranslate, Map, PAR]
+    C --> D[BitGen\n.bit file]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -319,6 +531,19 @@ ASIC implementation involves several stages:
 Simulation: Functional verification using simulation tools (e.g., Incisive Simulator) 🧪. Requires passing Linting checks
 Synthesis: Translates validated HDL into a netlist using standard cells from a library ⚙️. Requires timing constraints (SDC) and library files (LIB). DFT (Design For Testability) analysis and scan cell insertion can occur 🔍
 
+.mermaid[
+<pre>
+graph LR
+    A[Simulation\nfunctional verification] --> B[Synthesis\nstandard cells + DFT]
+    B --> C[Place and Route\nPnR]
+    C --> D[Checks\nLEC, Timing, LVS, DRC]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### ASIC Implementation - Place & Route (PnR) 🗺️
@@ -337,6 +562,21 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 -   Placement: Placing standard cells and macro cells within the floor plan 🧩. Aims to minimize wire length and meet timing
 -   Clock Tree Synthesis (CTS): Balances clock arrival times to sequential elements to minimize skew and jitter ⏰
 -   Routing: Making physical connections between cells based on logical netlist 🔗. Includes Power Routing (Vdd, Gnd). Signal Integrity (SI) driven routing reduces noise; timing driven routing focuses on critical paths
+
+.mermaid[
+<pre>
+graph LR
+    A[Design\nInitialization] --> B[Floor\nPlan]
+    B --> C[Placement]
+    C --> D[Clock Tree\nSynthesis]
+    D --> E[Routing]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
 
 ---
 
@@ -436,6 +676,21 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
   -   **Pstatic**: Power consumed when the circuit is idle, mainly due to leakage. 🛑
 -   **Switching power** is often the major issue in digital circuits. 🔌
 
+.mermaid[
+<pre>
+graph TD
+    P[Power\nConsumption] --> S[Pswitching\ndynamic]
+    P --> SC[Pshort-circuit]
+    P --> L[Pleakage]
+    P --> ST[Pstatic\nidle]
+    style P fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style SC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style L fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style ST fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Low-Power Design - Reducing Switching Power 🔋
@@ -476,6 +731,19 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 -   **Latch-based clock gating** is shown as an example; avoids glitches better than simple gate gating. ⚡
 -   Even clock gating circuits consume power; schemes exist to reduce this. 🔋
 
+.mermaid[
+<pre>
+graph LR
+    CLK[Clock] --> G[Clock Gating\nlogic]
+    EN[Enable] --> G
+    G --> FF[Flip-Flop]
+    style CLK fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style EN fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style FF fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Advanced Topics - System-on-Chip (SoC) 🖥️
@@ -488,6 +756,17 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 -   Offers advantages in real-time operations compared to ASIC-based embedded systems. ⏱️
 -   FPGA-based SoCs have the extra advantage of **reconfigurability**. 🔄
 
+.mermaid[
+<pre>
+graph TD
+    SOC[System-on-Chip] --> CPU[Processor\ninterfacing, serial]
+    SOC --> FPGA[FPGA\nparallel processing]
+    style SOC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CPU fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style FPGA fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+]
+
 ---
 
 ### Advanced Topics - Partial Reconfiguration (PR) 🔄
@@ -497,6 +776,21 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 -   Enables changing functionality on-the-fly. 🔄
 -   Complex process, supported by advanced EDA tools (Xilinx Vivado, Intel Quartus). Open-source alternatives also exist. 🛠️
 -   DPR flow involves partitioning the design into static and reconfigurable regions, floorplanning, implementing static logic, implementing reconfigurable modules (PRMs), and merging bitstreams. 🔧
+
+.mermaid[
+<pre>
+graph TD
+    FPGA[FPGA] --> S[Static Region\nalways active]
+    FPGA --> R[Reconfigurable Region\nPRMs]
+    R --> PRM1[PRM 1]
+    R --> PRM2[PRM 2]
+    style FPGA fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PRM1 fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style PRM2 fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+</pre>
+]
 
 ---
 

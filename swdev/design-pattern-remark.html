@@ -1,0 +1,1005 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Design Patterns in Modern C++</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 Design Patterns in Modern C++
+
+### As Practiced Across 28 Header-Only Libraries
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Strategy & Policy** 🧩
+- The Oracle Pattern (Ellipsoid Method)
+- Strategy via Template Parameters
+- Static vs Dynamic Dispatch
+
+**2️⃣ CRTP & Template Method** 🏗️
+- Curiously Recurring Template
+- Algorithm Skeletons
+
+**3️⃣ Structural Patterns** 🧱
+- Builder · Composite · Adapter
+- Type Erasure with Variant
+
+]
+
+.pull-right[
+
+**4️⃣ Behavioral Patterns** ⚡
+- Memento · Command · Factory
+- Iterator & Visitor
+
+**5️⃣ Absent Patterns** 🚫
+- Pimpl · Null Object · Chain of Responsibility
+- Design Trade-offs
+
+**6️⃣ Summary** 🎯
+- Key Takeaways
+- Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏛️ Part 1: The Portfolio
+
+---
+
+### 🗂️ 28 Libraries, One Template
+
+.mermaid[
+<pre>
+graph TD
+    PY["🐍 py2cpp"] --> MW["⚙️ mywheel"]
+    MW --> XN["🕸️ xnetwork"]
+    XN --> NL["📦 netlistx"]
+    NL --> CK["🔀 ckpttn"]
+    XN --> NO["🌐 netoptim"]
+    LD["🎲 lds / lds-gen"] --> SP["🔮 sphere-n"]
+    LD --> GI["🌱 ginger"]
+    LD --> PD["📐 physdes"]
+    FR["➗ fractions"] --> RT["📏 rat-trig"]
+    FR --> PG["📐 projgeom"]
+    EL["🧮 ellalgo"] --> CS["🔍 corr-solver"]
+    EL --> LM["📉 lmi-solver"]
+    CSD["🔢 csd"] --> ML["🎛️ multiplierless"]
+    style EL fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CK fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PD fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style XN fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style LD fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style FR fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**One ModernCppStarter template** — CMake + CPM + doctest + Doxygen. But wildly different *internal* architectures 🧠
+
+---
+
+### 🧭 Design Pattern Landscape
+
+.mermaid[
+<pre>
+graph TD
+    S["Design Patterns"] --> ST["Strategy\n+ Policy"]
+    S --> CR["CRTP /\nTemplate Method"]
+    S --> BD["Builder"]
+    S --> CP["Composite"]
+    S --> AD["Adapter"]
+    S --> ME["Memento"]
+    S --> CM["Command"]
+    S --> FC["Factory"]
+    S --> IT["Iterator"]
+    S --> VS["Visitor"]
+    style ST fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style CR fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style BD fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style CP fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style AD fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style ME fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Not a textbook exercise** — every pattern here appears in real, shipping code 📦
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Part 2: Strategy & Policy
+
+---
+
+### 🎯 The Oracle Pattern
+
+**The house style** of the optimization libraries:
+
+- A **separation oracle** asserts a point is feasible… or returns a **cut** ✂️
+- The algorithm (ellipsoid method) is **generic over the oracle**
+- Swap oracles without touching the solver 🧩
+
+**Convex feasibility problem:**
+
+$$ \mathop{\text{find}} x \quad \text{s.t.} \quad f(x) \le 0 $$
+
+**Convexity** guarantees a separating hyperplane exists:
+
+$$ f(z) \ge f(x) + g(x)'(z - x) \qquad \forall\, x, z \in \text{dom}\, f $$
+
+---
+
+### ✂️ The Cutting-Plane Math
+
+The affine function $g'(x - x_c) + \beta$ is called a **cut**:
+
+$$ g'(x - x_c) + \beta \le 0 $$
+
+.mermaid[
+<pre>
+graph LR
+    XC["Current center x_c"] --> OR["Oracle\nassess_feas(xc)"]
+    OR -->|"no cut"| F["Feasible ✓"]
+    OR -->|"has cut"| CU["Cut\ng'(x-xc)+β ≤ 0"]
+    CU --> UP["Update ellipsoid"]
+    UP --> CH{"tsq < tol?"}
+    CH -->|"No"| XC
+    CH -->|"Yes"| FL["Fail ✗"]
+    style OR fill:#a9cce3,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style CU fill:#fadbd8,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style UP fill:#d4e6f1,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F fill:#d5f5e3,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style FL fill:#fadbd8,stroke:#c62828,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**The oracle decides *where* to cut. The ellipsoid decides *how far* to shrink.** 🎯
+
+---
+
+### 💻 The Generic Algorithm (ellalgo-cpp)
+
+```cpp
+template <typename O, typename S>
+    requires OracleFeas<O, typename S::ArrayType> && SearchSpace<S>
+inline auto cutting_plane_feas(O& omega, S& space,
+                               const Options& options = Options())
+    -> std::tuple<CuttingPlaneArrayType<S>, size_t> {
+    for (auto niter = 0U; niter != options.max_iters; ++niter) {
+        const auto cut = omega.assess_feas(space.xc());  // 🎯 ask oracle
+        if (!cut) return {space.xc(), niter};            // ✅ feasible
+        const auto status = space.update_bias_cut(*cut); // 🔧 update
+        if (status != CutStatus::Success
+            || space.tsq() < options.tolerance)
+            return {invalid_value<CuttingPlaneArrayType<S>>(), niter};
+    }
+    return {invalid_value<CuttingPlaneArrayType<S>>(), options.max_iters};
+}
+```
+
+**One algorithm, many strategies.** The oracle is a *first-class concept* — constrained at compile time 🔒
+
+---
+
+### 🐘 The Oracle Zoo
+
+Different domains, **same interface** — one generic driver serves them all:
+
+.mermaid[
+<pre>
+graph TD
+    LM["LmiOracle"] --> CP["cutting_plane_feas"]
+    PR["ProfitOracle"] --> CP
+    LP["LowpassOracle"] --> CP
+    NW["NetworkOracle\n(netoptim)"] --> CP
+    QM["QmiOracle\n(corr-solver)"] --> CP
+    EL["🧮 ellalgo\n(feas / optim / bsearch)"] --> CP
+    style CP fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style LM fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PR fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style NW fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style LP fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style QM fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style EL fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**LMI feasibility · convex optimization · network flow · filter design** — one loop, pluggable oracles 🧩
+
+---
+
+### 🧩 Strategy via Template Parameters (ckpttn)
+
+The partition manager is **parameterized by its strategy families**:
+
+```cpp
+template <typename Gnl, typename GainMgr, typename ConstrMgr>
+class FMPartMgr : public PartMgrBase<Gnl, GainMgr, ConstrMgr> { ... };
+
+// Swap strategies per algorithm — the same skeleton:
+run_PartMgr<FMBiGainMgr<SimpleNetlist>, FMBiConstrMgr<SimpleNetlist>>(net);
+run_PartMgr<FMKWayGainMgr<SimpleNetlist>, FMKWayConstrMgr<SimpleNetlist>>(net);
+```
+
+- `GainMgr` = move-selection strategy 🎯
+- `ConstrMgr` = feasibility / balance strategy ⚖️
+
+**Policy-based design:** the algorithm skeleton stays in the base; strategies are injected as template parameters 🧬
+
+---
+
+### 📏 Strategy with Virtual Dispatch (physdes)
+
+```cpp
+class DelayCalculator {                     // 🎯 Strategy interface
+  public:
+    virtual double calculate_wire_delay(int length,
+                                        double load_capacitance) const = 0;
+    virtual double calculate_wire_capacitance(int length) const = 0;
+    virtual TappingResult calculate_tapping_point(...) const = 0;
+};
+
+class LinearDelayCalculator : public DelayCalculator { ... };  // 1️⃣
+class ElmoreDelayCalculator : public DelayCalculator { ... };  // 2️⃣
+```
+
+Linear: $\text{Delay} = d_{\text{unit}} \cdot \text{length}$
+
+Elmore: $\text{Delay} = R_{\text{wire}} \left( \dfrac{C_{\text{wire}}}{2} + C_{\text{load}} \right)$
+
+`DMEAlgorithm` receives the strategy via `std::unique_ptr<DelayCalculator>` 🔌 — swappable at runtime
+
+---
+
+### ⚖️ Static vs Dynamic Strategy
+
+.pull-left[
+
+**Compile-time (policy / template)**
+
+```cpp
+template <class DelayCalc>
+struct DMEHlpr {
+    DelayCalc _c;
+    void embed() {
+        // ...
+        _c.calc();
+    }
+};
+struct LinearCalc { double calc(); };
+struct ElmoreCalc { double calc(); };
+```
+
+✅ Zero overhead · ✅ Inlinable
+❌ Fixed at compile time
+
+]
+
+.pull-right[
+
+**Runtime (virtual interface)**
+
+```cpp
+class DelayCalc {
+  public:
+    virtual double calc() = 0;
+};
+struct LinearCalc : DelayCalc {
+    double calc() override;
+};
+struct ElmoreCalc : DelayCalc {
+    double calc() override;
+};
+```
+
+✅ Swappable at runtime
+❌ vtable indirection
+
+]
+
+**Rule of thumb:** `template` when the strategy is known at compile time; `virtual` when it must vary at runtime ⚖️
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 3: CRTP & Template Method
+
+---
+
+### 🔁 CRTP: FMGainMgr (ckpttn)
+
+```cpp
+template <typename Gnl, typename GainCalc, class Derived>
+class FMGainMgr {
+    Derived& self = *static_cast<Derived*>(this);  // 🔁 downcast!
+    // ...shared FM gain/bucket logic in the base...
+};
+
+// The derived class passes ITSELF as a template argument:
+class FMBiGainMgr
+    : public FMGainMgr<Gnl, FMBiGainCalc<Gnl>, FMBiGainMgr> { ... };
+```
+
+**Why?** Static dispatch — no vtable, fully inlinable, `constexpr`-friendly — **while the base still provides shared logic** 🏗️
+
+---
+
+### 🔁 CRTP with Duality (projgeom)
+
+```cpp
+template <Ring _K, typename Self, typename DualType>
+struct pg_object {
+    using Dual = DualType;
+    std::array<_K, 3> coord;
+
+    // operator* (meet/join) returns the DUAL object type
+    friend constexpr auto operator*(const Self& lhs, const Self& rhs)
+        -> DualType {
+        return DualType{::cross(lhs.coord, rhs.coord)};
+    }
+};
+
+struct pg_point : pg_object<Z, pg_point, pg_line> { ... };
+struct pg_line  : pg_object<Z, pg_line,  pg_point> { ... };
+```
+
+**Duality via CRTP:** the base knows the derived type *and its dual*, so operators can return the right type:
+
+$$ a \times b = (a_y b_z - a_z b_y,\; a_z b_x - a_x b_z,\; a_x b_y - a_y b_x)^T $$
+
+---
+
+### 🦀 CRTP in Rust? — Traits + Associated Types
+
+**No inheritance → no literal CRTP.** But `Self` + associated types replicate *everything* it gives you:
+
+```rust
+trait PgObject: Sized {
+    type Dual: PgObject<Dual = Self>;   // ↔ DualType + Self template params
+    fn coord(&self) -> [i64; 3];
+
+    fn cross(&self, other: &Self) -> Self::Dual {   // returns the DUAL type
+        Self::Dual::from_cross(self.coord(), other.coord())
+    }
+}
+
+struct PgPoint([i64; 3]);
+struct PgLine([i64; 3]);
+
+impl PgObject for PgPoint {
+    type Dual = PgLine;                 // ↔ pg_point : pg_object<Z, pg_point, pg_line>
+    fn coord(&self) -> [i64; 3] { self.0 }
+}
+impl PgObject for PgLine {
+    type Dual = PgPoint;
+    fn coord(&self) -> [i64; 3] { self.0 }
+}
+```
+
+---
+
+| C++ CRTP | Rust |
+|----------|------|
+| `static_cast<Derived*>(this)` | `Self` — always statically known |
+| Base provides shared logic | **Default trait methods** |
+| `constexpr` methods | `const fn` in traits |
+| Selective override | ⚠️ No stable specialization — override is all-or-nothing |
+
+**Same zero-cost static dispatch, no vtable, monomorphized per concrete type** 🦀
+
+---
+
+### 🧬 Template Method: PartMgrBase (ckpttn)
+
+**The algorithm skeleton lives in the base; derived classes fill in the steps:**
+
+```cpp
+// Base defines the FM iteration skeleton...
+int PartMgrBase<Gnl, GainMgr, ConstrMgr>::_optimize_1pass(...) {
+    // 1. init gains        → gain_mgr.init(part)
+    // 2. loop: select move → gain_mgr.select_move(part, to_part)
+    // 3. check constraints → validator(part, move, to_part)
+    // 4. update gains      → gain_mgr.update_move(...)
+    // 5. rollback if bad   → take_snapshot / restore_part
+}
+
+// Derived managers specialize the steps:
+FMPartMgr   // Fiduccia-Mattheyses (bi / k-way)
+MLPartMgr   // multi-level partitioning
+NNPartMgr   // nearest-neighbor
+```
+
+**Template Method** = Strategy's inheritance-based cousin 🧬
+
+---
+
+class: nord-light, middle, center
+
+## 🧱 Part 4: Structural Patterns
+
+---
+
+### 🏗️ Builder: CSRGraph (digraphx-fast)
+
+Separate **construction** from **representation**:
+
+.pull-left[
+.font-sm[
+```cpp
+class Builder {
+  public:
+    explicit Builder(size_t V) : _V(V), _adj(V) {}
+    void add_edge(uint32_t u, uint32_t v, weight_t w = {}) {
+        _adj[u].emplace_back(v, w);      // 📝 accumulate (O(1) append)
+    }
+    auto build() -> CSRGraph {           // 🏗️ compact to CSR
+        CSRGraph g; g.num_nodes = _V;
+        g.offsets.resize(_V + 1);
+        // ...prefix-sum offsets, gather targets & weights...
+        return g;
+    }
+};
+```
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    B["Builder\nadd_edge() × N"] -->|"build()"| C["CSRGraph\noffsets + targets + weights"]
+    B -->|"add_edge"| B
+    style B fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Why?** Incremental O(1) construction on the outside; **compact, cache-friendly, immutable** CSR on the inside 📦
+]
+
+---
+
+### 🌳 Composite: MidTree & HierNetlist (ckpttn)
+
+Recursive **tree-of-children** with parent pointers:
+
+```cpp
+std::vector<std::list<int>> children_;  // each node → its children
+std::vector<int>            parent_;    // each node → one parent
+```
+
+.mermaid[
+<pre>
+graph TD
+    R["Root"] --> A["Child A"]
+    R --> B["Child B"]
+    A --> A1["leaf"]
+    A --> A2["leaf"]
+    B --> B1["leaf"]
+    style R fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style A1 fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style A2 fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style B1 fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+Also: `HierNetlist` — a **tree of netlists** (parent + up/down maps) for multi-level partitioning; physdes `TreeNode` clock-tree arena 🕰️
+
+---
+
+### 🔌 Adapter: BSearchAdaptor (ellalgo)
+
+Adapt a **feasibility oracle** to the **binary-search protocol**:
+
+.font-sm[
+```cpp
+template <typename Oracle, typename Space>
+class BSearchAdaptor {
+    Oracle* _omega;
+    Space*  _space;
+  public:
+    template <typename Num>
+    auto assess_bs(Num& gamma) -> bool {     // 🔁 binary-search interface
+        Space space = this->_space->copy();
+        this->_omega->update(gamma);
+        return cutting_plane_feas(*this->_omega, space, this->_options)
+                   .first.size() != 0;
+    }
+};
+```
+]
+
+.mermaid[
+<pre>
+graph LR
+    BS["bsearch()"] -->|"assess_bs(gamma)"| AD["BSearchAdaptor"]
+    AD -->|"cutting_plane_feas"| CP["cutting_plane_feas()"]
+    AD -->|"update(gamma)"| OR["Oracle"]
+    style AD fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CP fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style OR fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style BS fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Explicitly named `Adaptor`** — makes the intent self-documenting 🔌 (cf. `MapAdapter` in mywheel, `GrAdaptor` in py2cpp)
+
+---
+
+### 🎭 Type Erasure with std::variant (sphere-n)
+
+**Sum-type polymorphism** without inheritance trees:
+
+.font-sm[
+```cpp
+using SphereVariant =
+    std::variant<std::unique_ptr<Sphere3>, std::unique_ptr<SphereN>>;
+
+auto res = std::visit(                  // 👣 visitor dispatches
+    [&](auto& t) { return t->value_at(x, y); }, this->s_gen);
+
+std::visit([seed](auto& t) { t->reseed(seed); }, this->s_gen);
+```
+]
+
+.mermaid[
+<pre>
+graph LR
+    V["std::variant\nSphere3 | SphereN"] -->|"std::visit"| H["Visitor lambda"]
+    V -->|"get_if"| A["get_if&lt;Sphere3&gt;"]
+    V -->|"holds_alternative"| B["holds_alternative&lt;SphereN&gt;"]
+    style V fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style H fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style A fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style B fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Closed set of types → `variant` beats a class hierarchy** — exhaustive, stack-allocated, no vtable 🎭
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 5: Behavioral Patterns
+
+---
+
+### 💾 Memento: Snapshot & Restore (ckpttn)
+
+**FM partitioning** backtracks when a move yields negative gain:
+
+```cpp
+// PartMgrBase
+auto take_snapshot(std::span<const std::uint8_t> part)
+    -> std::vector<std::uint8_t>;                // 💾 capture state
+
+auto restore_part(const std::vector<std::uint8_t>& snapshot,
+                  std::span<std::uint8_t> part); // ↩️ rollback
+```
+
+.mermaid[
+<pre>
+graph LR
+    M["Make move"] --> G{"gain ≥ 0?"}
+    G -->|"Yes"| K["Keep move\n(snapshot)"]
+    G -->|"No"| R["Rollback\n(restore_part)"]
+    K --> M
+    style M fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style R fill:#fadbd8,stroke:#c62828,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Also:** `netlistx::Snapshot<Node>` struct — a memento for netlist state 💾
+
+---
+
+### 📨 Command: thread_pool (xnetwork)
+
+**Tasks as command objects** — decouple producer from executor:
+
+.font-sm[
+```cpp
+class thread_pool {
+    std::queue<std::function<void()>> tasks_;   // 📨 command queue
+    // ...
+  public:
+    template <typename Fn>
+    auto enqueue(Fn&& fn) -> std::future<...> {  // 📦 wrap as command
+        auto task = std::make_shared<...>(std::forward<Fn>(fn));
+        {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            tasks_.emplace([task] { (*task)(); });
+        }
+        condition_.notify_one();
+        return task->get_future();
+    }
+};
+```
+]
+
+.mermaid[
+<pre>
+graph LR
+    P["Producer\nenqueue(fn)"] --> Q["📨 Task Queue\nstd::function&lt;void()&gt;"]
+    Q --> W1["Workers"]
+    style Q fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style W1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+The **same `thread_pool.hpp`** ships in xnetwork, netlistx & ginger 📦 — command pattern by copy-paste 😄
+
+---
+
+### 🏭 Factory Method: create_vdc (lds-cpp)
+
+**Choose the implementation at runtime**, behind one interface:
+
+```cpp
+class HaltonN {
+  public:
+    // 🔧 static factory: small bases → compile-time, large → dynamic
+    static auto create_vdc(unsigned long base)
+        -> std::unique_ptr<VdCorputBase> {
+        switch (base) {
+            case 2:  return std::make_unique<VdCorputWrap<2>>();
+            case 3:  return std::make_unique<VdCorputWrap<3>>();
+            // ...
+            default: return std::make_unique<VdCorputDynamic>(base);
+        }
+    }
+};
+```
+
+Interface: `VdCorputBase { pop(); peek(); skip(n); reseed(s); get_index(); }`
+
+**Bonus:** `fractions-simple` `Fraction<T>::from()` / `from_raw()` — a factory with inf/NaN semantics 🏭
+
+---
+
+### 🔍 Iterator: Decouple Traversal from Containers
+
+**`GeneratorIterator<Generator, Value>` (lds)** — wraps sequence generators as STL iterators:
+
+.font-sm[
+```cpp
+template <typename Generator, typename Value>
+class GeneratorIterator {
+    Generator* gen;               // 🔗 the "container" (stateful generator)
+    unsigned long index;
+  public:
+    using iterator_category = std::input_iterator_tag;
+    using value_type = Value;
+    using difference_type = std::ptrdiff_t;
+
+    auto operator*() const -> Value {   // 🔍 dereference = generate on demand
+        auto temp_idx = gen->get_index();
+        gen->reseed(index);
+        auto value = gen->pop();
+        gen->reseed(temp_idx);
+        return value;
+    }
+    // ...operator++, operator==, operator!=...
+};
+
+// ✨ STL algorithms & range-for "just work":
+VdCorput gen(2);
+std::vector<double> points(gen.begin(), gen.begin() + 100);
+```
+]
+
+**Why it matters in EDA:** uniform traversal over pins · nets · grid cells · timing paths — one iterator interface, many sources 🎯
+
+---
+
+### 🔍 Iterator & Visitor: The Ecosystem
+
+.pull-left[
+
+**Iterators everywhere:**
+
+- `py2cpp`: `RangeIterator`, `Generator<T>::iterator`, `key_iterator`, `EnumerateIterator`
+- `mywheel`: `DllIterator`, `BpqIterator`, `RobinIterator`
+- `lds`: `GeneratorIterator<Gen, Value>`
+- `physdes`: `RPolygonVertexIterator`
+- transranger: `iterator_base<Iterator, Ranger>` — CRTP again! 🔁
+
+**C++20 coroutines** power `ecgen`'s combinatoric generators ⚡
+
+]
+
+.pull-right[
+
+**Visitors / callbacks:**
+
+- `MidVisitFunc = std::function<void(const vector<int>&, int)>` — hamcycle 👣
+- `std::visit` on `SphereVariant` / `CylindVariant` 🎭
+- `NegCycleFinder` yields cycles via callback
+- Oracle `operator()` — **callable strategy** 🧩
+
+```cpp
+// oracle as a callable object
+struct LmiOracle {
+    auto operator()(const Arr036& x) {
+        return this->assess_feas(x);
+    }
+};
+```
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🚫 Part 6: Absent Patterns
+
+---
+
+### ❌ Patterns NOT Used (and why)
+
+| Pattern | Status | Why not? |
+|---------|--------|----------|
+| **Pimpl** | 🚫 absent | Header-only libraries — no ABI-hiding needed |
+| **Null Object** | 🚫 absent | `std::optional` / sentinels preferred |
+| **Chain of Responsibility** | 🚫 absent | Replaced by template pipelines |
+| **Prototype** | ⚠️ implicit | Only `Space::copy()` in BSearchAdaptor |
+| **Observer** | 🚫 absent | Logging via one `log_with_spdlog()` facade |
+| **Singleton** | ⚠️ rare | One `Globals` in sphere-n; one thread_pool |
+
+**Honesty slide:** knowing what a portfolio *doesn't* use tells you as much as what it does 🤓
+
+---
+
+### ⚖️ Design Decisions & Trade-offs
+
+.pull-left[
+
+**constexpr vs Thread-Safety** 🎲
+
+| | lds-cpp | lds-gen-cpp |
+|---|---|---|
+| pop() | `constexpr` | runtime |
+| count | plain | `std::atomic` |
+| thread-safe | ❌ | ✅ |
+
+A **deliberate fork**, documented in AGENTS.md 📄
+
+]
+
+.pull-right[
+
+**Header-only vs Pimpl** 📦
+
+- ✅ Zero build-order pain (CPM-friendly)
+- ✅ Full inlining → speed
+- ❌ No ABI boundary, longer compiles
+
+**Why no Pimpl?** These libraries are *shipped as source* — the pattern's main benefit (ABI stability) is irrelevant here 🚫
+
+**Rule:** choose the **cheapest abstraction** that still expresses the intent 🎯
+
+**virtual vs template** 🎭
+- virtual → runtime swaps (`DelayCalculator`)
+- template → zero-cost, compile-time (oracles)
+- CRTP → static dispatch + shared base logic
+
+]
+
+
+---
+
+### 🔑 Key Takeaways
+
+**1️⃣ Strategy/Policy is the house style** — oracles, `PartMgrBase<Gnl, GainMgr, ConstrMgr>`, `DelayCalculator` 🧩
+
+**2️⃣ Templates over virtuals** — C++20 concepts (`OracleFeas`, `SearchSpace`) make strategies first-class 🏗️
+
+**3️⃣ CRTP = free static polymorphism** — shared logic, no vtable: `FMGainMgr`, `pg_object` 🔁
+
+**4️⃣ Structural patterns shine in data libraries** — CSR Builder, MidTree Composite, BSearchAdaptor 🔌
+
+**5️⃣ Memento enables backtracking algorithms** — FM partitioning rollback 💾
+
+**6️⃣ Know what you don't use** — no Pimpl / Null Object: *header-only + `std::optional`* is the philosophy 🚫
+
+---
+
+### 📊 The Pattern Spectrum
+
+Where do the portfolio's patterns sit between **compile-time** and **runtime**?
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Compile-time"
+        CR["CRTP\nFMGainMgr"]
+        PL["Policy\nPartMgrBase"]
+        OR["Concept Oracle\ncutting_plane_feas"]
+    end
+    subgraph "Runtime"
+        ST["Virtual Strategy\nDelayCalculator"]
+        AD["Adapter\nBSearchAdaptor"]
+        V["Variant + visit\nsphere-n"]
+    end
+    style CR fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PL fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style OR fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style ST fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style AD fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style V fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Choose the cheapest abstraction that still expresses the intent.** 🎯
+
+---
+
+### 🧩 EDA Use Cases for Design Patterns (1/2)
+
+**Every pattern in this deck appears in real EDA tool development:**
+
+.pull-left[
+
+**Algorithm Families (Strategy / Template Method / CRTP):**
+- 🎯 **Delay models** — linear vs Elmore vs CCS/ECSM (STA)
+- 🔀 **Partitioning** — FM bi/k-way vs multi-level (`PartMgrBase`)
+- 🧮 **Separation oracles** — LMI, network flow, filter design
+- 🌲 **Clock-tree synthesis** — DME with swappable tapping-point models
+
+]
+
+.pull-right[
+
+**Traversal (Iterator / Visitor):**
+- 🔍 Uniform iteration over pins · nets · cells · timing paths
+- 👣 One object model, many analyses — DRC, timing, power as *visitors*
+
+**Design Structure (Composite / Builder / Adapter):**
+- 🏛️ **Hierarchical netlists** — top → blocks → sub-blocks (`HierNetlist`)
+- 🏗️ **Netlist construction** — incremental build → compact CSR (`CSRGraph::Builder`)
+- 🔌 **Format interoperability** — LEF/DEF/GDSII/Verilog adapters
+
+]
+
+---
+
+### 🧩 EDA Use Cases for Design Patterns (2/2)
+
+.pull-left[
+
+**Flyweight — Technology Cell Library** 🏭
+
+Millions of **cell instances** share a few thousand **cell masters**:
+
+- 🧬 **Intrinsic (shared) state** — geometry, timing arcs, power, pin layout (the *master*)
+- 📍 **Extrinsic (per-instance) state** — location, orientation, net connections
+- 💾 **Memory win** — masters stored once, instances reference them
+- 🔁 AKA the **Master/Instance** pattern — the backbone of every place & route tool
+
+.mermaid[
+<pre>
+graph LR
+    M1["🧬 INV master"] --> I1["📍 inst INV_0"]
+    M1 --> I2["📍 inst INV_1"]
+    M1 --> I3["📍 inst INV_2"]
+    M2["🧬 NAND2 master"] --> I4["📍 inst NAND_0"]
+    M2 --> I5["📍 inst NAND_1"]
+    style M1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style M2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style I1 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style I2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style I3 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style I4 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style I5 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+]
+
+.pull-right[
+
+**More Flyweight in EDA:**
+- 🧱 **Layer definitions** — shared tech/layer stacks across the layout
+- 🎫 **Via & rule decks** — one DRC rule set, millions of shapes checked
+- 📐 **Timing arcs** — same master's arcs shared by all its instances
+
+**Tool Infrastructure (Command / Memento / Factory):**
+- 📨 **Parallel engines** — thread-pooled DRC, concurrent STA
+- 💾 **ECO & checkpointing** — snapshot / rollback design state
+- 🏭 **PDK factories** — process-node-specific rule/geometry objects
+
+**The takeaway:** this portfolio is a *living catalog* of EDA design patterns — the same patterns power industrial tools like OpenROAD, OpenSTA & yosys 🔧
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Design Patterns in Modern C++
+
+@luk036 👨‍💻 · 2026 📅
+
+**Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme**
+
+**Links:**
+- Slides: `luk036.github.io/swdev/design-pattern-remark.html`
+- Code: `github.com/luk036/{ellalgo,ckpttn,projgeom,digraphx,...}-cpp`
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,675 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Refactoring with Design Patterns — A Polyglot Case Study (C++ / Rust / Python)
+    </title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧱 Refactoring with Design Patterns
+
+### A Polyglot Case Study across C++ · Rust · Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Factory Method** 🏭
+- The duplicated node-creation smell
+- One `_create_node` to rule them all
+- C++ / Rust / Python before & after
+
+**2️⃣ Builder Pattern** 🧰
+- Telescoping constructors
+- Fluent `builder().margin(..).build()`
+- Adding tests & doctests
+
+]
+
+.pull-right[
+
+**3️⃣ Template Method** 🏗️
+- Three near-identical decomposers
+- Policy hooks + shared skeleton
+
+**4️⃣ Cross-Language Parity** 🌐
+- Same pattern, three idioms
+- Verification & results
+
+**5️⃣ Lessons Learned** 🎯
+- What to refactor, what to leave
+- Q&A
+
+]
+
+---
+
+### 🎯 Why Refactor with Design Patterns?
+
+.pull-left[
+
+**Patterns give code a shape** 🧩
+
+- 🏷️ **Shared vocabulary** — "this is a Factory Method" communicates intent in one word
+- 🔍 **Spot duplication** — knowing the pattern reveals the *smell* that needs fixing
+- 🧠 **AI-friendly** — "refactor as a Builder" beats "clean this up" every time
+- 📖 **Self-documenting** — `_create_node` tells you how nodes come into existence
+
+]
+
+.pull-right[
+
+**But patterns are not magic** ⚠️
+
+- 🚫 **Don't force them** — a Visitor for a 30-line tree is over-engineering
+- 🎯 **Match the idiom** — Rust's `..Default::default()` already *is* a builder
+- ⚖️ **YAGNI** — refactor real duplication, not hypothetical futures
+- ✅ **Verify behavior** — 700+ assertions must still pass after the rewrite
+
+]
+
+---
+
+### 🌐 The physdes Polyglot Family
+
+Three siblings implementing the same VLSI physical-design algorithms:
+
+.mermaid[
+<pre>
+graph LR
+    CPP["🧱 physdes-cpp\nC++20 header-only"] --> ALGO["⚙️ Shared Algorithms\nDME · Global Router\nRPolygon Cut"]
+    RS["🦀 physdes-rs\nRust crate"] --> ALGO
+    PY["🐍 physdes-py\nPython package"] --> ALGO
+    ALGO --> TEST["✅ Cross-Language\nVerification"]
+    style CPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style RS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style ALGO fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style TEST fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**The mission:** refactor *all three* with the same three patterns, idiomatically.
+
+---
+
+### 🔍 The Three Smells We Found
+
+| Smell | Where | Pattern to Apply |
+|-------|-------|------------------|
+| 🏭 **5× duplicated node creation** | `global_router` (C++/Rust/Py) | **Factory Method** |
+| 🧰 **8-arg telescoping constructor** | `ClockTreeVisualizer` (all three) | **Builder** |
+| 🏗️ **3× near-identical recursive skeletons** | `rpolygon_cut` (C++/Py) | **Template Method** |
+
+Each smell is *recognizable precisely because* we know the target pattern.
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Part 1 — Factory Method
+
+---
+
+### 🏭 The Smell: Node Creation Scattered Everywhere
+
+In `GlobalRoutingTree`, **5 different methods** hand-rolled the same dance:
+
+```cpp
+// insert_steiner_node
+std::string steiner_id = "steiner_" + std::to_string(this->next_steiner_id++);
+this->_arena.emplace_back(steiner_id, NodeType::Steiner, point);
+RoutingNode* node = &this->_arena.back();
+this->nodes[steiner_id] = node;
+
+// insert_terminal_node   → same, with "terminal_" prefix
+// insert_node_on_branch  → if/else on enum to pick prefix
+// _insert_terminal_impl  → both terminal AND steiner
+// constructor            → hard-coded "source"
+```
+
+- 🔁 ID generation + counter + arena + map registration, repeated 5×
+- 🐛 `insert_node_on_branch` had a latent bug: empty ID if given `NodeType::Source`
+
+---
+
+### 🏭 The Fix: One Factory Method
+
+```cpp
+// C++
+RoutingNode<IntPoint>* GlobalRoutingTree<IntPoint>::_create_node(
+    NodeType type, const IntPoint& pt) {
+    std::string id;
+    switch (type) {
+        case NodeType::Steiner: id = "steiner_" + std::to_string(next_steiner_id++); break;
+        case NodeType::Terminal: id = "terminal_" + std::to_string(next_terminal_id++); break;
+        case NodeType::Source:   id = "source"; break;
+    }
+    _arena.emplace_back(id, type, pt);
+    RoutingNode* node = &_arena.back();
+    nodes[id] = node;
+    return node;
+}
+```
+
+All 5 call sites collapse to: `this->_create_node(NodeType::Steiner, point);` 🎯
+
+---
+
+### 🏭 Same Pattern, Three Idioms
+
+.pull-left[
+
+**C++** — private method, pointer return:
+
+```cpp
+auto _create_node(NodeType type, const IntPoint& pt)
+    -> RoutingNode<IntPoint>*;
+```
+
+**Rust** — private method, index return:
+
+```rust
+fn _create_node(&mut self, node_type: NodeType, pt: Point) -> usize {
+    let id = match node_type {
+        NodeType::Steiner => { let s = format!("steiner_{}", self.next_steiner_id);
+                               self.next_steiner_id += 1; s }
+        NodeType::Terminal => { /* ... */ }
+        NodeType::Source   => "source".to_string(),
+    };
+    self.add_node(RoutingNode::new(&id, node_type, pt))
+}
+```
+
+]
+
+.pull-right[
+
+**Python** — method returning the node object:
+
+```python
+def _create_node(self, node_type, pt):
+    if node_type == NodeType.Steiner:
+        node_id = f"steiner_{self.next_steiner_id}"
+        self.next_steiner_id += 1
+    elif node_type == NodeType.Terminal:
+        node_id = f"terminal_{self.next_terminal_id}"
+        self.next_terminal_id += 1
+    else:  # Source
+        node_id = "source"
+    node = RoutingNode(node_id, node_type, pt)
+    self.nodes[node_id] = node
+    return node
+```
+
+**One factory, zero duplication, three languages.** 🌐
+
+]
+
+---
+
+### 🏭 Subtle Behaviors We Had to Preserve
+
+Python taught us the factory isn't a *mechanical* extraction:
+
+- ⚠️ **`insert_terminal_node`** — the node must NOT be registered before
+  `_find_nearest_node` runs, or it becomes its own nearest neighbor (distance 0)
+  → reordered: *resolve parent first, then create*
+- ⚠️ **`insert_node_on_branch`** — a test asserted it raises `ValueError` for
+  `NodeType.Source` → kept the guard in front of the factory
+
+**Lesson:** patterns remove duplication, not contracts. Tests are the safety net. 🧪
+
+---
+
+class: nord-light, middle, center
+
+## 🧰 Part 2 — Builder Pattern
+
+---
+
+### 🧰 The Smell: Telescoping Constructor
+
+```python
+# Python — 8 positional parameters with defaults
+class ClockTreeVisualizer:
+    def __init__(self, margin=50, node_radius=8, wire_width=2,
+                 sink_color="#4CAF50", internal_color="#2196F3",
+                 root_color="#F44336", wire_color="#666666",
+                 text_color="#333333"):
+        ...
+```
+
+- 🤯 Call sites like `ClockTreeVisualizer(60, 10, 3, "#2E7D32", ...)` — what is `60`?
+- ➕ Adding a 9th option touches every call site
+- 📖 Hard to read, hard to extend, hard to review
+
+---
+
+### 🧰 The Fix: Fluent Builder
+
+```python
+# Python
+viz = (ClockTreeVisualizer.builder()
+       .margin(60)
+       .node_radius(10)
+       .wire_width(3)
+       .sink_color("#2E7D32")
+       .build())
+```
+
+```cpp
+// C++ — same intent
+auto viz = ClockTreeVisualizer::Builder()
+               .margin(60)
+               .node_radius(10)
+               .wire_width(3)
+               .build();
+```
+
+```rust
+// Rust — same intent
+let viz = ClockTreeVisualizer::builder()
+    .margin(60)
+    .node_radius(10)
+    .wire_width(3)
+    .build();
+```
+
+Self-documenting: each option is *named* at the call site. ✨
+
+---
+
+### 🧰 Language Idioms for the Builder
+
+.pull-left[
+
+**C++** — private ctor, nested Builder:
+
+```cpp
+class ClockTreeVisualizer {
+  public:
+    class Builder { /* setters + build() */ };
+  private:
+    friend class Builder;
+    ClockTreeVisualizer(int margin, ...);  // private
+};
+```
+
+Forces every customization through the Builder. 🔒
+
+**Python** — builder is a *classmethod*:
+
+```python
+@classmethod
+def builder(cls):
+    return ClockTreeVisualizerBuilder()
+```
+
+]
+
+.pull-right[
+
+**Rust** — the *honest* note 🦀:
+
+Rust already had the idiomatic answer:
+
+```rust
+let viz = ClockTreeVisualizer {
+    margin: 40,
+    node_radius: 6,
+    ..Default::default()   // struct-update syntax
+};
+```
+
+We added a real `ClockTreeVisualizerBuilder` anyway for **parity with the siblings** — but Rust's native ergonomics make it optional.
+
+**Lesson:** sometimes the pattern is *already the language*. 🎯
+
+]
+
+---
+
+### 🧰 Tests Guard the Builder
+
+Every language got builder tests:
+
+```
+✅ Builder Configuration      — custom values reach the output
+✅ Builder Defaults Match     — builder().build() == default ctor
+✅ Builder Is Fluent          — setters return self/builder
+```
+
+Plus a **doctest** in the Python class docstring (runs under pytest):
+
+```
+>>> viz = ClockTreeVisualizerBuilder().margin(10).node_radius(5).build()
+>>> viz.margin
+10
+```
+
+**Patterns without tests are just opinions.** 🧪
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 3 — Template Method
+
+---
+
+### 🏗️ The Smell: Three Near-Identical Decomposers
+
+`rpolygon_cut` splits a rectilinear polygon into convex pieces —
+**three variants** (convex / explicit / implicit) shared ~80% of their code:
+
+```
+base cases ──► find concave point ──► min-dist scan ──► re-wire ──► recurse ──► merge
+     │                │                    │             │            │
+     │           ✓ differs              ✓ differs      ✓ differs    ✓ differs
+     │          (3 variants)           (2 variants)   (2 variants) (2 variants)
+     │
+     └── convex had a 3-node base case; explicit/implicit didn't
+```
+
+Only the *hooks* differed — the **skeleton was identical**. 🕸️
+
+---
+
+### 🏗️ The Fix: Extract the Skeleton, Inject the Hooks
+
+.pull-left[
+
+**Before — 3× ~80-line recursive functions** (C++):
+
+```
+rpolygon_cut_convex_recur    295 duplicated lines
+rpolygon_cut_explicit_recur
+rpolygon_cut_implicit_recur
+```
+
+**After — one skeleton + policy hooks**:
+
+```
+rpolygon_cut_recur_impl        ← Template Method
+  ├── ConvexCutPolicy          ← find_concave_point + triangle base case
+  ├── ExplicitCutPolicy        ← find_concave_point only
+  └── ImplicitCutPolicy        ← different scan + rewiring + target
+```
+
+**Net −82 lines** in the C++ file. 📉
+
+]
+
+.pull-right[
+
+**Python version** — same idea, function-parameter style:
+
+```python
+def rpolygon_cut_recur(v1, lst, is_anticlockwise, rdll,
+                       find_concave_point, has_triangle_base_case):
+    # ... shared skeleton ...
+    vcurr = find_concave_point(v1, ...)   # ← hook
+
+def rpolygon_cut_convex_recur(...):
+    return rpolygon_cut_recur(..., _find_convex_concave_point, True)
+
+def rpolygon_cut_explicit_recur(...):
+    return rpolygon_cut_recur(..., _find_explicit_concave_point, False)
+```
+
+]
+
+---
+
+### 🏗️ The Template Method at a Glance
+
+.mermaid[
+<pre>
+graph TD
+    SKEL["🏗️ rpolygon_cut_recur_impl\nShared Skeleton\nbase cases · fallback · insert · recurse"]
+    SKEL --> H1["🎣 Hook: find_concave_point"]
+    SKEL --> H2["🎣 Hook: find_min_dist_point"]
+    SKEL --> H3["🎣 Hook: insert_cut (rewiring)"]
+    SKEL --> H4["🎣 Hook: first_target (recursion)"]
+    H1 --> C1["🟢 ConvexCutPolicy\ndirection-reversal test"]
+    H1 --> C2["🔵 ExplicitCutPolicy\narea-sign test"]
+    H1 --> C3["🟠 ImplicitCutPolicy\ncorner-point test"]
+    H2 --> C1
+    H2 --> C3
+    H3 --> C1
+    H3 --> C3
+    H4 --> C3
+    style SKEL fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C3 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Rust note:** its `rpolygon_cut` was a *placeholder stub* — all three "variants"
+were byte-identical and returned the whole polygon. We deduplicated only the
+wrapper boilerplate, and left the stubs as future extension points. 🦀
+
+---
+
+### 🏗️ Behavioral Equivalence — the Hard Part
+
+The C++ refactor looked trivial but had **four hidden contracts**:
+
+| Difference | How preserved |
+|------------|---------------|
+| 🔺 Convex's 3-node triangle base case | `has_triangle_base_case = true` flag |
+| 🎯 Implicit recurses on `v_min`, not `vcurr` | `first_target` hook |
+| 📏 Implicit scans from a corner point | `find_min_dist_point` hook |
+| 🔁 Implicit's different list rewiring | `insert_cut` hook |
+
+**Result:** all **701 assertions** still passed with zero behavioral drift. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🌐 Part 4 — Cross-Language Parity
+
+---
+
+### 🌐 Same Pattern, Three Codebases
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Factory["🏭 Factory Method"]
+        F1["C++ _create_node\n5 sites → 1"]
+        F2["Rust _create_node\n5 sites → 1"]
+        F3["Py _create_node\n5 sites → 1"]
+    end
+    subgraph Builder["🧰 Builder"]
+        B1["C++ nested Builder\nprivate ctor"]
+        B2["Rust Builder struct\n+ Default"]
+        B3["Py Builder class\n+ classmethod"]
+    end
+    subgraph Template["🏗️ Template Method"]
+        T1["C++ policy hooks\n−82 lines"]
+        T2["Rust shared wrapper\n(stub algorithms)"]
+        T3["Py finder-hook skeleton\n2 variants → 1"]
+    end
+    style Factory fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Builder fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Template fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+All pushed to GitHub in **9 commits** (3 per repo) on the `dev` branches. 🚀
+
+---
+
+### 🌐 Verification Across All Three
+
+| Project | Test count | Toolchain gates |
+|---------|-----------|-----------------|
+| 🧱 **physdes-cpp** | 132 cases · 701 assertions | `-W4 -WX`, clang-format |
+| 🦀 **physdes-rs** | 299 lib + 11 integ + 66 doc | `cargo fmt/clippy/doc -- -D warnings` |
+| 🐍 **physdes-py** | 600 passed · 1 skipped | black · isort · flake8 |
+
+Every gate **green** before any commit. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 5 — Lessons Learned
+
+---
+
+### 🎯 What Refactoring *Really* Means
+
+.pull-left[
+
+**Do refactor:** ✅
+
+- 🏭 Real duplication (5× node creation)
+- 🧰 Telescoping constructors
+- 🏗️ ~80% identical algorithm skeletons
+- 📚 When siblings share the same patterns
+
+**Don't force it:** 🚫
+
+- 🦀 Rust's struct-update syntax already *is* a builder
+- 🧩 A Visitor framework for a 30-line internal tree
+- 🗿 Splitting a cohesive 500-line value type
+- 🔮 Hypothetical future needs (YAGNI)
+
+]
+
+.pull-right[
+
+**Process that made it safe:** 🛡️
+
+1. 🔍 **Map the smells** — explore agents + code review
+2. 🎯 **Name the target pattern** before touching code
+3. 🧪 **Baseline tests** before any edit
+4. 🔒 **Preserve contracts** — hidden ordering, error guards
+5. ✅ **Re-run every gate** — build, lint, format, doc, test
+6. 🧱 **Atomic commits** — one pattern per commit
+
+]
+
+---
+
+### 🎯 Key Takeaways
+
+- 🧩 **Design patterns are refactoring targets** — recognize the smell, name the pattern, apply it
+- 🌐 **Polyglot refactoring** keeps sibling projects structurally consistent, making cross-language maintenance easier
+- 🦀 **Match the idiom** — the same pattern looks different in C++, Rust, and Python
+- 🧪 **Tests are the safety net** — 1,400+ assertions across three repos never blinked
+- 🤖 **AI amplification** — telling an agent "apply the Builder pattern" yields far better output than "clean this up"
+- 📉 **Less code, same behavior** — hundreds of duplicated lines removed, zero behavioral drift
+
+---
+
+### 🗂️ Session Log (9 commits)
+
+| Repo | Commits |
+|------|---------|
+| 🧱 physdes-cpp | `7942ac7` Factory · `9d8f9be` Builder · `52ac44f` Template Method |
+| 🦀 physdes-rs | `1bbbeb0` Factory · `01179f1` Builder · `c3b9045` shared wrapper |
+| 🐍 physdes-py | `2e03732` Factory · `311848a` Builder · `3666c82` Template Method |
+
+All on `dev`, all gates green, ready for PRs. 📤
+
+---
+
+### 📚 Further Reading
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🏗️ _Effective C++ / Modern C++_ — Scott Meyers
+- 🦀 _Rust Design Patterns_ — rust-unofficial
+
+**This session's repos**
+- 🧱 github.com/luk036/physdes-cpp
+- 🦀 github.com/luk036/physdes-rs
+- 🐍 github.com/luk036/physdes-py
+
+]
+
+.pull-right[
+
+**Refactoring practice**
+- 🛠️ _Refactoring_ — Martin Fowler
+- 📐 _Working Effectively with Legacy Code_ — Michael Feathers
+- 🧪 Property-based testing (RapidCheck / proptest / Hypothesis)
+- 🤖 Pattern-aware AI prompting (Sisyphus workflow)
+
+**Try it:** pick your own 5-site duplication and give it a factory. 😉
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Refactoring with Design Patterns
+
+@luk036 👨‍💻 · Questions welcome 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

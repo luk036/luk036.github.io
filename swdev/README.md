@@ -70,6 +70,7 @@ This section covers software development workflows and tooling: version control 
 | -------------------------------------------------- | ------------------------------- |
 | [Common Mistakes](mistakes-remark.html)            | Lessons learned in coding       |
 | [Remove Duplicate Code](remove-duplicate-remark.html) | DRY principles and refactoring |
+| [Refactoring with Design Patterns](refactor-remark.html) | Factory · Builder · Template Method across C++/Rust/Python |
 
 ---
 
@@ -101,6 +102,7 @@ swdev/
 ├── hyerframes-remark.html                 # Hyperframe Data Structure
 ├── mistakes-remark.html                   # Common Coding Mistakes
 ├── pldl.html                              # Primal-Dual Algorithms
+├── refactor-remark.html                   # Refactoring with Design Patterns
 ├── remove-duplicate-remark.html           # Remove Duplicate Code
 ├── swdev.html                             # Development Tools
 ├── swdev-flow-ai-remark.html              # Software Development Flow in AI Era

@@ -65,8 +65,37 @@ class: nord-dark, middle, center
 - Design Trade-offs
 
 **6️⃣ Summary** 🎯
+- Why Patterns Matter in the Age of AI
 - Key Takeaways
 - Q&A
+
+]
+
+---
+
+### 🤖 Why Design Patterns Matter More in the Age of AI
+
+.pull-left[
+
+**AI writes code — but who steers the architecture?** 🧭
+
+- 🧠 **LLMs can generate**, but they need *target shapes* — patterns give the vocabulary ("Strategy", "Builder", "Visitor")
+- 📐 **Code review at scale** — patterns provide a *shared vocabulary* to spot bugs ("this violates Strategy — the dispatch is wrong")
+- 🔍 **Pattern-aware prompts** — "refactor this as a Strategy" produces far better code than "clean this up"
+- 📄 **Documentation survives** — `@see Strategy/Oracle pattern` is more durable than prose comments
+
+]
+
+.pull-right[
+
+**AI amplifies engineering discipline** 🚀
+
+- 📏 **Patterns = guardrails** — AI-generated code respects structure when scaffolding is explicit
+- 🔄 **Refactoring leverage** — knowing *what* pattern to apply redirects AI from "more code" to "right code"
+- 🧩 **Composition over generation** — compose from known patterns rather than generate from scratch
+- 💡 **Human judgment stays in the loop** — pattern selection is a *design decision* AI can't reliably make alone
+
+**The paradox:** AI makes code *easier to write* but *harder to reason about* — patterns restore the reasoning 🧩
 
 ]
 
@@ -533,12 +562,7 @@ class BSearchAdaptor {
     Space*  _space;
   public:
     template <typename Num>
-    auto assess_bs(Num& gamma) -> bool {     // 🔁 binary-search interface
-        Space space = this->_space->copy();
-        this->_omega->update(gamma);
-        return cutting_plane_feas(*this->_omega, space, this->_options)
-                   .first.size() != 0;
-    }
+    auto assess_bs(Num& gamma) -> bool { ... }    // 🔁 binary-search interface
 };
 ```
 ]
@@ -914,23 +938,7 @@ Millions of **cell instances** share a few thousand **cell masters**:
 - 💾 **Memory win** — masters stored once, instances reference them
 - 🔁 AKA the **Master/Instance** pattern — the backbone of every place & route tool
 
-.mermaid[
-<pre>
-graph LR
-    M1["🧬 INV master"] --> I1["📍 inst INV_0"]
-    M1 --> I2["📍 inst INV_1"]
-    M1 --> I3["📍 inst INV_2"]
-    M2["🧬 NAND2 master"] --> I4["📍 inst NAND_0"]
-    M2 --> I5["📍 inst NAND_1"]
-    style M1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
-    style M2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
-    style I1 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
-    style I2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
-    style I3 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
-    style I4 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
-    style I5 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
-</pre>
-]
+**The takeaway:** this portfolio is a *living catalog* of EDA design patterns — the same patterns power industrial tools like OpenROAD, OpenSTA & yosys 🔧
 
 ]
 
@@ -945,8 +953,6 @@ graph LR
 - 📨 **Parallel engines** — thread-pooled DRC, concurrent STA
 - 💾 **ECO & checkpointing** — snapshot / rollback design state
 - 🏭 **PDK factories** — process-node-specific rule/geometry objects
-
-**The takeaway:** this portfolio is a *living catalog* of EDA design patterns — the same patterns power industrial tools like OpenROAD, OpenSTA & yosys 🔧
 
 ]
 

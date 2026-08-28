@@ -168,6 +168,7 @@ class: nord-light, middle, center
 | Topic | Directory | Description |
 |-------|-----------|-------------|
 | **Convex Optimization** | [`cvx/`](cvx/index.html) | CVXPY, KKT conditions, geometric programming, quasi-convex, LMI, ellipsoid method, cutting-plane, Krylov methods |
+| **Network Optimization** | [`net_optim/`](net_optim/index.html) | Graph algorithms, NCF, MCR, parametric SP, vertex cover (exact→GPU), TSP, DEC, Hadlock |
 | **N-Sphere Sampling** | [`n_sphere/`](n_sphere/index.html) | Low discrepancy sequences (van der Corput, Halton), spherical point generation, CORDIC implementation |
 | **Projective Geometry** | [`projgeom/`](projgeom/index.html) | Cayley-Klein geometries, rational trigonometry, Python implementation |
 | **Cyclic Quorum Systems** | [`cqs/`](cqs/index.html) | Difference covers, necklace generation, distributed systems |
@@ -386,7 +387,6 @@ class: nord-light, middle, center
 |-------|-----------|-------------|
 | **Programming Language** | [`proglang/`](proglang/index.html) | Modern C++17/20, design patterns, CMake/CPM tooling, documentation generation, cross-language (C++/Python/Rust), memory optimization |
 | **Software Development** | [`swdev/`](swdev/index.html) | Git/CI workflows, documentation, code quality, AI validation, video processing |
-| **Network Optimization** | [`net_optim/`](net_optim/index.html) | Graph algorithms, NCF, MCR, parametric SP, vertex cover (exact→GPU), TSP, DEC, Hadlock |
 | **Rust Migration** | [`rust_by_examples/`](rust_by_examples/index.html) | Python → Rust migration guide, ownership, traits |
 | **Fundamentals** | [`fun/`](fun/index.html) | Metric spaces, vector spaces, Boolean algebra |
 | **Workflows** | [`flows/`](flows/index.html) | Development workflows, LaTeX, remote working |

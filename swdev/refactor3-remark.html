@@ -1,0 +1,834 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Refactoring with Design Patterns — Part 3: ellalgo &amp; lmi-solver across C++ / Rust / Python
+    </title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Refactoring with Design Patterns — Part 3
+
+### ellalgo &amp; lmi-solver across C++ 🔁 Rust 🔁 Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — Strategy/Bridge: the search space**
+
+**1️⃣ The 95% Duplication Smell**
+- `Ell` vs `EllStable` — identical public API, two bodies
+
+**2️⃣ `EllBase` Strategy**
+- C++: `EllBase<Arr, Stable>` + `if constexpr`
+- Python: base class + Template Method `_update_core`
+- Rust: `impl_search_space!` macro
+
+**3️⃣ Template Method: LMI oracles** 🎯
+- Three oracles, one assess skeleton
+
+]
+
+.pull-right[
+
+**Part 2 — State, Strategy &amp; Facade** 🔁
+
+**4️⃣ `OptimQState`** — the retry-flag loop
+- C++ / Rust / Python, one state machine
+
+**5️⃣ `RoundRobin`** — the `idx += 1` idiom
+- 8 duplicated counters → one helper
+
+**6️⃣ Facade + Factory** 🏭
+- `LMIProblem`, `make_lmi_oracle` / `make_lmi0_oracle`
+
+**7️⃣ lmi-solver family** 📦
+- `factor_impl` + `PivotPolicy`
+
+**8️⃣ Lessons Learned** 📚
+
+]
+
+---
+
+### 🤔 Why Refactoring Again?
+
+Part 1 refactored *physdes &amp; LDS*; Part 2 covered *netlistx &amp; ckpttn*. This session applies the same recipe to **two new families** — the algorithm libraries — with a harder constraint:
+
+.pull-left[
+
+**New this time** ✨
+
+- 🧬 **One algorithm, three languages** — the exact same refactor must work in C++, Rust, and Python
+- 🔒 **"Don't change the public API"** — the hard constraint
+- 🔁 **Cross-repo consistency** — siblings must end up looking the same
+- 🧪 **Regression-pinned** — iteration counts locked in tests
+
+]
+
+.pull-right[
+
+**Same discipline** ✅
+
+- 🎯 Name the pattern *before* touching code
+- 📏 Baseline tests before any edit
+- 🚦 Every gate green after every commit
+- 🧹 Cleanup dead code first (P1)
+
+]
+
+---
+
+### 🌐 The Two Polyglot Families
+
+Six siblings, two missions:
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    ECPP["🧮 ellalgo-cpp\nC++ header-only"] --> E["👁️ Ellipsoid Method\nsearch space + cutting plane"]
+    EPY["🐍 ellalgo\nPython package"] --> E
+    ERS["🦀 ellalgo-rs\nRust crate"] --> E
+    style ECPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style EPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style ERS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style E fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    LCPP["🧮 lmi-solver-cpp\nC++ LDLT oracles"] --> L["📦 LMI Solver\noracle + factorization"]
+    LRS["🦀 lmi-solver-rs\nRust crate"] --> L
+    LPY["🐍 ellalgo/oracles\nPython LDLTMgr"] --> L
+    style LCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style LRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style LPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style L fill:#fce4ec,stroke:#880e4f,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+
+The refactors happen **sibling-by-sibling** — each keeps every public API byte-for-byte compatible.
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️  Part 1 — Strategy/Bridge: the search space
+
+---
+
+### 🧬 The Smell: 95% Duplicated Ellipsoid
+
+`Ell` (classic Q-update) and `EllStable` (LDL^T) expose **the same public API** — same constructors, same `xc` / `set_xc` / `tsq` / `copy`, same three `update_*` entry points:
+
+```
+Ell         (ell.hpp)        ~270 lines
+EllStable   (ell_stable.hpp) ~270 lines
+    ├── identical constructors        ✔
+    ├── identical xc/set_xc/tsq/copy  ✔
+    ├── identical update_bias_cut
+    │        /update_central_cut
+    │        /update_q wrappers       ✔
+    └── DIFFERENT _update_core        ✖  ← the strategy
+```
+
+- ✖ Only the private core update differs — direct Q vs LDL^T
+- 💣 Fix a bug in one → forget to fix the other
+- 📉 Adding a feature means editing **both** classes
+
+---
+
+### 🏭 The Fix: `EllBase<Arr, Stable>` (C++)
+
+Compile-time **Strategy** tag selects the update path:
+
+```cpp
+// ell_base.hpp — the shared public API, written ONCE
+template <typename Arr, bool Stable>
+class EllBase {
+  public:
+    using Vec = std::valarray<double>;
+    using ArrayType = Arr;
+
+    template <typename T>
+    auto update_bias_cut(const std::pair<Arr, T>& cut) -> CutStatus {
+        return this->_update_core(cut, [this](Vec& grad, const T& beta) {
+            if constexpr (Stable) {          // ← the strategy switch
+                return this->_mgr.update_stable_bias_cut(grad, beta);
+            } else {
+                return this->_mgr.update_bias_cut(grad, beta);
+            }
+        });
+    }
+    // ... update_central_cut, update_q identical pattern
+};
+```
+
+`Ell` / `EllStable` become ~60-line thin subclasses. **Net −200 lines** in the C++ family. ✅
+
+---
+
+### 🐍 Python: base class + Template Method
+
+Python can't do `if constexpr` — so the base class defines the **Template Method** hook:
+
+```python
+# ell_base.py — shared public API, written ONCE
+class EllBase(SearchSpace[ArrayType]):
+    def update_bias_cut(self, cut: Cut) -> CutStatus:
+        return self._update_core(cut, self.helper.calc_single_or_parallel)
+    # update_central_cut, update_q identical pattern
+
+    def _update_core(self, cut, cut_strategy):  # ← the hook
+        raise NotImplementedError
+```
+
+```python
+# ell.py — ONE strategy
+class Ell(EllBase[np.ndarray]):
+    def _update_core(self, cut, cut_strategy):   # direct Q update
+        ...
+```
+
+```python
+# ell_stable.py — the OTHER strategy
+class EllStable(EllBase[np.ndarray]):
+    def _update_core(self, cut, cut_strategy):   # LDL^T update
+        ...
+```
+
+`Ell` / `EllStable` are still imported from their original modules — **public API untouched**. ✅
+
+---
+
+### 🦀 Rust: no inheritance → a macro
+
+Rust has no base classes — so the identical `SearchSpace` impl is generated once by a macro:
+
+.font-sm[
+```rust
+// ell_common.rs — the macro body holds the shared impl ONCE,
+// with a type metavariable standing in for Ell / EllStable
+
+// ell.rs / ell_stable.rs — the invocation (two lines total)
+impl_search_space!(Ell);
+impl_search_space!(EllStable);
+
+// What the macro expands to for each type (written once in the macro):
+impl crate::cutting_plane::SearchSpace for Ell {
+    type ArrayType = crate::arr::Arr;
+    fn xc(&self) -> &Self::ArrayType { &self.xc }
+    fn tsq(&self) -> f64 { self.tsq }
+    fn update_bias_cut<T>(&mut self, cut: &(Self::ArrayType, T))
+        -> crate::cutting_plane::CutStatus
+    where T: crate::cutting_plane::UpdateByCutChoice<Self, ArrayType = Self::ArrayType> {
+        let (grad, beta) = cut;
+        beta.update_bias_cut_by(self, grad)
+    }
+    // ... update_central_cut, update_q, set_xc
+}
+```
+]
+
+- ✅ Same public `SearchSpace` behavior
+- 🧱 Macro paths fully-qualified for hygiene
+- 📉 The only hand-written difference: private `update_core`
+
+---
+
+### ✅ P1 First: Cleanup Dead Code
+
+Before any pattern, remove what's already dead:
+
+- 🔧 Removed redundant `enum class CutStatus;` forward declarations (C++)
+- 🧹 `calc_parallel_cut_fast_old` **kept** — tested public API, not dead
+- 🗑 `CInfo` / `Options::verbose` / `CutStatus::Unknown` kept — public surface
+
+> Rule: **cleanup ≠ delete**. Only remove what is provably unreachable *and* not public.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 2 — Template Method: the LMI oracles
+
+---
+
+### 🎯 The Smell: Three Identical `assess_feas`
+
+`LmiOracle`, `Lmi0Oracle`, `LmiOldOracle` — same pipeline, three copies:
+
+```
+assess_feas(x):
+    getA = ...                          ← varies: F0−Σ, Σ, explicit matrix
+    if factor(getA) → SPD?  return None ← fixed
+    ep = witness()                      ← fixed
+    g[i] = sign * sym_quad(F_i)         ← varies: +1 or −1
+    pack cut → return                   ← fixed
+```
+
+- ✖ ~30 lines duplicated × 3
+- 💣 Sign bug in one oracle = subtle wrong cut in that family only
+- 📈 Adding a 4th oracle = copy-paste again
+
+---
+
+### 🎯 C++: `LmiOracleBase` skeleton
+
+The **Template Method** lives once; oracles supply `getA` + sign:
+
+```cpp
+// lmi_oracle_base.hpp
+template <typename Arr036, typename Mat = Arr036>
+class LmiOracleBase {
+  protected:
+    std::unique_ptr<Cut> cut = std::make_unique<Cut>();
+
+    template <typename LDLT, typename Fn>
+    auto assess_impl(LDLT& mgr, const std::vector<Mat>& F, const int sign,
+                     const Arr036& x, Fn&& getA) -> Cut* {
+        if (mgr.factor(std::forward<Fn>(getA))) return nullptr;
+        const auto ep = mgr.witness();              // call before sym_quad() !!!
+        Arr036 g{x};
+        for (auto i = 0U; i != n; ++i) g[i] = sign * mgr.sym_quad(F[i]);
+        this->cut->first = std::move(g);
+        this->cut->second = std::move(ep);
+        return this->cut.get();
+    }
+};
+```
+
+Each oracle keeps its exact constructor + public members — **`Lmi0Oracle::_mq` stays public**. ✅
+
+---
+
+### 🐍 Python: `LMIBase._assess`
+
+Python mirrors it with a mixin-style base:
+
+```python
+# lmi_oracle_base.py
+class LMIBase:
+    def _assess(self, get_elem, sign) -> Optional[Cut]:
+        if self.ldlt_mgr.factor(get_elem):
+            return None                    # feasible
+        ep = self.ldlt_mgr.witness()
+        g = np.array([sign * self.ldlt_mgr.sym_quad(Fk) for Fk in self.mat_f])
+        return g, ep
+```
+
+```python
+# lmi0_oracle.py — negative sign, no constant term
+class LMI0Oracle(LMIBase):
+    def assess_feas(self, x):
+        def get_elem(i, j):
+            n = len(x)
+            return sum(self.mat_f[k][i, j] * x[k] for k in range(n))
+        return self._assess(get_elem, -1)     # ← only the strategy differs
+```
+
+✅ Constructors, `assess_feas` signatures, and attributes unchanged.
+
+---
+
+### 🦀 Rust: a shared free function
+
+Rust has no inheritance — the skeleton becomes a `pub(crate)` function:
+
+```rust
+// lmi_oracle_base.rs
+pub(crate) fn assess_feas_impl(
+    ldlt_mgr: &mut LDLTMgr,
+    mat_f: &[Arr],
+    xc: &Arr,
+    sign: f64,
+    get_elem: impl Fn(usize, usize) -> f64,
+) -> Option<(Arr, f64)> {
+    if ldlt_mgr.factor(get_elem) { return None; }
+    let ep = ldlt_mgr.witness();
+    let mut g = Arr::new(n);
+    for k in 0..n { g[k] = sign * ldlt_mgr.sym_quad(&mat_f[k]); }
+    Some((g, ep))
+}
+```
+
+```rust
+// lmi_oracle.rs
+let result = assess_feas_impl(&mut self.ldlt_mgr, &self.mat_f, xc, 1.0, getA);
+result.map(|(g, ep)| (g, SingleCut(ep)))
+```
+
+One skeleton, three languages, **zero API drift**. 🔁
+
+---
+
+class: nord-light, middle, center
+
+## 🔁 Part 3 — State: the `optim_q` loop
+
+---
+
+### 🔁 The Smell: A Retry Flag Scattered
+
+`cutting_plane_optim_q` hand-rolled its state machine inline:
+
+```python
+x_best = None
+retry = False
+for niter in range(options.max_iters):
+    cut, x_q, gamma1, more_alt = omega.assess_optim_q(space_q.xc(), gamma, retry)
+    if gamma1 is not None:
+        gamma = gamma1
+        x_best = x_q
+    status = space_q.update_q(cut)
+    if status == CutStatus.Success:      retry = False
+    elif status == CutStatus.NoSoln:     return x_best, gamma, niter
+    elif status == CutStatus.NoEffect:
+        if not more_alt:                 return x_best, gamma, niter
+        retry = True
+    if space_q.tsq() < options.tolerance: return x_best, gamma, niter
+```
+
+- 💣 Retry/termination logic spread across the loop — easy to break
+- 📉 Same pattern in 3 languages, subtly different return semantics
+
+---
+
+### 🔁 The Fix: `OptimQState` (all three languages)
+
+Extract the **State** machine — one class, three ports:
+
+```cpp
+// C++ — cutting_plane.hpp
+template <typename A> class OptimQState {
+    A x_best; bool retry = false;
+  public:
+    void on_shrunk(A x) { x_best = std::move(x); retry = false; }
+    auto on_update(CutStatus status, bool more_alt) -> Result {
+        switch (status) {
+            case Success: retry = false; return Continue;
+            case NoSoln:                  return NoSoln;
+            case NoEffect: return more_alt ? (retry = true, Continue) : NoMoreAlt;
+            case Unknown:                 return Continue;
+        }
+    }
+};
+```
+
+---
+
+```python
+# Python — cutting_plane.py
+class OptimQState:
+    def on_shrunk(self, x_q): self.x_best = x_q
+    def on_update(self, status, more_alt) -> bool:
+        if status == CutStatus.Success:  self.retry = False; return True
+        if status == CutStatus.NoSoln:   return False
+        if status == CutStatus.NoEffect:
+            if not more_alt: return False
+            self.retry = True
+        return True
+```
+
+```rust
+// Rust — cutting_plane.rs
+pub struct OptimQState<A> { x_best: Option<A>, retry: bool }
+impl<A> OptimQState<A> {
+    pub fn on_shrunk(&mut self, x: A) { self.x_best = Some(x); self.retry = false; }
+    pub fn on_update(&mut self, status: &CutStatus, more_alt: bool) -> OptimQOutcome
+    { ... }
+}
+```
+
+⚠️ Rust's `NoEffect+!more_alt` returns `niter` (not `max_iters`) — **preserved exactly**. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Part 4 — Strategy: the round-robin idiom
+
+---
+
+### 🔄 The Smell: `idx += 1; if idx == N`
+
+The same round-robin counter appears **8+ times** across the family:
+
+```cpp
+this->idx += 1;
+if (this->idx == 2) { this->idx = 0; }   // round robin
+```
+
+```python
+self.idx += 1
+if self.idx == 2:
+    self.idx = 0  # round robin
+```
+
+```rust
+self.idx += 1;
+if self.idx == 2 { self.idx = 0; }
+```
+
+- 📉 `ProfitOracle` has 1, `LowpassOracle` has **3** (idx1/idx2/idx3)
+- 💣 Off-by-one when the wrap bound changes
+
+---
+
+### 🔄 The Fix: `RoundRobin` helper
+
+One small class, all three languages:
+
+
+.pull-left[
+
+.font-sm[
+```cpp
+// C++ — round_robin.hpp
+class RoundRobin {
+    std::size_t _lo, _hi, _cur;
+  public:
+    RoundRobin(std::size_t lo, std::size_t hi)
+    : _lo{lo}, _hi{hi}, _cur{hi - 1} {}
+    auto next() -> std::size_t {
+        if (++_cur == _hi) _cur = _lo;
+        return _cur;
+    }
+};
+```
+
+```python
+# Python — round_robin.py
+class RoundRobin:
+    def next(self) -> int:
+        self._cur += 1
+        if self._cur == self._hi:
+            self._cur = self._lo
+        return self._cur
+```
+]
+]
+.pull-right[
+.font-sm[
+```rust
+// Rust — round_robin.rs
+// (clippy: rename next → advance)
+pub struct RoundRobin {
+    cur: i32, lo: i32, hi: i32 
+}
+
+impl RoundRobin {
+    pub fn advance(&mut self) -> i32 {
+        self.cur += 1;
+        if self.cur == self.hi {
+            self.cur = self.lo;
+        }
+        self.cur
+    }
+}
+```
+]
+
+✅ `LowpassOracle` keeps its **public** `idx1/idx2/idx3` fields as mirrors; `ProfitOracle.idx` stays readable int. **No public API change.** 🚫
+
+]
+
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Part 5 — Facade + Factory
+
+---
+
+### 🏭 The Fix: `LMIProblem` Facade + Factory
+
+Users previously hand-wired the 3-step recipe every time:
+
+```cpp
+// Before: build oracle → build space → call driver
+LmiOracle<Vec, Matrix> omega{3, F, B};
+EllStable<Vec> ellip{10.0, Vec{0.0, 0.0, 0.0}};
+auto result = cutting_plane_feas(omega, ellip);
+```
+
+```cpp
+// After: one facade call
+auto problem = make_lmi_problem<Vec, Matrix>(3, F, B);
+auto result = problem.solve_feas(10.0, Vec{0.0, 0.0, 0.0});
+```
+
+Plus uniform **Factory** entry points (additive, non-breaking):
+
+```cpp
+make_lmi_oracle(mat_f, mat_b)      → LmiOracle       // lazy
+make_lmi0_oracle(mat_f)            → Lmi0Oracle      // compact
+make_lmi_old_oracle(mat_f, mat_b)  → LmiOldOracle    // explicit
+```
+
+---
+
+```python
+# Python — same idea
+problem = LMIProblem(mat_f, mat_b)
+x, niter = problem.solve_feas(10.0, np.zeros(3))
+```
+
+```rust
+// Rust — same idea
+let mut problem = LMIProblem::new(f, b);
+let (x, niter) = problem.solve_feas(10.0, Arr::new(3), Options::default());
+```
+
+✅ Added new API only — nothing removed, nothing renamed.
+
+---
+
+### 🏭 Named Constructors
+
+The confusing overloads get clear names:
+
+```cpp
+Ell::from_radii(val, xc)   // per-axis radii (diagonal matrix)
+Ell::from_alpha(alpha, xc) // scalar scaling factor
+```
+
+```python
+# Python — EllBase.from_radii / EllBase.from_alpha
+```
+
+```rust
+// Rust already had new_with_scalar / from_covariance — nothing to add
+```
+
+- 🧠 Self-documenting construction — no more guessing which arg means what
+- ✅ Additive API, zero breakage
+
+---
+
+class: nord-light, middle, center
+
+## 📦 Part 6 — lmi-solver family
+
+---
+
+### 📦 The Smell: `factor` vs `factor_with_allow_semidefinite`
+
+`lmi-solver-cpp` / `lmi-solver-rs` / `py/ellalgo` all duplicate the same LDL^T row-sweep:
+
+```
+factor(f)                       factor_with_allow_semidefinite(f)
+  start = 0                       start = 0
+  for i in 0..n:                  for i in 0..n:
+    ... row sweep ...               ... row sweep ...          ← ~40 lines identical
+    if d <= 0: stop                if d < 0:  stop
+                                    if d == 0: start = i+1     ← only difference
+```
+
+- ✖ ~40 duplicated lines × 3 languages
+- 💣 The pivot policy is the *only* difference — everything else is noise
+
+---
+
+### 📦 The Fix: `factor_impl` + `PivotPolicy`
+
+C++ and Rust use an enum policy; Python uses a bool — same skeleton:
+
+```cpp
+// C++ — ldlt_mgr.hpp
+enum class PivotPolicy { Strict, AllowSemidefinite };
+
+template <typename Fn> auto factor(Fn&& f) -> bool {
+    return factor_impl(std::forward<Fn>(f), PivotPolicy::Strict);
+}
+```
+
+```rust
+// Rust — ldlt_mgr.rs
+enum PivotPolicy { Strict, AllowSemidefinite }
+fn factor_impl<F>(&mut self, get_elem: F, policy: PivotPolicy) -> bool { ... }
+```
+
+```python
+# Python — ldlt_mgr.py
+def _factor_impl(self, get_elem, allow_semidefinite: bool) -> bool: ...
+def factor(self, get_elem):            return self._factor_impl(get_elem, False)
+def factor_with_allow_semidefinite(...): return self._factor_impl(get_elem, True)
+```
+
+✅ Public signatures, docstrings, and doctests untouched — **zero behavior drift**.
+
+---
+
+### 📦 Wait — Where's the Python LMI Oracle Collapse?
+
+`py/ellalgo` already had it from an earlier pass:
+
+- ✅ `LMIBase._assess` (Template Method) — done
+- ✅ `RoundRobin` — done
+- ✅ `OptimQState` — done
+
+So this pass only needed **`_factor_impl`** — proof that the sibling-by-sibling recipe converges: once a family is clean, later passes are tiny. 🎯
+
+---
+
+### 📏 Verification Discipline
+
+Every refactor step was gated the same way:
+
+| Gate | C++ | Rust | Python |
+|------|-----|------|--------|
+| Build | `cmake --build` 🔨 | `cargo build` 🛠 | — |
+| Test | `ctest` 🧪 | `cargo test` 🧪 | `pytest` 🧪 |
+| Lint | `-Werror` ⚠ | `cargo clippy` 🔍 | `flake8` 🔍 |
+| Format | `clang-format` 📏 | `cargo fmt` 📏 | `black + isort` 📏 |
+| Docs | `doxygen` 📄 | `cargo doc -D warnings` 📄 | doctests 📄 |
+
+- 📉 **Net line change**: C++ −288, Rust −50 (ellalgo) & −20 (lmi), Python −100+
+- 🔁 Every "except" was explicit (e.g. keep `calc_parallel_cut_fast_old`)
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Lessons Learned
+
+---
+
+### 📚 Lessons Learned
+
+.pull-left[
+
+**Patterns that carried across languages** 🧩
+
+- 🏗️  **Strategy/Bridge** — `EllBase` / macro / base class
+- 🎯 **Template Method** — oracle skeleton everywhere
+- 🔁 **State** — `OptimQState` (C++/Rust/Python)
+- 🔄 **Strategy** — `RoundRobin`
+- 🏭 **Facade + Factory** — `LMIProblem`, `make_lmi_*`
+
+**Language idioms matter** 🗺
+- Rust: no inheritance → macro/free fn/trait
+- Python: no `if constexpr` → Template Method hook
+- C++: `if constexpr` / `virtual` → both work
+
+]
+
+.pull-right[
+
+**What actually helped** 💡
+
+- 🔒 **"Don't change the public API"** forces honest refactors
+- 🧪 **Regression-pinned iteration counts** catch drift instantly
+- 🔍 **Clippy caught a real naming trap** — `next()` vs `Iterator::next`
+- 🧹 Cleanup-first (P1) makes the patterns visible
+- 📉 **Duplicate-then-diverge** is the #1 smell to hunt
+
+**The takeaway** 🎯
+- Find the *one* thing that varies → extract it
+- Keep the skeleton fixed, inject the strategy
+
+]
+
+---
+
+### 📚 Resources
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🔧 _Refactoring_ — Martin Fowler
+- 🦀 _Rust Design Patterns_ — rust-unofficial
+
+**Repos**
+- 🧮 github.com/luk036/ellalgo-cpp
+- 🐍 github.com/luk036/ellalgo
+- 🦀 github.com/luk036/ellalgo-rs
+- 📦 github.com/luk036/lmi-solver-cpp · lmi-solver-rs
+
+]
+
+.pull-right[
+
+**Try it** 🎯
+- Find one duplicated loop / switch in your codebase
+- Name the pattern that removes it
+- Extract the skeleton, inject the strategy
+- **Do not change the public API** 🔒
+
+> "The joy of the ellipsoid method is that it never gives up — neither should your refactor." 😉
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Refactoring with Design Patterns — Part 3
+
+@luk036 🧑💻 — Questions welcome 💬
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

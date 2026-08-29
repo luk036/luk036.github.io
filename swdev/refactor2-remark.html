@@ -108,24 +108,33 @@ Last time we refactored *physdes &amp; LDS*. This session extends the same recip
 
 Six siblings, two missions:
 
+.pull-left[
 .mermaid[
 <pre>
 graph LR
     NCPP["🧱 netlistx-cpp\nC++ static lib"] --> N["🎯 Netlist Representation\nbipartite hypergraph"]
     NRS["🦀 netlistx-rs\nRust crate"] --> N
     NPY["🐍 netlistx\nPython package"] --> N
-    CCPP["✂️ ckpttn-cpp\nC++ partitioning"] --> P["🎯 Circuit Partitioning\nFM · NN · Multi-level"]
-    CPY["✂️ ckpttnpy\nPython partitioning"] --> P
-    CRS["✂️ ckpttn-rs\nRust partitioning"] --> P
     style NCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
     style NRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
     style NPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style N fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    CCPP["✂️ ckpttn-cpp\nC++ partitioning"] --> P["🎯 Circuit Partitioning\nFM · NN · Multi-level"]
+    CPY["✂️ ckpttnpy\nPython partitioning"] --> P
+    CRS["✂️ ckpttn-rs\nRust partitioning"] --> P
     style CCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
     style CPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
     style CRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
-    style N fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
     style P fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
 </pre>
+]
 ]
 
 The refactors happen **sibling-by-sibling** — each one keeps every public API byte-for-byte compatible.
@@ -274,7 +283,9 @@ becomes **one** `[[noreturn]]` helper in the reader module:
 
 auto open_input(std::string_view filename) -> std::ifstream {
     auto file = std::ifstream{std::string(filename)};
-    if (file.fail()) { fail("Error: Can't open file " + std::string(filename) + ".\n"); }
+    if (file.fail()) { 
+        fail("Error: Can't open file " + std::string(filename) + ".\n");
+    }
     return file;
 }
 ```
@@ -328,13 +339,18 @@ graph LR
 
 Same shape in **all three languages**:
 
+.pull-left[
+.font-sm[
 | Language | Shared builder |
 |----------|----------------|
 | 🧱 C++ | `detail::build_netlist(YosysParts&&)` |
 | 🦀 Rust | `build_netlist_from_parts(YosysParts)` |
 | 🐍 Python | `_build_netlist_from_parts(...)` |
-
+]
+]
+.pull-right[
 One maintenance point; DOM ≡ SAX **by construction**. ✅
+]
 
 ---
 
@@ -517,7 +533,8 @@ where GainMgr: GainMgrInterface<Gnl>, ConstrMgr: ConstrMgrInterface<Gnl>,
 ```rust
 // NNPartMgr — keeps its public methods as thin forwarders
 pub fn init(&mut self, part: &mut [u8])    { PartMgr::init(self, part) }
-pub fn legalize(&mut self, part: &mut [u8]) -> LegalCheck { PartMgr::legalize(self, part) }
+pub fn legalize(&mut self, part: &mut [u8]) -> LegalCheck
+{ PartMgr::legalize(self, part) }
 ```
 
 ---
@@ -609,10 +626,12 @@ declarations → **one definition, everywhere**. 🔒
 
 Same mechanical rule, two crates:
 
+.font-sm[
 | Crate | Functions | What |
 |-------|-----------|------|
 | 🦀 netlistx-rs | **19** | getters (`num_modules`, `get_module_by_name`), `Default` impls, `vdcorput` |
 | 🦀 ckpttn-rs | **147** | accessors, trait-impl forwarders, `Deref`/`Index` impls, `is_empty`, `len` |
+]
 
 "Contains only one line" = the **body** is a single statement, even if the
 signature spans lines:
@@ -657,6 +676,7 @@ class: nord-light, middle, center
 
 ### ✅ Every Gate Green, Public API Untouched
 
+.font-sm[
 | Repo | Tests | Toolchain gates | Δ lines |
 |------|-------|-----------------|---------|
 | 🧱 netlistx-cpp | 45 cases · 205 asserts | xmake + MSVC /W4 /WX · clang-format | `readwrite.cpp` 870 → 509 |
@@ -665,6 +685,7 @@ class: nord-light, middle, center
 | 🧱 ckpttn-cpp | 99 cases · 346 asserts | xmake + cmake · clang-format | net **−163 lines** |
 | 🐍 ckpttnpy | 23 passed (7 pre-existing env) | black · isort · flake8 | `NNPartMgr.py` 170 → 52 |
 | 🦀 ckpttn-rs | 241 tests | cargo fmt · clippy · test · doc `-D warnings` | skeleton single-sourced |
+]
 
 `git diff` on every `lib.rs` / public header: **empty**. ✅
 

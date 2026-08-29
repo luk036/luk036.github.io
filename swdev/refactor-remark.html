@@ -53,13 +53,13 @@ class: nord-dark, middle, center
 - Fluent `builder().margin(..).build()`
 - Adding tests & doctests
 
-]
-
-.pull-right[
-
 **3️⃣ Template Method** 🏗️
 - Three near-identical decomposers
 - Policy hooks + shared skeleton
+
+]
+
+.pull-right[
 
 **4️⃣ Cross-Language Parity** 🌐
 - Same pattern, three idioms
@@ -197,13 +197,16 @@ All 5 call sites collapse to: `this->_create_node(NodeType::Steiner, point);` �
 
 **C++** — private method, pointer return:
 
+.font-sm[
 ```cpp
 auto _create_node(NodeType type, const IntPoint& pt)
     -> RoutingNode<IntPoint>*;
 ```
+]
 
 **Rust** — private method, index return:
 
+.font-sm[
 ```rust
 fn _create_node(&mut self, node_type: NodeType, pt: Point) -> usize {
     let id = match node_type {
@@ -215,6 +218,7 @@ fn _create_node(&mut self, node_type: NodeType, pt: Point) -> usize {
     self.add_node(RoutingNode::new(&id, node_type, pt))
 }
 ```
+]
 
 ]
 
@@ -222,6 +226,7 @@ fn _create_node(&mut self, node_type: NodeType, pt: Point) -> usize {
 
 **Python** — method returning the node object:
 
+.font-sm[
 ```python
 def _create_node(self, node_type, pt):
     if node_type == NodeType.Steiner:
@@ -236,7 +241,7 @@ def _create_node(self, node_type, pt):
     self.nodes[node_id] = node
     return node
 ```
-
+]
 **One factory, zero duplication, three languages.** 🌐
 
 ]
@@ -283,6 +288,7 @@ class ClockTreeVisualizer:
 
 ### 🧰 The Fix: Fluent Builder
 
+.font-sm[
 ```python
 # Python
 viz = (ClockTreeVisualizer.builder()
@@ -310,6 +316,7 @@ let viz = ClockTreeVisualizer::builder()
     .wire_width(3)
     .build();
 ```
+]
 
 Self-documenting: each option is *named* at the call site. ✨
 
@@ -415,28 +422,34 @@ Only the *hooks* differed — the **skeleton was identical**. 🕸️
 
 .pull-left[
 
-**Before — 3× ~80-line recursive functions** (C++):
+**Before — 3× ~80-line recursive functions**:
 
+.font-sm[
 ```
 rpolygon_cut_convex_recur    295 duplicated lines
 rpolygon_cut_explicit_recur
 rpolygon_cut_implicit_recur
 ```
-
-**After — one skeleton + policy hooks**:
-
-```
-rpolygon_cut_recur_impl        ← Template Method
-  ├── ConvexCutPolicy          ← find_concave_point + triangle base case
-  ├── ExplicitCutPolicy        ← find_concave_point only
-  └── ImplicitCutPolicy        ← different scan + rewiring + target
-```
-
-**Net −82 lines** in the C++ file. 📉
+]
 
 ]
 
 .pull-right[
+
+**After — one skeleton + policy hooks**:
+
+.font-sm[
+```
+rpolygon_cut_recur_impl   ← Template Method
+  ├── ConvexCutPolicy     ← find_concave_point + triangle base case
+  ├── ExplicitCutPolicy   ← find_concave_point only
+  └── ImplicitCutPolicy   ← different scan + rewiring + target
+```
+]
+
+]
+
+**Net −82 lines** in the C++ file. 📉
 
 **Python version** — same idea, function-parameter style:
 
@@ -452,8 +465,6 @@ def rpolygon_cut_convex_recur(...):
 def rpolygon_cut_explicit_recur(...):
     return rpolygon_cut_recur(..., _find_explicit_concave_point, False)
 ```
-
-]
 
 ---
 
@@ -513,7 +524,7 @@ class: nord-light, middle, center
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph Factory["🏭 Factory Method"]
         F1["C++ _create_node\n5 sites → 1"]
         F2["Rust _create_node\n5 sites → 1"]
@@ -564,7 +575,7 @@ Four siblings implementing the same low-discrepancy sequence generators
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     CPP["🧱 lds-cpp\nC++20 templates · constexpr"] --> CORE["🔢 Shared Core\nvdc_digit_sum"]
     CC["⚙️ lds-gen-cpp\nC++20 runtime · std::atomic"] --> CORE
     RS["🦀 lds-rs\nRust crate"] --> CORE
@@ -617,6 +628,7 @@ stateless calculators. ✅
 
 ### 🧮 C++ — Template Method via CRTP
 
+.font-sm[
 ```cpp
 // lds-gen-cpp — the protocol lives once in the base
 template <typename Derived, typename Value>
@@ -644,6 +656,7 @@ class Halton : public GeneratorIterable<Halton, std::array<double, 2>> {
     }
 };
 ```
+]
 
 `lds-cpp` uses a plain `unsigned long` (constexpr priority); `lds-gen-cpp` uses
 `std::atomic` (thread-safe priority). Same skeleton. 🧱
@@ -652,6 +665,7 @@ class Halton : public GeneratorIterable<Halton, std::array<double, 2>> {
 
 ### 🦀 Rust — a Trait with Default Methods
 
+.font-sm[
 ```rust
 // lds-rs — the Generator trait (Template Method)
 pub trait Generator {
@@ -669,13 +683,16 @@ pub trait Generator {
     // advance / get_index / reseed defaults …
 }
 ```
+]
 
 A `macro_rules!` keeps the protocol methods **inherent**, so the public API
 is unchanged (no trait import needed to call `pop()`):
 
+.font-sm[
 ```rust
 impl_generator_protocol!(Halton, [f64; 2]);   // pop/peek/advance/… + Iterator
 ```
+]
 
 > ⚠️ Rust trait methods are *not* automatically inherent — that is why the
 > macro exists. Public API preservation drives the design. 🦀
@@ -747,6 +764,7 @@ $$
 Every `VdCorput::pop()` *and* `peek()` inlined the same base-`b` digit loop.
 Extract it once:
 
+.font-sm[
 ```cpp
 template <typename T, typename Table>
 constexpr auto vdc_digit_sum(unsigned long n, unsigned long base,
@@ -761,6 +779,7 @@ constexpr auto vdc_digit_sum(unsigned long n, unsigned long base,
     return reslt;
 }
 ```
+]
 
 - 🦀 **Rust** — generic over `f64`/`u64` via a small `DigitValue` trait
   (`f64` has no `From<u64>` — lossy)
@@ -799,7 +818,7 @@ static_assert(SequenceGenerator<VdCorput, double>);   // compile-time check
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph CPP1["🧱 lds-cpp"]
         A1["GeneratorBase CRTP\nconstexpr · concept · mixin"]
     end
@@ -835,7 +854,7 @@ The same pattern is *language-shaped*:
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph CPP["🧱 C++ — counter lives in the base"]
         B1["GeneratorBase\ncount_ member · inherited by all"]
     end
@@ -943,27 +962,33 @@ class: nord-light, middle, center
 
 ### 🗂️ Session Log
 
+.pull-left[
 **Case Study 1 — physdes** (9 commits)
 
+.font-sm[
 | Repo | Commits |
 |------|---------|
 | 🧱 physdes-cpp | `7942ac7` Factory · `9d8f9be` Builder · `52ac44f` Template Method |
 | 🦀 physdes-rs | `1bbbeb0` Factory · `01179f1` Builder · `c3b9045` shared wrapper |
 | 🐍 physdes-py | `2e03732` Factory · `311848a` Builder · `3666c82` Template Method |
+]
 
 All on `dev`, all gates green, ready for PRs. 📤
-
+]
+.pull-right[
 **Case Study 2 — LDS family** (~600 lines removed)
 
+.font-sm[
 | Repo | Δ lines | Highlights |
 |------|---------|------------|
 | 🧱 lds-cpp | `lds.hpp` 978 → 802 | CRTP + concept + digit core + factory registry |
 | ⚙️ lds-gen-cpp | `lds.hpp` 949 → 734 | atomic CRTP · composites atomic-as-point |
 | 🦀 lds-rs | −75 + 33× `#[inline]` | trait + macro · `DigitValue` |
 | 🐍 lds-gen | `lds.py` 574 → 430 | `GeneratorBase[T]` · new `vdc_i()` |
+]
 
 Uncommitted working trees, ready for review. 📤
-
+]
 ---
 
 ### 📚 Further Reading

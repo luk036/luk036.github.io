@@ -70,7 +70,7 @@ This section covers software development workflows and tooling: version control 
 | -------------------------------------------------- | ------------------------------- |
 | [Common Mistakes](mistakes-remark.html)            | Lessons learned in coding       |
 | [Remove Duplicate Code](remove-duplicate-remark.html) | DRY principles and refactoring |
-| [Refactoring with Design Patterns](refactor-remark.html) | Factory · Builder · Template Method across C++/Rust/Python |
+| [Refactoring with Design Patterns](refactor-remark.html) | Factory · Builder · Template Method across C++/Rust/Python (physdes & LDS) |
 
 ---
 

@@ -31,7 +31,7 @@ class: nord-dark, middle, center
 
 # 🧱 Refactoring with Design Patterns
 
-### A Polyglot Case Study across C++ · Rust · Python
+### Two Polyglot Case Studies — physdes & LDS across C++ · Rust · Python
 
 @luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
 
@@ -40,6 +40,8 @@ class: nord-dark, middle, center
 ### 📋 Agenda
 
 .pull-left[
+
+**Case Study 1 — physdes** 🧱
 
 **1️⃣ Factory Method** 🏭
 - The duplicated node-creation smell
@@ -63,7 +65,13 @@ class: nord-dark, middle, center
 - Same pattern, three idioms
 - Verification & results
 
-**5️⃣ Lessons Learned** 🎯
+**Case Study 2 — LDS family** 🧮
+
+**5️⃣ Template Method · Digit Core · Contracts** 🏗️
+- Four siblings, one `value_at` hook
+- Thread safety & dependents
+
+**6️⃣ Lessons Learned** 🎯
 - What to refactor, what to leave
 - Q&A
 
@@ -91,7 +99,7 @@ class: nord-dark, middle, center
 - 🚫 **Don't force them** — a Visitor for a 30-line tree is over-engineering
 - 🎯 **Match the idiom** — Rust's `..Default::default()` already *is* a builder
 - ⚖️ **YAGNI** — refactor real duplication, not hypothetical futures
-- ✅ **Verify behavior** — 700+ assertions must still pass after the rewrite
+- ✅ **Verify behavior** — 12,000+ assertions must still pass after the rewrites
 
 ]
 
@@ -134,7 +142,7 @@ Each smell is *recognizable precisely because* we know the target pattern.
 
 class: nord-light, middle, center
 
-## 🏭 Part 1 — Factory Method
+## 🏭 Part 1 — Factory Method (physdes)
 
 ---
 
@@ -251,7 +259,7 @@ Python taught us the factory isn't a *mechanical* extraction:
 
 class: nord-light, middle, center
 
-## 🧰 Part 2 — Builder Pattern
+## 🧰 Part 2 — Builder Pattern (physdes)
 
 ---
 
@@ -381,7 +389,7 @@ Plus a **doctest** in the Python class docstring (runs under pytest):
 
 class: nord-light, middle, center
 
-## 🏗️ Part 3 — Template Method
+## 🏗️ Part 3 — Template Method (physdes)
 
 ---
 
@@ -497,7 +505,7 @@ The C++ refactor looked trivial but had **four hidden contracts**:
 
 class: nord-light, middle, center
 
-## 🌐 Part 4 — Cross-Language Parity
+## 🌐 Part 4 — Cross-Language Parity (physdes)
 
 ---
 
@@ -545,7 +553,345 @@ Every gate **green** before any commit. ✅
 
 class: nord-light, middle, center
 
-## 🎯 Part 5 — Lessons Learned
+## 🧮 Part 5 — Case Study 2: The LDS Family
+
+---
+
+### 🧮 The LDS Polyglot Family
+
+Four siblings implementing the same low-discrepancy sequence generators
+(Van der Corput · Halton · Circle · Sphere):
+
+.mermaid[
+<pre>
+graph LR
+    CPP["🧱 lds-cpp\nC++20 templates · constexpr"] --> CORE["🔢 Shared Core\nvdc_digit_sum"]
+    CC["⚙️ lds-gen-cpp\nC++20 runtime · std::atomic"] --> CORE
+    RS["🦀 lds-rs\nRust crate"] --> CORE
+    PY["🐍 lds-gen\nPython package"] --> CORE
+    CORE --> PROTO["🎯 Uniform Protocol\npop · peek · reseed · get_index"]
+    style CPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CC fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style RS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CORE fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style PROTO fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**The mission:** refactor *all four* with the same patterns, idiomatically —
+and keep every public API byte-for-byte compatible.
+
+---
+
+### 🔍 The Smells We Found (LDS)
+
+| Smell | Where | Fix |
+|-------|-------|-----|
+| 🏗️ **~250 lines of identical protocol boilerplate** (pop/peek/skip/reseed/begin/end) | 6 template classes in `lds-cpp` | **Template Method** (CRTP base) |
+| 🔢 **Digit-reversal loop inlined in `pop()` *and* `peek()`** | every `VdCorput` (all 4 languages) | **Shared digit core** |
+| 🐍 **Same `pop`/`reseed`/iterators/batch duplicated** | 7 classes in Python `lds.py` | **Generic base class** |
+| 🏭 **11-case factory switch** | `HaltonN::create_vdc` (lds-cpp) | **Factory registry table** |
+
+---
+
+### 🧮 Template Method — State / Computation Separation
+
+Every generator fused two concerns into `pop()`:
+
+- 🧮 **the computation** — "what is the value at index *n*?"
+- 🔢 **the state** — "how far have I advanced?"
+
+```
+pop()  → count += 1;  compute(count)
+peek() →            compute(count + 1)      ← same loop, duplicated
+
+after:   pop()  = value_at(++count)
+         peek() = value_at(count + 1)       ← consistent BY CONSTRUCTION
+```
+
+Because `value_at` is pure, the components inside composites become
+stateless calculators. ✅
+
+---
+
+### 🧮 C++ — Template Method via CRTP
+
+```cpp
+// lds-gen-cpp — the protocol lives once in the base
+template <typename Derived, typename Value>
+class GeneratorBase {
+  public:
+    auto pop() -> Value {
+        auto n = count_.fetch_add(1, std::memory_order_relaxed) + 1;
+        return derived().value_at(n);                  // ← hook
+    }
+    auto peek() -> Value {
+        return derived().value_at(count_.load(std::memory_order_relaxed) + 1);
+    }
+    // skip / reseed / get_index …
+  protected:
+    std::atomic<unsigned long> count_{0};   // state lives here
+  private:
+    auto derived() -> Derived& { return static_cast<Derived&>(*this); }
+};
+
+class Halton : public GeneratorIterable<Halton, std::array<double, 2>> {
+    VdCorput vdc0, vdc1;
+  public:
+    auto value_at(unsigned long n) const -> std::array<double, 2> {
+        return {vdc0.value_at(n), vdc1.value_at(n)};   // ← the ONLY thing left
+    }
+};
+```
+
+`lds-cpp` uses a plain `unsigned long` (constexpr priority); `lds-gen-cpp` uses
+`std::atomic` (thread-safe priority). Same skeleton. 🧱
+
+---
+
+### 🦀 Rust — a Trait with Default Methods
+
+```rust
+// lds-rs — the Generator trait (Template Method)
+pub trait Generator {
+    type Value;
+    fn counter(&self) -> &AtomicU64;
+    fn value_at(&self, n: u64) -> Self::Value;      // ← hook
+
+    fn pop(&mut self) -> Self::Value {
+        let n = self.counter().fetch_add(1, Ordering::Relaxed) + 1;
+        self.value_at(n)
+    }
+    fn peek(&self) -> Self::Value {
+        self.value_at(self.counter().load(Ordering::Relaxed) + 1)
+    }
+    // advance / get_index / reseed defaults …
+}
+```
+
+A `macro_rules!` keeps the protocol methods **inherent**, so the public API
+is unchanged (no trait import needed to call `pop()`):
+
+```rust
+impl_generator_protocol!(Halton, [f64; 2]);   // pop/peek/advance/… + Iterator
+```
+
+> ⚠️ Rust trait methods are *not* automatically inherent — that is why the
+> macro exists. Public API preservation drives the design. 🦀
+
+---
+
+### 🐍 Python — a Generic Base Class
+
+```python
+# lds-gen — GeneratorBase[T] (Template Method)
+class GeneratorBase(Generic[T]):
+    def pop(self) -> T:
+        with self._count_lock:
+            self._count += 1
+            return self.value_at(self._count)      # ← hook
+
+    def value_at(self, n: int) -> T:
+        raise NotImplementedError
+
+    # __iter__ / __next__ / pop_batch / iter_batch …
+
+class Halton(GeneratorBase[List[float]]):
+    def value_at(self, n: int) -> List[float]:
+        return [self.vdc0.value_at(n), self.vdc1.value_at(n)]
+```
+
+- `T` is the value type — `float`, `List[float]`, `int`, …
+- All 7 classes shed ~25 lines of identical boilerplate each 📉
+
+---
+
+### 🧮 Template Method at a Glance
+
+.mermaid[
+<pre>
+graph TD
+    BASE["🧩 GeneratorBase · Generator trait\npop() → value_at(++count)\npeek() → value_at(count + 1)\nskip · reseed · get_index"]
+    HOOK["🎣 Hook: value_at(n)\npure · no state change"]
+    V["VdCorput\nvdc(n, base)"]
+    H["Halton\n[vdc0(n), vdc1(n)]"]
+    C["Circle\ncos/sin mapping"]
+    S["Sphere3Hopf\nHopf mapping"]
+    BASE --> HOOK
+    HOOK --> V
+    HOOK --> H
+    HOOK --> C
+    HOOK --> S
+    style BASE fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style HOOK fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style V fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style H fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style S fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**One skeleton, many generators.** 🎯
+
+---
+
+### 🔢 Shared Digit Core — One Loop, Four Languages
+
+The radical inverse is the heart of every generator:
+
+$$
+\phi_b(n) = \sum_{k=0}^{m} d_k \, b^{-k-1}
+$$
+
+Every `VdCorput::pop()` *and* `peek()` inlined the same base-`b` digit loop.
+Extract it once:
+
+```cpp
+template <typename T, typename Table>
+constexpr auto vdc_digit_sum(unsigned long n, unsigned long base,
+                             const Table& weights) -> T {
+    T reslt{};
+    std::size_t idx = 0;
+    while (n != 0) {
+        const auto remainder = n % base;
+        n /= base;
+        reslt += static_cast<T>(remainder) * weights[idx++];
+    }
+    return reslt;
+}
+```
+
+- 🦀 **Rust** — generic over `f64`/`u64` via a small `DigitValue` trait
+  (`f64` has no `From<u64>` — lossy)
+- 🐍 **Python** — the existing `vdc()` (float) plus a brand-new public `vdc_i()` (int)
+
+Three implementations of the same loop became **one**. 🔁 → 1️⃣
+
+---
+
+### 📜 The Formal Contract — Contract as Code
+
+Each language now *enforces* the protocol at compile time:
+
+```cpp
+// C++20 — the concept (lds-cpp / lds-gen-cpp)
+template <typename G, typename V>
+concept SequenceGenerator = requires(G g, unsigned long n) {
+    { g.pop() } -> std::convertible_to<V>;
+    { g.peek() } -> std::convertible_to<V>;
+    g.skip(n);
+    g.reseed(n);
+    { g.get_index() } -> std::convertible_to<unsigned long>;
+};
+
+static_assert(SequenceGenerator<VdCorput, double>);   // compile-time check
+```
+
+- 🦀 **Rust** — the `Generator` trait *is* the contract
+- 🐍 **Python** — `GeneratorBase[Generic[T]]` + type hints
+- ⚙️ **lds-gen-cpp** — the same concept also holds for the runtime
+  `VdCorputBase` / `HaltonN` — both families interchangeable
+
+---
+
+### 🌐 LDS Cross-Language Parity
+
+.mermaid[
+<pre>
+graph LR
+    subgraph CPP1["🧱 lds-cpp"]
+        A1["GeneratorBase CRTP\nconstexpr · concept · mixin"]
+    end
+    subgraph CPP2["⚙️ lds-gen-cpp"]
+        A2["GeneratorBase CRTP\nstd::atomic counter"]
+    end
+    subgraph RS["🦀 lds-rs"]
+        A3["Generator trait\ndefault methods + macro"]
+    end
+    subgraph PY["🐍 lds-gen"]
+        A4["GeneratorBase Generic[T]\nlock-guarded _count"]
+    end
+    A1 --> CON["🎯 Same Template Method\none value_at(n) hook"]
+    A2 --> CON
+    A3 --> CON
+    A4 --> CON
+    style CPP1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CPP2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style RS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CON fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Public API is unchanged** in every repo — only *additive* surface
+(`value_at`, the trait/base, `vdc_i`). 🌐
+
+---
+
+### 🛡️ Thread Safety & Where the Counter Lives
+
+The same pattern is *language-shaped*:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph CPP["🧱 C++ — counter lives in the base"]
+        B1["GeneratorBase\ncount_ member · inherited by all"]
+    end
+    subgraph RS["🦀 Rust — traits can't hold data"]
+        R1["count: AtomicU64\nfield per struct"]
+        R2["counter() accessor hook"]
+    end
+    B1 --> SAME["1 atomic per generator\nsame semantics"]
+    R1 --> SAME
+    style CPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style RS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SAME fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+Centralizing the counter made composite `pop()` **atomic as a point**:
+`Halton.pop() = value_at(++count)` — ONE atomic claim, always a valid point. ✅
+
+- 🐍 **lds-gen** — every generator now lock-guarded → **all thread-safe**
+- 🧱 **lds-cpp** — plain `unsigned long` on purpose: `constexpr` beats
+  thread-safety there (a documented design trade-off)
+
+---
+
+### 🛡️ Do the LDS Dependents Break?
+
+We audited every consumer before touching a header:
+
+| Dependent | Consumes | Impact |
+|-----------|----------|--------|
+| 🍵 **ginger-cpp** | `lds-cpp` (CPM v1.2.5) | Uses only `VdCorput::pop()` (constexpr) + `TWO_PI` → **safe, recompile only** |
+| 🧱 **physdes-cpp** | `lds-gen-cpp` (not lds-cpp!) | **Unaffected** — no transitive dependency |
+| 🔮 **sphere-n-cpp** | `lds-gen-cpp` | **Unaffected** |
+
+Only **one** of the three "dependents" actually depends on lds-cpp.
+**Know your dependency graph before you refactor.** 🗺️
+
+---
+
+### ✅ LDS Verification Across Four Repos
+
+| Repo | Tests | Toolchain gates |
+|------|-------|-----------------|
+| 🧱 **lds-cpp** | 96 cases · 4,622 assertions | MSVC `/W4 /WX` · clang-format |
+| ⚙️ **lds-gen-cpp** | 76 cases · 6,405 assertions | `/W4 /WX` · clang-format |
+| 🦀 **lds-rs** | 97 unit + 12 doc tests | `cargo fmt` · `clippy` · `test` |
+| 🐍 **lds-gen** | 103 pytest + 19 doctests | black · isort · flake8 |
+
+**Every gate green, zero behavioral drift** — exact-value tests matched the
+Python reference bit-for-bit. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 6 — Lessons Learned
 
 ---
 
@@ -589,13 +935,15 @@ class: nord-light, middle, center
 - 🧩 **Design patterns are refactoring targets** — recognize the smell, name the pattern, apply it
 - 🌐 **Polyglot refactoring** keeps sibling projects structurally consistent, making cross-language maintenance easier
 - 🦀 **Match the idiom** — the same pattern looks different in C++, Rust, and Python
-- 🧪 **Tests are the safety net** — 1,400+ assertions across three repos never blinked
+- 🧪 **Tests are the safety net** — 12,000+ assertions across the repos never blinked
 - 🤖 **AI amplification** — telling an agent "apply the Builder pattern" yields far better output than "clean this up"
 - 📉 **Less code, same behavior** — hundreds of duplicated lines removed, zero behavioral drift
 
 ---
 
-### 🗂️ Session Log (9 commits)
+### 🗂️ Session Log
+
+**Case Study 1 — physdes** (9 commits)
 
 | Repo | Commits |
 |------|---------|
@@ -604,6 +952,17 @@ class: nord-light, middle, center
 | 🐍 physdes-py | `2e03732` Factory · `311848a` Builder · `3666c82` Template Method |
 
 All on `dev`, all gates green, ready for PRs. 📤
+
+**Case Study 2 — LDS family** (~600 lines removed)
+
+| Repo | Δ lines | Highlights |
+|------|---------|------------|
+| 🧱 lds-cpp | `lds.hpp` 978 → 802 | CRTP + concept + digit core + factory registry |
+| ⚙️ lds-gen-cpp | `lds.hpp` 949 → 734 | atomic CRTP · composites atomic-as-point |
+| 🦀 lds-rs | −75 + 33× `#[inline]` | trait + macro · `DigitValue` |
+| 🐍 lds-gen | `lds.py` 574 → 430 | `GeneratorBase[T]` · new `vdc_i()` |
+
+Uncommitted working trees, ready for review. 📤
 
 ---
 
@@ -616,10 +975,16 @@ All on `dev`, all gates green, ready for PRs. 📤
 - 🏗️ _Effective C++ / Modern C++_ — Scott Meyers
 - 🦀 _Rust Design Patterns_ — rust-unofficial
 
-**This session's repos**
+**Case Study 1 — physdes**
 - 🧱 github.com/luk036/physdes-cpp
 - 🦀 github.com/luk036/physdes-rs
 - 🐍 github.com/luk036/physdes-py
+
+**Case Study 2 — LDS family**
+- 🧱 github.com/luk036/lds-cpp
+- ⚙️ github.com/luk036/lds-gen-cpp
+- 🦀 github.com/luk036/lds-rs
+- 🐍 github.com/luk036/lds-gen
 
 ]
 

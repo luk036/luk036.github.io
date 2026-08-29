@@ -1,0 +1,820 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Refactoring with Design Patterns — Part 2: netlistx &amp; ckpttn across C++ / Rust / Python
+    </title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧱 Refactoring with Design Patterns — Part 2
+
+### netlistx &amp; ckpttn across C++ · Rust · Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — netlistx: Strategy + Factory** 🏭
+
+**1️⃣ The God-Module Smell**
+- 870-line `readwrite.cpp` · switch dispatch · 8× `exit(1)`
+
+**2️⃣ Reader Hierarchy + Factory**
+- `HypergraphReader` · `make_reader()` · Facade
+- C++ / Rust / Python idioms
+
+**3️⃣ Shared Yosys Builder** 🏗️
+- DOM &amp; SAX duplicate phase 2
+- One `build_netlist_from_parts`
+
+]
+
+.pull-right[
+
+**Part 2 — ckpttn: Template Method** 🏗️
+
+**4️⃣ NNPartMgr = Copy-Paste**
+- C++: inheritance + `virtual` hook
+- Python: subclass + override
+- Rust: trait + default methods (no inheritance!)
+
+**5️⃣ LegalCheck + Inline Hygiene** 🔧
+- One enum, four forward decls
+- 166 `#[inline]` one-liners
+
+**6️⃣ Lessons Learned** 🎯
+- Verification &amp; Q&A
+
+]
+
+---
+
+### 🎯 Why Refactoring Again?
+
+Last time we refactored *physdes &amp; LDS*. This session extends the same recipe to **two more families** — with harder constraints:
+
+.pull-left[
+
+**New this time** 🆕
+
+- 🏭 **Strategy + Factory** — a format-dispatch switch, not just duplication
+- 🗄️ **God-module splits** — 2,000-line I/O files, not 80-line functions
+- 🔁 **Cross-repo coupling** — one repo's refactor *breaks its sibling's build*
+- 🦀 **No inheritance** — Rust can't subclass; the pattern must be re-idiomed
+
+]
+
+.pull-right[
+
+**Same discipline** 🛡️
+
+- 🎯 Name the pattern *before* touching code
+- 🧪 Baseline tests before any edit
+- 🔒 **"Don't change the public API"** — the hard constraint this time
+- ✅ Every gate green after every commit
+
+]
+
+---
+
+### 🌐 The Two Polyglot Families
+
+Six siblings, two missions:
+
+.mermaid[
+<pre>
+graph LR
+    NCPP["🧱 netlistx-cpp\nC++ static lib"] --> N["🎯 Netlist Representation\nbipartite hypergraph"]
+    NRS["🦀 netlistx-rs\nRust crate"] --> N
+    NPY["🐍 netlistx\nPython package"] --> N
+    CCPP["✂️ ckpttn-cpp\nC++ partitioning"] --> P["🎯 Circuit Partitioning\nFM · NN · Multi-level"]
+    CPY["✂️ ckpttnpy\nPython partitioning"] --> P
+    CRS["✂️ ckpttn-rs\nRust partitioning"] --> P
+    style NCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style NRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style NPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style CRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style N fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style P fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+The refactors happen **sibling-by-sibling** — each one keeps every public API byte-for-byte compatible.
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Part 1 — Strategy + Factory (netlistx)
+
+---
+
+### 🏭 The Smell: A God-Module I/O File
+
+`netlistx-cpp/source/readwrite.cpp` — **870 lines** doing everything:
+
+```
+readwrite.cpp  (870 lines)
+├── 6 format readers        hmetis · json · dimacs · netD · yosys DOM · yosys SAX
+├── read_hypergraph()       ──► switch (InputFormat) { … }   ← hand-rolled dispatch
+├── readNetD / readAre      legacy IBM formats
+├── writeJSON + partition writers
+└── 8×  cerr << …; exit(1);  ← every error path calls exit()!
+```
+
+- ➕ Adding format #7 means editing the `switch` **and** copying the file-open boilerplate again
+- 💥 `exit(1)` in a library is fatal for anyone who embeds it
+- 🧱 The switch is the **Strategy smell**: dispatch is hard-wired to implementations
+
+---
+
+### 🏭 The Fix: Reader Hierarchy + Factory
+
+New internal module `source/reader.{hpp,cpp}`:
+
+```cpp
+// Strategy interface
+class HypergraphReader {
+  public:
+    virtual ~HypergraphReader() = default;
+    virtual auto read(std::string_view filename) const -> SimpleNetlist = 0;
+};
+
+// Concrete strategies
+class HmetisReader final : public HypergraphReader { … };
+class JsonReader   final : public HypergraphReader { … };
+class DimacsReader final : public HypergraphReader { … };
+class NetDReader   final : public HypergraphReader { … };
+
+// Factory — the switch lives HERE, once
+auto make_reader(InputFormat format) -> std::unique_ptr<HypergraphReader>;
+```
+
+`read_hypergraph()` collapses to a 6-line **Facade**: `make_reader(fmt)->read(path)`. 🎯
+
+---
+
+### 🦀 Rust — Trait Objects, Same Idea
+
+`netlistx-rs` mirrors it with a private `reader` module:
+
+```rust
+pub(crate) trait HypergraphReader {
+    fn read(&self, path: &Path) -> IoResult<Netlist>;
+}
+
+pub(crate) struct HmetisReader;
+pub(crate) struct JsonReader;
+pub(crate) struct DimacsReader;
+pub(crate) struct NetDReader;
+
+// Factory
+pub(crate) fn make_reader(format: InputFormat) -> Box<dyn HypergraphReader> {
+    match format {
+        InputFormat::HMetis => Box::new(HmetisReader),
+        InputFormat::Json   => Box::new(JsonReader),
+        InputFormat::Dimacs => Box::new(DimacsReader),
+        InputFormat::NetD | InputFormat::AutoDetect => Box::new(NetDReader),
+    }
+}
+```
+
+Same Strategy + Factory, **zero heap surprise**: the factory owns the box. 🦀
+
+---
+
+### 🐍 Python — No Dispatcher, But the Same Lesson
+
+Python has **no format dispatch** — so no factory. But it has the *same* god-module smell:
+
+- `netlist.py` = 875 lines mixing the `Netlist` class **and** all JSON readers
+- DOM (`read_yosys_json`) and SAX (`read_yosys_json_sax`) duplicated the **netlist-building phase**
+
+The Python refactor targets the real duplication: **one shared phase-2 builder**:
+
+```python
+def _build_netlist_from_parts(cell_names, port_names, all_net_ids,
+                              cell_edges, port_nets) -> Netlist:
+    # … the graph + Netlist construction, written ONCE …
+```
+
+`netlist.py` 875 → **475 lines**. 📉
+
+---
+
+### 🏭 The Facade Before / After
+
+The dispatch switch — before:
+
+```cpp
+auto read_hypergraph(const string& filename, InputFormat format) -> SimpleNetlist {
+    switch (actual_format) {
+        case InputFormat::hmetis: return read_hmetis_format(filename);
+        case InputFormat::json:   return read_json_format(filename);
+        case InputFormat::dimacs: return read_dimacs_format(filename);
+        case InputFormat::netD | auto_detect: return read_netd_format(filename);
+    }
+}
+```
+
+…and after — **open/closed**: new format = new class, zero edits to dispatch:
+
+```cpp
+auto read_hypergraph(const string& filename, InputFormat format) -> SimpleNetlist {
+    return netlistx::detail::make_reader(actual_format)->read(filename);
+}
+```
+
+---
+
+### 🔥 Bonus: Killing `exit(1)` — Error Handling Centralized
+
+The library version of the smell:
+
+```
+8×  cerr << "Error: Can't open file " << name << ".\n";  exit(1);
+```
+
+becomes **one** `[[noreturn]]` helper in the reader module:
+
+```cpp
+[[noreturn]] void fail(const std::string& msg, int code = 1) {
+    std::cerr << msg;
+    std::exit(code);
+}
+
+auto open_input(std::string_view filename) -> std::ifstream {
+    auto file = std::ifstream{std::string(filename)};
+    if (file.fail()) { fail("Error: Can't open file " + std::string(filename) + ".\n"); }
+    return file;
+}
+```
+
+- 🐍 Python / 🦀 Rust never had this problem — errors flow through `Result`/exceptions
+- 🧱 C++ now has a **single error choke-point** instead of eight
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 2 — Shared Yosys Builder (netlistx)
+
+---
+
+### 🏗️ The Smell: DOM and SAX Duplicate Phase 2
+
+Yosys netlists can be read two ways — but both end the same:
+
+```
+read_yosys_json      (DOM)  ──►  cell_names · net IDs · edges ──►  build Netlist
+read_yosys_json_sax  (SAX)  ──►  same data, streamed           ──►  build Netlist
+                                                        ▲
+                                            ~50 identical lines: graph →
+                                            net_to_node → weights → fixed ports
+```
+
+- 🔁 **Phase 2 (the build)** is copy-pasted — any change must be applied twice
+- 🐛 The two copies drifted: DOM set `graph.graph` metadata, SAX didn't
+
+The fix is **Template Method in functional form**: two parse front-ends, one shared build phase.
+
+---
+
+### 🏗️ The Fix: One Builder, Two Front-Ends
+
+.mermaid[
+<pre>
+graph LR
+    DOM["📄 read_yosys_json\njson.load DOM"] --> PARTS["🧩 YosysParts\ncell_names · port_names\nall_net_ids · cell_edges · port_nets"]
+    SAX["📄 read_yosys_json_sax\nijson stream"] --> PARTS
+    PARTS --> BUILD["🏗️ build_netlist_from_parts\nshared phase 2\nnodes → edges → weights → fixed"]
+    BUILD --> NL["🎯 SimpleNetlist"]
+    style DOM fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style SAX fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style PARTS fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style BUILD fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style NL fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+Same shape in **all three languages**:
+
+| Language | Shared builder |
+|----------|----------------|
+| 🧱 C++ | `detail::build_netlist(YosysParts&&)` |
+| 🦀 Rust | `build_netlist_from_parts(YosysParts)` |
+| 🐍 Python | `_build_netlist_from_parts(...)` |
+
+One maintenance point; DOM ≡ SAX **by construction**. ✅
+
+---
+
+### 🧩 Subtle Behaviors We Preserved
+
+"Extract the shared phase" sounds mechanical — it isn't:
+
+- ⚠️ **DOM vs SAX collection order** — DOM reads JSON maps (sorted keys), SAX streams file order. The *build* must be order-agnostic; node IDs are assigned by sorted net IDs in both.
+- ⚠️ **`graph.graph` metadata** — only DOM set it. The shared builder sets it for **both**, making them MORE identical.
+- ⚠️ **String net constants** (`"0"`, `"1"`) — skipped in cell connections in both, kept as-is in port bits (historical DOM behavior preserved exactly).
+
+The `test_dom_sax_identical_*` cross-validation tests pass **before and after**. 🧪
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Part 3 — The Python Module Split
+
+---
+
+### 🐍 The Smell: netlist.py Is a God-Module
+
+One file, three responsibilities:
+
+```
+netlist.py  (875 lines)
+├── SimpleGraph · TinyGraph · Netlist      ← the core data types
+├── read_json · read_yosys_json (DOM) · read_yosys_json_sax   ← the readers
+└── create_inverter · create_drawf · vdc · vdcorput …          ← factories
+```
+
+The C++/Rust siblings moved readers to a dedicated module — Python should too.
+**But** Python has no private modules, and moving breaks imports:
+
+```python
+from netlistx.netlist import read_yosys_json   # ← existing public API!
+```
+
+---
+
+### 🐍 The Fix: Move + Re-Export Without Circular Imports
+
+Readers move to `readwrite.py` (the natural I/O home). The trap: `readwrite.py` imports `Netlist` from `netlist.py`, so `netlist.py` cannot import `readwrite.py` at module load — **circular import**.
+
+The clean solution is **PEP 562** — a lazy module-level `__getattr__`:
+
+```python
+def __getattr__(name: str) -> Any:
+    """Lazily re-export readers that moved to netlistx.readwrite."""
+    if name in ("read_json", "read_yosys_json", "read_yosys_json_sax"):
+        import netlistx.readwrite as readwrite
+        return getattr(readwrite, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+```
+
+- ✅ `from netlistx.netlist import read_yosys_json` **still works**
+- ✅ No import-order fragility — the readers load on first *use*
+- ✅ `readwrite.py` 85 → 297 lines; `netlist.py` 875 → 475
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 4 — Template Method Made Real (ckpttn)
+
+---
+
+### 🏗️ The Smell: NNPartMgr Is Copy-Paste
+
+The ckpttn family partitions hypergraphs with FM-style algorithms. `NNPartMgr`
+("no-nonsense" — stop at the first bad move) was a **full copy** of `PartMgrBase`:
+
+```
+PartMgrBase   ── init ── legalize ── optimize ── final_check   (identical!)
+NNPartMgr     ── init ── legalize ── optimize ── final_check   (identical!)
+                                                    │
+                                        optimize_1pass  ← the ONLY difference
+        FM:  snapshot + rollback on negative gain
+        NN:  break on the first non-positive gain
+```
+
+~120 lines of byte-identical skeleton, duplicated in **all three siblings**. 🔁
+
+---
+
+### 🏗️ The FM-vs-NN Difference Is One Hook
+
+The whole behavioral gap, side by side:
+
+```cpp
+// PartMgrBase (FM) — journal + rollback to the best state
+if (gainmax < 0) {
+    if (!deferredsnapshot || totalgain > besttotalgain) {
+        snapshot = part.to_vec();        // memento!
+        besttotalgain = totalgain;
+    }
+    deferredsnapshot = true;
+}
+
+// NNPartMgr — just stop
+if (gainmax <= 0) { break; }
+```
+
+That's it. Everything else — `init`, `legalize`, `optimize`, `final_check` —
+is identical. The refactor: **write the skeleton once, let the pass vary**. 🎯
+
+---
+
+### 🧱 C++ — Inheritance + a Real Virtual Hook
+
+The base had claimed "Template Method" but `_optimize_1pass` was `private` + non-`virtual` — the override point didn't exist. We made it real:
+
+```cpp
+// PartMgrBase.hpp
+protected:
+    virtual void _optimize_1pass(std::span<std::uint8_t> part);   // ← the hook
+
+// NNPartMgr.hpp — ~110 duplicated lines removed, one override left
+template <typename Gnl, typename GainMgr, typename ConstrMgr>
+class NNPartMgr : public PartMgrBase<Gnl, GainMgr, ConstrMgr> {
+    using Base = PartMgrBase<Gnl, GainMgr, ConstrMgr>;
+  public:
+    using Base::Base;                       // inherit the 4-arg constructor
+  protected:
+    void _optimize_1pass(std::span<std::uint8_t> part) override;  // the ONLY override
+};
+```
+
+`init`/`legalize`/`optimize`/`total_cost` all inherited — **public API unchanged**. ✅
+
+---
+
+### 🐍 Python — Same Story, Dynamic Dispatch
+
+Python needs no `virtual` — every method is virtual. `NNPartMgr` becomes a subclass
+overriding only the pass:
+
+```python
+class NNPartMgr(PartMgrBase):
+    """Inherits the FM skeleton; only the single-pass behaviour differs."""
+
+    def _optimize_1pass(self, part: Part) -> None:
+        totalgain = 0
+        while not self.gain_mgr.is_empty():
+            move_info_v, gainmax = self.gain_mgr.select(part)
+            if gainmax <= 0:
+                break
+            # … update_move / update_move_v / validator.update_move …
+        self.totalcost -= totalgain
+```
+
+Enabler: `PartMgrBase.take_snapshot`/`restore_part_info` were abstract but *unused*
+(journal replaced them) → made them concrete defaults so a subclass can exist.
+`NNPartMgr.py` 170 → **52 lines**. 📉
+
+---
+
+### 🦀 Rust — No Inheritance? A Trait With Defaults
+
+Rust can't subclass. The faithful Template Method is a **trait with default methods**
+plus inherent forwarders that keep the public API callable *without* a trait import:
+
+```rust
+// private trait — the skeleton written ONCE
+pub(crate) trait PartMgr<Gnl, GainMgr, ConstrMgr>
+where GainMgr: GainMgrInterface<Gnl>, ConstrMgr: ConstrMgrInterface<Gnl>,
+{
+    fn gain_mgr(&mut self) -> &mut GainMgr;
+    fn validator(&mut self) -> &mut ConstrMgr;
+    fn total_cost_mut(&mut self) -> &mut i32;
+    // …
+    fn init(&mut self, part: &mut [u8]) { … }          // default
+    fn legalize(&mut self, part: &mut [u8]) -> LegalCheck { … }  // default
+    fn optimize(&mut self, part: &mut [u8]) { … }      // default
+    fn optimize_1pass(&mut self, part: &mut [u8]);     // ← the hook
+}
+```
+
+```rust
+// NNPartMgr — keeps its public methods as thin forwarders
+pub fn init(&mut self, part: &mut [u8])    { PartMgr::init(self, part) }
+pub fn legalize(&mut self, part: &mut [u8]) -> LegalCheck { PartMgr::legalize(self, part) }
+```
+
+---
+
+### 🦀 Why the Forwarders? Public API Preservation
+
+Trait default methods are **not** automatically callable as `pm.init(…)` —
+Rust requires the trait to be in scope:
+
+```rust
+pm.init(&mut part);            // ✗ fails unless `use PartMgr;` is imported
+PartMgr::init(&mut pm, &mut part);  // ✓ works but changes the call syntax
+```
+
+The **inherent forwarders** keep `pm.init(…)` working for every existing caller —
+no new imports, no API break. This is the Rust price of "no inheritance", paid once
+in the trait design. 🎯
+
+Bonus enabler: `NNGainMgrInterface` is a superset of `GainMgrInterface`, so we made
+it a **supertrait** (`NNGainMgrInterface: GainMgrInterface`) — one shared gain-mgr
+bound for the whole skeleton.
+
+---
+
+### ⚖️ One Skeleton, Three Idioms
+
+.mermaid[
+<pre>
+graph TD
+    subgraph CPP["🧱 C++"]
+        C1["NNPartMgr : PartMgrBase\nprotected virtual optimize_1pass"]
+    end
+    subgraph PY["🐍 Python"]
+        P1["NNPartMgr(PartMgrBase)\noverride _optimize_1pass"]
+    end
+    subgraph RS["🦀 Rust"]
+        R1["trait PartMgr (defaults)\n+ inherent forwarders"]
+    end
+    C1 --> SAME["🎯 Same Template Method\nskeleton once · one pass hook"]
+    P1 --> SAME
+    R1 --> SAME
+    style CPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style PY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style RS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SAME fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+The gain equation stays the same in every language:
+
+$$
+\text{gain}(v \to p) = \text{cut-cost decrease if } v \text{ moves to partition } p
+$$
+
+The FM/NN policy difference is a **one-line branch** everywhere. 🧩
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Part 5 — LegalCheck &amp; Inline Hygiene
+
+---
+
+### 🔧 Single Source of Truth: `LegalCheck`
+
+The C++ port scattered one enum across five headers:
+
+```
+enum class LegalCheck;        // forward-declared in 4 headers
+                              //   PartMgrBase · NNPartMgr · MLPartMgr · MLMidLvlPartMgr
+enum class LegalCheck { … };  // defined only in FMConstrMgr.hpp
+```
+
+Any caller of `legalize()` had to *know* to include `FMConstrMgr.hpp` or hit an
+incomplete-type error. The fix — one canonical header:
+
+```cpp
+// LegalCheck.hpp  ← new, self-contained
+enum class LegalCheck { NotSatisfied, GetBetter, AllSatisfied };
+```
+
+Every header that returns it now `#include "LegalCheck.hpp"`. Fragile forward
+declarations → **one definition, everywhere**. 🔒
+
+---
+
+### ⚡ Inline Hygiene: 166 One-Liners Get `#[inline]`
+
+Same mechanical rule, two crates:
+
+| Crate | Functions | What |
+|-------|-----------|------|
+| 🦀 netlistx-rs | **19** | getters (`num_modules`, `get_module_by_name`), `Default` impls, `vdcorput` |
+| 🦀 ckpttn-rs | **147** | accessors, trait-impl forwarders, `Deref`/`Index` impls, `is_empty`, `len` |
+
+"Contains only one line" = the **body** is a single statement, even if the
+signature spans lines:
+
+```rust
+// QUALIFIES (body is one line):
+pub fn check_constraints(&self,
+                         move_info_v: &MoveInfoV<Gnl::Node>) -> bool {
+    self.validator.check_constraints(move_info_v)
+}
+```
+
+Skipped deliberately: `#[test]` fns, `fn main`, trait declarations (`;`), and
+functions already inlined. Verification: **test profile identical** before/after. ✅
+
+---
+
+### 🧩 Bonus: The Refactor Became a Skill
+
+The whole detection + insertion + verification procedure now lives as an
+opencode skill:
+
+```
+~/.config/opencode/skills/add-rust-inline/SKILL.md
+```
+
+- 🔍 brace-aware single-line-body detection (multi-line signatures, nested braces)
+- 🚫 skip rules: `#[test]`, `fn main`, trait declarations, duplicates
+- 📏 insertion rule: `#[inline]` at the fn's own indentation, above the `fn`
+- ✅ mandatory verification: baseline test profile must not change
+
+**Patterns-as-prompting:** telling an agent "run `add-rust-inline`" is far more
+reproducible than "add inline to small functions". 🤖
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Part 6 — Verification &amp; Lessons
+
+---
+
+### ✅ Every Gate Green, Public API Untouched
+
+| Repo | Tests | Toolchain gates | Δ lines |
+|------|-------|-----------------|---------|
+| 🧱 netlistx-cpp | 45 cases · 205 asserts | xmake + MSVC /W4 /WX · clang-format | `readwrite.cpp` 870 → 509 |
+| 🦀 netlistx-rs | 249 tests | cargo fmt · clippy · test · doc `-D warnings` | `io.rs` 2057 → 1510 |
+| 🐍 netlistx | 179 passed (11 pre-existing env) | black · isort · flake8 | `netlist.py` 875 → 475 |
+| 🧱 ckpttn-cpp | 99 cases · 346 asserts | xmake + cmake · clang-format | net **−163 lines** |
+| 🐍 ckpttnpy | 23 passed (7 pre-existing env) | black · isort · flake8 | `NNPartMgr.py` 170 → 52 |
+| 🦀 ckpttn-rs | 241 tests | cargo fmt · clippy · test · doc `-D warnings` | skeleton single-sourced |
+
+`git diff` on every `lib.rs` / public header: **empty**. ✅
+
+---
+
+### 🌐 Cross-Repo Coupling: The Hidden Cost
+
+Refactoring one repo **broke its sibling's build**:
+
+```
+ckpttn-cpp/xmake.lua
+  add_files("../netlistx-cpp/source/readwrite.cpp")   ← compiles netlistx sources directly
+  add_files("../netlistx-cpp/source/reader.cpp")      ← NEW file the refactor created
+```
+
+The netlistx-cpp Strategy+Factory split moved parser bodies into `reader.cpp` —
+and ckpttn-cpp (which compiles netlistx sources directly) stopped linking.
+**Fix:** one line in `xmake.lua`.
+
+- 🗺️ Know who compiles *your* sources before you split them
+- 🧪 The linker error was the fastest possible feedback — caught instantly
+- 📦 CMake was unaffected: it fetches the released netlistx tag
+
+---
+
+### 🎯 Lessons Learned
+
+.pull-left[
+
+**Patterns that paid off** ✅
+
+- 🏭 **Strategy + Factory** — dispatch switches are smells; open/closed wins
+- 🏗️ **Template Method** — copy-pasted skeletons collapse to one + a hook
+- 🧩 **PEP 562 `__getattr__`** — the Python escape hatch for circular imports
+- 🔒 **Single-source enums** — forward declarations are deferred breakage
+
+**What didn't need a pattern** 🚫
+
+- 🐍 Python had no dispatcher → no factory needed
+- 🦀 `Result`/exceptions → no `exit(1)` problem to centralize
+- 🗿 A full Builder for a 3-field config struct
+
+]
+
+.pull-right[
+
+**The hard constraint shaped everything** 🛡️
+
+1. 🏷️ **"Don't change the public API"** — every refactor preserved call syntax
+2. 🦀 **Rust has no inheritance** — trait defaults + inherent forwarders
+3. 🔁 **Sibling repos move together** — one shared skeleton per language family
+4. 🧪 **Tests are the contract** — 1,000+ assertions never blinked
+5. 🔍 **Cross-repo awareness** — xmake compiled the sibling's sources
+6. 🤖 **Skills capture the recipe** — `add-rust-inline` for reproducibility
+
+]
+
+---
+
+### 🗂️ Session Log
+
+.pull-left[
+
+**netlistx family** (readers)
+
+| Repo | Highlights |
+|------|------------|
+| 🧱 netlistx-cpp | Strategy+Factory readers · shared Yosys builder · `fail()` |
+| 🦀 netlistx-rs | `reader.rs` trait objects · `build_netlist_from_parts` |
+| 🐍 netlistx | shared `_build_netlist_from_parts` · PEP 562 re-export |
+
+]
+
+.pull-right[
+
+**ckpttn family** (partitioning)
+
+| Repo | Highlights |
+|------|------------|
+| 🧱 ckpttn-cpp | `NNPartMgr : PartMgrBase` · `LegalCheck.hpp` · xmake fix |
+| 🐍 ckpttnpy | `NNPartMgr(PartMgrBase)` · concrete snapshot defaults |
+| 🦀 ckpttn-rs | `PartMgr` trait + forwarders · supertrait gain mgr |
+
+All on `dev`, all gates green. 📤
+
+]
+
+---
+
+### 📚 Further Reading
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🛠️ _Refactoring_ — Martin Fowler
+- 🦀 _Rust Design Patterns_ — rust-unofficial
+
+**Repos**
+- 🧱 github.com/luk036/netlistx-cpp · ✂️ github.com/luk036/ckpttn-cpp
+- 🦀 github.com/luk036/netlistx-rs · ✂️ github.com/luk036/ckpttn-rs
+- 🐍 github.com/luk036/netlistx · ✂️ github.com/luk036/ckpttnpy
+
+]
+
+.pull-right[
+
+**Skills**
+- ⚡ `add-rust-inline` — inline one-liners reproducibly
+- 🧩 `add-rust-eqn` · `add-cpp-eqn` · `add-py-plot` — doc enrichment
+
+**Try it:** find one `switch` that dispatches formats… and give it a factory. 😉
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Refactoring with Design Patterns — Part 2
+
+@luk036 👨‍💻 · Questions welcome 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

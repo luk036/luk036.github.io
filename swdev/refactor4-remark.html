@@ -1,0 +1,702 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Refactoring with Design Patterns — Part 4: ginger &amp; multiplierless across C++ / Rust / Python</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Refactoring with Design Patterns — Part 4
+
+### ginger &amp; multiplierless across C++ 🔁 Rust 🔁 Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — Strategy: solver execution policies**
+
+**1️⃣ The 12-Copy Smell** 📊
+- `_st` / `_mt` / `_atomic` triplicated per solver
+
+**2️⃣ ginger-cpp: `execution_policy.hpp`**
+- step functors + sequential / jacobi_mt / atomic policies
+
+**3️⃣ Python `_policy.py`**
+- `sequential_run` / `jacobi_mt_run` + job closures
+
+**4️⃣ Rust `execution_policy.rs`**
+- generic policies + `AtomicCell` trait
+
+]
+
+.pull-right[
+
+**Part 2 — Template Method, Facade &amp; Dedup**
+
+**5️⃣ multiplierless: `scan_constraints`**
+- inline Oracle → shared scan skeleton
+
+**6️⃣ Facades &amp; namespaces** 🏭
+- `solve_*` facade, `ginger::Options`, strategy registries
+
+**7️⃣ Dedup the jobs** 🧹
+- `aberth_job`, `roots_from_quadratic`, `pbairstow_job`
+
+**8️⃣ Lessons Learned** 📚
+
+]
+
+---
+
+### 🤔 Why Refactoring Again?
+
+Parts 1–3 refactored *physdes, LDS, netlistx, ellalgo &amp; lmi-solver*. This session applies the same recipe to the **algorithm libraries** — polynomial root-finding and FIR filter design — where the constraint gets even harder:
+
+.pull-left[
+
+**New this time** ✨
+
+- 🧮 **`_st` / `_mt` / `_atomic` triplication** — one algorithm, three execution modes, three copies
+- 🔒 **"Keep the public API unchanged"** — signatures frozen across 6 repos
+- 🔁 **Cross-repo consistency** — C++ / Rust / Python siblings must converge on the same shape
+- 🧪 **Iteration counts pinned in tests** — exact counts (5, 6, 7…) must not drift
+
+]
+
+.pull-right[
+
+**Same discipline** ✅
+
+- 🎯 Name the pattern *before* touching code
+- 📏 Baseline tests before any edit
+- 🚦 Every gate green after every commit
+- 🧹 Cleanup dead code first (P1)
+
+]
+
+---
+
+### 🌐 The Two Polyglot Families
+
+Six siblings, two missions:
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    GCPP["🧮 ginger-cpp\nC++ root-finding"] --> G["🎯 Polynomial\nroot-finding\nBairstow + Aberth"]
+    GPY["🐍 ginger\nPython package"] --> G
+    GRS["🦀 ginger-rs\nRust crate"] --> G
+    style GCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style GPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style GRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style G fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    MCPP["🧮 multiplierless-cpp\nC++ FIR design"] --> M["🎛 FIR Filter Design\nlowpass oracle + CSD"]
+    MPY["🐍 multiplierless\nPython package"] --> M
+    MRS["🦀 multiplierless-rs\nRust crate"] --> M
+    style MCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style MPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style MRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style M fill:#fce4ec,stroke:#880e4f,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+
+Plus the shared dependency **ellalgo** (C++/Rust/Python) — refactored in Part 3, now released.
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 1 — Strategy: the execution policies
+
+---
+
+### 📊 The Smell: 12 Copy-Pasted Loops
+
+Every solver exists in up to three execution modes, and the loop is copy-pasted each time:
+
+```
+pbairstow_even_st  / pbairstow_even_mt  / pbairstow_even_atomic
+pbairstow_autocorr_st / _mt / _atomic
+aberth (st)        / aberth_mt         / aberth_atomic
+aberth_autocorr (st) / aberth_autocorr_mt / aberth_autocorr_atomic
+```
+
+The per-root math is **identical** — only the scheduling &amp; data layout differ:
+
+.font-sm[
+| Mode | Read | Write | Sync |
+|------|------|-------|------|
+| `_st` | live `state[i]` | in place | — (Gauss-Seidel) |
+| `_mt` | frozen snapshot | live `state[i]` | per-iteration barrier (Jacobi) |
+| `_atomic` | seqlock buffer | own slot only | none (decoupled) |
+]
+
+- 💣 Fix a bug in one mode → forget the other two
+- 📉 Same loop written 3×, in 3 languages → 9× total
+
+---
+
+### 🏗️ The Fix: Step Functors + Execution Policies
+
+Split the **algorithm** from the **execution mode** — the GoF Strategy + Template Method:
+
+.mermaid[
+<pre>
+graph TD
+    S["🎯 Step functors\nper-root Newton job"] --> P1["🚶 sequential\nGauss-Seidel"]
+    S --> P2["🏃 jacobi_mt\nsnapshot + rayon"]
+    S --> P3["⚛️ atomic\ndecoupled buffer"]
+    style S fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style P3 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+- 🎯 Each algorithm supplies a *job*: `job(i, state) → (tol, i, new_value)`
+- 🏭 Each policy owns the loop, scheduling, and convergence aggregation
+- ✅ Public function signatures untouched — the modes become thin wrappers
+
+---
+
+### 🧮 C++: `source/execution_policy.hpp`
+
+The step functors and policies live in one internal header; public functions shrink to wrappers:
+
+```cpp
+// step functor — one per algorithm (even/autocorr Bairstow, Aberth, ...)
+struct even_bairstow_step {
+    const std::vector<double>& coeffs;
+    std::size_t degree;
+    const Options& options;
+
+    template <typename Get, typename Set, typename Neighbors>
+    auto operator()(std::size_t idx, Get&& get, Set&& set,
+                    Neighbors&& neighbors) const -> double {
+        const auto vri = get(idx);
+        auto local_coeffs = coeffs;              // horner corrupts the array
+        auto vA = horner(local_coeffs, degree, vri);
+        const auto tol_i = std::max(std::abs(vA.x()), std::abs(vA.y()));
+        if (tol_i < options.tol_ind) return 0.0;
+        auto vA1 = horner(local_coeffs, degree - 2, vri);
+        for (const auto jdx : neighbors) {
+            suppress_old(vA, vA1, vri, get(jdx));
+        }
+        set(vri - delta_scalar(vA, vri, vA1));   // ← the only math
+        return tol_i;
+    }
+};
+```
+
+---
+
+### 🧮 C++: three policies, one `run()`
+
+```cpp
+// sequential — Gauss-Seidel, in-place
+struct sequential_policy {
+    template <typename State, typename Step>
+    static auto run(State& state, const Options& options, Step& step)
+        -> std::pair<unsigned int, bool> { ... }
+};
+
+// jacobi_mt — frozen snapshot + chunked futures, small problems → sequential
+struct jacobi_mt_policy {
+    static auto run(State& state, const Options& options, Step& step) {
+        if (!ginger::should_parallelize(state.size()))
+            return sequential_policy::run(state, options, step);
+        ... snapshot + pool.enqueue(chunk) ...
+    }
+};
+
+// atomic_decoupled — one seqlock buffer, robin order, no barrier
+struct atomic_decoupled_policy {
+    static auto run(State& state, const Options& options, Step& step) {
+        std::vector<std::atomic<value_type>> buffer(num_roots);
+        ... decoupled per-chunk loops, max niter ...
+    }
+};
+```
+
+---
+
+The public entry points become one-liners:
+
+```cpp
+auto pbairstow_even_mt(const std::vector<double>& coeffs, std::vector<Vec2>& vrs,
+                       const Options& options) -> std::pair<unsigned int, bool> {
+    const auto degree = coeffs.size() - 1;
+    ginger::detail::even_bairstow_step step{coeffs, degree, options};
+    return ginger::detail::jacobi_mt_policy::run(vrs, options, step);
+}
+```
+
+📉 ginger-cpp: **−714 / +73 lines** across 9 files.
+
+---
+
+### 🐍 Python: `_policy.py` + job closures
+
+Python has no templates — closures carry the algorithm, the policy owns the loop:
+
+```python
+# ginger/_policy.py
+def sequential_run(job, state, options):
+    for niter in range(options.max_iters):
+        tolerance = 0.0
+        for i in range(len(state)):
+            tol_i, i, new_value = job(i, state)   # GS: reads live state
+            state[i] = new_value
+            tolerance = max(tolerance, tol_i)
+        if tolerance < options.tolerance:
+            return state, niter, True
+    return state, options.max_iters, False
+
+def jacobi_mt_run(job, state, options):
+    with ThreadPoolExecutor() as executor:
+        for niter in range(options.max_iters):
+            snapshot = state[:]                   # frozen for the iteration
+            futures = [executor.submit(job, i, snapshot)
+                       for i in range(len(state))]
+            ...
+```
+
+---
+
+```python
+# aberth.py — deduped job, shared by ST and MT
+def aberth_job(coeffs, i, zsc): ...               # one copy, not two
+
+def aberth(coeffs, zs, options=Options()):
+    return sequential_run(lambda i, zsc: aberth_job(coeffs, i, zsc), zs, options)
+
+def aberth_mt(coeffs, zs, options=Options()):
+    return jacobi_mt_run(lambda i, zsc: aberth_job(coeffs, i, zsc), zs, options)
+```
+
+- 🎯 The old `aberth_job` / `aberth_job2` (nested, **byte-identical**) → one module-level job
+- 📉 `aberth.py` **−116 lines**; `rootfinding.py` + `autocorr.py` share `_bairstow_solve`
+
+---
+
+### 🦀 Rust: generic policies + `AtomicCell`
+
+Rust needs `Copy + Sync` bounds and a trait to unify `Complex` and `Vec2`:
+
+.font-sm[
+```rust
+// execution_policy.rs
+pub trait AtomicCell<T>: Sync {
+    fn new(value: T) -> Self;
+    fn load(&self) -> T;
+    fn store(&self, value: T);
+}
+impl AtomicCell<Complex<f64>> for AtomicComplex { ... }
+impl AtomicCell<Vector2<f64>> for AtomicVec2 { ... }
+
+pub fn sequential_run<T, F>(state: &mut [T], options: &Options, from: usize, job: F)
+where T: Copy, F: Fn(usize, &mut T, &mut bool, &[T]) -> Option<f64> + Sync { ... }
+
+pub fn jacobi_mt_run<T, F>(state: &mut [T], options: &Options, from: usize, job: F)
+where T: Copy + Default + Send + Sync, ... { ... }
+
+pub fn atomic_decoupled_run<T, C, F>(state: &mut [T], options: &Options, job: F)
+where T: Copy + Send + Sync, C: AtomicCell<T> + Sync, ... { ... }
+
+pub fn aberth(coeffs: &[f64], zs: &mut [Complex<f64>], options: &Options) -> (usize, bool) {
+    sequential_run(zs, options, 0, |i, zi, _c, zsc| {
+        Some(aberth_job(coeffs, i, zi, zsc, &coeffs1))
+    })
+}
+```
+]
+
+- 📉 ginger-rs: **−446 lines** across `aberth.rs` + `rootfinding.rs`
+- ✅ `from` preserves each variant's original 0- vs 1-based iteration count
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 2 — Template Method: the oracle scan
+
+---
+
+### 🎯 The Smell: Inline Oracle + Round-Robin Idiom
+
+`multiplierless-cpp`'s `fir_design.cpp` buried a full `LowpassOracle` inline — a duplicate of `ellalgo`'s — with the same scan written three times:
+
+```
+assess_optim(x, spsq):
+    passband:    for rows → if v > up_sq ... else if v < lp_sq ...   ← idx += 1; if == N: = 0
+    stopband:    for rows → if v > spsq ... else if v < 0 ...        ← same idiom
+    nonredundant: for rows → if v < 0 ...                            ← same idiom
+    objective:   spsq = fmax
+```
+
+- ✖ The `idx += 1; if idx == N { idx = 0; }` round-robin counter appears **3×** in one file
+- 💣 `dot_row` re-implemented per scan; the oracle was re-implemented from `ellalgo` entirely
+
+---
+
+### 🎯 The Fix: `scan_constraints` Template Method
+
+One skeleton drives all three scans; each band supplies only its check callback:
+
+.font-sm[
+```cpp
+// lowpass_oracle.cpp — shared skeleton
+template <typename Check>
+auto scan_constraints(const Arr& mat, std::size_t& idx, std::size_t count,
+                      const Arr& x, Check&& check)
+    -> std::optional<ParallelCut> {
+    for (auto i = 0U; i != count; ++i) {
+        if (idx == count) { idx = 0; }        // round robin, once
+        const auto k = idx++;
+        const auto v = dot_row(mat, k, x);
+        if (auto cut = check(k, v)) { return cut; }
+    }
+    return std::nullopt;
+}
+```
+
+```cpp
+// stopband scan — only the policy lambda differs
+if (auto cut = scan_constraints(as, i_as, n_as, x,
+        [&](std::size_t k, double v) -> std::optional<ParallelCut> {
+            if (v > *spsq) { ... return cut; }
+            if (v < 0.0)   { ... return cut; }
+            if (v > fmax)  { fmax = v; imax = k; }
+            return std::nullopt;
+        })) { return {std::move(*cut), false}; }
+```
+]
+
+✅ Same skeleton in Python (`_scan_constraints`) and Rust (`scan_constraints`) — one shape, three languages.
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Part 3 — Facades, Namespaces &amp; Dedup
+
+---
+
+### 🏭 The Fix: `solve_*` Facade + Centralized Threshold
+
+Each solver gets an auto-dispatching facade, plus a single source of truth for "when to go parallel":
+
+.mermaid[
+<pre>
+graph LR
+    U["👤 User calls\nsolve_pbairstow_even(...)"] --> M{"mode?\nAUTOMATIC"}
+    M -->|"should_parallelize(n)\nn > 4"| MT["🏃 pbairstow_even_mt"]
+    M -->|"else"| ST["🚶 pbairstow_even_st"]
+    style U fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style M fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style MT fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style ST fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+---
+
+```cpp
+// C++ solve.hpp
+enum class solve_mode { automatic, sequential, multi_threaded, atomic };
+
+inline auto solve_aberth(const std::vector<double>& coeffs,
+                         std::vector<std::complex<double>>& zs,
+                         const ginger::Options& options,
+                         solve_mode mode = solve_mode::automatic)
+    -> std::pair<unsigned, bool> {
+    switch (mode) {
+        case solve_mode::sequential:      return aberth(coeffs, zs, options);
+        case solve_mode::multi_threaded:  return aberth_mt(coeffs, zs, options);
+        case solve_mode::atomic:          return aberth_atomic(coeffs, zs, options);
+        case solve_mode::automatic:
+        default:
+            return should_parallelize(zs.size()) ? aberth_mt(coeffs, zs, options)
+                                                 : aberth(coeffs, zs, options);
+    }
+}
+```
+
+- 🎯 `ginger::PARALLEL_THRESHOLD = 4` + `ginger::should_parallelize()` — one place, used by policies *and* facades
+- ✅ Mirrors in Python (`solve.py`) and Rust (`solve.rs` with `SolveMode`)
+
+---
+
+### 🧹 Namespace hygiene + dedup
+
+**`Options` → `ginger::Options`** (C++) — the only global-scope type is now namespaced; the single consumer (`multiplierless-cpp`) updated in the same pass.
+
+**`roots_from_quadratic`** — was `static` in **both** `rootfinding.cpp` and `autocorr.cpp`:
+
+```cpp
+// before: two identical static copies
+// after:  one ginger::detail::roots_from_quadratic
+auto [r1, r2] = ginger::detail::roots_from_quadratic(vr);
+```
+
+---
+
+**Bairstow jobs deduped with a flag** — Rust `pbairstow_even_job` vs `pbairstow_autocorr_mt_job` differed only in the reciprocal-pair suppression:
+
+```rust
+fn pbairstow_job(coeffs, i, vri, converged, vrsc, autocorr: bool) -> Option<f64> {
+    ...
+    for (_, vrj) in vrsc.iter().enumerate().filter(|t| t.0 != i) {
+        suppress_old(..., vrj);
+        if autocorr {                       // ← the only difference
+            let vrjn = Vector2::new(-vrj.x_, 1.0) / vrj.y_;
+            suppress_old(..., &vrjn);
+        }
+    }
+    ...
+}
+```
+
+- 📉 4 Bairstow jobs → 2; the `autocorr: bool` is the extracted *strategy*
+
+---
+
+### 🏭 Strategy registries in the CLI
+
+`fir_design` picked its algorithms with `if/else` chains — now they're **Strategy registries**:
+
+```python
+# multiplierless/fir_design.py — spectral method
+from multiplierless.spectral_fact import spectral_fact_select, SpectralMethod
+h = spectral_fact_select(r, method, tol)      # one dispatch, not an if/else
+
+# verilog generator registry
+VERILOG_GENERATORS: dict[str, VerilogGenerator] = {
+    "transpose": _generate_transpose_verilog,
+    "direct": _generate_direct_verilog,
+}
+output["verilog"] = VERILOG_GENERATORS[form](coeff_tuples, module_name)
+```
+
+```rust
+// multiplierless-rs — same idea
+let method = if spec.spectral_method == "fft" { SpectralMethod::Fft }
+             else { SpectralMethod::Root };
+let h = spectral_fact_select(&r, method, spec.root_tolerance);
+```
+
+- ✅ Unknown `form` now errors explicitly instead of silently falling through
+- 📉 `fir_design.cpp` **−160+ lines**; the inline Oracle moved to `lowpass_oracle.rs` / `.py`
+
+---
+
+### 🔢 Name the magic numbers
+
+The retry bound and parallel threshold were scattered literals — now named constants:
+
+```rust
+// multiplierless-rs — lowpass_oracle_q.rs
+const MAX_RETRIES: u32 = 15;          // was: self.num_retries < 15
+```
+
+```cpp
+// multiplierless-cpp
+static constexpr unsigned int MAX_RETRIES = 15;   // was: _num_retries < 15
+```
+
+```python
+# multiplierless/lowpass_oracle_q.py
+self.max_retries = self.lowpass.spectrum.shape[0]  # was: an inline expression
+```
+
+```cpp
+// ginger-cpp — config.hpp
+inline constexpr std::size_t PARALLEL_THRESHOLD = 4;
+inline bool should_parallelize(std::size_t n) { return n > PARALLEL_THRESHOLD; }
+```
+
+- 🎯 Same constant, three names, zero behavior drift
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Part 4 — Verification
+
+---
+
+### 📏 Verification Discipline
+
+Every refactor step was gated the same way:
+
+| Gate | C++ | Rust | Python |
+|------|-----|------|--------|
+| Build | `cmake --build` 🔨 | `cargo build` 🛠 | — |
+| Test | `ctest` 🧪 | `cargo test` 🧪 | `pytest` 🧪 |
+| Lint | `-Werror` ⚠ | `cargo clippy` 🔍 | `flake8` 🔍 |
+| Format | `clang-format` 📏 | `cargo fmt` 📏 | black/isort 📏 |
+| Consumer | xmake build (multiplierless-cpp) 🏗 | — | — |
+
+---
+
+**Net line change** (the payoff):
+
+| Repo | Change |
+|------|--------|
+| ginger-cpp | **−714 / +73** |
+| ginger-rs | **−446 / +79** |
+| ginger (py) | −116 (aberth) + shared `_policy.py`/`solve.py` |
+| multiplierless-cpp | **−166 / +40** |
+| multiplierless-rs | +113 / −71 |
+
+- 🔁 Every "except" was explicit (e.g. Rust keeps `&mut Vec` signatures → pre-existing clippy `ptr_arg`)
+- 🧪 Iteration-count tests still assert exact values (5, 6, 7 …)
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Lessons Learned
+
+---
+
+### 📚 Lessons Learned
+
+.pull-left[
+
+**Patterns that carried across languages** 🧩
+
+- 🏃 **Strategy** — sequential / jacobi_mt / atomic policies
+- 🎯 **Template Method** — `scan_constraints`
+- 🏭 **Facade** — `solve_*` auto-dispatch
+- 🗂️ **Dedup** — `roots_from_quadratic`, `aberth_job`, `pbairstow_job(autocorr)`
+- 🔢 **Named constants** — `MAX_RETRIES`, `PARALLEL_THRESHOLD`
+
+**Language idioms matter** 🗺
+- Rust: traits (`AtomicCell`) + generics
+- Python: closures as step functors — no templates needed
+- C++: templated policy structs + `if constexpr`-free dispatch
+
+]
+
+.pull-right[
+
+**What actually helped** 💡
+
+- 🔒 **"Keep the public API unchanged"** forces honest refactors
+- 🧪 **Exact iteration counts** catch drift the moment it happens
+- 🏗 **Consumer-first verification** — build multiplierless-cpp against local ginger-cpp via xmake
+- 📉 **Triplicate-then-diverge** is the smell to hunt: one algorithm, N modes
+
+**The takeaway** 🎯
+- Find the *one* thing that varies (scheduling, data layout, sign, mode)
+- Extract it into a policy / step / callback
+- Keep the public API byte-for-byte compatible
+
+]
+
+---
+
+### 📚 Resources
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🔧 _Refactoring_ — Martin Fowler
+- 🦀 _Rust Design Patterns_ — rust-unofficial
+
+**Repos**
+- 🧮 github.com/luk036/ginger-cpp
+- 🐍 github.com/luk036/ginger
+- 🦀 github.com/luk036/ginger-rs
+- 🎛 github.com/luk036/multiplierless-cpp · multiplierless-rs
+- 👁️ github.com/luk036/ellalgo-rs
+
+]
+
+.pull-right[
+
+**Try it** 🎯
+- Find one triplicated solver loop in your codebase
+- Name the execution mode that varies
+- Extract the step, inject the policy
+- **Do not change the public API** 🔒
+
+> "Every root converges — the question is only how you schedule the sweeps." 😉
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Refactoring with Design Patterns — Part 4
+
+@luk036 🧑‍💻 — Questions welcome 💬
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

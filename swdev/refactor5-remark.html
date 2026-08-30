@@ -1,0 +1,727 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Refactoring with Design Patterns — Part 5: digraphx &amp; netoptim across C++ / Rust / Python</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Refactoring with Design Patterns — Part 5
+
+### digraphx &amp; netoptim across C++ 🔁 Rust 🔁 Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — Template Method**
+
+**1️⃣ The Smell: ~6 duplicated methods** 📊
+- `NegCycleFinder` vs `NegCycleFinderQ`
+- `find_cycle` / `relax` / `cycle_list` / `howard*`
+
+**2️⃣ C++ `digraph_detail.hpp`**
+- `graph_traits` + `howard_search` skeleton
+
+**3️⃣ Rust shared cores**
+- `relax_pred_core` / `relax_succ_core` + `Gen` skeleton
+
+**4️⃣ Python `_cycle_base.py`**
+- `find_cycle` / `relax_pred` / `cycle_list` / `howard_search`
+
+]
+
+.pull-right[
+
+**Part 2 — Strategy, Facade &amp; Dedup**
+
+**5️⃣ Relaxation as Strategy** 🏃
+- `update_ok` gate + pred / succ direction
+
+**6️⃣ Parametric loop: one skeleton** 🎯
+- `MaxParametricSolver` / `MinParametricSolver`
+
+**7️⃣ Adapter &amp; Facade** 🏭
+- callback adapters, `__init__` re-exports, `solve_*` facades
+
+**8️⃣ Dedup &amp; the Release** 🚀
+- `flow_value`, `Paths`/`DijkstraResult`
+
+**9️⃣ Lessons Learned** 📚
+
+]
+
+---
+
+### 🤔 Why Refactoring Again?
+
+Parts 1–4 refactored *physdes, LDS, ginger, multiplierless &amp; ellalgo*. This session applies the same recipe to the **graph algorithm libraries** — digraphx (negative cycles, parametric, min-cost flow) and netoptim (separation oracles):
+
+.pull-left[
+
+**New this time** ✨
+
+- 🧮 **Two finder classes, ~6 duplicated methods each** — the Howard engine copy-pasted across `NegCycleFinder` / `NegCycleFinderQ`
+- 🔁 **Three languages, three copies** — C++ / Rust / Python each had the same smell
+- 🔒 **"Keep the public API unchanged"** — every signature frozen across 6 repos
+- 🧪 **External consumer** — `netoptim` depends on `NegCycleFinder`, so byte-compatible `howard()` is a hard constraint
+
+]
+
+.pull-right[
+
+**Same discipline** ✅
+
+- 🎯 Name the pattern *before* touching code
+- 📏 Baseline tests before any edit
+- 🚦 Every gate green after every commit
+- 🧹 Release the dependency chain in order (py2cpp → xnetwork → digraphx)
+
+]
+
+---
+
+### 🌐 The Two Polyglot Families
+
+Six siblings, two missions:
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    DCPP["🧮 digraphx-cpp\nC++ graph algorithms"] --> D["🎯 Negative cycle\n+ parametric\n+ min-cost flow"]
+    DPY["🐍 digraphx\nPython package"] --> D
+    DRS["🦀 digraphx-rs\nRust crate"] --> D
+    style DCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style DPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style DRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style D fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    NCPP["🧮 netoptim-cpp\nC++ separation oracles"] --> N["🎯 Feasibility + Optimal\nmatrix scaling\ncutting-plane oracles"]
+    NPY["🐍 netoptim\nPython package"] --> N
+    NRS["🦀 netoptim-rs\nRust crate"] --> N
+    style NCPP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style NPY fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style NRS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style N fill:#fce4ec,stroke:#880e4f,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+
+Plus the shared dependency chain **py2cpp → xnetwork → digraphx**, released bottom-up in this session.
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 1 — Template Method: the Howard skeleton
+
+---
+
+### 📊 The Smell: Two Finders, Six Copy-Pasted Methods
+
+`NegCycleFinder` (predecessor only) and `NegCycleFinderQ` (pred **and** succ + `update_ok` gate) share almost everything:
+
+```
+find_cycle      — DFS cycle detection in the point-to map
+relax / relax_pred — Bellman-Ford one-pass relaxation
+cycle_list      — reconstruct a cycle from the point-to map
+is_negative     — triangle-inequality check
+howard / howard_pred / howard_succ — the policy-iteration loop
+```
+
+- 💣 `relax` vs `relax_pred` differ by **one line** — the `update_ok(dist[v], distance)` gate
+- 💣 `cycle_list` / `is_negative` are **byte-for-byte identical**
+- 📉 Same skeleton in 3 languages → the smell triples
+
+---
+
+### 🏗️ The Fix: one Template-Method skeleton
+
+The loop is the same everywhere — only the *relaxation* and the *negativity check* vary:
+
+```
+while not found and relax(dist, get_weight):
+    for vtx in find_cycle(digraph, point_to):
+        assert is_negative(vtx, dist, get_weight)   # optional
+        yield cycle_list(vtx, point_to)
+```
+
+.mermaid[
+<pre>
+graph TD
+    H["🔄 Howard skeleton\nrelax → find_cycle → check → yield"] --> R1["🚶 relax_pred\nBellman-Ford fwd"]
+    H --> R2["🏃 relax_succ\nreverse"]
+    H --> C["✅ is_negative\noptional check"]
+    style H fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style R2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+- 🎯 Extract the loop once, inject the relax strategy and the check hook
+- ✅ Public methods keep their exact signatures — they become thin wrappers
+
+---
+
+### 🧮 C++: `digraph_detail.hpp`
+
+The shared internals live in one header (the Adapter + Template-Method layer), mirroring the sibling libraries:
+
+```cpp
+// graph_traits — Adapter: derive Node/Edge/Cycle from any container shape
+template <typename DiGraph> struct graph_traits { /* … */ };
+
+// relax_pred — one Bellman-Ford pass, gated by update_ok
+template <typename DiGraph, typename Mapping, typename GetWeight,
+          typename PointTo, typename UpdateOk>
+auto relax_pred(const DiGraph& digraph, Mapping& dist, GetWeight&& get_weight,
+                PointTo& pred, UpdateOk&& update_ok) -> bool { /* … */ }
+
+// howard_search — Template Method skeleton
+template <typename DiGraph, typename Mapping, typename GetWeight,
+          typename PointTo, typename Relax, typename Check>
+auto howard_search(const DiGraph& digraph, Mapping& dist, GetWeight get_weight,
+                   PointTo& point_to, Relax relax, Check check)
+    -> py::Generator<typename graph_traits<DiGraph>::Cycle> { /* … */ }
+```
+
+---
+
+### 🧮 C++: the finders become thin wrappers
+
+```cpp
+template <typename Mapping, typename Callable>
+auto howard(Mapping& dist, Callable get_weight) -> py::Generator<Cycle> {
+    auto relax = [this](Mapping& d, auto& gw) {
+        return digraph_detail::relax_pred(this->_digraph, d, gw, this->_pred,
+                                          [](const auto&, const auto&) { return true; });
+    };
+    auto check = [this](const auto& vtx, const auto& d, auto& gw) {
+        assert(digraph_detail::is_negative(vtx, d, gw, this->_pred));
+    };
+    return digraph_detail::howard_search(this->_digraph, dist, std::move(get_weight),
+                                         this->_pred, std::move(relax), std::move(check));
+}
+```
+
+- `NegCycleFinder` 313 → 130 lines; `NegCycleFinderQ` 270 → 130 lines
+- 📉 The 3 duplicated `howard*` loops + `_find_cycle` / `_cycle_list` / `_relax*` are gone
+
+---
+
+### 🦀 Rust: shared cores + `Gen` skeleton
+
+Rust needs explicit lifetimes and a `Generator` (genawaiter). The cores live in `lib.rs`:
+
+```rust
+pub(crate) fn relax_pred_core<G, F, U>(
+    graph: &G,
+    dist: &mut HashMap<G::Node, G::Weight>,
+    get_weight: &F,
+    update_ok: &U,                       // generic — monomorphized per call site
+    pred: &mut HashMap<G::Node, (G::Node, G::Weight)>,
+) -> bool { /* … */ }
+
+#[allow(clippy::type_complexity)]
+pub(crate) fn howard_search<'b, G, F, R, C>(
+    graph: &'b G, dist: &'b mut HashMap<G::Node, G::Weight>,
+    get_weight: F,
+    point_to: &'b mut HashMap<G::Node, (G::Node, G::Weight)>,
+    relax: R, check: C,                  // the gate is baked INTO relax
+) -> Gen<Vec<G::Weight>, (), Pin<Box<dyn Future<Output = ()> + 'b>>> { /* … */ }
+```
+
+- 🎯 The 3 duplicate `Gen::new(Box::pin(async …))` loops collapse to **one** skeleton
+- ✅ Borrow-safe: the point-to map is passed as a parameter, not captured
+
+---
+
+### 🦀 Rust: why the gate is baked into `relax`
+
+An earlier draft passed `update_ok` through the skeleton as a **trait object** — a `&dyn Fn` called **once per edge** in the relaxation hot loop:
+
+```rust
+// ✗ first draft — erased gate, virtual call per edge
+R: Fn(&mut dist, &F, &dyn Fn(&W, &W) -> bool, &mut point_to) -> bool
+```
+
+That traded one virtual call per relaxed edge for the dedup — measurable on large graphs. **Reverted**: the gate now lives *inside* the `relax` closure, so `relax_pred_core` stays generic (`U`) and the call is statically dispatched:
+
+```rust
+let graph = self.graph;               // Copy — capture the ref, not `self`
+let relax = move |d: &mut dist, w: &F, p: &mut point_to| {
+    crate::relax_pred_core(graph, d, w, &update_ok, p)   // U = concrete closure type
+};
+crate::howard_search(self.graph, dist, get_weight, &mut self.pred, relax, check)
+```
+
+- ✅ Same skeleton, same public API — but the per-edge gate call is monomorphized again
+- 💡 Lesson: keep the *hot-loop* strategy generic; erase types only outside the per-element path
+
+---
+
+### 🐍 Python: `_cycle_base.py`
+
+No templates, no lifetimes — module-level functions serve as the shared cores:
+
+.font-sm[
+```python
+def relax_pred(digraph, dist, get_weight, update_ok, pred) -> bool:
+    changed = False
+    for utx, neighbors in digraph.items():
+        for vtx, edge in neighbors.items():
+            distance = dist[utx] + get_weight(edge)
+            if dist[vtx] > distance and update_ok(dist[vtx], distance):
+                dist[vtx] = distance
+                pred[vtx] = (utx, edge)
+                changed = True
+    return changed
+
+def howard_search(digraph, dist, get_weight, update_ok,
+                  point_to, direction, verify=True):
+    point_to.clear()
+    found = False
+    relax = relax_pred if direction == "pred" else relax_succ
+    while not found and relax(digraph, dist, get_weight, update_ok, point_to):
+        for vtx in find_cycle(digraph, point_to):
+            if verify:
+                assert is_negative(point_to, vtx, dist, get_weight)
+            found = True
+            yield cycle_list(point_to, vtx)
+```
+]
+
+- 📉 `neg_cycle.py` 325 → 222 lines; `neg_cycle_q.py` 406 → 328 lines
+
+---
+
+class: nord-light, middle, center
+
+## 🏃 Part 2 — Strategy: relaxation &amp; parametric loops
+
+---
+
+### 🏃 Relaxation as Strategy
+
+The `update_ok` gate and the **direction** (pred vs succ) are the *varying parts* — extracted as strategies:
+
+.font-sm[
+| Variant | Relaxation | Gate |
+|---------|-----------|------|
+| `NegCycleFinder.relax` | pred | always `True` |
+| `NegCycleFinderQ.relax_pred` | pred | user `update_ok(old, new)` |
+| `NegCycleFinderQ.relax_succ` | succ | user `update_ok(old, new)` |
+]
+
+```python
+# Python — unconstrained relax = constrained relax with the shared always-true gate
+# (module-level constant, NOT a fresh lambda per call — same rationale as the Rust revert)
+def _always_true(old, new):
+    return True
+
+def relax(self, dist, get_weight):
+    return _relax_pred(self.digraph, dist, get_weight, _always_true, self.pred)
+```
+
+- 🎯 One implementation of the relaxation math, three behaviors
+- ✅ Same shape in C++ (`relax_pred` + lambda) and Rust (generic `U` gate, statically dispatched)
+
+---
+
+### 🎯 Parametric loop: one skeleton
+
+`MaxParametricSolver.run` and `MinParametricSolver.run` are the **same loop** — only the comparison direction and the direction alternation differ:
+
+```
+get_weight  = λ e : DomainType(omega.distance(ratio, e))
+ratio_best  = ratio ; cycle_best = [] ; reverse = True
+while True:
+    cycles = ncf.howard* (dist, get_weight[, update_ok])
+    for c_i in cycles:
+        r_i = omega.zero_cancel(c_i)
+        if better(ratio_best, r_i):  ratio_best, cycle_best = r_i, c_i
+    if not improved(ratio_best): break
+    ratio, cycle, reverse = ratio_best, cycle_best, not reverse
+return ratio, cycle
+```
+
+- 🎯 Extract into `_parametric_base._run_loop(minimize, alternate_direction, pick_one_only)`
+- ✅ `MaxParametricSolver` → `minimize=True`; `MinParametricSolver` → `minimize=False, alternate_direction=True`
+- 📉 `parametric.py` −37, `min_parametric_q.py` −57 lines
+
+---
+
+### 🎯 Python: `MinParametricAPI` was a duplicate
+
+The two abstract interfaces were **textually identical** — two copies of `distance()` / `zero_cancel()`:
+
+```python
+class ParametricAPI(Generic[Node, Arc, Ratio]):        # parametric.py
+    @abstractmethod
+    def distance(self, ratio, edge) -> Ratio: ...
+    @abstractmethod
+    def zero_cancel(self, cycle) -> Ratio: ...
+
+class MinParametricAPI(ParametricAPI[Node, Arc, Ratio]):  # min_parametric_q.py — was a copy
+    ...  # now inherits instead of re-declaring
+```
+
+- ✅ One interface, one source of truth — subclasses plug in as Strategies
+- 🔒 Class name and module path unchanged → public API intact
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Part 3 — Adapter &amp; Facade
+
+---
+
+### 🏭 Adapter: one graph abstraction, many containers
+
+`graph_traits` (C++/Rust) and duck-typed `Mapping` (Python) let every algorithm accept any graph shape:
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["📦 HashMap\nN → Nbrs"] --> GT["🎛 graph_traits\nNode / Edge / Cycle"]
+    B["📦 BTreeMap"] --> GT
+    C["📦 Vec<Vec<(usize,W)>>"] --> GT
+    D["📦 CSRDiGraph\narray-backed"] --> GT
+    GT --> E["🧮 algorithms\nneg_cycle · parametric\nmin_cycle_ratio · mcf"]
+    style A fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style GT fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style E fill:#fce4ec,stroke:#880e4f,color:#2e3440,stroke-width:3px
+</pre>
+]
+]
+.pull-right[
+- 🎯 The C++ `_get_key`/`_get_val` helpers (previously copy-pasted in 2 headers) now live once in `digraph_detail.hpp`
+- ✅ `mcf.rs` gained `flow_value(flow, u, v)` — killing 6 inline `get(&u).and_then(...)` copies
+]
+
+---
+
+### 🏭 Callback adapters: free functions → class solvers
+
+The C++/Rust free functions (`max_parametric`, `min_parametric`) used to **re-implement the loop**. Now they build a callback adapter and delegate:
+
+```cpp
+// digraph_detail.hpp — Strategy adapter
+template <typename Ratio, typename Edge, typename Cycle, typename Domain,
+          typename Fn1, typename Fn2>
+class CallbackParametricAPI {
+    Fn1 _distance; Fn2 _zero_cancel;
+public:
+    auto distance(Ratio& r, const Edge& e) const -> Domain {
+        return static_cast<Domain>(_distance(r, e));
+    }
+    auto zero_cancel(const Cycle& c) const { return _zero_cancel(c); }
+};
+
+// parametric.hpp — the free function is now a 3-line Facade
+template <typename DiGraph, typename T, typename Fn1, typename Fn2, typename Mapping, typename D>
+auto max_parametric(const DiGraph& digraph, T& r_opt, Fn1 distance, Fn2 zero_cancel,
+                    Mapping& dist, D domain) {
+    digraph_detail::CallbackParametricAPI<…> omega{…};
+    auto solver = MaxParametricSolver<DiGraph, decltype(omega)>(digraph, omega);
+    return solver.run(r_opt, dist, domain);
+}
+```
+
+---
+
+### 🏭 Python: fix the broken facade
+
+`digraphx/__init__.py` exported **nothing** — yet the README said `from digraphx import NegCycleFinder`. Every example would fail:
+
+```python
+# __init__.py — after: additive re-exports, README examples now work
+from .csr_digraph import CSRDiGraph
+from .mcf import cycle_canceling_mcf
+from .min_cycle_ratio import MinCycleRatioSolver
+from .neg_cycle import NegCycleFinder
+from .neg_cycle_q import NegCycleFinderQ
+from .parametric import MaxParametricSolver
+from .tiny_digraph import DiGraphAdapter, TinyDiGraph
+```
+
+`netoptim/__init__.py` gained the same treatment plus **facade free functions** mirroring the C++ `solve_*` pattern:
+
+```python
+def solve_network_feas(oracle, space, x0):
+    return cutting_plane_optim(oracle, space, x0)
+```
+
+---
+
+### 🐍 netoptim: formalize the oracle contract
+
+The edge-oracle was an informal `oracle: Any` with a latent bug — `Ratio` had no `update()`:
+
+```python
+# _typing.py — the Strategy contract, now explicit
+class EdgeOracle(Protocol):
+    def eval(self, edge: Any, x: Any) -> Any: ...
+    def grad(self, edge: Any, x: Any) -> Any: ...
+    def update(self, t: Any) -> None: ...
+
+# optscaling_oracle.py — Ratio now satisfies the Protocol
+def update(self, t: Any) -> None:
+    """No-op hook: matrix scaling has no best-so-far parameter."""
+    pass
+```
+
+- ✅ `Cut` alias consolidated into `_typing.py` (was defined in both modules + tests)
+- 🔒 `NetworkOracle.update()` no longer risks an `AttributeError` on an `OptScalingOracle`
+
+---
+
+class: nord-light, middle, center
+
+## 🧹 Part 4 — Dedup, Tests &amp; the Release
+
+---
+
+### 🧹 Dedup the plumbing
+
+The small, boring wins add up:
+
+**`mcf` — flow lookup &amp; residual edges**
+
+.font-sm[
+```python
+# was: flow.get(u, {}).get(v, 0)  × 6 in digraphx-rs mcf.rs
+def flow_value(flow, u, v): ...
+
+# was: forward/backward ResidualEdge built twice
+def _residual_edge(g, u, v, flow): ...   # shared by build + update
+```
+]
+
+**netoptim-rs — identical structs**
+.font-sm[
+```rust
+pub type DijkstraResult<N, E> = crate::Paths<N, E>;   // was a duplicate struct
+```
+]
+
+.pull-left[
+**Duplicate tests removed** 🧹
+- `lib.rs` (netoptim-rs): 6 tests deleted
+- `utils.rs`: `GraphJSON` defined twice → once
+- `min_cycle_ratio.rs`: `zero_cancel` rewritten with `fold` — the empty-cycle panic is now explicit
+
+]
+.pull-right[
+**netoptim-cpp** — same recipe:
+- `HasKeyType` out of the anonymous namespace (ODR hazard)
+- `explicit` copy constructors fixed
+- `parametric.hpp` → shared `parametric_search` skeleton
+
+]
+
+---
+
+### 🧪 Verification Discipline
+
+Every refactor step was gated the same way — before *and* after:
+
+.font-sm[
+| Repo | Build | Test | Lint |
+|------|-------|------|------|
+| digraphx-cpp | `cmake` + `xmake` 🔨 | 77 cases / 125 asserts 🧪 | `-Werror` ⚠ |
+| netoptim-cpp | `cmake` + `xmake` 🔨 | 33 cases / 78 asserts 🧪 | `-Werror` ⚠ |
+| digraphx-rs | `cargo build` 🛠 | 78 tests 🧪 | `cargo clippy` 🔍 |
+| netoptim-rs | `cargo build` 🛠 | 70 tests 🧪 | `cargo clippy` 🔍 |
+| digraphx (py) | — | 206 tests, 99% cov 🧪 | flake8 🔍 |
+| netoptim (py) | — | 31 tests, 94% cov 🧪 | flake8 🔍 |
+]
+
+- 🧪 `netoptim` (all 3 langs) is an **external consumer** of `digraphx::NegCycleFinder` — running its suite guards the refactor
+
+---
+
+### 📊 Net line change
+
+.font-sm[
+| Repo | Change |
+|------|--------|
+| digraphx-cpp | **−497 / +413** (incl. new `digraph_detail.hpp`) |
+| netoptim-cpp | **−272 / +232** (incl. new `netoptim_detail.hpp`) |
+| digraphx-rs | **−192 / +268** (incl. shared cores in lib.rs) |
+| netoptim-rs | **−93 / +19** |
+| digraphx (py) | **−248 / +95** (incl. 2 new `_base.py` modules) |
+| netoptim (py) | **−15 / +58** (incl. `_typing.py`) |
+]
+
+- 🔁 ~**1,300 lines of duplicated algorithm logic removed**, replaced by ~1,000 lines of shared skeletons
+- 🧪 Every "except" was explicit (e.g. Rust keeps `&mut` signatures → pre-existing clippy `ptr_arg`)
+
+---
+
+### 🚀 The Release: dependency chain, bottom-up
+
+The refactor shipped as a coordinated release across three repos:
+
+.mermaid[
+<pre>
+graph LR
+    P["🐍 py2cpp\nv1.6.4 → v1.6.5"] --> X["🕸 xnetwork-cpp\nv1.7.7 → v1.7.8\npin Py2Cpp v1.6.5"]
+    X --> D["🧮 digraphx-cpp\nv1.1.7 → v1.1.8\npin Py2Cpp v1.6.5"]
+    style P fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style X fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+- 📦 Each repo: bump VERSION → update the pin → build/test → commit on `dev` → merge → `gh release create`
+- 🔧 **HTTPS was blocked, SSH worked** → `git config url."git@github.com:".insteadOf "https://github.com/"` so CPM's FetchContent could resolve the new tag
+- ✅ The digraphx-cpp Template-Method refactor shipped inside v1.1.8
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Lessons Learned
+
+---
+
+### 📚 Lessons Learned
+
+**Patterns that carried across languages** 🧩
+
+- 🎯 **Template Method** — the Howard loop: one skeleton, injected relax + check
+- 🏃 **Strategy** — `update_ok` gate, pred/succ direction, minimize flag
+- 🏭 **Adapter** — `graph_traits` / `_get_key` / `_get_val` / `flow_value`
+- 🏭 **Facade** — free functions + callback adapters → class solvers
+- 🗂️ **Dedup** — `Paths`/`DijkstraResult`, `GraphJSON`, duplicate tests
+
+**Language idioms matter** 🗺
+- Rust: `&dyn Fn` gates, `Gen` + lifetime-heavy signatures, type-inference fixes
+- Python: module-level cores, closures as strategies, Protocol for the oracle
+- C++: templated cores + `py::Generator` coroutine skeleton
+
+---
+
+**What actually helped** 💡
+
+- 🔒 **"Keep the public API unchanged"** — forces honest refactors; external consumer (`netoptim`) proves it
+- 🧪 **Run the consumer's suite** — not just your own
+- 🏗 **Baseline before, gate after** — every repo green at every step
+- 📦 **Release the dependency chain in order** — py2cpp must exist before xnetwork can pin it
+- 🛠 **Know your network** — SSH rewrite for CPM when HTTPS is blocked
+- ⚡ **Keep the hot loop statically dispatched** — a `&dyn Fn` gate was reverted; the strategy is generic, the *per-edge call* is not erased (Python: module-level gate constant, not a per-call lambda)
+
+**The takeaway** 🎯
+- Find the *one* thing that varies (direction, gate, comparison, storage)
+- Extract it into a skeleton + injected strategy
+- Keep every public signature byte-for-byte compatible
+
+---
+
+### 📚 Resources
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🔧 _Refactoring_ — Martin Fowler
+- 🦀 _Rust Design Patterns_ — rust-unofficial
+
+**Repos**
+- 🧮 github.com/luk036/digraphx-cpp · digraphx-rs
+- 🐍 github.com/luk036/digraphx
+- 🎯 github.com/luk036/netoptim-cpp · netoptim-rs
+- 🐍 github.com/luk036/netoptim
+- 📦 github.com/luk036/py2cpp · xnetwork-cpp
+
+]
+
+.pull-right[
+
+**Try it** 🎯
+- Find two classes with the same loop and one differing line
+- Name the strategy that varies (gate, direction, comparator)
+- Extract the skeleton, inject the strategy
+- **Do not change the public API** 🔒
+
+> "Every negative cycle is found — the question is only how you relax." 😉
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Refactoring with Design Patterns — Part 5
+
+@luk036 🧑‍💻 — Questions welcome 💬
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

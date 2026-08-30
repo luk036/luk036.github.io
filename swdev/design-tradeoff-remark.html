@@ -1,0 +1,647 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Design is a Trade-off — Part 6: The Flag That Should Have Been Two Functions</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Design is a Trade-off — Part 6
+
+### The Flag That Should Have Been Two Functions
+
+ginger across C++ 🔁 Rust 🔁 Python
+
+@luk036 👨‍💻 · 2026 📅 · 30 min ⏱️
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — The Revert** 🔄
+
+**1️⃣** A "win" that wasn't — the `autocorr` flag
+**2️⃣** Why it failed — a branch in the hottest loop
+**3️⃣** The correct cut — compile-time vs runtime
+**4️⃣** The fixes — 🦀 Rust · 🐍 Python
+
+**Part 2 — The Trade-off Lens** 🔬
+
+**5️⃣** Bought / Paid / Verdict
+**6️⃣** Judge by seams, not lines
+
+]
+
+.pull-right[
+
+**Part 3 — The Catalogue** ⚖️
+
+**7️⃣** Strategy — execution policies
+**8️⃣** Template Method — `scan_constraints`
+**9️⃣** Facade · Dedup · Constants
+
+**Part 4 — Retro-Analysis** 🔍
+
+**🔟** The selection spectrum (Parts 1–5 + the revert)
+**1️⃣1️⃣** The flags that survived (incl. refactor5)
+**1️⃣2️⃣** Seams that leak · line-currency patterns
+
+**Part 5 — Closing** 🎯
+
+**1️⃣3️⃣** Lessons · Try it · Resources
+
+]
+
+---
+
+### 🤔 Why This Session?
+
+Part 4's scoreboard celebrated the refactor:
+
+.font-sm[
+| Repo | Change |
+|------|--------|
+| ginger-cpp | **−714 / +73** |
+| ginger-rs | **−446 / +79** |
+| ginger (py) | −116 (aberth) + shared `_policy.py`/`solve.py` |
+]
+
+One of those "wins" was merging the Bairstow jobs with a flag:
+
+```rust
+fn pbairstow_job(coeffs, i, vri, converged, vrsc, autocorr: bool) -> Option<f64>
+```
+
+- 📉 4 Bairstow jobs → 2 · "the `autocorr: bool` is the extracted *strategy*"
+- 🔒 public API unchanged · 🧪 iteration counts still pinned
+
+**Then we looked again — and reverted it.** 🤔
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Part 1 — The Revert
+
+A dedup that seemed right — and the fix that followed.
+
+---
+
+### 🔀 The Dedup That Seemed Right
+
+`pbairstow_even_job` vs `pbairstow_autocorr_job` differed **only** in the reciprocal-pair suppression:
+
+```rust
+fn pbairstow_job(coeffs, i, vri, converged, vrsc, autocorr: bool) -> Option<f64> {
+    ...
+    for (_, vrj) in vrsc.iter().enumerate().filter(|t| t.0 != i) {
+        suppress_old(..., vrj);
+        if autocorr {                       // ← the only difference
+            let vrjn = Vector2::new(-vrj.x_, 1.0) / vrj.y_;
+            suppress_old(..., &vrjn);
+        }
+    }
+    ...
+}
+```
+
+- 📉 4 Bairstow jobs → 2 · −40 lines · all gates green
+- 🤔 ...but the `if autocorr` lives **inside** the per-root, per-iteration loop
+
+---
+
+### 🚨 Why the Flag Is Wrong
+
+The check runs **once per neighbor, per factor, per iteration** — the hottest loop in the solver:
+
+.font-sm[
+| Cost | Why |
+|------|-----|
+| ⚡ Branch in the hot loop | evaluated m × (m−1) × niter times — even when never needed |
+| 🔗 Coupled evolution | even & autocorr must change in lockstep forever |
+| 🧠 False strategy | `autocorr` is NOT a mode — no call changes it at runtime |
+]
+
+The reciprocal image it suppresses:
+
+$$ \hat{v}_j = \bigl(-v_{j,x},\; 1\bigr) \big/ v_{j,y} $$
+
+> The flag dedup parameterized the **variation point** with a bool — the very thing Strategy exists to avoid.
+
+---
+
+### 🎯 The Correct Cut: Compile-time vs Runtime
+
+.mermaid[
+<pre>
+graph TD
+    V["🔀 What varies?"] --> R["🕐 runtime\nmode: st / mt / atomic"]
+    V --> C["🏷️ compile-time\nalgorithm variant: even / autocorr"]
+    R --> F["SolveMode enum\n(facade) — flag is fine"]
+    C --> F2["separate functions\n— a bool is wrong"]
+    style V fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style R fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style F2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+- ✅ **Runtime-varying** → parameter/enum is honest (the facade's `SolveMode`)
+- ❌ **Compile-time property** → two functions/types, never a bool
+- The branch cost is paid on **every call**, but the answer never changes
+
+---
+
+### 📖 The Reference Never Had This Problem
+
+ginger-cpp kept two step structs:
+
+```cpp
+struct even_bairstow_step {        // plain suppression
+    for (const auto jdx : neighbors) {
+        suppress_old(vA, vA1, vri, get(jdx));
+    }
+};
+
+struct autocorr_bairstow_step {    // reciprocal suppression, always on
+    for (const auto jdx : neighbors) {
+        const auto vrj = get(jdx);
+        suppress_old(vA, vA1, vri, vrj);
+        const auto vrjn = Vector2(-vrj.x(), 1.0) / vrj.y();
+        suppress_old(vA, vA1, vri, vrjn);     // reciprocal — no flag
+    }
+    const auto vrin = Vector2(-vri.x(), 1.0) / vri.y();
+    suppress_old(vA, vA1, vri, vrin);
+};
+```
+
+- 🏗️ templated `Get/Set/Neighbors` serves all three policies
+- 🎯 duplicated body is the price — the hot path stays straight-line
+
+---
+
+### 🦀 Rust: Split the Jobs Back
+
+```
+pbairstow_job(coeffs, i, vri, converged, vrsc, autocorr: bool)
+  ├─ pbairstow_even_job(coeffs, i, vri, converged, vrsc)
+  └─ pbairstow_autocorr_job(coeffs, i, vri, converged, vrsc)
+
+pbairstow_atomic_job(coeffs, i, buffer, autocorr: bool)
+  ├─ pbairstow_even_atomic_job(coeffs, i, buffer)
+  └─ pbairstow_autocorr_atomic_job(coeffs, i, buffer)
+```
+
+- The 6 public wrappers just pass the right job — **public API unchanged**
+- Bodies restored from the pre-dedup commit · **+92 / −38**
+- `cargo test`: 156 ✅ · clippy: only the pre-existing `ptr_arg` exceptions
+
+---
+
+### 🐍 Python: Split the Steps Back
+
+```
+_bairstow_step(coeffs, degree, i, vri, vrs, robin, autocorr, tol_ind)
+  ├─ _bairstow_even_step(coeffs, degree, i, vri, vrs, robin, tol_ind)
+  └─ _bairstow_autocorr_step(coeffs, degree, i, vri, vrs, robin, tol_ind)
+```
+
+The shared Gauss-Seidel loop becomes a **policy over the step**:
+
+```python
+_bairstow_solve(coeffs, vrs, options, step)       # loop: no flag anywhere
+pbairstow_even     → _bairstow_solve(..., _bairstow_even_step)
+pbairstow_autocorr → _bairstow_solve(..., _bairstow_autocorr_step)
+```
+
+- **+70 / −27** · `pytest`: 86 ✅ · coverage 97% (rootfinding 100%)
+- Same shape as C++ and Rust — **one architecture, three languages**
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Part 2 — The Trade-off Lens
+
+How to judge any refactor: what it bought, what it cost, and how to tell.
+
+---
+
+### 🔬 Bought / Paid / Verdict
+
+Every pattern is a trade. Name all three sides *before* touching code:
+
+.font-sm[
+| Side | Question |
+|------|----------|
+| ✅ **Bought** | what duplication or indirection was removed? |
+| ❌ **Paid** | what seam, branch, or API surface was added? |
+| ⚖️ **Verdict** | does the seam hold — or does it leak? |
+]
+
+**The deciding factors** 🔍
+
+- 🕐 **Frequency** — a flag checked once per call is configuration; per inner-loop-iteration is a branch
+- 🧭 **Where the seam is** — the seam is the design; a flag at the seam is the symptom
+- 📏 **Currency** — line counts are the metric to distrust; seam quality is the metric to inspect
+
+---
+
+class: nord-light, middle, center
+
+## ⚖️ Part 3 — The Catalogue
+
+The Part 4 patterns, judged through the lens.
+
+---
+
+### 🏃 Strategy — execution policies
+
+The per-root job is one Newton step; the policy owns the loop:
+
+$$ v_i^{(k+1)} = v_i^{(k)} - \delta\bigl(A, v_i^{(k)}, A_1\bigr) $$
+
+.mermaid[
+<pre>
+graph LR
+    S["🎯 per-root job\none Newton step"] --> P1["🚶 sequential\nGauss-Seidel"]
+    S --> P2["🏃 jacobi_mt\nsnapshot + rayon"]
+    S --> P3["⚛️ atomic\ndecoupled buffer"]
+    style S fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style P3 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+.font-sm[
+| Bought ✅ | Paid ❌ |
+|----------|---------|
+| one loop per mode | the **job contract** is now the bottleneck for new modes |
+| per-root math written once | Rust: atomic uses a *different* job shape → two job families |
+| bug fixed in one place | the `from` parameter exists only to preserve pinned counts |
+]
+
+- 🎯 **The seam is the design** — and the flag was the symptom of the seam
+
+---
+
+### 🎯 Template Method — `scan_constraints`
+
+The skeleton owns the traversal; each band injects only its check:
+
+.font-sm[
+```cpp
+template <typename Check>
+auto scan_constraints(const Arr& mat, std::size_t& idx, std::size_t count,
+                      const Arr& x, Check&& check) -> std::optional<ParallelCut> {
+    for (auto i = 0U; i != count; ++i) {
+        if (idx == count) { idx = 0; }        // round robin, ONCE
+        const auto k = idx++;
+        const auto v = dot_row(mat, k, x);
+        if (auto cut = check(k, v)) { return cut; }
+    }
+    return std::nullopt;
+}
+```
+]
+
+.font-sm[
+| Bought ✅ | Paid ❌ |
+|----------|---------|
+| round-robin idiom written once | skeleton **fixes the traversal** — round-robin, one `dot_row` per row |
+| all bands share bug fixes | control flow inverted into **stateful closures** (`fmax`, `imax`, …) |
+]
+
+- ✅ Right trade **only because** passband / stopband / nonredundant share the round-robin invariant
+
+---
+
+### 🏭 Facade — `solve_*` auto-dispatch
+
+```rust
+pub fn solve_pbairstow_even(..., mode: SolveMode) -> (usize, bool) {
+    match mode {
+        SolveMode::Automatic =>
+            if should_parallelize(vrs.len()) { pbairstow_even_mt(..) }
+            else                            { pbairstow_even(..) },
+        ...
+    }
+}
+```
+
+.font-sm[
+| Bought ✅ | Paid ❌ |
+|----------|---------|
+| one entry point per solver | API **surface grew** — 12 functions stay + 4 facades |
+| "when to go parallel" in one place | `PARALLEL_THRESHOLD` is a **hidden global policy** |
+| callers can't get the mode wrong | `solve_aberth_autocorr` ignores `mode` — a no-op arm |
+]
+
+- ⚖️ **Centralized policy vs explicit determinism** — `Automatic` surrenders pinned counts to a global threshold
+
+---
+
+### 🗂️ Dedup — Three Instances, Three Verdicts
+
+.font-sm[
+| Instance | What was merged | Trade | Verdict |
+|----------|-----------------|-------|---------|
+| `roots_from_quadratic` | two identical statics | cross-module dependency | ✅ worth it |
+| `aberth_job` / `aberth_job2` | byte-identical closures | trivial generalization | ✅ worth it |
+| `pbairstow_job(autocorr)` | even + autocorr | **branch in hot loop** · coupled evolution | ❌ reverted |
+]
+
+- 🎯 Dedup is only free when the shared part is truly invariant
+- 🚨 Here the shared part was the *loop body*, but the difference was *inside* the loop
+
+---
+
+### 🔢 Constants & Registries
+
+.font-sm[
+| Pattern | Bought ✅ | Paid ❌ |
+|---------|----------|---------|
+| named constants | magic numbers named & greppable | "same constant, three names" = **three copies** — drift silently |
+| strategy registries | dispatch as data; unknown keys error | **indirection** + runtime typos; for sets of 2–3 the if/else was fine |
+]
+
+> YAGNI cuts both ways: registries pay off only for open-ended sets
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Part 4 — Retro-Analysis
+
+Parts 1–5 through the lens: the series' own flags.
+
+---
+
+### 🌈 The Selection Spectrum
+
+Every mechanism the series used, from compile-time to runtime-bool:
+
+.font-sm[
+| Mechanism | Where | Checked at | Verdict |
+|-----------|-------|-----------|---------|
+| `if constexpr (Stable)` | `EllBase` (P3) | compile time | ✅ right |
+| two step structs | `autocorr_bairstow_step` (P4→P5) | compile time | ✅ right |
+| macro codegen | `impl_search_space!` (P3) | compile time | ✅ right |
+| hook injection | `find_concave_point` (P1) | once per call | ✅ right |
+| bool at base case | `has_triangle_base_case` (P1) | once per recursion | 🟡 tolerable |
+| enum in the loop | `PivotPolicy` (P3) | once per row | 🟠 borderline |
+| **bool in the loop** | **`pbairstow_job(autocorr)`** (P4) | **per neighbor per iteration** | ❌ **reverted** |
+]
+
+- 🎯 The revert wasn't an anomaly — the series was converging on this rule
+- 📏 **Frequency decides**: once per call is configuration; per inner-loop-iteration is a branch
+- 🔬 refactor5 (digraphx · netoptim) re-runs this trade twice — next slide
+
+---
+
+### 🟠 refactor5: The Flag-Heaviest Deck
+
+The digraphx & netoptim session extends the spectrum with five more mechanisms:
+
+.font-sm[
+| Mechanism | Where | Checked at | Verdict |
+|-----------|-------|-----------|---------|
+| template `update_ok` lambda | C++ `relax_pred` | compile time, per edge | ✅ right |
+| **`&dyn Fn` gate** | Rust `relax_pred_core` | **vtable per edge** | 🟠 the Rust leak |
+| `direction: str` | Python `howard_search` | once per call | 🟡 tolerable |
+| `verify: bool` | Python `howard_search` | once per found cycle | 🟡 tolerable |
+| `minimize` / `pick_one_only` | `_run_loop` | per sweep iteration | 🟠 borderline |
+| `alternate_direction` | `_run_loop` | per sweep (runtime state) | ✅ defensible |
+]
+
+- 🟠 **The always-true lambda** — the unconstrained finder now pays a per-edge gate; Rust dispatches it through `dyn`, C++ inlines it
+- 🟠 **Two bools in `_run_loop`** — Max/Min solvers are distinct algorithms; only `alternate_direction` is genuine runtime state
+- 🎯 The series is self-consistent in its inconsistency: every deck extracts "the one thing that varies" — as a function, template, `dyn` closure, string, or bool
+
+---
+
+### 🟠 The Flag's Cousin: `PivotPolicy` (Part 3)
+
+`factor_impl` threads a policy through the **per-row LDL^T sweep** — same shape as the autocorr flag:
+
+```cpp
+template <typename Fn>
+auto factor_impl(Fn&& f, PivotPolicy policy) -> bool {
+    for (std::size_t i = 0; i != n; ++i) {
+        // ... 40 lines of identical row sweep ...
+        if (d < 0) { return true; }
+        if (d == 0 && policy == PivotPolicy::AllowSemidefinite) {
+            start = i + 1;                 // ← the only difference, per row
+        }
+    }
+    return false;
+}
+```
+
+Why it survived:
+
+.font-sm[
+| Advantage | Why it matters |
+|-----------|----------------|
+| 📦 bigger dedup | ~40 lines × 3 languages |
+| ⚡ cheaper predicate | one `d == 0` per row — not per neighbor |
+| 🏷️ an enum, not a bool | self-documenting at the call site |
+]
+
+⚠️ **Still Part-5's standard:** the policy is compile-time-fixed per entry point. If the sweep becomes hot → specialize.
+
+---
+
+### 🟡 When a Bool Is Fine (Part 1)
+
+`rpolygon_cut` merged three recursive decomposers — the real differences were **hooks**, only one edge case stayed a flag:
+
+```python
+def rpolygon_cut_recur(v1, lst, is_anticlockwise, rdll,
+                       find_concave_point, has_triangle_base_case):
+    if has_triangle_base_case and len(lst) == 3:   # ← once per recursion
+        return [v1]                                #    not per neighbor
+    vcurr = find_concave_point(v1, ...)            # ← the real hooks
+```
+
+- 🐢 checked once per **recursive call**
+- 🧭 guards a base-case *specialization*, not the per-root math
+- 🔀 the three real differences were **functions**, not flags
+
+> **Frequency × semantics**: a bool guarding a base case is configuration; a bool in the Newton loop is a branch.
+
+---
+
+### 🔧 Seams That Leak: Mirrors, Quirks, Cruft
+
+"Don't change the public API" left seams open across Parts 1–3:
+
+.font-sm[
+| Seam | Pattern | The leak |
+|------|---------|----------|
+| `idx1/idx2/idx3` public fields (P3) | `RoundRobin` | helper + public mirrors must stay in sync |
+| `NoEffect + !more_alt → niter` (P3) | `OptimQState` | a historical quirk preserved *exactly* |
+| `from: 0` vs `from: 1` (P4) | `sequential_run` | count quirks threaded through every call |
+| `has_triangle_base_case` (P1) | `rpolygon_cut` | a 4th "hook" that is a bool, not a function |
+]
+
+- 🎯 Compatibility is bought with surface — every preserved quirk is that bill
+- 📏 An abstraction that absorbs a historical accident makes it **permanent**
+
+---
+
+### 📉 Line-Currency Patterns — the "Wins" That Weren't
+
+.font-sm[
+| Pattern | Claimed win | The unmeasured cost |
+|---------|------------|---------------------|
+| 🏭 `make_reader` (P2) | "open/closed — zero edits to dispatch" | the factory is still an explicit `match` — the switch moved |
+| 🧰 parity Builder (P1) | Rust Builder "for parity" | `..Default::default()` already was one — pure surface |
+| ⚡ 166 × `#[inline]` (P2) | "inline the one-liners" | "test profile identical" — **no measured speedup** |
+| 🐍 PEP 562 `__getattr__` (P2) | split without breaking imports | moved API invisible to IDE/mypy — analysis tax |
+]
+
+- 🧾 Justified by line counts or mechanical rules, not by seams
+- 🔍 "test profile identical" is the tell: no behavior, no benchmark
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 5 — Closing
+
+The rules, the homework, the resources.
+
+---
+
+### 📚 Lessons Learned
+
+.pull-left[
+
+**What actually helped** 💡
+
+- 🏷️ Name the pattern *before* touching code — we named "Strategy" wrong
+- 🧪 Exact iteration counts catch drift the moment it happens
+- 📖 A sibling reference (ginger-cpp) settles design arguments
+- 🔍 Retro-analysis — Parts 1–5 already had the full spectrum
+- 🔁 Reverting is cheap **when the halves are semantically separate**
+
+]
+
+.pull-right[
+
+**The corrected rule** 🎯
+
+- If the "one thing that varies" never varies at runtime → **two functions, not a flag**
+- Extract the skeleton, inject the check — never a bool in the loop
+- Frequency decides: once per call is config; per-iteration is a branch
+- Judge by **seams**, not line counts
+
+]
+
+---
+
+### 🎯 Try It
+
+- 🔍 Find a `bool` parameter in your core loop
+- ❓ Does it change at runtime? Or is it a property of the algorithm?
+- 🏗️ If compile-time → split into two functions, let the caller choose
+- 🔒 Keep the public API unchanged — the wrapper picks the variant
+- 📏 Judge the result by its seams, not its line count
+
+> "Every root converges — the question is only how you schedule the sweeps.
+> And whether your flag belongs inside the loop." 😉
+
+---
+
+### 📚 Resources
+
+.pull-left[
+
+**Patterns**
+- 🧩 _Design Patterns_ — Gamma, Helm, Johnson, Vlissides
+- 🔧 _Refactoring_ — Martin Fowler
+- ⚖️ _A Philosophy of Software Design_ — Ousterhout
+
+**Repos**
+- 🧮 github.com/luk036/ginger-cpp
+- 🐍 github.com/luk036/ginger
+- 🦀 github.com/luk036/ginger-rs
+
+]
+
+.pull-right[
+
+**This series**
+- 🧩 Part 1: physdes · LDS
+- 🏗️ Part 2: netlistx · ckpttn
+- 🔬 Part 3: ellalgo · lmi-solver
+- ⚖️ Part 4: ginger · multiplierless
+- 🧩 Part 5: digraphx · netoptim
+- ⚖️ **Part 6 (this talk): trade-offs + retro-analysis**
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Design is a Trade-off — Part 6
+
+@luk036 👨‍💻 — Questions welcome 💬
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

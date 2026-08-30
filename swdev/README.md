@@ -70,7 +70,12 @@ This section covers software development workflows and tooling: version control 
 | -------------------------------------------------- | ------------------------------- |
 | [Common Mistakes](mistakes-remark.html)            | Lessons learned in coding       |
 | [Remove Duplicate Code](remove-duplicate-remark.html) | DRY principles and refactoring |
-| [Refactoring with Design Patterns](refactor-remark.html) | Factory · Builder · Template Method across C++/Rust/Python (physdes & LDS) |
+| [Refactoring Part 1](refactor-remark.html)  | Factory · Builder · Template Method (physdes & LDS) |
+| [Refactoring Part 2](refactor2-remark.html) | Strategy · Factory · Template Method (netlistx & ckpttn) |
+| [Refactoring Part 3](refactor3-remark.html) | Strategy/Bridge · State · Facade (ellalgo & lmi-solver) |
+| [Refactoring Part 4](refactor4-remark.html) | Execution policies · facades · dedup (ginger & multiplierless) |
+| [Refactoring Part 5](refactor5-remark.html) | Howard skeleton · adapters · releases (digraphx & netoptim) |
+| [Design is a Trade-off (Part 6)](design-tradeoff-remark.html) | Retrospective across Parts 1–5: the trade-off of every pattern — and the flag that was reverted |
 
 ---
 
@@ -96,13 +101,18 @@ swdev/
 ├── ### Remark.js HTML Slides
 ├── ai-validate-remark.html                # Validation in AI Era
 ├── cocotb-hdl-remark.html                 # Cocotb HDL Verification
+├── design-tradeoff-remark.html            # Design is a Trade-off (Part 6)
 ├── ec-gen-remark.html                     # EC Generator
 ├── git-gh-ci-remark.html                  # Git & GitHub CI
 ├── git-gh-ci-advanced-remark.html         # Advanced Git & CI
 ├── hyerframes-remark.html                 # Hyperframe Data Structure
 ├── mistakes-remark.html                   # Common Coding Mistakes
 ├── pldl.html                              # Primal-Dual Algorithms
-├── refactor-remark.html                   # Refactoring with Design Patterns
+├── refactor-remark.html                   # Refactoring Part 1 (physdes & LDS)
+├── refactor2-remark.html                  # Refactoring Part 2 (netlistx & ckpttn)
+├── refactor3-remark.html                  # Refactoring Part 3 (ellalgo & lmi-solver)
+├── refactor4-remark.html                  # Refactoring Part 4 (ginger & multiplierless)
+├── refactor5-remark.html                  # Refactoring Part 5 (digraphx & netoptim)
 ├── remove-duplicate-remark.html           # Remove Duplicate Code
 ├── swdev.html                             # Development Tools
 ├── swdev-flow-ai-remark.html              # Software Development Flow in AI Era

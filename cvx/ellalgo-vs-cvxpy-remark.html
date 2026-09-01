@@ -190,7 +190,9 @@ C++ ellipsoid **beats CVXPY at every size** — the crossover never happens ⚙�
 
 ### The Three-Way Picture 📈
 
-![Run-time comparison: CVXPY vs Python vs C++](ellalgo-vs-cvxpy-remark.files/bench_chebyshev3.svg)
+<div style="display:flex;justify-content:center">
+  <img src="ellalgo-vs-cvxpy-remark.files/bench_chebyshev3.svg" style="width:70%" />
+</div>
 
 -   Log-scale wall-clock time vs dimension $n$
 -   C++ ellipsoid is **below both** curves everywhere
@@ -255,7 +257,9 @@ In **Python**, the ellipsoid method loses to CVXPY (interpreter overhead) 🐍
 
 ### Experiment 2 Picture 📈
 
-![Run-time comparison: LMI EVP](ellalgo-vs-cvxpy-remark.files/bench_lmi_evp3.svg)
+<div style="display:flex;justify-content:center">
+  <img src="ellalgo-vs-cvxpy-remark.files/bench_lmi_evp3.svg" style="width:70%" />
+</div>
 
 -   C++ ellipsoid **beats CVXPY at $m \le 16$** (54× → 2×) ⚙️
 -   The gap narrows as $\mathcal{O}(m^2)$ iterations grow — CVXPY catches up at $m = 20$
@@ -335,7 +339,9 @@ prob.solve()
 
 ### Experiment 3 Picture 📈
 
-![Run-time comparison: FIR lowpass design](ellalgo-vs-cvxpy-remark.files/bench_lowpass3.svg)
+<div style="display:flex;justify-content:center">
+  <img src="ellalgo-vs-cvxpy-remark.files/bench_lowpass3.svg" style="width:70%" />
+</div>
 
 -   C++ ellipsoid **beats CVXPY at every filter length** ⚙️
 -   CVXPY's time grows 38× (0.09 → 3.47 s); C++ stays ~0.05–0.19 s

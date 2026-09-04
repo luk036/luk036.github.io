@@ -1,0 +1,760 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Fairness-Centric Global Placement via Howard's Algorithm</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚖️ Fairness-Centric Global Placement
+### via Howard's Algorithm & Bipartite Matching
+
+🖥️ A Case Study in Refactoring `nnsplace` with Design Patterns
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📝 Abstract
+
+We revisit the **global placement** problem for FPGAs and present a *fairness-centric* view: instead of minimizing total wire length 📉, minimize the **worst-case** wire length of any single connection ⚖️. The talk walks through the algorithm 🧮 — Howard's method for the parametric minimum-cost-flow problem, bipartite-matching legalization, and I/O pad assignment — and then tells the **engineering story** 🏗️ of this session:
+
+- Removing duplicated infrastructure 🔁 by reusing sibling libraries (`digraphx`, `netlistx`, `physdes`)
+- Migrating the core optimizer to `digraphx.MinParametricSolver` 🔄
+- Fixing a legalization crash on crowded buckets 🐛 with a global free-slot fallback
+- Applying **Strategy** 🧩 and **Memento** 📸 design patterns
+- Verifying **bit-identical** results ✅ across 30 (grid × seed) scenarios
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Global Placement Problem** 🧭
+- What is placement?
+- Wire length models 📏
+
+**Part 2: Fairness-Centric Approach** ⚖️
+- Min–max fairness paradigm
+- Howard's algorithm 🌀
+
+]
+.pull-right[
+
+**Part 3: Legalization & I/O** 🧩
+- Bipartite matching
+- I/O pad ring 📍
+
+**Part 4: Refactoring & Results** 🏗️
+- Removing redundancy
+- Design patterns 🧩 & verification ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1: Global Placement Problem
+
+---
+
+### 🎯 What is Placement?
+
+- **Placement** assigns physical locations 📍 to the modules of a netlist on a fixed grid (FPGA fabric) or die (ASIC).
+- Input: a *netlist* of **modules** (cells 🟥, I/O pads 🟦) connected by **nets**.
+- Output: one grid site per module, such that
+  - no two modules overlap ❌,
+  - hard blocks (DSP/SRAM) are respected 🧱,
+  - and **wire length** is minimized 📉.
+
+- 🧱 **Column 27 is reserved** for DSP/SRAM — *cells cannot be placed there*, so the placer must skip it (`reserved_col`, configurable in `NnsConfig`). This shrinks the usable area, e.g. a 30-wide grid effectively has only **29** columns.
+
+- Placement sits between **synthesis** (logic → gates) and **routing** (wires → tracks).
+
+---
+
+### 🏗️ The Design Flow
+
+.mermaid[
+<pre>
+flowchart LR
+    RTL[RTL Design] --> SYN[Synthesis]
+    SYN --> NET[Netlist]
+    NET --> GLB[Global Placement]
+    GLB --> LEG[Legalization]
+    LEG --> DET[Detailed Placement]
+    DET --> ROU[Routing]
+    ROU --> STA[Timing Closure]
+
+    style RTL fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style SYN fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style NET fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style GLB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style LEG fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style DET fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style ROU fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style STA fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+**Global placement** 🔵 produces a *roughly legal* layout capturing connectivity; **detailed placement** 🟢 cleans it up row by row.
+
+---
+
+### ❓ Why is it hard?
+
+- Placement is an **NP-hard** combinatorial problem 🧩 (related to quadratic assignment).
+
+- We cannot optimize true routed delay directly; we must optimize a **proxy** 📏 — wire length of each net.
+
+- Moving one module changes *all* its nets; modules are coupled through the netlist **and** the occupancy grid ⛓️.
+
+- Real FPGAs have **concave** wire costs 🔄 and fixed resources, so smooth quadratic approximations miss the real target.
+
+---
+
+### 📏 Half-Perimeter Wire Length (HPWL)
+
+For a net ${\color{red} e}$ with pins at $({\color{blue} x_i}, {\color{orange} y_i})$:
+
+$$
+{\color{red}\mathrm{HPWL}}(e) = {\color{blue} \max_{i\in e} x_i - \min_{i\in e} x_i} \;+\; {\color{orange} \max_{i\in e} y_i - \min_{i\in e} y_i}
+$$
+
+- 💡 Convex but **non-smooth** (piecewise linear).
+- ⚠️ Underestimates routing when the net has many pins ($n>3$).
+- 🧮 The whole chip cost is the sum over nets:
+
+$$
+\mathrm{HPWL}_{\text{total}} = \sum_{e \in \text{nets}} \bigl({\color{blue}\Delta x_e} + {\color{orange}\Delta y_e}\bigr)
+$$
+
+---
+
+### ⚠️ Minimizing *total* is not enough
+
+- Total wire length minimization creates **blind spots** 🙈: an algorithm may sacrifice a few very long nets to improve the average.
+
+- Long nets → **timing violations** ⏱️ and **routing congestion** 🚧 — the exact failures that matter on FPGAs with fixed resources.
+
+> 🀄 不患寡而患不均 — *"We do not worry about scarcity, but about unfairness."*
+
+---
+
+class: nord-light, middle, center
+
+## ⚖️ Part 2: Fairness-Centric Approach
+
+---
+
+### ⚖️ Min–Max Fairness: A New Paradigm
+
+- **Max–min fairness** (from network traffic management 🌐): maximize the *minimum* allocation.
+- In placement: **minimize the worst-case wire length** instead of the sum:
+
+$$
+\min_{\text{placement}} \;\; {\color{red}\max_{(u,v)\,\in\, E}} \; w(u,v)
+$$
+
+where $w(u,v) = {\color{blue} c_x |x_u - x_v|} + {\color{orange} c_y |y_u - y_v|}$.
+
+- Enforcing *fairness* rather than *equality* is mathematically more tractable ➗.
+- With a **linear** cost model we can even avoid floating point 🎯.
+
+---
+
+### 🌀 Fairness via One-Axis Optimization
+
+- We optimize **one axis at a time** (x then y) with potentials ${\color{blue}q_v}$ (coordinates on that axis).
+
+- For a target "radius" ${\color{royalblue} r}$ the layout is feasible iff no connection needs more:
+
+$$
+{\color{blue} q_v} - {\color{blue} q_u} \;\le\; {\color{green} \mathrm{cost}}\bigl((u,v),\, {\color{royalblue} r}\bigr), \qquad \forall (u,v)\in E
+$$
+
+- Minimize ${\color{royalblue} r}$:
+
+$$
+\min {\color{royalblue} r} \quad \text{s.t.} \quad {\color{blue} q_v} - {\color{blue} q_u} \le {\color{green} \mathrm{cost}}\bigl((u,v),\, {\color{royalblue} r}\bigr)
+$$
+
+---
+
+### 🔍 Negative Cycles ⇔ Infeasibility
+
+- Difference constraints ${\color{blue} q_v} - {\color{blue} q_u} \le {\color{green} c}_{uv}$ are feasible **iff** the constraint graph has **no negative cycle** 🔄.
+
+- A negative cycle of length $n$ with total cost $C$ forces
+
+$$
+n\cdot{\color{royalblue} r} \;\le\; C \quad\Longrightarrow\quad {\color{royalblue} r} \ge \tfrac{C}{n}
+$$
+
+- So the minimal feasible radius is the **minimum cycle ratio** 🌀:
+
+$$
+{\color{royalblue} r}^{*} = \max_{\text{cycles } {\color{red}\kappa}} \;\; \frac{\sum_{(u,v)\in{\color{red}\kappa}} {\color{green}c}_{uv}}{\lvert {\color{red}\kappa}\rvert}
+$$
+
+---
+
+### 🌀 Howard's Algorithm
+
+- Howard's method solves the **minimum cycle ratio** / **parametric minimum-cost-flow** problem by *policy iteration* 🏛️:
+
+1. 🟢 **Relax** potentials ${\color{blue}q}$ along a direction (Bellman–Ford style),
+2. 🔵 **Detect** cycles in the predecessor/successor policy graph,
+3. 🟠 **Raise** ${\color{royalblue} r}$ to the zero-cancel ratio of the critical cycle,
+4. 🔁 Alternate search direction (successor ↔ predecessor) until no improvement.
+
+- Implemented by `digraphx.NegCycleFinderQ` and `digraphx.MinParametricSolver` — now the engine of `apply_howard`.
+
+---
+
+### 📐 The Parametric Formulation
+
+We repeatedly solve: find the smallest ${\color{royalblue}r}$ and potentials ${\color{blue}q}$ such that
+
+$$
+{\color{blue}q_v} - {\color{blue}q_u} \;\le\; {\color{green}\mathrm{cost}}(u,v) - {\color{royalblue}r}\cdot {\color{brown} \tau}_{uv}
+$$
+
+- ${\color{green}\mathrm{cost}}(u,v)$: Manhattan distance of the *opposite* axis (constant during one axis pass)
+- ${\color{brown}\tau}_{uv}$: linear "time" factor
+- $\mathrm{zero\_cancel}$: returns the ${\color{royalblue}r}$ that makes a cycle's total weight $=0$
+
+As ${\color{royalblue}r}$ rises, negative cycles disappear; the final ${\color{royalblue}r}$ is the **worst wire length budget** along that axis.
+
+---
+
+### 🐍 Code: `apply_howard`
+
+```python
+def apply_howard(self, place, axis):
+    oppo = axis ^ 1
+    def update_ok(from_where, to_where): ...   # grid/capacity checks
+
+    worst = 0
+    for u in self.ugraph:
+        for v in self.ugraph.neighbors(u):      # set arc costs
+            gruv = abs(place[oppo][v] - place[oppo][u])
+            self.ugraph[u][v]["cost"] = self.cost(gruv, oppo)
+            worst = max(worst, gruv)
+
+    solver = MinParametricSolver(
+        {u: dict(self.ugraph[u]) for u in self.ugraph},
+        _HowardsCost(self, axis),
+    )
+    return solver.run(place[axis], Fraction(worst), update_ok)
+```
+
+---
+
+### 🔌 Adapter Pattern: `_HowardsCost`
+
+`digraphx` expects an arc-based cost model; `nnsplace` stores costs on NetworkX edge dicts. 🧩 A tiny **Adapter** bridges them:
+
+```python
+class _HowardsCost(MinParametricAPI[Any, Any, Fraction]):
+    def __init__(self, placer, axis):
+        self._placer = placer
+        self._axis = axis
+
+    def distance(self, ratio, arc):          # weight of arc at given ratio
+        temp = self._placer.cost_inv(ratio - arc["cost"], self._axis)
+        return Fraction(temp.numerator // temp.denominator)
+
+    def zero_cancel(self, cycle):            # ratio that zeroes a cycle
+        total = sum(arc["cost"] for arc in cycle)
+        return Fraction(total, len(cycle))
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Part 3: Legalization & I/O Pads
+
+---
+
+### 🧩 Legalization: Removing Overlaps
+
+Optimization happily lets several modules drift to the **same** coordinate 🙈. We legalize **line by line**:
+
+1. **Bucket** modules sharing the same coordinate on the perpendicular axis 🪣,
+2. Build a **bipartite graph**:
+   - left 🅰️ = modules of the bucket,
+   - right 🅱️ = candidate slots,
+   - edge weight = change in worst wire length if the module moves there,
+3. Solve a **minimum-weight full matching** ↔️, then update positions & occupancy counts.
+
+---
+
+### ⚖️ Minimum-Weight Full Matching
+
+.mermaid[
+<pre>
+flowchart LR
+    M1["module a 🅰️"] --> S1
+    M1 --> S2
+    M2["module b 🅰️"] --> S2
+    M2 --> S3
+    M3["module c 🅰️"] --> S1
+    M3 --> S3
+    S1["slot 1 🅱️"]
+    S2["slot 2 🅱️"]
+    S3["slot 3 🅱️"]
+
+    style M1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style M2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style M3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style S1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style S2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style S3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+Find the matching that pairs **every module** to a **distinct slot** with minimum total weight:
+
+$$
+\min_{{\color{red}\mu}} \sum_{v} \Delta \mathrm{worst}(v \to {\color{red}\mu}(v))
+$$
+
+---
+
+### 🪣 Strategy Pattern: `Legalizer`
+
+The candidate-slot policies are a classic **Strategy** seam 🧩:
+
+- `LocalWindowLegalizer` (primary): grow a ±radius window 11 → 50 around each module until a full matching exists — cheap & quality-preserving.
+- `GlobalSlotLegalizer` (fallback): offer **every free slot** along the axis — guaranteed to succeed whenever the grid has capacity.
+
+Both policies share the *same* bipartite graph `B` built by `legalize()`, so the fallback is deterministic and bit-identical to the original local search when it succeeds.
+
+---
+
+### 🧩 LocalWindowLegalizer
+
+```python
+class LocalWindowLegalizer(Legalizer):
+    neighborhood = 11
+    MAX_NEIGHBORHOOD = 50
+
+    def solve(self, lst, B, place, axis):
+        grid = self._placer.cfg.grid[axis]
+        for i in range(1, self.neighborhood):
+            self._placer.add_bipartite_edge(lst, B, place, i, grid, axis)
+        i = self.neighborhood
+        while i < self.MAX_NEIGHBORHOOD:
+            try:
+                matches = bipartite.minimum_weight_full_matching(B)
+                for v in lst: _ = matches[v]
+                return matches
+            except (ValueError, KeyError, nx.AmbiguousSolution):
+                self._placer.add_bipartite_edge(lst, B, place, i, grid, axis)
+            i += 1
+        return None  # window exhausted -> caller falls back
+```
+
+---
+
+### 🐛 The Bug We Found: Crowded Buckets
+
+- A **column** (or row) can legally collect ~100 modules before vertical legalization is consulted.
+- The local window can only *reach* rows within ±50 of the current row → too few **distinct slots** for a full matching!
+
+| scenario (p1.json) | before fix | after fix |
+|---|---|---|
+| 100×100, seed 831 | 💥 `RuntimeError: neighborhood limit` | ✅ iters=2, worst=2120 |
+
+- Reported: *"Failed to legalize modules ... Grid may be too small."* — a **misleading** message: the grid was fine; the search window was too small.
+
+---
+
+### 🆘 Fix: `GlobalSlotLegalizer` Fallback
+
+```python
+class GlobalSlotLegalizer(Legalizer):
+    def solve(self, lst, B, place, axis):
+        # keep the q-nodes (weight-0 self edges), then every free slot
+        self._placer._add_all_slots(lst, B, place, axis)
+        try:
+            matches = bipartite.minimum_weight_full_matching(B)
+            for v in lst: _ = matches[v]
+            return matches
+        except (ValueError, KeyError, nx.AmbiguousSolution):
+            return None
+```
+
+- Only runs when the local window fails (rare) 🎯
+- Now raises only when the grid **genuinely** lacks free slots, with a precise message.
+
+---
+
+### 📍 I/O Pad Assignment
+
+.pull-left[
+- Pads must live on the **ring** around the core 📍:
+
+- `choose_nearest_iopad`: for each pad, pick the border side/coordinate nearest to its connected modules, respecting per-side capacity (`limit`).
+- `legalize_iopad`: spread pads along each edge with the same matching legalizer.
+- `io_assign` = `choose_nearest_iopad` + `legalize_iopad` on both axes.
+]
+.pull-right[
+![I/O ring placement](fairness-placer.files/ioloop32x32.svg)
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Part 4: The Outer Loop & Memento
+
+---
+
+### 🔁 Iterative Optimization Loop
+
+.mermaid[
+<pre>
+flowchart LR
+    A["Initial Placement 🎲"] --> B{optimize loop}
+    B -->|x-axis| C["howard(x) → legalize(y) → pads"]
+    C -->|y-axis| D["howard(y) → legalize(x) → pads"]
+    D --> E{worst improved?}
+    E -->|Yes ✅| F["commit, snapshot"]
+    F --> B
+    E -->|No ❌| G["restore last snapshot 📸"]
+    G --> H["io_assign"]
+    H --> I[End]
+
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style G fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+Never accept a round that didn't improve the worst wire length ⚖️.
+
+---
+
+### 📸 Memento Pattern: `PlacerState`
+
+`optimize()` and `run()` used to duplicate ~20 lines of snapshot/rollback 🧵:
+
+```python
+place0 = [place[0].copy(), place[1].copy()]
+count0 = [self.count[0].copy(), self.count[1].copy()]
+...
+if worst1 >= worst0:
+    place[0] = place0[0]; place[1] = place0[1]
+    self.count[0] = count0[0]; self.count[1] = count0[1]
+```
+
+Extracted into a **Memento** 📸:
+
+```python
+class PlacerState:
+    def __init__(self, place, count):
+        self._place = [place[0].copy(), place[1].copy()]
+        self._count = [count[0].copy(), count[1].copy()]
+
+    def restore(self, place, count):
+        place[0] = self._place[0]; place[1] = self._place[1]
+        count[0] = self._count[0]; count[1] = self._count[1]
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 5: Refactoring — Removing Redundancy
+
+---
+
+### 🧹 The Problem: One God Object + Duplicated Infra
+
+Before this session, `NnsPlacer` (~850 lines) owned **five** responsibilities, and `src/nnsplace/` re-implemented libraries that already lived in sibling repos:
+
+| local file | duplicate of | lines |
+|---|---|---|
+| `netlist.py` | `netlistx.netlist` (+ `readwrite`) | 510 |
+| `tiny_digraph.py` | `digraphx.tiny_digraph` | 58 |
+| `neg_cycle.py` | `digraphx.neg_cycle_q` | 201 |
+| `min_parametric.py` | `digraphx.min_parametric_q` | 81 |
+
+👉 ~**2,400 lines** of duplicated code removed.
+
+---
+
+### 🧩 The Strategy After Refactoring
+
+.mermaid[
+<pre>
+graph TD
+    subgraph sibling libraries
+        NX[netlistx]
+        DG[digraphx]
+        PD[physdes]
+        MW[mywheel]
+    end
+    NNS["nnsplace"]
+    NNS --> NX
+    NNS --> DG
+    NNS --> PD
+    NNS --> MW
+    NNS --> PY["nnsplace.placement.py"]
+    NNS --> CFG["nnsplace.placement_cfg.py"]
+
+    style NX fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style DG fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style PD fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style MW fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style NNS fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style PY fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style CFG fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+`nnsplace` keeps only its **core algorithms** (placement.py) and config; all infrastructure is imported.
+
+---
+
+### 🧩 Design Patterns Applied
+
+- 🧩 **Strategy** — `Legalizer` ABC + `LocalWindowLegalizer` / `GlobalSlotLegalizer`
+- 📸 **Memento** — `PlacerState` snapshot/restore
+- 🔌 **Adapter** — `_HowardsCost` bridges NetworkX arcs to `digraphx.MinParametricSolver`
+- 🏛️ **Facade** — `NnsPlacer.run()` orchestrates the whole flow
+
+.mermaid[
+<pre>
+flowchart LR
+    A[NnsPlacer] --> B[PlacerState 📸]
+    A --> C["Legalizer 🧩"]
+    A --> D[_HowardsCost 🔌]
+    C --> E[LocalWindowLegalizer]
+    C --> F[GlobalSlotLegalizer]
+
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+---
+
+### ✅ Verification: Bit-Identical Refactoring
+
+- 30 scenarios (6 grid sizes × 5 seeds) across **old vs new** implementation:
+  - niter & worst wire length **bit-identical** ✅
+- 20/20 single-`apply_howard` comparisons identical ✅
+- Test suite: **47 passed**, coverage **94%** ✅
+- mypy / flake8 / black / pre-commit all green ✅
+
+**Lesson:** when refactoring a numeric algorithm, treat the existing seed–grid matrix as your *regression oracle* 🎯.
+
+---
+
+class: nord-light, middle, center
+
+## 🖼️ Part 6: Results & Experiments
+
+---
+
+### 🧪 Placement Output — 30×30
+
+`p1.json` · seed 831 · worst = **1640** · 190 pad-to-module connections 🟢
+
+.pull-left[
+![ioloop 30x30 result](fairness-placer.files/ioloop30x30.svg)
+]
+.pull-right[
+> ⚠️ **Observation:** worst (1640) > 32×32 (1480) even though the grid is smaller. Column 27 is reserved 🧱 (not placable), so 30×30 leaves only **29 × 30 = 870 core slots** for 752 cells (**86%** density) vs **76%** for 32×32. The constraints are *too tight* 🗜️ for the placer to spread modules and shorten the longest nets, so the objective cannot be minimized further.
+]
+
+---
+
+### 🧪 Placement Output — 50×50 and 100x100
+
+.pull-left[
+`p1.json` · seed 831 · worst = **1600** 🟢
+
+![ioloop 50x50 result](fairness-placer.files/ioloop50x50.svg)
+
+> 🟢 Only **31%** density — plenty of empty room, so this is *not* capacity-limited; there is room to improve the objective 🔭 (see summary).
+
+]
+.pull-right[
+`p1.json` · seed 831 · worst = **2120**
+
+![ioloop 100x100 result](fairness-placer.files/ioloop100x100.svg)
+
+> 🟢 Only **8%** density — the grid is far from full; the wide seed spread (1880–2400) shows the *search*, not capacity, limits quality. Room to improve 🔭
+]
+
+---
+
+### 🧪 Non-Square Grids
+
+.pull-left[
+
+**30 × 40** (portrait) · worst = **1440**
+
+![ioloop 30x40 result](fairness-placer.files/ioloop30x40.svg)
+
+]
+
+.pull-right[
+
+**40 × 30** (landscape) · worst = **1480**
+
+![ioloop 40x30 result](fairness-placer.files/ioloop40x30.svg)
+
+]
+
+---
+
+### 📊 Convergence Summary (p1.json, seed 831)
+
+.pull-left[
+| grid | iters | worst wire length |
+|---|---|---|
+| 30×30 | 2 | 1640 |
+| 30×40 | 2 | 1440 |
+| 32×32 | 1 | 1480 |
+| 40×30 | 2 | 1480 |
+| 50×50 | 3 | 1600 |
+| 100×100 | 2 | 2120 |
+]
+.pull-right[
+- 0 overlaps, 0 off-grid cells, all pads on the border ring ✅
+- ⚠️ 30×30 has **86%** cell density (tightest; col 27 reserved 🧱 leaves 29 usable columns); the high density *constrains* the optimizer, so worst wire length cannot drop as low as on roomier grids 🗜️
+- 🟢 By contrast, **50×50 (31%)** and **100×100 (8%)** have plenty of empty room — capacity is *not* the bottleneck, so the objective still has **room to improve** 🔭
+  - 50×50 varies 1560–1640 and 100×100 varies 1880–2400 across seeds → the search (not the grid) limits quality
+- Different orientations trade off worst vs total HPWL slightly ⚖️
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 Conclusion
+
+---
+
+### ✅ Summary
+
+- **Global placement** for FPGAs is NP-hard; we optimize a **fair** proxy: the *worst* wire length ⚖️.
+- **Howard's algorithm** solves the parametric min-cost-flow / min-cycle-ratio subproblem 🌀, using difference constraints and negative-cycle detection.
+- **Legalization** = minimum-weight **bipartite matching** per line 🧩.
+- A robust **global free-slot fallback** fixed a crash on crowded buckets 🐛✅.
+- **Memento + Strategy + Adapter** patterns tamed an 850-line God object without changing results 🏗️.
+- Removing ~2,400 lines of duplicated infrastructure made `nnsplace` a thin, focused library 📦.
+
+---
+
+### 🔮 Future Directions
+
+- 🧭 **Howard-aware I/O pad assignment** (one pad ↔ many modules)
+- ⏱️ **Timing & congestion aware** cost models
+- 🖧 Exploiting `CSRDiGraph` for larger netlists
+- 🔀 Parallel cuts / multi-axis updates
+- 🦀 Re-implement in Rust / C++ sharing the same test oracle
+- 📏 **Cap the per-line limit** for small designs: `limit = grid size` is loose when the netlist is small
+  - 💡 idea: $\text{limit} = \min(\text{grid}, \lceil \sqrt{{\color{red}N_{\text{cells}}}} \times 1.2 \rceil)$
+  - ⚠️ **the same `limit` gates I/O edge fullness** (`choose_nearest_iopad_vp`), so any cap must be applied consistently to core lines **and** the I/O ring 📍 — a too-small cap can starve pads or scatter them far from their cells
+
+---
+
+### 📚 Key References
+
+- 📘 Sherwani, *Algorithms for VLSI Physical Design Automation*, Springer, 1999.
+- 📘 Kahng, Lienig, Markov, Hu, *VLSI Physical Design: From Graph Partitioning to Timing Closure*, Springer, 2011.
+- 🔄 Howard's algorithm for the **minimum cycle-ratio / parametric flow** problem.
+- 📦 `digraphx`, `netlistx`, `physdes` (luk036) — the sibling libraries `nnsplace` now builds on.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### ⚖️ Fairness-Centric Global Placement
+### via Howard's Algorithm & Bipartite Matching
+
+![ioloop 50x50](fairness-placer.files/ioloop50x50.svg)
+
+Slides built with Remark.js 🛠️ | KaTeX 🧮 | Mermaid 🧜 | Nord Theme 🌃
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

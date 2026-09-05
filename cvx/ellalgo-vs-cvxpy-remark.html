@@ -191,7 +191,7 @@ C++ ellipsoid **beats CVXPY at every size** — the crossover never happens ⚙�
 ### The Three-Way Picture 📈
 
 <div style="display:flex;justify-content:center">
-  <img src="ellalgo-vs-cvxpy-remark.files/bench_chebyshev3.svg" style="width:70%" />
+  <img src="ellalgo-vs-cvxpy-remark.files/bench_chebyshev3.svg" style="width:90%" />
 </div>
 
 -   Log-scale wall-clock time vs dimension $n$
@@ -298,8 +298,10 @@ where $R(\omega) = {\color{darkcyan}A}(\omega) \cdot {\color{darkblack}r}$ is th
 ```python
 r = cp.Variable(n); t = cp.Variable()
 prob = cp.Problem(cp.Minimize(t), [
-    Ap @ r <= up_sq, Ap @ r >= lp_sq,
-    As @ r <= t,     -As @ r <= t,
+    Ap @ r <= up_sq,
+    Ap @ r >= lp_sq,
+    As @ r <= t,
+    -As @ r <= t,
     A @ r >= 0,
 ])
 prob.solve()
@@ -479,7 +481,7 @@ class: nord-dark, middle, center
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
+        ratio: '4:3',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
         countIncrementalSlides: false,

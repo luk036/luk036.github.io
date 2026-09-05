@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Making nnsplace Faster — Without Moving a Single Cell</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ Making `nnsplace` Faster
+### ⚖️ Without Moving a Single Cell — A Performance, Patterns & Memory Story
+
+🛠️ `cProfile` → bit-identical refactor → design patterns → smaller RAM
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📝 Abstract
+
+We take the **fairness-centric** `nnsplace` placer from the previous talk ⚖️ and make it genuinely **fast** 🚀 — without changing a single result:
+
+- 🔥 **4.57× less CPU** across the 30-scenario seed–grid matrix (up to ~7× on the 32×32 headline case)
+- 🎯 **30 / 30 scenarios bit-identical** — same `niter`, same worst wire length, same final placement hash
+- 🧩 A **Strategy** (`WireLengthModel`) and **Template Method** (`_optimize_axis`) refactor along the way
+- 📉 **Memory**: −2.4 MB duplicated adjacency, and a roadmap for the rest
+- 🧭 And the honest list of things we *deliberately* did **not** do (scipy, CSR, `float`…)
+
+The whole journey is guarded by one idea: **treat the seed–grid matrix as a regression oracle** 🎯.
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Where the time goes** 🧭
+- The NNS pipeline in one slide
+- Profiling: two hotspots, one surprise
+- The bit-identical regression oracle
+
+**Part 2: 4 speedups, 1 number** ⚡
+- Kill `Fraction` churn in `distance()`
+- Cache the solver adjacency
+- Gate the legalizer's matching
+- O(log deg) scoring via envelopes
+
+]
+.pull-right[
+
+**Part 3: Structure & memory** 🧩
+- Strategy + Template Method seams
+- −2.4 MB by sharing adjacency
+- What we did **not** do, and why
+
+**Part 4: Results & outlook** 📊
+- Verification: tests, matrix, hashes
+- Future directions
+- Q&A 🎤
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1: Where the time goes
+
+---
+
+### 🏗️ The NNS Pipeline (recap)
+
+One outer round optimizes **x**, then **y** — each axis pass = Howard + legalize + I/O pads:
+
+.mermaid[
+<pre>
+flowchart LR
+    A["Initial Placement 🎲"] --> B{optimize round}
+    B -->|axis = x| C["howard(x) 🌀"]
+    C --> C2["legalize(y) 🧩"]
+    C2 --> C3["pads 📍"]
+    B -->|axis = y| D["howard(y) 🌀"]
+    D --> D2["legalize(x) 🧩"]
+    D2 --> D3["pads 📍"]
+    C3 --> E{worst improved?}
+    D3 --> E
+    E -->|Yes ✅| B
+    E -->|No ❌| F["restore 📸 + io_assign"]
+    F --> G[End]
+
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style C2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style D2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style C3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style D3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+Which part eats the wall-clock? 📈 We measured before touching anything.
+
+---
+
+### 🐢 Baseline: profile of `p1.json` @ 32×32
+
+One `NnsPlacer.run()` on the reference scenario (`p1.json`, seed 831) took **~16 s** on our machine (30.7 s on the original profile machine) — dominated by two spots:
+
+| 🕳️ hotspot | evidence | share |
+|---|---|---|
+| **Howard solver loop** | `_HowardsCost.distance()` called **533 k×**; `Fraction.__new__` ≈ **1.6 M** times | ~50 % |
+| **Legalization** | `minimum_weight_full_matching` rerun per window step + `calc_worst_wirelength_v` **140 k×** | ~35 % |
+| `cost()` | 3.57 M calls | ~10 % |
+
+> 🐍 Python object churn, not the algorithm, was the real cost — every `Fraction` allocates, normalizes, and reduces.
+
+---
+
+### 🎯 The Regression Oracle: 30 Scenarios
+
+.pull-left[
+| grid (seed 831) | iters | worst ⚖️ |
+|---|---|---|
+| 30×30 | 2 | 1640 |
+| 30×40 | 2 | 1440 |
+| 32×32 | 1 | 1480 |
+| 40×30 | 2 | 1480 |
+| 50×50 | 1 | 1800 |
+| 100×100 | 2 | 2640 |
+
+]
+.pull-right[
+Every change had to keep results **bit-identical**:
+
+- 30 scenarios = **6 grids × 5 seeds** (`30×30` … `100×100`)
+- Compare `niter`, worst wire length, **and** a SHA-256 over the full placement 🧮
+
+🔬 The talk's "verification" slide became our **test harness** (`experiments/bench.py`) — embarrassingly parallel 🧵.
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 2: Four Speedups, One Number
+
+---
+
+### 🔧 Suggestion #1 — Kill `Fraction` churn in `distance()`
+
+`distance()` built **2+ `Fraction` objects per call** just to take a floor. With ${\color{royalblue} r} = {\color{red}n}/{\color{red}d}$, the whole expression collapses to one integer division:
+
+$${\color{green}\mathrm{dist}}(e, {\color{royalblue} r}) = \Big\lfloor \tfrac{{\color{royalblue} r} - {\color{blue}c}}{{\color{green}\delta}} \Big\rfloor = \Big\lfloor \tfrac{{\color{red}n} - {\color{blue}c}\,{\color{red}d}}{{\color{green}\delta}\,{\color{red}d}} \Big\rfloor$$
+
+```python
+def distance(self, ratio, arc):
+    n, d = ratio.numerator, ratio.denominator
+    c = arc["cost"] * d
+    return (n - c) // (self._delta * d)   # was: Fraction → Fraction → floor
+```
+
+📉 **16.0 s → 7.6 s** (~2.1×), bit-identical ✅
+
+---
+
+### 🔧 Suggestion #2 — Build the solver adjacency once
+
+`apply_howard` rebuilt `{u: dict(self.ugraph[u]) for u in self.ugraph}` on **every call**, copying the whole graph — even though only the edge `"cost"` attributes ever change.
+
+💡 The arc objects (edge attr dicts) are **shared** with the graph → build once, mutate in place:
+
+```python
+adj = self._adj
+if adj is None:
+    adj = {u: self.ugraph[u] for u in self.ugraph}
+    self._adj = adj
+```
+
+📉 **7.6 s → 7.1 s**, bit-identical ✅
+
+---
+
+### 🔧 Suggestion #3 — Don't run the matching when it must fail
+
+`LocalWindowLegalizer` grew a ±radius window and re-ran the **scipy Hungarian** at every radius. But `minimum_weight_full_matching` is *guaranteed* to raise when:
+
+- 🪢 the graph is **disconnected** → `bipartite.sets` throws `AmbiguousSolution`
+- 🪣 there are **fewer slots than modules** → unmatched modules
+
+Both are cheap to probe, so we **gate the expensive call** and just widen the window:
+
+```python
+if nx.is_connected(B) and B.number_of_nodes() - m >= m:
+    try:
+        matches = bipartite.minimum_weight_full_matching(B)
+        for v in lst:
+            _ = matches[v]
+        return matches
+    except (ValueError, KeyError, nx.AmbiguousSolution):
+        pass          # infeasible → widen
+```
+
+📉 **7.1 s → 6.5 s**, bit-identical ✅ (and the 100×100 retry storm shrinks a lot)
+
+---
+
+### 🔧 Suggestion #4 — Hoist weights, score in O(log deg)
+
+Legalization builds an edge per **module × candidate slot**, each needing the module's worst wire length after a hypothetical move. Naively that is $O(\deg)$ rescans **per slot**.
+
+💡 Moving ${\color{blue}v}$ only changes distances to its own neighbours, and the worst is a max of V-shaped terms — score every candidate via **prefix/suffix envelopes**:
+
+$$F(q) = \max_j \bigl({\color{red}\delta}\,|q - a_j| + c_j\bigr)
+\quad\Rightarrow\quad
+\underbrace{\max_{a_j \le q} (c_j - {\color{red}\delta}a_j) + {\color{red}\delta}q}_{\text{prefix}},\;
+\underbrace{\max_{a_j \ge q} (c_j + {\color{red}\delta}a_j) - {\color{red}\delta}q}_{\text{suffix}}$$
+
+- `weight0` computed **once per module per bucket** (not once per radius) 🪣
+- cached neighbor lists + `bisect` on sorted coordinates → $O(\log \deg)$ per slot
+
+📉 **6.5 s → 2.3 s**, bit-identical ✅
+
+---
+
+### 📉 Cumulative: 32×32 `p1.json` (seed 831)
+
+.mermaid[
+<pre>
+flowchart LR
+    B["baseline 🐢\n16.0 s"] --> S1["#1 no Fraction\n7.6 s"]
+    S1 --> S2["#2 one adjacency\n7.1 s"]
+    S2 --> S3["#3 gate matching\n6.5 s"]
+    S3 --> S4["#4 O(log deg) slots ⚡\n2.3 s"]
+
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style S1 fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style S2 fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style S3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style S4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- Single scenario: **~7× faster** (16.0 → 2.3 s)
+- Full matrix CPU time: **1506 s → 330 s = 4.57×** 🚀
+- `worst` **still 1480** — same placement, same hash 🎯
+
+---
+
+### 🧪 War Stories: two traps that would have broken the oracle
+
+**1. Self-loops are real.** 🪢 Every net creates a $v\!\to\!v$ arc, so when $v$ moves, its "self neighbour" moves too. Hoisted slot data had to exclude self-loops or every weight was wrong.
+
+**2. Matching tie-breaking depends on insertion order.** When several full matchings share the minimum weight, `linear_sum_assignment` picks the one that comes *first in matrix order* — so we had to keep the **radius-major edge insertion order** exactly, or legalize silently changed the placement.
+
+> 🧠 Lesson: in a numeric codebase, "equivalent" data structures are only equivalent if you also preserve **iteration order**.
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Part 3: Structure & Memory
+
+---
+
+### 🧩 Design Patterns: the seams we kept
+
+The previous refactor already used **Strategy** (`Legalizer`), **Memento** (`PlacerState`), **Adapter** (`_HowardsCost`), **Facade** (`run`). This session added two more seams:
+
+.mermaid[
+<pre>
+graph TD
+    N["NnsPlacer 🏛️"] --> W["WireLengthModel 🧩\ncost / worst / HPWL"]
+    N --> L["Legalizer 🧩\nLocal / Global"]
+    N --> H["_HowardsCost 🔌"]
+    N --> A["_optimize_axis(axis) 📐"]
+
+    style N fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style W fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style L fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- 🧩 **Strategy — `WireLengthModel`**: the delta-scaled cost/HPWL metrics moved out of the placer (public wrappers stay) → future timing/congestion-aware models drop in
+- 📐 **Template Method — `_optimize_axis(axis)`**: the x/y choreography `howard → legalize → pads` is written once
+
+---
+
+### 📉 Memory: share the adjacency instead of copying it
+
+The solver's cached adjacency `_adj` shallow-copied **every per-node neighbour dict** — ~240 B per arc, ≈ 2.5 MB on `p1`. But the arc attr dicts are already shared with the graph, and the topology never changes after construction:
+
+```python
+adj = {u: dict(self.ugraph[u]) for u in self.ugraph}   # before: 2.47 MB
+adj = {u: self.ugraph[u]       for u in self.ugraph}   # after:  0.09 MB
+```
+
+| structure | before | after |
+|---|---|---|
+| `ugraph` (networkx) | 2.9 MB | 2.9 MB |
+| `_adj` (solver copy) | **2.47 MB** | **0.09 MB** 🎉 |
+
+Bit-identical, 30/30 ✅ — the deeper memory items are tracked in issue #5 📋.
+
+---
+
+### 🚫 What we deliberately did NOT do (and why)
+
+- 🐍 **Swap the matching to scipy?** — networkx 3.6 already calls `scipy.optimize.linear_sum_assignment`; measured dispatcher overhead ≈ 0. Nothing to win.
+- 🗂️ **`CSRDiGraph` for the solver loop?** — measured **2.2× slower** iteration than dict adjacency (per-item generator overhead). Great for *memory*, wrong for *this* hot loop.
+- 🧮 **Replace `Fraction` with `float`?** — a float variant was bit-identical on all 30 scenarios, but that is *empirical luck*, not a guarantee; the min-cycle-ratio method needs exact rationals near integer boundaries. We kept exactness.
+- 🔀 **Round-robin net-fairness pass?** — explored, never converged cleanly, reverted. Fairness stays where it is provable: the min–max objective.
+
+> 🧭 Engineering = knowing which door *not* to open.
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Part 4: Results & Outlook
+
+---
+
+### ✅ Verification
+
+.pull-left[
+- **59 tests passed**, coverage **95%** 🧪
+- `mypy` / `flake8` / `black` / `isort` / `pre-commit` all green ✅
+- **30 / 30 scenarios bit-identical**: same `niter`, same `worst`, same placement hash 🔬
+- Public API unchanged (`NnsPlacer` wrappers delegate to `WireLengthModel`) 🧩
+
+**CPU time across the matrix**
+
+| | before | after |
+|---|---|---|
+| sum CPU | 1506 s | **330 s** |
+| speedup | 1× | **4.57×** |
+]
+
+.pull-right[
+![32x32 result](fairness-placer.files/ioloop32x32.svg)
+*32×32 · seed 831 · worst = 1480 — unchanged* 🎯
+]
+
+---
+
+### 🖼️ Same picture, 7× sooner
+
+.pull-left[
+![50x50 result](fairness-placer.files/ioloop50x50.svg)
+`50×50 · worst 1800`
+]
+.pull-right[
+![100x100 result](fairness-placer.files/ioloop100x100.svg)
+`100×100 · worst 2640`
+
+> The layout is **bit-identical** to the baseline — we only sped up the journey. 🗺️
+]
+
+---
+
+### 🔮 Future Directions
+
+- 🗂️ **Memory (issue #5):** flow-graph storage beyond networkx (`CSRDiGraph`), and building the legalization cost matrix **without** a transient `nx.Graph`
+- 🔀 **Howard-aware I/O pads** (one pad ↔ many modules)
+- ⏱️ **Timing & congestion-aware `WireLengthModel`** — the Strategy seam is ready
+- 🦀 **Rust / C++ port** sharing the same 30-scenario test oracle
+- 📏 Cap the per-line limit consistently for core **and** I/O ring (the `line_cap_ratio` idea from the last talk)
+
+> Every idea above ships with the same acceptance test: **bit-identical or bust** 🎯
+
+---
+
+### 🏁 Conclusion
+
+- 📊 **Profile first** — the bottleneck was `Fraction` object churn, not the algorithm.
+- ⚡ Four small, behavior-preserving speedups → **4.57× less CPU** on the matrix (≈ 7× on the headline case).
+- 🎯 The **30-scenario oracle** made every change safe — and caught two subtle order/self-loop traps.
+- 🧩 **Strategy + Template Method** seams keep future cost models and axis policies local.
+- 📉 **−2.4 MB** by sharing, not copying, the adjacency.
+- 🚫 And we said **no** to scipy-wrapping, CSR-for-speed, and `float` — with measurements.
+
+**Making software faster is easy. Keeping it *identical* is the craft.** ⚖️
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### ⚡ Making `nnsplace` Faster
+### ⚖️ Without Moving a Single Cell
+
+![50x50](fairness-placer.files/ioloop50x50.svg)
+
+Slides built with Remark.js 🛠️ | KaTeX 🧮 | Mermaid 🧜 | Nord Theme 🌃
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

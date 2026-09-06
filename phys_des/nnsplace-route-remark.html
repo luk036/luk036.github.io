@@ -129,6 +129,7 @@ $$
 
 ### 🌲 The physdes Global Router
 
+.pull-left[
 `physdes` already ships a **rectilinear global router** for one net at a time:
 
 - `GlobalRouter(source, terminals)` → builds a `GlobalRoutingTree` 🌳
@@ -137,10 +138,11 @@ $$
   bounds every **source-to-sink path** by an allowed wire length ⏱️
 - **Steiner insertion** shares trunks and saves wire 📉
 - `calculate_total_wirelength()` = Manhattan sum over the tree branches
-
+]
+.pull-right[
 .mermaid[
 <pre>
-flowchart LR
+flowchart TD
     D["driver pin (output) 🟦"] --> SP["Steiner ⭐"]
     SP --> S1["sink 1 🟥"]
     SP --> S2["sink 2 🟥"]
@@ -152,6 +154,7 @@ flowchart LR
     style S2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
     style S3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
+]
 ]
 
 One **net** → one tree rooted at its **driver pin** (the wire direction matters).
@@ -169,6 +172,7 @@ class: nord-light, middle, center
 
 ### 🧩 The Mapping
 
+.pull-left[
 A **net** is a star of pins, and routing is **directional**: the *driver pin*
 (output) is the **source**, the *sink pins* (inputs) are the terminals:
 
@@ -181,7 +185,8 @@ A **net** is a star of pins, and routing is **directional**: the *driver pin*
 $$
 {\color{green}\mathrm{route}}(a,b)\;=\; \underbrace{{\color{blue}\lvert x_a-x_b\rvert}}_{\text{horizontal run}} + \underbrace{{\color{orange}\lvert y_a-y_b\rvert}}_{\text{vertical run}}
 $$
-
+]
+.pull-right[
 > ✅ **Yosys netlists carry the direction.** `modules[*].ports[name].direction`
 > and `cells[inst].port_directions` say exactly which pin drives each net —
 > verified: every net of a Yosys module has exactly **one** driver (a cell output
@@ -190,6 +195,7 @@ $$
 > figures in Parts 2–3 were routed with the earlier pad-rooted Steiner
 > approximation. The **implemented** driver→sink `route_with_constraints()`
 > pipeline on real Yosys netlists is shown below ⤵️.
+]
 
 ---
 
@@ -255,7 +261,7 @@ Each tree edge is emitted as axis-aligned `<line>` segments (the green style):
 ```
  vertical_first               horizontal_first
  parent                      parent
-   │                            ──────┐
+   │                           ──────┐
    │                                 │
    └──── child                       │
                                      │
@@ -309,6 +315,7 @@ Each tree edge is emitted as axis-aligned `<line>` segments (the green style):
 Every net is routed **independently**; the total is the sum of the tree lengths
 over all **902 nets** (in grid units and in the placer's cost scale, ×40):
 
+.font-sm[
 | grid | routed WL (grid) | routed WL (cost) | pad-net share |
 |---|---|---|---|
 | 30×30 | 15,073 | 602,920 | 12.5% |
@@ -317,6 +324,7 @@ over all **902 nets** (in grid units and in the placer's cost scale, ×40):
 | 40×30 | 14,430 | 577,200 | 14.7% |
 | 50×50 | 17,623 | 704,920 | 13.3% |
 | 100×100 | 18,943 | 757,720 | 18.0% |
+]
 
 - 💡 Pad nets are **short** in a good placement (pads sit near their cells)
 - 🧮 Tree wire length sits **3–8%** above the HPWL bound — the cost of real routing
@@ -389,8 +397,11 @@ green 🟢 → yellow 🟡 → red 🔴.
 
 ![y map](fairness-placer.files/congestion50x50-y.svg)
 
-![combined map](fairness-placer.files/congestion50x50-combined.svg)
 ]
+
+---
+
+![combined map](fairness-placer.files/congestion50x50-combined.svg)
 
 ---
 
@@ -525,7 +536,7 @@ TEST_CASE("congestion maps are consistent with the cut counts") {
     CHECK(maps.combined[r][c] == std::max(maps.x[r][c], maps.y[r][c]));
     CHECK(maps.peak_combined == std::max(maps.peak_x, maps.peak_y));
 }
-TEST_CASE("routed placement svg has one use per module and one line per branch") { ... }
+TEST_CASE("routed placement has one use per module and one line per branch") { ... }
 ```
 
 ✅ 35 test cases · **24 948 assertions** · all green
@@ -655,7 +666,7 @@ flowchart LR
   fan-outs (469 branches) — readable at ~80% density.
 - All **3 373 nets** are still routed and counted; only the *drawing* is
   filtered to the I/O-driven trees.
-- Each gate cell (ABC `$_AND_`, `$_DFF_PN0_`, …) carries a `port_directions`
+- Each gate cell (ABC `_AND_`, `_DFF_PN0_`, …) carries a `port_directions`
   attribute, so internal drivers are exact 🎯.
 ]
 
@@ -673,11 +684,19 @@ flowchart LR
 
 ![congestion y](nnsplace-route.files/yosys_fir_par-y.svg)
 
+]
+
+---
+
+.pull-left[
+
 ![congestion combined](nnsplace-route.files/yosys_fir_par-combined.svg)
 
 > Peak **50** on one cut at ~80% density — the maps use *all* nets, not just
 > the pad-driven ones drawn above 🗺️.
+
 ]
+
 
 ---
 

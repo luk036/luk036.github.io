@@ -637,6 +637,9 @@ flowchart LR
 
 - 🧮 Every net routed from its **driver** with `route_with_constraints()`
 - ✅ Invariant holds on both: **H + V == routed wire length** (1 576 / 139 754)
+- ⚙️ **C++** (`nnsplace-cpp`, same converted netlist): worst dr→sink **3960**,
+  routed WL **135 509** (grid), pad-driven branches **615**; 38 doctest cases
+  pass incl. the directed reader / driver-flow-graph tests 🧪
 
 ---
 

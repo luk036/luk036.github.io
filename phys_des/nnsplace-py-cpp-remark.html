@@ -1,0 +1,701 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Porting nnsplace from Python to C++</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Porting `nnsplace` from Python to C++ 🚀
+
+### A C++20 Port: Headers + `source/*.cpp` 🧩
+### guided by the `netoptim-cpp` Reference ✨
+
+@luk036 📌 2026
+
+---
+
+### 🎯 Abstract
+
+We ported the **fairness-centric FPGA placer** `nnsplace` (Python, ~1 200 lines)
+to a **C++20 library** — public headers + `source/*.cpp` — `nnsplace-cpp` 🧬,
+reusing the sibling C++
+stack (`digraphx-cpp`, `netlistx-cpp`, `physdes-cpp`, `fractions-cpp`) and
+mirroring `netoptim-cpp` conventions. The talk tells the whole **engineering
+story** 🛠️ of the session:
+
+- Mapping the Python dependency graph onto the C++ ecosystem 🔄
+- Reproducing subtle **flow-graph semantics** (self-loops, pad rules) — verified
+  empirically against the Python runtime 🔬
+- Implementing legalization with a **rectangular Hungarian assignment** 🎯
+- Finding & fixing a real **port bug** (memento snapshot refresh) via a
+  Python ⟷ C++ **parity harness** 🐛➡️✅
+- Splitting the code into **headers + `source/*.cpp`** (bodies > 15 lines move
+  out of the header) 🧱
+- Shipping with **xmake + CMake**, doctest suites, and a git repo 📦
+
+---
+
+### 🗂️ Agenda
+
+.pull-left[
+
+**Part 1 — Mission** 🧭
+- What `nnsplace` does
+- The Python architecture
+
+**Part 2 — C++ Ecosystem** 🏗️
+- Mapping py deps → cpp libs
+- Solver & Fraction contracts
+
+**Part 3 — The Port** 🧱
+- Flow graph, legalization, I/O
+- Design decisions & deviations
+
+]
+
+.pull-right[
+
+**Part 4 — Verification** ✅
+- xmake gates & doctest suite
+- Parity harness & the snapshot bug
+- Results: Python vs C++
+
+**Part 5 — Release** 🚀
+- CMake mirroring `netoptim-cpp`
+- Git, future work
+
+**Q&A** 🙋
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1: Mission — What We Ported
+
+---
+
+### 📍 `nnsplace`: No-Nonsense Placement
+
+- **Placement** assigns every module of a netlist to a grid site of the FPGA
+  fabric 🧩: no overlaps 🚫, reserved DSP/SRAM column honored ⚠️, wire length
+  minimized 📉.
+- `nnsplace` uses a **fairness-centric** objective 🎯: minimize the
+  **worst-case** wire length of any connection, not the average:
+
+$${\color{red}\min_{\text{place}}}\ \ {\color{red}\max_{(u,v)\in E}}\ \ {\color{blue} c_x}\lvert x_u-x_v\rvert + {\color{orange} c_y}\lvert y_u-y_v\rvert$$
+
+- This is a **min–max** problem 🧮: tractable with *Howard's algorithm*
+  (parametric minimum-cost flow) plus bipartite-matching legalization.
+
+---
+
+### 🧬 The Python Architecture (`placement.py`)
+
+The module is compact but dense 📄 — a full placer in one file:
+
+```
+nnsplace (Python, ~1 200 lines)
+├── NnsConfig            config (grid, deltas, reserved col)
+├── create_flow_graph    netlist → directed flow graph
+├── NnsPlacer            the optimizer
+│   ├── apply_howard     Howard / MinParametricSolver (per axis)
+│   ├── legalize_*       bipartite matching (bucket by line)
+│   └── choose_nearest_iopad / io_assign
+└── WireLengthModel      cost, HPWL hull metrics
+```
+
+- Optimization alternates the **x axis then y axis**, then **legalizes** and
+  snaps **I/O pads** onto the ring 🔄.
+
+---
+
+### 🔗 Python Dependencies
+
+.mermaid[
+<pre>
+flowchart LR
+    NS[nnsplace] --> DG[digraphx]
+    NS --> NX[netlistx]
+    NS --> PD[physdes]
+    NS --> NX2[networkx]
+    NS --> FR[Fraction]
+    DG --> MPS["MinParametricSolver\n/ TinyDiGraph"]
+    NX --> NL["Netlist / read_json\ncreate_inverter / drawf"]
+    PD --> IV["Interval\nhull_with / measure"]
+    NX2 --> BM["bipartite matching"]
+
+    style NS fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style DG fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style NX fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style PD fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style NX2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style FR fill:#fff59d,stroke:#f9a825,stroke-width:3px,color:#2e3440
+    style MPS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style NL fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style IV fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style BM fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+The Python port must answer: **where are the C++ twins** of these pieces? 🔍
+
+---
+
+### 🤔 Why Port to C++?
+
+- 📦 **C++20 with headers + `source/*.cpp`** fits the sibling library
+  ecosystem — sibling repos mix header-only `INTERFACE` and compiled `STATIC`
+  libraries (e.g. `netlistx-cpp`, `digraphx-cpp`) 🧩.
+- ⚡ Reuse of battle-tested sibling implementations → no need to re-write
+  Howard's algorithm or the JSON readers.
+- 🔬 Exact integer arithmetic with `fractions::Fraction` (Python `Fraction`
+  semantics) — no floating-point drift.
+- 🎓 `netoptim-cpp` is the **reference**: same structure, same tooling, same
+  quality bar (warnings-as-errors, doctest, xmake + CMake).
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 2: The C++ Ecosystem
+
+---
+
+### 🗺️ Python → C++ Mapping
+
+| Python | C++ twin | What the placer uses |
+|--------|----------|----------------------|
+| `netlistx.Netlist` | `netlistx-cpp` `SimpleNetlist` | `gr`, `modules`, `nets`, `num_pads`, `get_module_weight` |
+| `netlistx.read_json` | `read_json_edges` (ours) | node-link JSON reader |
+| `physdes.Interval` | `recti::Interval&lt;T&gt;` | hull_length metrics |
+| `digraphx.MinParametricSolver` | `digraphx-cpp` `MinParametricSolver` | Howard's algorithm |
+| `digraphx.TinyDiGraph` | ❌ **does not exist** | plain adjacency + `mywheel::MapAdapter` |
+| `fractions.Fraction` | `fractions-cpp` `fractions::Fraction&lt;int64_t&gt;` | exact ratios |
+| `networkx` bipartite | `matching.hpp` (ours) | Hungarian assignment |
+
+- 💡 Only **integer module ids** are needed (C++ `SimpleNetlist` is int-based).
+
+---
+
+### 📦 `SimpleNetlist` & The JSON Format
+
+- `read_json_format` (netlistx-cpp) builds the *exact* bipartite layout the
+  Python code assumes:
+
+$${\color{blue}\text{modules}} : 0\ldots M-1, \qquad {\color{orange}\text{nets}}: M\ldots M+N-1, \qquad {\color{green}\text{pads}}= \text{last } P \text{ modules}$$
+
+- ⚠️ **Format gotcha**: Python node-link JSON stores edges under `"edges"` 🧾,
+  but netlistx-cpp's reader expects `"links"`. Since siblings are
+  read-only 📵, we ship a tiny `read_json_edges` helper with identical
+  semantics (see Part 5). 🔧
+
+---
+
+### 🧮 Exact Arithmetic: `fractions::Fraction`
+
+- Howard's algorithm needs **exact ratios** (average cost of a cycle) and the
+  Python code computes *integer* reduced costs with floor division:
+
+$$
+{\color{royalblue}\mathrm{distance}}(r, e)=\left\lfloor \tfrac{{\color{royalblue} n}-{\color{green} c}\,{\color{royalblue} d}}{{\color{blue}\delta}\,{\color{royalblue} d}}\right\rfloor\!,\qquad
+{\color{royalblue}\mathrm{zero\_cancel}}(C)=\tfrac{\sum_{e\in C} {\color{green} c}_e}{\lvert C\rvert}
+$$
+
+- 🐛 **Latent crash found**: `fractions-cpp` overflow guards divide by
+  `abs(numerator)` — a **zero-cost flow arc** (abundant, e.g. self-loops)
+  triggered an integer divide-by-zero during Howard relaxation 💥.
+- 🩹 No sibling repo ever feeds `Fraction` through the solver → we **vendored**
+  a patched, otherwise byte-identical copy into
+  `include/fractions/pyfractions.hpp` (guard routes through `_max_div`).
+
+---
+
+### 🎛️ `MinParametricSolver` Contract (digraphx-cpp)
+
+- The C++ API is a faithful port of the Python `min_parametric_q` solver:
+
+```
+MinParametricAPI<Node, Edge, Ratio>
+    virtual Ratio distance(const Ratio& r, const Edge& e)      // reduced cost
+    virtual Ratio zero_cancel(const vector<Edge>& cycle)       // mean cycle cost
+
+MinParametricSolver<DiGraph, Ratio, Domain>::run(
+    Mapping& dist, Ratio ratio, UpdateOk update_ok)            // pair<Ratio, Cycle>
+```
+
+- 🦆 `DiGraph` is **duck-typed** container-of-containers: iterate
+  `(node → (neighbour, edge))`. `Edge` = the stored *value* (we store `int`
+  costs directly).
+- 🧭 `dist` must be indexable by node — we use `std::vector&lt;Fraction&gt;`
+  (integer-valued positions, read back via `.numerator()`).
+- ✅ No `TinyDiGraph` needed in C++: `create_flow_graph` returns a plain
+  adjacency; `apply_howard` wraps it in `mywheel::MapAdapter` for the solver.
+
+---
+
+class: nord-light, middle, center
+
+## 🧱 Part 3: The Port
+
+---
+
+### 🏗️ Repo Layout & Conventions (netoptim-cpp style)
+
+```
+nnsplace-cpp/
+├── include/nnsplace/
+│   ├── placement_cfg.hpp    NnsConfig (+ validation)
+│   ├── placement.hpp        create_flow_graph, NnsPlacer, HowardsCost
+│   ├── matching.hpp         rectangular Hungarian assignment
+│   └── readwrite.hpp        read_json_edges ("edges" node-link reader)
+├── include/fractions/       vendored patched pyfractions.hpp
+├── source/                  placement.cpp · matching.cpp · readwrite.cpp · placement_cfg.cpp
+├── test/source/             doctest suite (main.cpp + test_placement.cpp)
+├── standalone/source/       CLI parity runner
+├── experiments/parity.py    Python side-by-side runner
+├── testcases/               p1.json, drawf.json, fix.json
+├── xmake.lua  +  CMakeLists.txt
+└── AGENTS.md  +  README.md
+```
+
+- Global-scope headers (no namespace wrapper), Doxygen comments, Google-ish
+  clang-format — exactly like `netoptim-cpp` 📐.
+- **Function bodies of more than 15 lines live in `source/*.cpp`** 🧱; headers
+  only declare them. The one exception is the `hungarian` **template**, which
+  cannot move out of a header without explicit instantiation.
+
+---
+
+### 🔗 `create_flow_graph`: Fidelity Matters
+
+Python builds directed edges from every **ordered pair** `(v1, v2)` inside each
+net, adding both directions — unless the *target* is a pad:
+
+```
+for each net:
+  for v1 in net:                       # every ordered pair
+    for v2 in net:
+      if module_weight[v2] == 0: continue      # pad can never be a target
+      add v1 → v2  and  v2 → v1
+```
+
+We verified the consequences **empirically** on the Python runtime 🔬:
+
+- **self-loops** appear on every non-pad net member `(v, v)` 🌀
+- pads connect **bidirectionally** to their net, but never self-loop
+- edge set is de-duplicated & sorted per node
+
+C++ `create_flow_graph` reproduces this exactly — the mock edge set matches
+Python byte-for-byte ✔️, and the `p1` flow graph has the Python-verified
+**10 249 directed edges** 🎯.
+
+---
+
+### ⚖️ Wire Length & HPWL (integer-exact)
+
+The linear (delta-scaled) cost model stays **integer-exact** 🧮:
+
+$${\color{green}\mathrm{cost}}(\ell, a)={\color{blue}\delta_a}\cdot\ell,\qquad
+{\color{green}\mathrm{worst}}=\max_{(u,v)\in E}\ {\color{blue}\delta_x}\lvert\Delta x\rvert+{\color{orange}\delta_y}\lvert\Delta y\rvert$$
+
+HPWL via hull intervals (one axis at a time) 🧊:
+
+$${\color{orange}\mathrm{hull}}(e)=\max_{i\in e} q_i-\min_{i\in e} q_i,\qquad
+{\color{orange}\mathrm{HPWL}}=\sum_{e}\Bigl({\color{blue}\mathrm{hull}_x(e)}\cdot{\color{blue}\delta_x}+{\color{orange}\mathrm{hull}_y(e)}\cdot{\color{orange}\delta_y}\Bigr)$$
+
+---
+
+### 🎯 Legalization = Min-Weight Assignment
+
+- A bucket of modules sharing one perpendicular line must spread onto distinct
+  slots 🃏. Scoring a lateral move of module $v$ to coordinate $q$ is done in
+  $O(\log \deg)$ via sorted neighbours + prefix/suffix tables:
+
+$${\color{blue}w}(q)=\max\Bigl({\color{blue}\delta_x} q+{\color{green}\mathrm{pref}}[t],\ \ {\color{green}\mathrm{suff}}[t]-{\color{blue}\delta_x} q\Bigr),\qquad
+t=\#\{a: a\le q\}$$
+
+- Each candidate slot gets weight ${\color{green}w_1}-{\color{green}w_0}$; the
+  placer solves
+
+$${\color{red}\min}\sum_{v} {\color{green}w}\bigl(v,\ \mathrm{slot}(v)\bigr)$$
+
+with our **rectangular Hungarian** (dummy rows leave spare slots free,
+infeasible ⇒ `nullopt`).
+
+---
+
+### 🔍 Legalization Strategy: Window → Fallback
+
+.mermaid[
+<pre>
+flowchart TB
+    L[legalize bucket] --> B[base graph: current pos, weight 0]
+    B --> LW[Local window  r = 1..10]
+    LW --> M{matching feasible?}
+    M -- yes --> D[apply matches]
+    M -- "no - widen window" --> LW2[add radius ring r]
+    LW2 --> M
+    M -- "no - window exhausted" --> GS[Global slots fallback]
+    GS --> M2{matching feasible?}
+    M2 -- yes --> D
+    M2 -- no --> RAISE[RuntimeError]
+
+    style L fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style LW fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style GS fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style RAISE fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- Local ±radius window is the **cheap, quality-preserving** path 🪟; the global
+  free-slot fallback guarantees success when the grid has capacity 🛡️
+  (regression: 70 modules crowded on one line).
+
+---
+
+### 🔌 I/O Pad Ring Assignment
+
+- Each pad picks the nearest of the two **opposite edges**, respecting
+  per-edge capacity:
+
+$${\color{blue} \mathrm{io\_limit}}=\Big\lceil \tfrac{\#\text{pads}}{2}\Big\rceil,\qquad
+\text{position}\in\{{\color{orange}0},\,{\color{orange} \mathrm{grid}+1}\}$$
+
+- Nearest-pad math (derived in the source comments) uses only **integer**
+  arithmetic with floor division — and huge sentinels (~$10^{12}$), which is
+  why coordinates are `int64_t` 📏.
+
+---
+
+### 🌀 The Per-Axis Optimization Loop
+
+.mermaid[
+<pre>
+flowchart LR
+    O[optimize] --> AX0["optimize_axis(0)"]
+    AX0 --> AX1["optimize_axis(1)"]
+    AX1 --> W{worst improved?}
+    W -- yes --> AX0
+    W -- no --> R[restore best memento &amp; return]
+
+    subgraph A0 ["optimize_axis(axis)"]
+      H["apply_howard (axis)"] --> LM["legalize_modules (axis^1)"]
+      LM --> IO["choose_nearest_iopad"]
+    end
+
+    style O fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style AX0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style AX1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style W fill:#fff59d,stroke:#f9a825,stroke-width:3px,color:#2e3440
+    style R fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style A0 fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px,color:#2e3440
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style LM fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style IO fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- `run()` repeats optimize + `io_assign` until no strict improvement,
+  **restoring the best saved state** each time (Memento 🧾).
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Part 4: Verification
+
+---
+
+### 🧪 Test Suite (ported from Python)
+
+- **31 doctest cases**, mirroring `test_placement.py`,
+  `test_placement_cfg.py`, `test_place.py`, `test_line_limit.py`:
+  config validation, flow-graph edge set, cost / cost_inv / worst wire length,
+  HPWL hulls, `line_cap_ratio` & `io_limit` caps, legalize fallback, and full
+  p1 / drawf placement runs with **legality + improvement** checks 🧯.
+- xmake gates on Windows: **MSVC `/W4 /WX`** — zero warnings allowed 🚫⚠️.
+- Result: ✅
+
+```
+test cases:    31 | 31 passed | 0 failed
+assertions: 19315 | 19315 passed | Status: SUCCESS!
+```
+
+- The suite now asserts **strict worst-length improvement** — the guard that
+  would have caught the snapshot bug below 🔍.
+
+---
+
+### 🤝 The Parity Harness
+
+- A CLI runner (`standalone/source/main.cpp`) + `experiments/parity.py` print
+  the *same* metrics (HPWL x/y, worst before/after, iterations) for the *same*
+  seed-831 flow:
+
+```
+xmake run nnsplace_standalone testcases/p1.json 50 50 40 2000    # C++
+python experiments/parity.py    testcases/p1.json 50 50          # Python
+```
+
+- Same file (`testcases/*.json`), same config, same pipeline → side-by-side
+  comparison of the two implementations 📊.
+
+---
+
+### 🐛 The Bug the Parity Check Found
+
+- **Symptom**: C++ returned `iterations = 0` everywhere — the placer never
+  improved 🤔, while Python improved on every grid.
+- **Root cause**: the C++ `optimize()`/`run()` snapshotted the state **once**
+  at entry 🔒. Python re-creates its `PlacerState` **after every improving
+  iteration**; when the next iteration stalled, Python rolled back to the
+  *best improved* state — C++ rolled back to the *original* one 💥.
+- **Fix** — re-snapshot in the loop:
+
+```
+worst0 = worst1
+state  = snapshot(place, count)     # ← was missing
+```
+
+- ✅ After the fix the C++ placer improves on every configuration and lands on
+  the **same final worst value** as Python (e.g. 32×32: 1480 = 1480) 🎯.
+
+---
+
+### 📊 Python vs C++ — p1 (833 modules / 81 pads, seed 831)
+
+| grid | Python worst → | C++ worst → | Py HPWLₐ | C++ HPWLₐ |
+|------|----------------|-------------|----------|-----------|
+| 32×32 | 2240 → **1480** | 2160 → **1480** | 583 040 | 559 320 |
+| 50×50 | 2400 → 1800 | 2440 → 1600 | 653 160 | 644 120 |
+| 100×100 | 4240 → 2640 | 4200 → 2760 | 980 880 | 1 182 680 |
+| 50×50 cap | 2400 → 1360 | 2440 → 1520 | 605 560 | 651 560 |
+| 100×100 cap | 4240 → 2480 | 4200 → 2720 | 983 280 | 1 126 800 |
+
+- Final **worst** values are close (identical on 32×32); HPWL within a few % 📈
+- Remaining spread = different RNG (Python `random` vs `std::mt19937`) and
+  Hungarian tie-breaking — both placements are **legal** ✔️
+
+---
+
+### 🖼️ Placement Snapshots — Initial (before)
+
+![initial placement](nnsplace-py-cpp-remark.files/initial.svg)
+
+Random initial placement on the core grid 🎲 — pads still inside the core.
+
+---
+
+### 🖼️ After One Howard Pass (x-axis)
+
+![after howard](nnsplace-py-cpp-remark.files/after1howard.svg)
+
+Howard relaxes potentials along one axis ✨ — the first big wire-length drop.
+
+---
+
+### 🖼️ After Legalization
+
+![after legalize](nnsplace-py-cpp-remark.files/after1legalize.svg)
+
+Legalization spreads each bucket onto distinct slots — no overlaps 🧩.
+
+---
+
+### 🖼️ Final Placement
+
+![final placement](nnsplace-py-cpp-remark.files/final.svg)
+
+Optimized & legal layout with I/O pads snapped to the ring 🎯.
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Part 5: Release & Future Work
+
+---
+
+### 📦 CMake — Mirroring `netoptim-cpp`
+
+- `CMakeLists.txt` follows the netoptim-cpp blueprint 🧬:
+  CPM.cmake dependencies (`INSTALL_ONLY`), fmt/spdlog handling, abseil
+  resolution, `SPECIFIC_LIBS`, PackageProject install, doctest, Format.cmake.
+- `NnsPlace` is a **compiled (static) target** now 📚: it PUBLIC-links
+  `${SPECIFIC_LIBS}` + abseil so the `.cpp` units compile and consumers
+  inherit the sibling includes 🔗 (mirrors `netlistx-cpp`).
+- Sibling packages are pulled **by tag** from GitHub
+  (`NetlistX` v1.1.7, `DiGraphX` v1.1.7, `Recti` v1.2.4, `MyWheel` v1.1.6,
+  `Py2Cpp` v1.6.4, `XNetwork` v1.7.7) 🏷️.
+- Lessons learned on Windows 🪟:
+  - VS **18 2026** generator (not VS 2022 toolset) 🛠️
+  - a static library target needs **`CXX_STANDARD 20`** set explicitly — MSVC
+    otherwise defaults to C++17 and rejects `operator<=>` 🔧
+  - abseil headers come from DiGraphX; include them via the linked targets,
+    not by hand 🔗
+
+Verified: configure → build → **ctest 100% passed** ✅
+
+---
+
+### 🧱 From Header-Only to Headers + `.cpp`
+
+A later clean-up pass moved every **function body longer than 15 lines** out of
+the headers into `source/*.cpp` 🗂️:
+
+- `placement.cpp` — flow graph + the big `NnsPlacer` methods (constructor,
+  `apply_howard`, `legalize`, I/O-pad logic, …)
+- `matching.cpp` — Kuhn feasibility + `min_weight_full_matching`
+- `readwrite.cpp` / `placement_cfg.cpp` — JSON reader, validated constructor
+
+Rules followed:
+
+- bodies of **≤ 15 lines stay inline** in the header (metrics, `run`/`optimize`,
+  small helpers) 📏
+- the **`hungarian` template** stays in the header — templates cannot move to a
+  `.cpp` without explicit instantiation 🧬
+
+Verified **before & after** — byte-identical behaviour:
+
+```
+xmake       → build ok (no warnings)      cmake build → NnsPlace.lib + exes
+xmake run   → 31/31 · 19315 assertions    ctest       → 100% passed
+standalone  → worst 2160 → 1480, legal=yes (unchanged)  ✅
+```
+
+---
+
+### 📦 xmake + CMake, One Source of Truth
+
+.mermaid[
+<pre>
+flowchart LR
+    SRC[include/nnsplace/*.hpp] --> X[xmake.lua]
+    SRC --> C[CMakeLists.txt]
+    X --> XT[test_nnsplace]
+    X --> XS[nnsplace_standalone]
+    C --> CT[NnsPlaceTests]
+    C --> CS[NnsPlaceStandalone]
+    XT --> OK1[doctest 31/31 ✔]
+    CT --> OK2[ctest 100% ✔]
+
+    style SRC fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style X fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style XT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style CT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style XS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style CS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style OK1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style OK2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- xmake for **fast local iteration** ⚡; CMake/CPM for the **published** repo &
+  install (`find_package`) 📦.
+
+---
+
+### 🧾 Deliberate Deviations (documented in AGENTS.md)
+
+1. **`"edges"` reader**: netlistx-cpp expects `"links"`; we keep a small
+   `read_json_edges` in `include/nnsplace/readwrite.hpp` (Python testcases use
+   networkx `"edges"`) 🧾
+2. **Vendored `pyfractions.hpp`**: zero-divisor-safe overflow guards 🩹
+3. **Integer module ids only** (C++ `SimpleNetlist`) 🎯
+4. **RNG**: `std::mt19937` with a fixed seed; tests assert legality +
+   improvement, never bit-exact worst values 🎲
+
+---
+
+### 🧭 What's Next?
+
+- 🌍 **Upstream** the `fractions-cpp` zero-divisor fix (drop the vendored copy)
+- 🏃 **GitHub Actions** workflows: Ubuntu / macOS / Windows + coverage
+- 🏗️ **Doxygen** docs target + `GenerateDocs` deploy to GitHub Pages
+- 📊 **Benchmarks** (nanobench) against the Python baseline
+- 🔧 Optional: CMake `find_package` **install** test (`test_installed`)
+- 🧮 Revisit pad-aware optimization (the Python `TODO`s stay TODO)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Ask me anything about the port 🎤
+
+![final](nnsplace-py-cpp-remark.files/final.svg)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 Thank You!
+
+### 📐 Porting `nnsplace` from Python to C++
+
+Reuse the ecosystem 🧬 · Preserve semantics 🔬 · Verify against the reference 🤝
+
+![final placement](nnsplace-py-cpp-remark.files/final.svg)
+
+Slides built with Remark.js 🛠️ | KaTeX 🧮 | Mermaid 🌊 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

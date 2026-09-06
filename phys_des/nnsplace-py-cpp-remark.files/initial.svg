@@ -1,0 +1,1071 @@
+<svg viewBox="0 0 4080 4080" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @import "mysvg.css"
+  </style>
+
+  <!-- Create mask that we'll use to define a slight gradient -->
+  <mask maskUnits="userSpaceOnUse" id="fade">
+    <!-- Here's that slight gradient -->
+    <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="100%">
+      <stop offset ="0" style="stop-color: #FFFFFF" />
+      <stop offset ="1" style="stop-color: #000000" />
+    </linearGradient>
+    <!-- The canvas for our mask -->
+    <rect fill="url(#gradient)" width="100%" height="100%" />
+  </mask>
+
+  <!-- Let's define the pattern -->
+  <!-- The width and height should be double the circle radius we plan to use -->
+  <pattern id="pattern-circles" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <!-- Now let's draw the circle -->
+    <!-- We're going to define the `fill` in the CSS for flexible use -->
+    <circle class="cell" opacity="0.2" cx="20" cy="20" r="15" />
+  </pattern>
+
+  <!-- Let's define the pattern -->
+  <!-- The width and height should be double the circle radius we plan to use -->
+  <pattern id="pattern-io" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <!-- Now let's draw the circle -->
+    <!-- We're going to define the `fill` in the CSS for flexible use -->
+    <circle class="iopad" opacity="0.2" cx="20" cy="20" r="15" />
+  </pattern>
+
+  <!-- The canvas with our applied pattern -->
+  <rect x="40" y="40" width="4000" height="4000" fill="url(#pattern-circles)" />
+
+  <rect x="40" y="0" width="4000" height="40" fill="url(#pattern-io)" />
+  <rect x="40" y="4040" width="4000" height="40" fill="url(#pattern-io)" />
+  <rect x="0" y="40" width="40" height="4000" fill="url(#pattern-io)" />
+  <rect x="4040" y="40" width="40" height="4000" fill="url(#pattern-io)" />
+  <defs>
+    <!-- A circle of radius 200 -->
+    <circle id = "s1" cx = "200" cy = "200" r = "200" fill = "yellow" stroke = "black" stroke-width = "3"/>
+    <!-- An ellipse (rx=200,ry=150) -->
+    <ellipse id = "s2" cx = "200" cy = "150" rx = "200" ry = "150" fill = "salmon" stroke = "black" stroke-width = "3"/>
+    <rect id = "r1" width="35" height="35" fill = "#FF00A7" opacity="0.2" stroke = "black" stroke-width = "3"/>
+    <rect id = "io" width="35" height="35" fill = "#00E7FF" opacity="0.2" stroke = "black" stroke-width = "3"/>
+  </defs>
+<use x="160" y="240" href="#r1"/>
+<use x="3880" y="120" href="#r1"/>
+<use x="1680" y="120" href="#r1"/>
+<use x="1480" y="40" href="#r1"/>
+<use x="560" y="120" href="#r1"/>
+<use x="1520" y="40" href="#r1"/>
+<use x="2560" y="320" href="#r1"/>
+<use x="2880" y="280" href="#r1"/>
+<use x="120" y="280" href="#r1"/>
+<use x="2520" y="240" href="#r1"/>
+<use x="800" y="360" href="#r1"/>
+<use x="800" y="120" href="#r1"/>
+<use x="1480" y="240" href="#r1"/>
+<use x="3120" y="200" href="#r1"/>
+<use x="3480" y="40" href="#r1"/>
+<use x="3720" y="40" href="#r1"/>
+<use x="3000" y="40" href="#r1"/>
+<use x="920" y="280" href="#r1"/>
+<use x="640" y="80" href="#r1"/>
+<use x="160" y="320" href="#r1"/>
+<use x="2200" y="160" href="#r1"/>
+<use x="3720" y="120" href="#r1"/>
+<use x="2680" y="40" href="#r1"/>
+<use x="720" y="240" href="#r1"/>
+<use x="560" y="240" href="#r1"/>
+<use x="1120" y="360" href="#r1"/>
+<use x="2080" y="320" href="#r1"/>
+<use x="80" y="120" href="#r1"/>
+<use x="3120" y="240" href="#r1"/>
+<use x="2800" y="240" href="#r1"/>
+<use x="1160" y="200" href="#r1"/>
+<use x="3000" y="120" href="#r1"/>
+<use x="200" y="320" href="#r1"/>
+<use x="280" y="120" href="#r1"/>
+<use x="3480" y="240" href="#r1"/>
+<use x="680" y="160" href="#r1"/>
+<use x="1360" y="280" href="#r1"/>
+<use x="3720" y="80" href="#r1"/>
+<use x="200" y="200" href="#r1"/>
+<use x="80" y="80" href="#r1"/>
+<use x="2840" y="320" href="#r1"/>
+<use x="1800" y="200" href="#r1"/>
+<use x="1120" y="200" href="#r1"/>
+<use x="40" y="240" href="#r1"/>
+<use x="2120" y="280" href="#r1"/>
+<use x="3760" y="320" href="#r1"/>
+<use x="440" y="280" href="#r1"/>
+<use x="2240" y="120" href="#r1"/>
+<use x="1760" y="280" href="#r1"/>
+<use x="440" y="360" href="#r1"/>
+<use x="1600" y="120" href="#r1"/>
+<use x="3800" y="200" href="#r1"/>
+<use x="2440" y="40" href="#r1"/>
+<use x="640" y="200" href="#r1"/>
+<use x="800" y="280" href="#r1"/>
+<use x="3200" y="200" href="#r1"/>
+<use x="2680" y="120" href="#r1"/>
+<use x="2640" y="40" href="#r1"/>
+<use x="2280" y="280" href="#r1"/>
+<use x="240" y="200" href="#r1"/>
+<use x="3840" y="200" href="#r1"/>
+<use x="2640" y="320" href="#r1"/>
+<use x="1400" y="280" href="#r1"/>
+<use x="800" y="80" href="#r1"/>
+<use x="960" y="160" href="#r1"/>
+<use x="3640" y="160" href="#r1"/>
+<use x="3440" y="40" href="#r1"/>
+<use x="1080" y="280" href="#r1"/>
+<use x="3280" y="280" href="#r1"/>
+<use x="560" y="160" href="#r1"/>
+<use x="2360" y="320" href="#r1"/>
+<use x="560" y="40" href="#r1"/>
+<use x="2880" y="120" href="#r1"/>
+<use x="280" y="40" href="#r1"/>
+<use x="3800" y="160" href="#r1"/>
+<use x="2400" y="280" href="#r1"/>
+<use x="200" y="240" href="#r1"/>
+<use x="3040" y="40" href="#r1"/>
+<use x="3440" y="160" href="#r1"/>
+<use x="3680" y="200" href="#r1"/>
+<use x="2040" y="160" href="#r1"/>
+<use x="800" y="200" href="#r1"/>
+<use x="2240" y="80" href="#r1"/>
+<use x="1160" y="320" href="#r1"/>
+<use x="2800" y="280" href="#r1"/>
+<use x="2920" y="240" href="#r1"/>
+<use x="2400" y="120" href="#r1"/>
+<use x="480" y="120" href="#r1"/>
+<use x="3320" y="280" href="#r1"/>
+<use x="1880" y="200" href="#r1"/>
+<use x="2920" y="280" href="#r1"/>
+<use x="2400" y="160" href="#r1"/>
+<use x="3120" y="120" href="#r1"/>
+<use x="3320" y="80" href="#r1"/>
+<use x="360" y="360" href="#r1"/>
+<use x="640" y="280" href="#r1"/>
+<use x="3240" y="120" href="#r1"/>
+<use x="480" y="360" href="#r1"/>
+<use x="3920" y="320" href="#r1"/>
+<use x="200" y="120" href="#r1"/>
+<use x="1560" y="240" href="#r1"/>
+<use x="680" y="360" href="#r1"/>
+<use x="1720" y="240" href="#r1"/>
+<use x="480" y="280" href="#r1"/>
+<use x="3600" y="120" href="#r1"/>
+<use x="2520" y="80" href="#r1"/>
+<use x="280" y="160" href="#r1"/>
+<use x="920" y="80" href="#r1"/>
+<use x="680" y="80" href="#r1"/>
+<use x="120" y="200" href="#r1"/>
+<use x="1040" y="200" href="#r1"/>
+<use x="1440" y="240" href="#r1"/>
+<use x="2280" y="160" href="#r1"/>
+<use x="1440" y="320" href="#r1"/>
+<use x="1880" y="80" href="#r1"/>
+<use x="1360" y="120" href="#r1"/>
+<use x="2240" y="160" href="#r1"/>
+<use x="1920" y="200" href="#r1"/>
+<use x="3720" y="160" href="#r1"/>
+<use x="2040" y="200" href="#r1"/>
+<use x="2080" y="80" href="#r1"/>
+<use x="1320" y="320" href="#r1"/>
+<use x="2160" y="40" href="#r1"/>
+<use x="160" y="160" href="#r1"/>
+<use x="2840" y="240" href="#r1"/>
+<use x="1480" y="280" href="#r1"/>
+<use x="960" y="200" href="#r1"/>
+<use x="1920" y="240" href="#r1"/>
+<use x="520" y="200" href="#r1"/>
+<use x="200" y="40" href="#r1"/>
+<use x="3600" y="160" href="#r1"/>
+<use x="2720" y="280" href="#r1"/>
+<use x="120" y="320" href="#r1"/>
+<use x="3800" y="80" href="#r1"/>
+<use x="360" y="120" href="#r1"/>
+<use x="2680" y="320" href="#r1"/>
+<use x="2760" y="40" href="#r1"/>
+<use x="2720" y="240" href="#r1"/>
+<use x="3600" y="40" href="#r1"/>
+<use x="1800" y="240" href="#r1"/>
+<use x="1960" y="320" href="#r1"/>
+<use x="3280" y="160" href="#r1"/>
+<use x="720" y="160" href="#r1"/>
+<use x="920" y="200" href="#r1"/>
+<use x="1240" y="40" href="#r1"/>
+<use x="3920" y="40" href="#r1"/>
+<use x="3240" y="160" href="#r1"/>
+<use x="1000" y="280" href="#r1"/>
+<use x="1160" y="360" href="#r1"/>
+<use x="3000" y="320" href="#r1"/>
+<use x="2800" y="320" href="#r1"/>
+<use x="2040" y="280" href="#r1"/>
+<use x="920" y="360" href="#r1"/>
+<use x="2280" y="240" href="#r1"/>
+<use x="2720" y="40" href="#r1"/>
+<use x="920" y="120" href="#r1"/>
+<use x="360" y="80" href="#r1"/>
+<use x="1080" y="360" href="#r1"/>
+<use x="3080" y="40" href="#r1"/>
+<use x="1080" y="240" href="#r1"/>
+<use x="360" y="280" href="#r1"/>
+<use x="1320" y="360" href="#r1"/>
+<use x="2520" y="320" href="#r1"/>
+<use x="1160" y="240" href="#r1"/>
+<use x="1120" y="160" href="#r1"/>
+<use x="3560" y="160" href="#r1"/>
+<use x="3000" y="80" href="#r1"/>
+<use x="2320" y="240" href="#r1"/>
+<use x="3400" y="200" href="#r1"/>
+<use x="2240" y="240" href="#r1"/>
+<use x="4000" y="240" href="#r1"/>
+<use x="2760" y="240" href="#r1"/>
+<use x="640" y="160" href="#r1"/>
+<use x="960" y="320" href="#r1"/>
+<use x="2840" y="160" href="#r1"/>
+<use x="880" y="120" href="#r1"/>
+<use x="1560" y="120" href="#r1"/>
+<use x="560" y="80" href="#r1"/>
+<use x="1760" y="120" href="#r1"/>
+<use x="320" y="240" href="#r1"/>
+<use x="2840" y="200" href="#r1"/>
+<use x="1320" y="40" href="#r1"/>
+<use x="2200" y="80" href="#r1"/>
+<use x="2200" y="280" href="#r1"/>
+<use x="840" y="280" href="#r1"/>
+<use x="3480" y="80" href="#r1"/>
+<use x="3640" y="120" href="#r1"/>
+<use x="1040" y="280" href="#r1"/>
+<use x="320" y="360" href="#r1"/>
+<use x="2160" y="320" href="#r1"/>
+<use x="920" y="320" href="#r1"/>
+<use x="3520" y="80" href="#r1"/>
+<use x="1960" y="40" href="#r1"/>
+<use x="1680" y="40" href="#r1"/>
+<use x="520" y="40" href="#r1"/>
+<use x="3840" y="240" href="#r1"/>
+<use x="2800" y="160" href="#r1"/>
+<use x="1840" y="40" href="#r1"/>
+<use x="2960" y="240" href="#r1"/>
+<use x="2760" y="120" href="#r1"/>
+<use x="120" y="120" href="#r1"/>
+<use x="2640" y="160" href="#r1"/>
+<use x="1280" y="320" href="#r1"/>
+<use x="800" y="160" href="#r1"/>
+<use x="720" y="200" href="#r1"/>
+<use x="1760" y="200" href="#r1"/>
+<use x="3400" y="240" href="#r1"/>
+<use x="1200" y="240" href="#r1"/>
+<use x="3520" y="320" href="#r1"/>
+<use x="2200" y="40" href="#r1"/>
+<use x="3160" y="40" href="#r1"/>
+<use x="1640" y="160" href="#r1"/>
+<use x="1360" y="240" href="#r1"/>
+<use x="1840" y="80" href="#r1"/>
+<use x="2520" y="280" href="#r1"/>
+<use x="2640" y="240" href="#r1"/>
+<use x="1240" y="320" href="#r1"/>
+<use x="2040" y="240" href="#r1"/>
+<use x="2720" y="200" href="#r1"/>
+<use x="1520" y="200" href="#r1"/>
+<use x="320" y="40" href="#r1"/>
+<use x="3400" y="40" href="#r1"/>
+<use x="320" y="80" href="#r1"/>
+<use x="3960" y="160" href="#r1"/>
+<use x="2400" y="320" href="#r1"/>
+<use x="840" y="360" href="#r1"/>
+<use x="840" y="200" href="#r1"/>
+<use x="1640" y="200" href="#r1"/>
+<use x="3320" y="120" href="#r1"/>
+<use x="2000" y="240" href="#r1"/>
+<use x="3240" y="200" href="#r1"/>
+<use x="2800" y="120" href="#r1"/>
+<use x="2000" y="40" href="#r1"/>
+<use x="1040" y="360" href="#r1"/>
+<use x="600" y="280" href="#r1"/>
+<use x="2720" y="120" href="#r1"/>
+<use x="2200" y="240" href="#r1"/>
+<use x="240" y="40" href="#r1"/>
+<use x="360" y="240" href="#r1"/>
+<use x="3440" y="120" href="#r1"/>
+<use x="3760" y="160" href="#r1"/>
+<use x="3560" y="80" href="#r1"/>
+<use x="2840" y="120" href="#r1"/>
+<use x="1960" y="240" href="#r1"/>
+<use x="1600" y="80" href="#r1"/>
+<use x="1480" y="120" href="#r1"/>
+<use x="1960" y="280" href="#r1"/>
+<use x="3840" y="80" href="#r1"/>
+<use x="1000" y="80" href="#r1"/>
+<use x="3760" y="120" href="#r1"/>
+<use x="600" y="160" href="#r1"/>
+<use x="1600" y="40" href="#r1"/>
+<use x="680" y="240" href="#r1"/>
+<use x="1720" y="200" href="#r1"/>
+<use x="1240" y="240" href="#r1"/>
+<use x="3200" y="240" href="#r1"/>
+<use x="3720" y="280" href="#r1"/>
+<use x="2760" y="200" href="#r1"/>
+<use x="1280" y="40" href="#r1"/>
+<use x="2240" y="280" href="#r1"/>
+<use x="2960" y="200" href="#r1"/>
+<use x="2920" y="160" href="#r1"/>
+<use x="1400" y="120" href="#r1"/>
+<use x="2720" y="80" href="#r1"/>
+<use x="2920" y="320" href="#r1"/>
+<use x="160" y="280" href="#r1"/>
+<use x="600" y="40" href="#r1"/>
+<use x="2240" y="320" href="#r1"/>
+<use x="1280" y="120" href="#r1"/>
+<use x="2160" y="280" href="#r1"/>
+<use x="1920" y="120" href="#r1"/>
+<use x="3840" y="280" href="#r1"/>
+<use x="3800" y="320" href="#r1"/>
+<use x="3480" y="120" href="#r1"/>
+<use x="3720" y="200" href="#r1"/>
+<use x="1280" y="80" href="#r1"/>
+<use x="3800" y="280" href="#r1"/>
+<use x="1640" y="40" href="#r1"/>
+<use x="1760" y="40" href="#r1"/>
+<use x="80" y="280" href="#r1"/>
+<use x="560" y="280" href="#r1"/>
+<use x="2640" y="280" href="#r1"/>
+<use x="3800" y="240" href="#r1"/>
+<use x="2800" y="200" href="#r1"/>
+<use x="400" y="120" href="#r1"/>
+<use x="1840" y="160" href="#r1"/>
+<use x="520" y="80" href="#r1"/>
+<use x="2920" y="120" href="#r1"/>
+<use x="880" y="320" href="#r1"/>
+<use x="1440" y="200" href="#r1"/>
+<use x="3360" y="80" href="#r1"/>
+<use x="680" y="40" href="#r1"/>
+<use x="2440" y="320" href="#r1"/>
+<use x="1320" y="160" href="#r1"/>
+<use x="440" y="240" href="#r1"/>
+<use x="3000" y="160" href="#r1"/>
+<use x="720" y="280" href="#r1"/>
+<use x="3320" y="240" href="#r1"/>
+<use x="1760" y="160" href="#r1"/>
+<use x="2440" y="240" href="#r1"/>
+<use x="2320" y="280" href="#r1"/>
+<use x="1800" y="280" href="#r1"/>
+<use x="3880" y="200" href="#r1"/>
+<use x="2280" y="200" href="#r1"/>
+<use x="3480" y="160" href="#r1"/>
+<use x="3080" y="160" href="#r1"/>
+<use x="1240" y="120" href="#r1"/>
+<use x="1040" y="120" href="#r1"/>
+<use x="120" y="80" href="#r1"/>
+<use x="1800" y="320" href="#r1"/>
+<use x="3640" y="40" href="#r1"/>
+<use x="3080" y="200" href="#r1"/>
+<use x="800" y="240" href="#r1"/>
+<use x="2480" y="120" href="#r1"/>
+<use x="400" y="200" href="#r1"/>
+<use x="1760" y="240" href="#r1"/>
+<use x="1600" y="160" href="#r1"/>
+<use x="3680" y="320" href="#r1"/>
+<use x="3680" y="80" href="#r1"/>
+<use x="3240" y="240" href="#r1"/>
+<use x="2600" y="80" href="#r1"/>
+<use x="160" y="40" href="#r1"/>
+<use x="1000" y="40" href="#r1"/>
+<use x="2480" y="80" href="#r1"/>
+<use x="40" y="200" href="#r1"/>
+<use x="2360" y="40" href="#r1"/>
+<use x="160" y="360" href="#r1"/>
+<use x="80" y="40" href="#r1"/>
+<use x="80" y="240" href="#r1"/>
+<use x="3920" y="80" href="#r1"/>
+<use x="2800" y="40" href="#r1"/>
+<use x="880" y="280" href="#r1"/>
+<use x="1040" y="320" href="#r1"/>
+<use x="3160" y="120" href="#r1"/>
+<use x="1720" y="120" href="#r1"/>
+<use x="2680" y="80" href="#r1"/>
+<use x="360" y="200" href="#r1"/>
+<use x="3640" y="240" href="#r1"/>
+<use x="600" y="200" href="#r1"/>
+<use x="1280" y="200" href="#r1"/>
+<use x="3400" y="320" href="#r1"/>
+<use x="1360" y="160" href="#r1"/>
+<use x="760" y="120" href="#r1"/>
+<use x="3680" y="240" href="#r1"/>
+<use x="3360" y="160" href="#r1"/>
+<use x="2000" y="160" href="#r1"/>
+<use x="3360" y="120" href="#r1"/>
+<use x="2960" y="80" href="#r1"/>
+<use x="1400" y="320" href="#r1"/>
+<use x="1200" y="120" href="#r1"/>
+<use x="2760" y="160" href="#r1"/>
+<use x="3880" y="240" href="#r1"/>
+<use x="2640" y="200" href="#r1"/>
+<use x="1280" y="360" href="#r1"/>
+<use x="2480" y="160" href="#r1"/>
+<use x="3240" y="80" href="#r1"/>
+<use x="2560" y="80" href="#r1"/>
+<use x="3400" y="80" href="#r1"/>
+<use x="280" y="280" href="#r1"/>
+<use x="2000" y="200" href="#r1"/>
+<use x="2880" y="160" href="#r1"/>
+<use x="3840" y="160" href="#r1"/>
+<use x="1000" y="200" href="#r1"/>
+<use x="1640" y="240" href="#r1"/>
+<use x="3760" y="240" href="#r1"/>
+<use x="2040" y="120" href="#r1"/>
+<use x="3680" y="120" href="#r1"/>
+<use x="2280" y="320" href="#r1"/>
+<use x="3520" y="160" href="#r1"/>
+<use x="3200" y="280" href="#r1"/>
+<use x="1200" y="40" href="#r1"/>
+<use x="3400" y="280" href="#r1"/>
+<use x="960" y="120" href="#r1"/>
+<use x="960" y="280" href="#r1"/>
+<use x="2160" y="120" href="#r1"/>
+<use x="2360" y="280" href="#r1"/>
+<use x="640" y="120" href="#r1"/>
+<use x="1760" y="80" href="#r1"/>
+<use x="3560" y="120" href="#r1"/>
+<use x="2960" y="320" href="#r1"/>
+<use x="40" y="360" href="#r1"/>
+<use x="2040" y="80" href="#r1"/>
+<use x="2680" y="200" href="#r1"/>
+<use x="1320" y="240" href="#r1"/>
+<use x="2160" y="240" href="#r1"/>
+<use x="2680" y="160" href="#r1"/>
+<use x="2280" y="80" href="#r1"/>
+<use x="3280" y="320" href="#r1"/>
+<use x="1920" y="160" href="#r1"/>
+<use x="720" y="40" href="#r1"/>
+<use x="3360" y="320" href="#r1"/>
+<use x="520" y="240" href="#r1"/>
+<use x="1120" y="40" href="#r1"/>
+<use x="2600" y="240" href="#r1"/>
+<use x="1640" y="320" href="#r1"/>
+<use x="2960" y="120" href="#r1"/>
+<use x="3240" y="280" href="#r1"/>
+<use x="1280" y="240" href="#r1"/>
+<use x="1080" y="320" href="#r1"/>
+<use x="160" y="120" href="#r1"/>
+<use x="3840" y="320" href="#r1"/>
+<use x="3000" y="280" href="#r1"/>
+<use x="440" y="120" href="#r1"/>
+<use x="3720" y="320" href="#r1"/>
+<use x="2080" y="240" href="#r1"/>
+<use x="1880" y="160" href="#r1"/>
+<use x="3280" y="40" href="#r1"/>
+<use x="2120" y="200" href="#r1"/>
+<use x="480" y="320" href="#r1"/>
+<use x="1240" y="360" href="#r1"/>
+<use x="2280" y="120" href="#r1"/>
+<use x="2160" y="160" href="#r1"/>
+<use x="3920" y="280" href="#r1"/>
+<use x="3520" y="200" href="#r1"/>
+<use x="920" y="160" href="#r1"/>
+<use x="2440" y="120" href="#r1"/>
+<use x="1880" y="120" href="#r1"/>
+<use x="1440" y="160" href="#r1"/>
+<use x="2320" y="80" href="#r1"/>
+<use x="3600" y="80" href="#r1"/>
+<use x="3880" y="280" href="#r1"/>
+<use x="400" y="280" href="#r1"/>
+<use x="3680" y="160" href="#r1"/>
+<use x="2960" y="160" href="#r1"/>
+<use x="2760" y="320" href="#r1"/>
+<use x="760" y="360" href="#r1"/>
+<use x="1040" y="160" href="#r1"/>
+<use x="2200" y="120" href="#r1"/>
+<use x="4000" y="40" href="#r1"/>
+<use x="3080" y="120" href="#r1"/>
+<use x="2640" y="120" href="#r1"/>
+<use x="2360" y="80" href="#r1"/>
+<use x="2320" y="160" href="#r1"/>
+<use x="1120" y="240" href="#r1"/>
+<use x="2120" y="80" href="#r1"/>
+<use x="1080" y="120" href="#r1"/>
+<use x="280" y="320" href="#r1"/>
+<use x="3520" y="280" href="#r1"/>
+<use x="1440" y="120" href="#r1"/>
+<use x="840" y="240" href="#r1"/>
+<use x="3280" y="200" href="#r1"/>
+<use x="720" y="80" href="#r1"/>
+<use x="3320" y="320" href="#r1"/>
+<use x="760" y="40" href="#r1"/>
+<use x="40" y="320" href="#r1"/>
+<use x="320" y="280" href="#r1"/>
+<use x="560" y="360" href="#r1"/>
+<use x="2520" y="160" href="#r1"/>
+<use x="3600" y="320" href="#r1"/>
+<use x="2000" y="120" href="#r1"/>
+<use x="3520" y="120" href="#r1"/>
+<use x="3240" y="320" href="#r1"/>
+<use x="240" y="160" href="#r1"/>
+<use x="1320" y="80" href="#r1"/>
+<use x="3040" y="200" href="#r1"/>
+<use x="2720" y="320" href="#r1"/>
+<use x="3400" y="120" href="#r1"/>
+<use x="3200" y="40" href="#r1"/>
+<use x="1040" y="40" href="#r1"/>
+<use x="280" y="80" href="#r1"/>
+<use x="3040" y="280" href="#r1"/>
+<use x="1680" y="160" href="#r1"/>
+<use x="1200" y="80" href="#r1"/>
+<use x="1600" y="280" href="#r1"/>
+<use x="120" y="240" href="#r1"/>
+<use x="760" y="320" href="#r1"/>
+<use x="760" y="280" href="#r1"/>
+<use x="1240" y="200" href="#r1"/>
+<use x="1120" y="120" href="#r1"/>
+<use x="1160" y="160" href="#r1"/>
+<use x="2560" y="40" href="#r1"/>
+<use x="2120" y="120" href="#r1"/>
+<use x="3160" y="240" href="#r1"/>
+<use x="600" y="240" href="#r1"/>
+<use x="2520" y="120" href="#r1"/>
+<use x="1800" y="120" href="#r1"/>
+<use x="2840" y="280" href="#r1"/>
+<use x="1360" y="80" href="#r1"/>
+<use x="240" y="320" href="#r1"/>
+<use x="1560" y="160" href="#r1"/>
+<use x="520" y="120" href="#r1"/>
+<use x="1440" y="40" href="#r1"/>
+<use x="200" y="160" href="#r1"/>
+<use x="2160" y="80" href="#r1"/>
+<use x="2480" y="320" href="#r1"/>
+<use x="1600" y="200" href="#r1"/>
+<use x="280" y="200" href="#r1"/>
+<use x="40" y="280" href="#r1"/>
+<use x="2080" y="120" href="#r1"/>
+<use x="3440" y="80" href="#r1"/>
+<use x="720" y="360" href="#r1"/>
+<use x="2880" y="240" href="#r1"/>
+<use x="2080" y="200" href="#r1"/>
+<use x="1680" y="240" href="#r1"/>
+<use x="2440" y="80" href="#r1"/>
+<use x="4000" y="200" href="#r1"/>
+<use x="3600" y="200" href="#r1"/>
+<use x="2120" y="40" href="#r1"/>
+<use x="1000" y="240" href="#r1"/>
+<use x="3640" y="200" href="#r1"/>
+<use x="3760" y="40" href="#r1"/>
+<use x="2920" y="80" href="#r1"/>
+<use x="2360" y="240" href="#r1"/>
+<use x="440" y="40" href="#r1"/>
+<use x="2760" y="80" href="#r1"/>
+<use x="2520" y="40" href="#r1"/>
+<use x="2080" y="160" href="#r1"/>
+<use x="600" y="320" href="#r1"/>
+<use x="1840" y="280" href="#r1"/>
+<use x="2080" y="40" href="#r1"/>
+<use x="80" y="160" href="#r1"/>
+<use x="2480" y="240" href="#r1"/>
+<use x="3280" y="80" href="#r1"/>
+<use x="3920" y="240" href="#r1"/>
+<use x="520" y="320" href="#r1"/>
+<use x="2440" y="160" href="#r1"/>
+<use x="880" y="40" href="#r1"/>
+<use x="2360" y="200" href="#r1"/>
+<use x="600" y="80" href="#r1"/>
+<use x="3760" y="80" href="#r1"/>
+<use x="3040" y="320" href="#r1"/>
+<use x="1720" y="80" href="#r1"/>
+<use x="3800" y="120" href="#r1"/>
+<use x="3040" y="160" href="#r1"/>
+<use x="1000" y="360" href="#r1"/>
+<use x="3480" y="320" href="#r1"/>
+<use x="840" y="80" href="#r1"/>
+<use x="2160" y="200" href="#r1"/>
+<use x="1480" y="80" href="#r1"/>
+<use x="2880" y="40" href="#r1"/>
+<use x="3920" y="120" href="#r1"/>
+<use x="1440" y="80" href="#r1"/>
+<use x="1680" y="200" href="#r1"/>
+<use x="1200" y="200" href="#r1"/>
+<use x="3200" y="160" href="#r1"/>
+<use x="3160" y="80" href="#r1"/>
+<use x="1840" y="240" href="#r1"/>
+<use x="3080" y="320" href="#r1"/>
+<use x="3560" y="240" href="#r1"/>
+<use x="2720" y="160" href="#r1"/>
+<use x="1360" y="200" href="#r1"/>
+<use x="120" y="360" href="#r1"/>
+<use x="2000" y="80" href="#r1"/>
+<use x="2120" y="160" href="#r1"/>
+<use x="3960" y="240" href="#r1"/>
+<use x="480" y="80" href="#r1"/>
+<use x="400" y="40" href="#r1"/>
+<use x="760" y="80" href="#r1"/>
+<use x="1240" y="280" href="#r1"/>
+<use x="2520" y="200" href="#r1"/>
+<use x="1120" y="280" href="#r1"/>
+<use x="3040" y="120" href="#r1"/>
+<use x="520" y="280" href="#r1"/>
+<use x="1680" y="280" href="#r1"/>
+<use x="320" y="200" href="#r1"/>
+<use x="240" y="120" href="#r1"/>
+<use x="3640" y="80" href="#r1"/>
+<use x="1360" y="40" href="#r1"/>
+<use x="1880" y="40" href="#r1"/>
+<use x="160" y="80" href="#r1"/>
+<use x="1200" y="280" href="#r1"/>
+<use x="1640" y="80" href="#r1"/>
+<use x="3920" y="160" href="#r1"/>
+<use x="40" y="160" href="#r1"/>
+<use x="3080" y="80" href="#r1"/>
+<use x="2360" y="120" href="#r1"/>
+<use x="960" y="240" href="#r1"/>
+<use x="2560" y="240" href="#r1"/>
+<use x="1480" y="200" href="#r1"/>
+<use x="3400" y="160" href="#r1"/>
+<use x="3360" y="240" href="#r1"/>
+<use x="1160" y="40" href="#r1"/>
+<use x="2000" y="320" href="#r1"/>
+<use x="520" y="360" href="#r1"/>
+<use x="3120" y="40" href="#r1"/>
+<use x="2040" y="320" href="#r1"/>
+<use x="3120" y="320" href="#r1"/>
+<use x="3120" y="160" href="#r1"/>
+<use x="400" y="80" href="#r1"/>
+<use x="3840" y="40" href="#r1"/>
+<use x="2400" y="240" href="#r1"/>
+<use x="3200" y="320" href="#r1"/>
+<use x="3560" y="320" href="#r1"/>
+<use x="1560" y="40" href="#r1"/>
+<use x="360" y="160" href="#r1"/>
+<use x="440" y="80" href="#r1"/>
+<use x="1600" y="320" href="#r1"/>
+<use x="1160" y="120" href="#r1"/>
+<use x="440" y="320" href="#r1"/>
+<use x="480" y="200" href="#r1"/>
+<use x="600" y="360" href="#r1"/>
+<use x="3160" y="280" href="#r1"/>
+<use x="2000" y="280" href="#r1"/>
+<use x="2600" y="280" href="#r1"/>
+<use x="880" y="160" href="#r1"/>
+<use x="2560" y="120" href="#r1"/>
+<use x="680" y="200" href="#r1"/>
+<use x="1880" y="280" href="#r1"/>
+<use x="3360" y="200" href="#r1"/>
+<use x="400" y="160" href="#r1"/>
+<use x="2920" y="200" href="#r1"/>
+<use x="2880" y="200" href="#r1"/>
+<use x="1680" y="80" href="#r1"/>
+<use x="4000" y="120" href="#r1"/>
+<use x="3880" y="40" href="#r1"/>
+<use x="3320" y="40" href="#r1"/>
+<use x="1920" y="280" href="#r1"/>
+<use x="2480" y="280" href="#r1"/>
+<use x="960" y="40" href="#r1"/>
+<use x="2800" y="80" href="#r1"/>
+<use x="2480" y="40" href="#r1"/>
+<use x="3760" y="280" href="#r1"/>
+<use x="2600" y="320" href="#r1"/>
+<use x="3160" y="160" href="#r1"/>
+<use x="1800" y="40" href="#r1"/>
+<use x="1680" y="320" href="#r1"/>
+<use x="3960" y="120" href="#r1"/>
+<use x="360" y="320" href="#r1"/>
+<use x="1520" y="320" href="#r1"/>
+<use x="960" y="80" href="#r1"/>
+<use x="280" y="360" href="#r1"/>
+<use x="2760" y="280" href="#r1"/>
+<use x="3160" y="320" href="#r1"/>
+<use x="2600" y="160" href="#r1"/>
+<use x="800" y="320" href="#r1"/>
+<use x="3920" y="200" href="#r1"/>
+<use x="2680" y="280" href="#r1"/>
+<use x="3560" y="200" href="#r1"/>
+<use x="160" y="200" href="#r1"/>
+<use x="3480" y="280" href="#r1"/>
+<use x="1720" y="160" href="#r1"/>
+<use x="2280" y="40" href="#r1"/>
+<use x="1520" y="80" href="#r1"/>
+<use x="2400" y="200" href="#r1"/>
+<use x="1960" y="120" href="#r1"/>
+<use x="2120" y="240" href="#r1"/>
+<use x="2560" y="200" href="#r1"/>
+<use x="2320" y="40" href="#r1"/>
+<use x="1320" y="280" href="#r1"/>
+<use x="3680" y="40" href="#r1"/>
+<use x="1080" y="200" href="#r1"/>
+<use x="640" y="40" href="#r1"/>
+<use x="240" y="360" href="#r1"/>
+<use x="3520" y="40" href="#r1"/>
+<use x="1200" y="160" href="#r1"/>
+<use x="1000" y="320" href="#r1"/>
+<use x="1720" y="40" href="#r1"/>
+<use x="1200" y="360" href="#r1"/>
+<use x="1760" y="320" href="#r1"/>
+<use x="1640" y="280" href="#r1"/>
+<use x="3680" y="280" href="#r1"/>
+<use x="2560" y="280" href="#r1"/>
+<use x="480" y="160" href="#r1"/>
+<use x="1600" y="240" href="#r1"/>
+<use x="240" y="240" href="#r1"/>
+<use x="2080" y="280" href="#r1"/>
+<use x="2440" y="280" href="#r1"/>
+<use x="3360" y="280" href="#r1"/>
+<use x="320" y="120" href="#r1"/>
+<use x="2600" y="40" href="#r1"/>
+<use x="1520" y="240" href="#r1"/>
+<use x="720" y="320" href="#r1"/>
+<use x="120" y="160" href="#r1"/>
+<use x="1960" y="200" href="#r1"/>
+<use x="400" y="360" href="#r1"/>
+<use x="3880" y="80" href="#r1"/>
+<use x="840" y="40" href="#r1"/>
+<use x="2240" y="200" href="#r1"/>
+<use x="1320" y="200" href="#r1"/>
+<use x="880" y="360" href="#r1"/>
+<use x="3840" y="120" href="#r1"/>
+<use x="3040" y="80" href="#r1"/>
+<use x="3600" y="280" href="#r1"/>
+<use x="1920" y="320" href="#r1"/>
+<use x="2840" y="40" href="#r1"/>
+<use x="1440" y="280" href="#r1"/>
+<use x="1120" y="320" href="#r1"/>
+<use x="3440" y="280" href="#r1"/>
+<use x="3320" y="160" href="#r1"/>
+<use x="2880" y="320" href="#r1"/>
+<use x="1400" y="40" href="#r1"/>
+<use x="3240" y="40" href="#r1"/>
+<use x="3080" y="280" href="#r1"/>
+<use x="3960" y="280" href="#r1"/>
+<use x="680" y="120" href="#r1"/>
+<use x="640" y="320" href="#r1"/>
+<use x="880" y="200" href="#r1"/>
+<use x="1400" y="160" href="#r1"/>
+<use x="1880" y="320" href="#r1"/>
+<use x="1240" y="80" href="#r1"/>
+<use x="1640" y="120" href="#r1"/>
+<use x="2880" y="80" href="#r1"/>
+<use x="400" y="240" href="#r1"/>
+<use x="2240" y="40" href="#r1"/>
+<use x="1880" y="240" href="#r1"/>
+<use x="920" y="240" href="#r1"/>
+<use x="40" y="80" href="#r1"/>
+<use x="1280" y="160" href="#r1"/>
+<use x="1400" y="240" href="#r1"/>
+<use x="760" y="240" href="#r1"/>
+<use x="2360" y="160" href="#r1"/>
+<use x="3600" y="240" href="#r1"/>
+<use x="200" y="80" href="#r1"/>
+<use x="1400" y="200" href="#r1"/>
+<use x="480" y="240" href="#r1"/>
+<use x="3040" y="240" href="#r1"/>
+<use x="2960" y="280" href="#r1"/>
+<use x="3800" y="40" href="#r1"/>
+<use x="1840" y="320" href="#r1"/>
+<use x="2040" y="40" href="#r1"/>
+<use x="4000" y="320" href="#r1"/>
+<use x="80" y="200" href="#r1"/>
+<use x="1280" y="280" href="#r1"/>
+<use x="880" y="80" href="#r1"/>
+<use x="1080" y="80" href="#r1"/>
+<use x="3160" y="200" href="#r1"/>
+<use x="80" y="360" href="#r1"/>
+<use x="2400" y="40" href="#r1"/>
+<use x="3120" y="80" href="#r1"/>
+<use x="2920" y="40" href="#r1"/>
+<use x="2200" y="200" href="#r1"/>
+<use x="360" y="40" href="#r1"/>
+<use x="560" y="200" href="#r1"/>
+<use x="1520" y="280" href="#r1"/>
+<use x="840" y="320" href="#r1"/>
+<use x="2840" y="80" href="#r1"/>
+<use x="1840" y="120" href="#r1"/>
+<use x="720" y="120" href="#r1"/>
+<use x="3880" y="160" href="#r1"/>
+<use x="1240" y="160" href="#r1"/>
+<use x="3640" y="320" href="#r1"/>
+<use x="600" y="120" href="#r1"/>
+<use x="520" y="160" href="#r1"/>
+<use x="1800" y="80" href="#r1"/>
+<use x="40" y="40" href="#r1"/>
+<use x="240" y="80" href="#r1"/>
+<use x="3560" y="280" href="#r1"/>
+<use x="3720" y="240" href="#r1"/>
+<use x="3960" y="200" href="#r1"/>
+<use x="3280" y="240" href="#r1"/>
+<use x="1200" y="320" href="#r1"/>
+<use x="680" y="320" href="#r1"/>
+<use x="880" y="240" href="#r1"/>
+<use x="400" y="320" href="#r1"/>
+<use x="2320" y="320" href="#r1"/>
+<use x="3200" y="80" href="#r1"/>
+<use x="640" y="360" href="#r1"/>
+<use x="1560" y="320" href="#r1"/>
+<use x="1000" y="160" href="#r1"/>
+<use x="40" y="120" href="#r1"/>
+<use x="960" y="360" href="#r1"/>
+<use x="2320" y="200" href="#r1"/>
+<use x="1520" y="0" href="#io"/>
+<use x="1480" y="0" href="#io"/>
+<use x="2040" y="0" href="#io"/>
+<use x="1040" y="0" href="#io"/>
+<use x="2000" y="0" href="#io"/>
+<use x="1800" y="0" href="#io"/>
+<use x="2200" y="0" href="#io"/>
+<use x="1640" y="0" href="#io"/>
+<use x="2520" y="0" href="#io"/>
+<use x="2240" y="0" href="#io"/>
+<use x="1440" y="0" href="#io"/>
+<use x="800" y="0" href="#io"/>
+<use x="1200" y="0" href="#io"/>
+<use x="720" y="0" href="#io"/>
+<use x="2920" y="0" href="#io"/>
+<use x="1840" y="0" href="#io"/>
+<use x="640" y="0" href="#io"/>
+<use x="880" y="0" href="#io"/>
+<use x="1400" y="0" href="#io"/>
+<use x="1880" y="0" href="#io"/>
+<use x="920" y="0" href="#io"/>
+<use x="2160" y="0" href="#io"/>
+<use x="680" y="0" href="#io"/>
+<use x="2880" y="0" href="#io"/>
+<use x="1320" y="0" href="#io"/>
+<use x="2080" y="0" href="#io"/>
+<use x="3480" y="0" href="#io"/>
+<use x="1000" y="0" href="#io"/>
+<use x="2560" y="0" href="#io"/>
+<use x="2680" y="0" href="#io"/>
+<use x="2960" y="0" href="#io"/>
+<use x="3000" y="0" href="#io"/>
+<use x="2120" y="0" href="#io"/>
+<use x="2320" y="0" href="#io"/>
+<use x="1360" y="0" href="#io"/>
+<use x="2400" y="0" href="#io"/>
+<use x="2840" y="0" href="#io"/>
+<use x="3520" y="0" href="#io"/>
+<use x="3440" y="0" href="#io"/>
+<use x="1680" y="0" href="#io"/>
+<use x="760" y="0" href="#io"/>
+<use x="3040" y="0" href="#io"/>
+<use x="1600" y="0" href="#io"/>
+<use x="2360" y="0" href="#io"/>
+<use x="2480" y="0" href="#io"/>
+<use x="1560" y="0" href="#io"/>
+<use x="600" y="0" href="#io"/>
+<use x="520" y="0" href="#io"/>
+<use x="1920" y="0" href="#io"/>
+<use x="1160" y="0" href="#io"/>
+<use x="3120" y="0" href="#io"/>
+<use x="2280" y="0" href="#io"/>
+<use x="1120" y="0" href="#io"/>
+<use x="3080" y="0" href="#io"/>
+<use x="2720" y="0" href="#io"/>
+<use x="3200" y="0" href="#io"/>
+<use x="2440" y="0" href="#io"/>
+<use x="360" y="0" href="#io"/>
+<use x="560" y="0" href="#io"/>
+<use x="1080" y="0" href="#io"/>
+<use x="440" y="0" href="#io"/>
+<use x="3160" y="0" href="#io"/>
+<use x="1960" y="0" href="#io"/>
+<use x="400" y="0" href="#io"/>
+<use x="4040" y="160" href="#io"/>
+<use x="3920" y="0" href="#io"/>
+<use x="960" y="0" href="#io"/>
+<use x="1760" y="0" href="#io"/>
+<use x="2800" y="0" href="#io"/>
+<use x="1280" y="0" href="#io"/>
+<use x="2640" y="0" href="#io"/>
+<use x="3240" y="0" href="#io"/>
+<use x="320" y="0" href="#io"/>
+<use x="200" y="0" href="#io"/>
+<use x="2760" y="0" href="#io"/>
+<use x="480" y="0" href="#io"/>
+<use x="840" y="0" href="#io"/>
+<use x="2600" y="0" href="#io"/>
+<use x="0" y="240" href="#io"/>
+<use x="1240" y="0" href="#io"/>
+<use x="1720" y="0" href="#io"/>
+<line x1="1540" y1="20" x2="700" y2="380"/>
+<line x1="1540" y1="20" x2="1460" y2="100"/>
+<line x1="1540" y1="20" x2="3460" y2="300"/>
+<line x1="1540" y1="20" x2="660" y2="60"/>
+<line x1="1500" y1="20" x2="700" y2="380"/>
+<line x1="1500" y1="20" x2="1700" y2="220"/>
+<line x1="1500" y1="20" x2="3340" y2="180"/>
+<line x1="1500" y1="20" x2="260" y2="380"/>
+<line x1="2060" y1="20" x2="700" y2="380"/>
+<line x1="2060" y1="20" x2="1220" y2="220"/>
+<line x1="2060" y1="20" x2="2900" y2="340"/>
+<line x1="2060" y1="20" x2="3540" y2="60"/>
+<line x1="1060" y1="20" x2="700" y2="380"/>
+<line x1="1060" y1="20" x2="3220" y2="180"/>
+<line x1="1060" y1="20" x2="1420" y2="60"/>
+<line x1="1060" y1="20" x2="1220" y2="180"/>
+<line x1="2020" y1="20" x2="700" y2="380"/>
+<line x1="2020" y1="20" x2="3180" y2="100"/>
+<line x1="2020" y1="20" x2="3260" y2="60"/>
+<line x1="2020" y1="20" x2="1020" y2="340"/>
+<line x1="1820" y1="20" x2="700" y2="380"/>
+<line x1="1820" y1="20" x2="1860" y2="260"/>
+<line x1="1820" y1="20" x2="3100" y2="300"/>
+<line x1="1820" y1="20" x2="1740" y2="60"/>
+<line x1="2220" y1="20" x2="700" y2="380"/>
+<line x1="2220" y1="20" x2="3100" y2="340"/>
+<line x1="2220" y1="20" x2="3980" y2="300"/>
+<line x1="2220" y1="20" x2="1220" y2="380"/>
+<line x1="1660" y1="20" x2="700" y2="380"/>
+<line x1="1660" y1="20" x2="3580" y2="260"/>
+<line x1="1660" y1="20" x2="700" y2="140"/>
+<line x1="1660" y1="20" x2="1780" y2="340"/>
+<line x1="2540" y1="20" x2="1740" y2="260"/>
+<line x1="2540" y1="20" x2="2740" y2="180"/>
+<line x1="2540" y1="20" x2="1660" y2="300"/>
+<line x1="2260" y1="20" x2="1740" y2="260"/>
+<line x1="2260" y1="20" x2="1380" y2="220"/>
+<line x1="2260" y1="20" x2="3700" y2="300"/>
+<line x1="1460" y1="20" x2="1740" y2="260"/>
+<line x1="1460" y1="20" x2="140" y2="380"/>
+<line x1="1460" y1="20" x2="2580" y2="300"/>
+<line x1="820" y1="20" x2="1740" y2="260"/>
+<line x1="820" y1="20" x2="1700" y2="300"/>
+<line x1="820" y1="20" x2="500" y2="180"/>
+<line x1="1220" y1="20" x2="1740" y2="260"/>
+<line x1="1220" y1="20" x2="340" y2="220"/>
+<line x1="1220" y1="20" x2="1620" y2="260"/>
+<line x1="740" y1="20" x2="1740" y2="260"/>
+<line x1="740" y1="20" x2="260" y2="140"/>
+<line x1="740" y1="20" x2="260" y2="260"/>
+<line x1="2940" y1="20" x2="1740" y2="260"/>
+<line x1="2940" y1="20" x2="3660" y2="100"/>
+<line x1="2940" y1="20" x2="2100" y2="300"/>
+<line x1="1860" y1="20" x2="1740" y2="260"/>
+<line x1="1860" y1="20" x2="1380" y2="60"/>
+<line x1="1860" y1="20" x2="2460" y2="300"/>
+<line x1="660" y1="20" x2="660" y2="340"/>
+<line x1="900" y1="20" x2="900" y2="220"/>
+<line x1="1420" y1="20" x2="1420" y2="180"/>
+<line x1="1900" y1="20" x2="1900" y2="340"/>
+<line x1="940" y1="20" x2="940" y2="260"/>
+<line x1="2180" y1="20" x2="3060" y2="260"/>
+<line x1="2180" y1="20" x2="1300" y2="300"/>
+<line x1="700" y1="20" x2="2580" y2="340"/>
+<line x1="700" y1="20" x2="780" y2="300"/>
+<line x1="700" y1="20" x2="460" y2="60"/>
+<line x1="2900" y1="20" x2="2900" y2="60"/>
+<line x1="1340" y1="20" x2="1500" y2="100"/>
+<line x1="2100" y1="20" x2="2140" y2="220"/>
+<line x1="2100" y1="20" x2="3060" y2="300"/>
+<line x1="2100" y1="20" x2="1700" y2="180"/>
+<line x1="2100" y1="20" x2="1740" y2="100"/>
+<line x1="2100" y1="20" x2="4020" y2="340"/>
+<line x1="2100" y1="20" x2="100" y2="220"/>
+<line x1="3500" y1="20" x2="3500" y2="340"/>
+<line x1="1020" y1="20" x2="1020" y2="380"/>
+<line x1="2580" y1="20" x2="900" y2="60"/>
+<line x1="2580" y1="20" x2="3620" y2="260"/>
+<line x1="2580" y1="20" x2="620" y2="100"/>
+<line x1="2580" y1="20" x2="3060" y2="340"/>
+<line x1="2580" y1="20" x2="3940" y2="140"/>
+<line x1="2580" y1="20" x2="60" y2="140"/>
+<line x1="2700" y1="20" x2="900" y2="60"/>
+<line x1="2700" y1="20" x2="3620" y2="260"/>
+<line x1="2980" y1="20" x2="2500" y2="260"/>
+<line x1="3020" y1="20" x2="2500" y2="260"/>
+<line x1="2140" y1="20" x2="2100" y2="180"/>
+<line x1="2340" y1="20" x2="2100" y2="180"/>
+<line x1="1380" y1="20" x2="2060" y2="300"/>
+<line x1="1380" y1="20" x2="2740" y2="340"/>
+<line x1="1380" y1="20" x2="300" y2="100"/>
+<line x1="1380" y1="20" x2="780" y2="340"/>
+<line x1="2420" y1="20" x2="2060" y2="300"/>
+<line x1="2860" y1="20" x2="3700" y2="340"/>
+<line x1="2860" y1="20" x2="2020" y2="180"/>
+<line x1="3540" y1="20" x2="3700" y2="100"/>
+<line x1="3540" y1="20" x2="3380" y2="180"/>
+<line x1="3460" y1="20" x2="3260" y2="260"/>
+<line x1="3460" y1="20" x2="3700" y2="260"/>
+<line x1="1700" y1="20" x2="2620" y2="100"/>
+<line x1="1700" y1="20" x2="780" y2="140"/>
+<line x1="780" y1="20" x2="180" y2="60"/>
+<line x1="780" y1="20" x2="1380" y2="180"/>
+<line x1="3060" y1="20" x2="3700" y2="340"/>
+<line x1="3060" y1="20" x2="3700" y2="100"/>
+<line x1="3060" y1="20" x2="3260" y2="260"/>
+<line x1="3060" y1="20" x2="2620" y2="100"/>
+<line x1="3060" y1="20" x2="180" y2="60"/>
+<line x1="3060" y1="20" x2="1740" y2="140"/>
+<line x1="1620" y1="20" x2="980" y2="380"/>
+<line x1="1620" y1="20" x2="2340" y2="220"/>
+<line x1="2380" y1="20" x2="3140" y2="100"/>
+<line x1="2380" y1="20" x2="980" y2="380"/>
+<line x1="2500" y1="20" x2="2940" y2="60"/>
+<line x1="2500" y1="20" x2="980" y2="380"/>
+<line x1="1580" y1="20" x2="2220" y2="220"/>
+<line x1="1580" y1="20" x2="980" y2="380"/>
+<line x1="620" y1="20" x2="380" y2="60"/>
+<line x1="620" y1="20" x2="980" y2="380"/>
+<line x1="540" y1="20" x2="580" y2="220"/>
+<line x1="540" y1="20" x2="980" y2="380"/>
+<line x1="1940" y1="20" x2="1540" y2="300"/>
+<line x1="1940" y1="20" x2="2340" y2="220"/>
+<line x1="1180" y1="20" x2="860" y2="340"/>
+<line x1="1180" y1="20" x2="2340" y2="220"/>
+<line x1="3140" y1="20" x2="2860" y2="100"/>
+<line x1="3140" y1="20" x2="2340" y2="220"/>
+<line x1="2300" y1="20" x2="1860" y2="140"/>
+<line x1="2300" y1="20" x2="2340" y2="220"/>
+<line x1="1140" y1="20" x2="740" y2="140"/>
+<line x1="1140" y1="20" x2="2340" y2="220"/>
+<line x1="3100" y1="20" x2="3900" y2="180"/>
+<line x1="3100" y1="20" x2="2340" y2="220"/>
+<line x1="2740" y1="20" x2="2900" y2="300"/>
+<line x1="2740" y1="20" x2="1940" y2="340"/>
+<line x1="2740" y1="20" x2="3140" y2="100"/>
+<line x1="2740" y1="20" x2="2860" y2="60"/>
+<line x1="3220" y1="20" x2="2940" y2="60"/>
+<line x1="2460" y1="20" x2="2220" y2="220"/>
+<line x1="380" y1="20" x2="380" y2="60"/>
+<line x1="580" y1="20" x2="580" y2="220"/>
+<line x1="1100" y1="20" x2="1540" y2="300"/>
+<line x1="460" y1="20" x2="860" y2="340"/>
+<line x1="3180" y1="20" x2="2860" y2="100"/>
+<line x1="1980" y1="20" x2="1860" y2="140"/>
+<line x1="420" y1="20" x2="740" y2="140"/>
+<line x1="4060" y1="180" x2="3900" y2="180"/>
+<line x1="3940" y1="20" x2="3940" y2="60"/>
+<line x1="980" y1="20" x2="1500" y2="260"/>
+<line x1="980" y1="20" x2="980" y2="180"/>
+<line x1="1780" y1="20" x2="3500" y2="260"/>
+<line x1="1780" y1="20" x2="140" y2="260"/>
+<line x1="2820" y1="20" x2="3500" y2="60"/>
+<line x1="2820" y1="20" x2="2820" y2="260"/>
+<line x1="2820" y1="20" x2="700" y2="100"/>
+<line x1="2820" y1="20" x2="2300" y2="180"/>
+<line x1="1300" y1="20" x2="180" y2="340"/>
+<line x1="1300" y1="20" x2="220" y2="340"/>
+<line x1="1300" y1="20" x2="3460" y2="100"/>
+<line x1="1300" y1="20" x2="620" y2="340"/>
+<line x1="1300" y1="20" x2="3300" y2="100"/>
+<line x1="1300" y1="20" x2="1180" y2="60"/>
+<line x1="2660" y1="20" x2="3220" y2="100"/>
+<line x1="2660" y1="20" x2="1020" y2="180"/>
+<line x1="3260" y1="20" x2="3260" y2="140"/>
+<line x1="340" y1="20" x2="380" y2="380"/>
+<line x1="220" y1="20" x2="220" y2="140"/>
+<line x1="2780" y1="20" x2="3700" y2="220"/>
+<line x1="2780" y1="20" x2="820" y2="220"/>
+<line x1="2780" y1="20" x2="500" y2="380"/>
+<line x1="2780" y1="20" x2="3940" y2="340"/>
+<line x1="500" y1="20" x2="380" y2="380"/>
+<line x1="500" y1="20" x2="660" y2="300"/>
+<line x1="500" y1="20" x2="500" y2="300"/>
+<line x1="860" y1="20" x2="1900" y2="220"/>
+<line x1="860" y1="20" x2="2940" y2="300"/>
+<line x1="860" y1="20" x2="380" y2="380"/>
+<line x1="860" y1="20" x2="500" y2="300"/>
+<line x1="860" y1="20" x2="660" y2="300"/>
+<line x1="860" y1="20" x2="1260" y2="180"/>
+<line x1="2620" y1="20" x2="2420" y2="180"/>
+<line x1="2620" y1="20" x2="3140" y2="140"/>
+<line x1="2620" y1="20" x2="660" y2="300"/>
+<line x1="20" y1="260" x2="180" y2="260"/>
+<line x1="1260" y1="20" x2="1500" y2="60"/>
+<line x1="1260" y1="20" x2="580" y2="140"/>
+<line x1="1260" y1="20" x2="1540" y2="60"/>
+<line x1="1260" y1="20" x2="2900" y2="300"/>
+<line x1="1740" y1="20" x2="2660" y2="140"/>
+<line x1="1740" y1="20" x2="740" y2="100"/>
+</svg>

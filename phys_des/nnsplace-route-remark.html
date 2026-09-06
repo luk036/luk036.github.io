@@ -1,0 +1,683 @@
+<!doctype html>
+<html>
+  <head>
+    <title>From Placement to Global Routing &amp; Congestion</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧭 From Placement to Global Routing & Congestion
+
+### Routing Trees for the NNS Placer 🎄 · Congestion Maps 🗺️ · Python 🐍 → C++ ⚙️
+
+🛰️ A session report: wire the fairness-centric placer with `physdes`' global router
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: The Gap** 🕳️
+- Why placement is not routing
+- The physdes global router 🌲
+
+**Part 2: Routing the Solution** 🔀
+- One tree per net
+- Orthogonal figures 🖼️
+- Total routed wire length 📏
+
+]
+.pull-right[
+
+**Part 3: Congestion Maps** 🗺️
+- Cut / edge model
+- x · y · combined heat maps
+
+**Part 4: C++ Port** ⚙️
+- Library + tools in `nnsplace-cpp`
+- xmake & CMake verification ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🕳️ Part 1: The Gap
+
+### Why Placement Needs a Router
+
+---
+
+### 🔁 Placement ≠ Routing
+
+- **Placement** decides *where* modules sit; **routing** decides *how* the wires get there 🧵.
+
+- The placer optimizes a **proxy** — the worst half-perimeter wire length ⚖️ — not the true wire layout.
+
+.mermaid[
+<pre>
+flowchart LR
+    RTL[RTL Design] --> SYN[Synthesis]
+    SYN --> NET[Netlist]
+    NET --> GLB[Global Placement]
+    GLB --> LEG[Legalization]
+    LEG --> DET[Detailed Placement]
+    DET --> ROU[Global Routing]
+    ROU --> CON["Congestion Analysis 🗺️"]
+    CON --> STA[Timing Closure]
+
+    style RTL fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style SYN fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style NET fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style GLB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style LEG fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style DET fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style ROU fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style CON fill:#ffe0b2,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style STA fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+**This session:** run the **global router** on a placer solution and *look at* the wiring it produces 🧐.
+
+---
+
+### ⚖️ Recap: The Fairness-Centric Placer
+
+- `nnsplace` minimizes the **worst** wire length of any single connection, one axis at a time:
+
+$$
+\min_{\text{placement}}\ \max_{(u,v)\in E}\ \Bigl(\; {\color{blue}c_x\lvert x_u - x_v\rvert} + {\color{orange}c_y\lvert y_u - y_v\rvert} \;\Bigr)
+$$
+
+- Engine: **Howard's algorithm** (parametric min-cost flow) 🌀 for potentials,
+  **bipartite matching** for legalization 🧩, **ring assignment** for I/O pads 📍.
+
+- Output: a *legal* grid placement — e.g. `testcases/p1.json` → **752 cells + 81 pads**,
+  connected by **902 nets** (107 of them touch an I/O pad).
+
+---
+
+### 🌲 The physdes Global Router
+
+`physdes` already ships a **rectilinear global router** for one net at a time:
+
+- `GlobalRouter(source, terminals)` → builds a `GlobalRoutingTree` 🌳
+- `route_simple()` / `route_with_steiners()` / `route_with_constraints()`
+- **`route_with_constraints()`** is the *correct* mode for driver→sink routing: it
+  bounds every **source-to-sink path** by an allowed wire length ⏱️
+- **Steiner insertion** shares trunks and saves wire 📉
+- `calculate_total_wirelength()` = Manhattan sum over the tree branches
+
+.mermaid[
+<pre>
+flowchart LR
+    D["driver pin (output) 🟦"] --> SP["Steiner ⭐"]
+    SP --> S1["sink 1 🟥"]
+    SP --> S2["sink 2 🟥"]
+    D --> S3["sink 3 🟥"]
+
+    style D fill:#b3e5fc,stroke:#0277bd,stroke-width:3px,color:#2e3440
+    style SP fill:#ce93d8,stroke:#6a1b9a,stroke-width:3px,color:#2e3440
+    style S1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style S2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style S3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+One **net** → one tree rooted at its **driver pin** (the wire direction matters).
+The router already existed in C++ too ✅.
+
+---
+
+class: nord-light, middle, center
+
+## 🔀 Part 2: Routing the Solution
+
+### From Straight Green Lines to Routing Trees
+
+---
+
+### 🧩 The Mapping
+
+A **net** is a star of pins, and routing is **directional**: the *driver pin*
+(output) is the **source**, the *sink pins* (inputs) are the terminals:
+
+- **source** = the net's driver, taken from the **pin direction** stored in the
+  netlist (e.g. a directed node-link JSON / a `dir` pin attribute) 🟦
+- **terminals** = every other module of the net 🟥
+- route with `route_with_constraints()` so each **driver → sink** path respects
+  an allowed wire-length budget ⏱️
+
+$$
+{\color{green}\mathrm{route}}(a,b)\;=\; \underbrace{{\color{blue}\lvert x_a-x_b\rvert}}_{\text{horizontal run}} + \underbrace{{\color{orange}\lvert y_a-y_b\rvert}}_{\text{vertical run}}
+$$
+
+> ⚠️ **Data caveat:** `p1.json` is **undirected** — it stores no pin direction,
+> so a driver is *not* recoverable from the file. The figures in this deck were
+> therefore routed with an **undirected approximation** (I/O pad chosen as the
+> root of pad nets, Steiner branches). The driver-aware, source→sink
+> `route_with_constraints()` flow above is the correct production method; treat
+> the shown wire lengths as illustrative of the *pipeline*, not of true
+> directed timing.
+
+---
+
+### 🔁 The Pipeline
+
+.mermaid[
+<pre>
+flowchart LR
+    PL["Placer solution 📍"] --> RO["physdes GlobalRouter 🌲"]
+    NL["Netlist 🧾"] --> RO
+    RO --> WL["total routed WL 📏"]
+    RO --> TR["orthogonal trees 🎄"]
+    TR --> FI["routed SVG figure 🖼️"]
+    TR --> CC["cut crossing counts 🧮"]
+    CC --> X["x map"]
+    CC --> Y["y map"]
+    CC --> CM["combined map 🗺️"]
+
+    style PL fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style NL fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style RO fill:#ce93d8,stroke:#6a1b9a,stroke-width:3px,color:#2e3440
+    style WL fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style TR fill:#b3e5fc,stroke:#0277bd,stroke-width:3px,color:#2e3440
+    style FI fill:#ffe0b2,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style CC fill:#fff9c4,stroke:#f9a825,stroke-width:3px,color:#2e3440
+    style X fill:#e1bee7,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style Y fill:#e1bee7,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style CM fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+Same driver for **Python 🐍** and **C++ ⚙️** — only the placement source differs.
+
+---
+
+### 🐍 Code: Route One Net (driver-aware)
+
+```python
+def route_net(members, driver, place):
+    src = driver                     # output pin of the net (from pin direction)
+    sinks = [m for m in members if m != src]
+    router = GlobalRouter(
+        Point(place[0][src], place[1][src]),          # driver is the source
+        [Point(place[0][s], place[1][s]) for s in sinks],
+    )
+    router.route_with_constraints()  # bound every driver → sink path ⏱️
+    return router.tree
+```
+
+- 🎯 Only **driver → sink** wires count — a pin-to-pin "loop" adds nothing.
+- The tree is then traversed; every parent → child edge is decomposed into the
+  **same L-shaped runs** used for drawing and for congestion counting ✅.
+- ⚠️ `p1.json` stores no pin direction, so the figures in this deck were drawn
+  from the earlier undirected *pad-rooted Steiner* variant of this driver.
+
+---
+
+### 📐 Orthogonal Branches
+
+Each tree edge is emitted as axis-aligned `<line>` segments (the green style):
+
+```
+ vertical_first               horizontal_first
+ parent                      parent
+   │                            ──────┐
+   │                                 │
+   └──── child                       │
+                                     │
+                                 ┌───┘
+                                 child
+```
+
+- 🔴 no diagonal segments — global routing is rectilinear by nature
+- one net with several cells becomes a **branching tree** instead of a fan of lines
+
+---
+
+### 🖼️ Figure Upgrade — 30 × 30
+
+.pull-left[
+**Before: straight green "air lines" ✈️**
+
+![straight lines](fairness-placer.files/ioloop30x30.svg)
+]
+
+.pull-right[
+**After: orthogonal routing trees 🎄**
+
+![routed trees](fairness-placer.files/ioloop30x30-routed.svg)
+
+> Same cells & pads — only the wiring representation changed.
+]
+
+---
+
+### 🖼️ Routed Figures Across Grid Sizes
+
+.pull-left[
+**50 × 50 · seed 831**
+
+![routed 50x50](fairness-placer.files/ioloop50x50-routed.svg)
+]
+.pull-right[
+**100 × 100 · seed 831**
+
+![routed 100x100](fairness-placer.files/ioloop100x100-routed.svg)
+
+> Larger grids → long trunks and sparse branches; dense 30×30 grids → short
+> local trees packed into the core 🗜️.
+]
+
+---
+
+### 📏 Total Routed Wire Length
+
+Every net is routed **independently**; the total is the sum of the tree lengths
+over all **902 nets** (in grid units and in the placer's cost scale, ×40):
+
+| grid | routed WL (grid) | routed WL (cost) | pad-net share |
+|---|---|---|---|
+| 30×30 | 15,073 | 602,920 | 12.5% |
+| 30×40 | 14,751 | 590,040 | 14.5% |
+| 32×32 | 15,455 | 618,200 | 13.1% |
+| 40×30 | 14,430 | 577,200 | 14.7% |
+| 50×50 | 17,623 | 704,920 | 13.3% |
+| 100×100 | 18,943 | 757,720 | 18.0% |
+
+- 💡 Pad nets are **short** in a good placement (pads sit near their cells)
+- 🧮 Tree wire length sits **3–8%** above the HPWL bound — the cost of real routing
+
+---
+
+class: nord-light, middle, center
+
+## 🗺️ Part 3: Congestion Maps
+
+### x · y · Combined — What the Router Reveals
+
+---
+
+### 🧮 The Cut / Edge Model
+
+Count every **unit step** of every routed net on the routing lattice:
+
+- a **horizontal** unit step on row ${\color{blue}y}$ crossing the vertical cut
+  ${\color{blue}c}$ (between columns $c$ and $c{+}1$):
+
+$$
+{\color{green}h}[{\color{blue}c},\,{\color{blue}y}]\ \mathrel{+}=\ 1
+$$
+
+- a **vertical** unit step on column ${\color{blue}x}$ crossing the horizontal cut
+  ${\color{orange}r}$ (between rows $r$ and $r{+}1$):
+
+$$
+{\color{green}v}[{\color{blue}x},\,{\color{orange}r}]\ \mathrel{+}=\ 1
+$$
+
+**Invariant:** the sum of all cut crossings equals the total routed wire length:
+
+$$
+{\color{royalblue}\sum h}\ +\ {\color{royalblue}\sum v}\;=\;\sum_{\text{nets}} {\color{green}\mathrm{tree\_WL}}
+$$
+
+---
+
+### 🗺️ From Cuts to Per-Cell Maps
+
+Each **core cell** $({\color{blue}x},{\color{blue}y})$ reports the most congested cut
+**adjacent** to it:
+
+$$
+{\color{blue}\mathrm{cong}_x}(x,y) = \max\bigl(\, {\color{green}h}[x{-}1,y],\; {\color{green}h}[x,y] \,\bigr)
+\qquad
+{\color{orange}\mathrm{cong}_y}(x,y) = \max\bigl(\, {\color{green}v}[x,y{-}1],\; {\color{green}v}[x,y] \,\bigr)
+$$
+
+- **x-direction map** = horizontal track demand → vertical cuts ↔ cells
+- **y-direction map** = vertical track demand → horizontal cuts ↔ cells
+- **combined** = element-wise maximum: ${\color{red}\max}(\mathrm{cong}_x, \mathrm{cong}_y)$
+
+Each heat map is **normalised to its own busiest cut → 100%** and painted
+green 🟢 → yellow 🟡 → red 🔴.
+
+---
+
+### 🖼️ Congestion Map Triple — 50 × 50
+
+.pull-left[
+**x-direction (horizontal demand)**
+
+![x map](fairness-placer.files/congestion50x50-x.svg)
+]
+.pull-right[
+**y-direction (vertical demand)** → and the **combined** map 🗺️
+
+![y map](fairness-placer.files/congestion50x50-y.svg)
+
+![combined map](fairness-placer.files/congestion50x50-combined.svg)
+]
+
+---
+
+### 🖼️ A Tight Design — 30 × 30
+
+.pull-left[
+**x-direction**
+
+![x map](fairness-placer.files/congestion30x30-x.svg)
+]
+.pull-right[
+**combined**
+
+![combined map](fairness-placer.files/congestion30x30-combined.svg)
+
+> At **86% cell density** the whole core glows — nearly every cut carries
+> traffic, not just a few hot spots 🥵.
+]
+
+---
+
+### 📊 Congestion Results Across Grids
+
+| grid | peak x | peak y | peak combined | mean combined |
+|---|---|---|---|---|
+| 30×30 | 25 | 27 | 27 | 11.6 |
+| 30×40 | 22 | 23 | 23 | 8.3 |
+| 32×32 | 21 | 22 | 22 | 10.1 |
+| 40×30 | 27 | 17 | 27 | 8.4 |
+| 50×50 | 29 | 22 | 29 | 5.0 |
+| 100×100 | 22 | 32 | 32 | 1.5 |
+
+- Dense grids → **uniformly high** mean congestion 🔥
+- Roomy grids → low average but a **single vertical hot spot** on 100×100
+  (peak **32** vs mean **1.4**) — exactly what a congestion map should expose 🎯
+
+---
+
+### 🧐 Consistency Verification
+
+The same library routine that draws also counts, so we can assert:
+
+- ✅ `H + V == total routed wire length` on every grid (bit-exact)
+- ✅ combined map == element-wise `max(x, y)`
+- ✅ every SVG well-formed; **0 diagonal segments**; cells/pads byte-identical to the input figure
+- ✅ pad nets included as part of the full 902-net demand (13–18% of the wire)
+
+> 📌 **Lesson:** when figure and metric come from the *same* traversal, the
+> invariant check turns the visualisation into a regression oracle 🎯.
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Part 4: The C++ Port
+
+### `nnsplace-cpp` Grows a Router & a Congestion Toolbox
+
+---
+
+### 🏗️ Port Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph nnsplace-cpp
+        NN["nnsplace (placer) 📍"]
+        GRH["global_routing.hpp/.cpp 🔀"]
+        FIG["nnsplace_figures 🖼️"]
+        TST["doctest tests 🧪"]
+    end
+    subgraph physdes-cpp
+        ROU["recti::GlobalRouter 🌲"]
+        TRE["recti::GlobalRoutingTree"]
+    end
+    NN --> GRH
+    GRH --> ROU
+    GRH --> TRE
+    FIG --> GRH
+    TST --> GRH
+
+    style NN fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style GRH fill:#ce93d8,stroke:#6a1b9a,stroke-width:3px,color:#2e3440
+    style FIG fill:#ffe0b2,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style TST fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style ROU fill:#b3e5fc,stroke:#0277bd,stroke-width:3px,color:#2e3440
+    style TRE fill:#b3e5fc,stroke:#0277bd,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+**Reuse, don't re-port:** the router stays in `physdes-cpp`; `nnsplace-cpp` only
+adds the *analysis + figure layer* on top of its existing placer.
+
+---
+
+### 📦 Library API
+
+New public module in `nnsplace-cpp` (Doxygen-documented, ≤15-line bodies inline):
+
+```cpp
+#include <nnsplace/global_routing.hpp>
+
+// route every net over a Placement, record runs + cut usage
+auto route_all_nets(const SimpleNetlist&, const Placement&, int gx, int gy)
+    -> RoutingAnalysis;          // .total_wirelength, .hsegments, .vsegments, .h, .v
+
+// derive per-cell x / y / combined congestion grids
+auto build_congestion_maps(const RoutingAnalysis&, int gx, int gy)
+    -> CongestionMaps;           // .x, .y, .combined, peaks
+
+// SVG rendering
+auto make_routed_placement_svg(...) -> std::string;    // cells + orthogonal trees
+auto make_congestion_map_svg(...)  -> std::string;     // green-yellow-red heat map
+```
+
+The `Point&lt;int,int&gt;` instantiations come from `physdes-cpp/source/global_router.cpp`,
+which the `NnsPlace` target now compiles.
+
+---
+
+### 🧪 Internal-Consistency Tests (doctest)
+
+```cpp
+TEST_CASE("every routed unit step is counted exactly once") {
+    const auto fixture = run_p1_32();                        // placer, seed 831
+    const auto routing = route_all_nets(fixture.netlist, fixture.place, 32, 32);
+    CHECK(routing.total_wirelength > 0);
+    CHECK(routing.total_wirelength == cut_crossing_total(routing));  // H + V
+}
+TEST_CASE("congestion maps are consistent with the cut counts") {
+    const auto maps = build_congestion_maps(routing, 32, 32);
+    CHECK(maps.combined[r][c] == std::max(maps.x[r][c], maps.y[r][c]));
+    CHECK(maps.peak_combined == std::max(maps.peak_x, maps.peak_y));
+}
+TEST_CASE("routed placement svg has one use per module and one line per branch") { ... }
+```
+
+✅ 35 test cases · **24 948 assertions** · all green
+
+---
+
+### 🔧 Build & Verify — xmake then CMake
+
+```bash
+# xmake (primary)
+xmake f -m debug
+xmake -j 10                                  # warning-clean /W4 /WX
+xmake run test_nnsplace                      # 35/35 tests pass
+
+# figures tool
+xmake run nnsplace_figures testcases/p1.json 32 32 40 2000 0 831 ./out
+
+# CMake (mirrors the xmake targets)
+cmake -S . -B build-cmake -G "Visual Studio 18 2026" -A x64
+cmake --build build-cmake --config Debug
+ctest --test-dir build-cmake -C Debug --output-on-failure   # 100% pass
+```
+
+> The CMake build gained the matching `NnsPlaceFigures` target and the
+> `NNSPLACE_HAVE_RECTI_LOGGER` define (CPM's `Recti::Recti` already provides
+> the logger that the xmake path stubs out).
+
+---
+
+### 🖼️ C++ Output — 32 × 32 (seed 831)
+
+.pull-left[
+**Routed figure** 🎄
+
+![cpp routed](fairness-placer.files/ioloop32x32-routed-cpp.svg)
+]
+.pull-right[
+**Combined congestion** 🗺️
+
+![cpp combined](fairness-placer.files/congestion32x32-combined-cpp.svg)
+]
+
+> Identical algorithm, C++ placement: worst **1480**, routed WL **14,899**
+> grid units, peaks x/y/combined = **27 / 24 / 27**.
+
+---
+
+### 📈 Python vs C++ (p1.json, seed 831)
+
+| grid | Python worst | C++ worst | C++ routed WL (grid) | C++ peaks x/y/c |
+|---|---|---|---|---|
+| 30×30 | 1640 | 1840 | 18,200 | 26 / 28 / 28 |
+| 32×32 | 1480 | 1480 | 14,899 | 27 / 24 / 27 |
+| 50×50 | 1600 | 1600 | 16,946 | 20 / 23 / 23 |
+| 100×100 | 2640* | 2760 | 30,706 | 18 / 22 / 22 |
+
+- ⚖️ Same objective, same *worst* 1480 / 1600 on two grids (different RNG ⇒
+  different cell layouts)
+- ✅ Both back-ends pass the **H + V == routed WL** invariant and emit
+  structurally valid, axis-aligned SVGs
+- \* Python worst **2360** measured on the placement captured in the deck figure
+  (its caption is stale) — figures are *canonical snapshots* 📸
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Observations & Lessons
+
+---
+
+### 🧭 What We Learned
+
+- **Router-first figures** turn a placement picture into a *physical* one:
+  straight "air lines" hide the real wire demand ✈️ → 🎄.
+- **Congestion is per-direction**: x and y hot spots differ (40×30: x=27 vs y=17),
+  so a single scalar metric would have masked the real bottleneck 🎯.
+- **Normalise per map** keeps every heat map readable, but only raw counts let you
+  compare across grids — report both 📊.
+- **H + V == total wire length** is a free, bit-exact invariant when the drawing
+  and the counting share one traversal 🧮.
+- **Reuse beats re-port**: the C++ router stayed in `physdes-cpp`; `nnsplace-cpp`
+  added only the analysis/figure layer (xmake and CMake builds agree) ⚙️.
+
+---
+
+### 🔮 Future Directions
+
+- 🚦 **Congestion-aware placement** — feed the peak-cut maps back as a cost
+  (`line_cap_ratio`-style) so the placer spreads cells away from hot cuts.
+- 🧱 **Keepout-aware routing** — the router already supports keepouts (reserved
+  column 27 is a natural obstacle 🧱).
+- 🔁 **Rip-up & re-route** — iteratively detour nets off the busiest cuts.
+- 🪜 **3D / multi-layer** routing with via minimisation (`GlobalRoutingTree3d`).
+- 🦀 **Rust/C++ cross-checks** of the same H+V invariant & figure corpus.
+
+---
+
+### 📚 Key References
+
+- 📘 Kahng, Lienig, Markov, Hu, *VLSI Physical Design: From Graph Partitioning
+  to Timing Closure*, Springer, 2011 (global routing & congestion chapters).
+- 🌲 `physdes` global router — `recti::GlobalRouter`, `GlobalRoutingTree`
+  (Python + C++), `steiner_forest` congestion tooling.
+- ⚖️ Fairness-centric placement deck — `fairness-placer-remark.html`.
+- 📦 `nnsplace`, `physdes-py`, `nnsplace-cpp` (luk036) — placer & router siblings.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### 🧭 From Placement to Global Routing & Congestion
+
+### Routing Trees 🎄 · Congestion Maps 🗺️ · Python → C++ 🐍 → ⚙️
+
+![routed 50x50](fairness-placer.files/ioloop50x50-routed.svg)
+
+Slides built with Remark.js 🛠️ | KaTeX 🧮 | Mermaid 🧜 | Nord Theme 🌃
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

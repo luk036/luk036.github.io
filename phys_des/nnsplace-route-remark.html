@@ -61,6 +61,10 @@ class: nord-dark, middle, center
 - Library + tools in `nnsplace-cpp`
 - xmake & CMake verification ✅
 
+**Part 5: Directed Routing** 🎯
+- Driver→sink on Yosys netlists
+- 180 → 3 518 cells 🚀
+
 ]
 
 ---
@@ -178,13 +182,14 @@ $$
 {\color{green}\mathrm{route}}(a,b)\;=\; \underbrace{{\color{blue}\lvert x_a-x_b\rvert}}_{\text{horizontal run}} + \underbrace{{\color{orange}\lvert y_a-y_b\rvert}}_{\text{vertical run}}
 $$
 
-> ⚠️ **Data caveat:** `p1.json` is **undirected** — it stores no pin direction,
-> so a driver is *not* recoverable from the file. The figures in this deck were
-> therefore routed with an **undirected approximation** (I/O pad chosen as the
-> root of pad nets, Steiner branches). The driver-aware, source→sink
-> `route_with_constraints()` flow above is the correct production method; treat
-> the shown wire lengths as illustrative of the *pipeline*, not of true
-> directed timing.
+> ✅ **Yosys netlists carry the direction.** `modules[*].ports[name].direction`
+> and `cells[inst].port_directions` say exactly which pin drives each net —
+> verified: every net of a Yosys module has exactly **one** driver (a cell output
+> pin, or an input port when the net is fed from outside).
+> `p1.json` (the earlier benchmark of this deck) is **undirected**, so the
+> figures in Parts 2–3 were routed with the earlier pad-rooted Steiner
+> approximation. The **implemented** driver→sink `route_with_constraints()`
+> pipeline on real Yosys netlists is shown below ⤵️.
 
 ---
 
@@ -237,8 +242,9 @@ def route_net(members, driver, place):
 - 🎯 Only **driver → sink** wires count — a pin-to-pin "loop" adds nothing.
 - The tree is then traversed; every parent → child edge is decomposed into the
   **same L-shaped runs** used for drawing and for congestion counting ✅.
-- ⚠️ `p1.json` stores no pin direction, so the figures in this deck were drawn
-  from the earlier undirected *pad-rooted Steiner* variant of this driver.
+- 📖 The driver comes from the Yosys JSON via
+  `netlistx.read_yosys_json_directed`; `nnsplace.create_flow_graph` builds only
+  **driver ↔ sink** arcs, so the worst wire length is driver→sink too.
 
 ---
 
@@ -582,6 +588,93 @@ ctest --test-dir build-cmake -C Debug --output-on-failure   # 100% pass
   structurally valid, axis-aligned SVGs
 - \* Python worst **2360** measured on the placement captured in the deck figure
   (its caption is stale) — figures are *canonical snapshots* 📸
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 5: Directed Routing on Yosys Netlists
+
+### Driver → Sink, the Real Way
+
+---
+
+### 🔀 From Yosys JSON to a Directed Netlist
+
+Yosys `write_json` records the **direction of every pin** — and `netlistx` now reads it:
+
+.mermaid[
+<pre>
+flowchart LR
+    Y["Yosys write_json 📄"] --> R["read_yosys_json_directed()"]
+    R --> D["net_driver: net → driver module 🎯"]
+    D --> C["directed_netlist.py → p1-style JSON + driver attr"]
+    C --> F["create_flow_graph: driver ↔ sink arcs only 🔀"]
+    F --> P["NnsPlacer (worst = driver → sink) 📍"]
+
+    style Y fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style C fill:#ce93d8,stroke:#6a1b9a,stroke-width:3px,color:#2e3440
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style P fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+- `ports[name]["direction"]` (input/output) + `cells[inst]["port_directions"]`
+  identify the single **driver** of every net ✅ (0 multi-driver nets found)
+- 🙅 sink↔sink pairs are gone from the flow graph — the "pin-to-pin" overcount
+  that inflated the worst wire length is fixed.
+
+---
+
+### 📊 Results on Yosys Netlists
+
+| module | cells | nets | grid | density | worst dr→sink | routed WL | peaks x/y/c |
+|---|---|---|---|---|---|---|---|
+| `cordic_trig_16bit_simple_fixed` | 180 | 184 | 30×20 | ~31% | **680** | 1 576 | 13 / 9 / 13 |
+| `fir_par` (T=8, ABC gates) | 3 518 | 3 373 | 72×62 | **79.9%** | **4 360** | 139 754 | 50 / 41 / 50 |
+
+- 🧮 Every net routed from its **driver** with `route_with_constraints()`
+- ✅ Invariant holds on both: **H + V == routed wire length** (1 576 / 139 754)
+
+---
+
+### 🖼️ Routed Figure — Pad-Driven Nets Only
+
+.pull-left[
+**3 518 cells · 72×62 · ~80% density**
+
+![routed fir](nnsplace-route.files/yosys_fir_par-routed.svg)
+]
+.pull-right[
+- Trees shown = **pad-driven nets only** 👀: the `clk`, `rst_n` and `data_in`
+  fan-outs (469 branches) — readable at ~80% density.
+- All **3 373 nets** are still routed and counted; only the *drawing* is
+  filtered to the I/O-driven trees.
+- Each gate cell (ABC `$_AND_`, `$_DFF_PN0_`, …) carries a `port_directions`
+  attribute, so internal drivers are exact 🎯.
+]
+
+---
+
+### 🗺️ Congestion Maps — All 3 373 Nets
+
+.pull-left[
+**x-direction**
+
+![congestion x](nnsplace-route.files/yosys_fir_par-x.svg)
+]
+.pull-right[
+**y-direction** → and the **combined** map
+
+![congestion y](nnsplace-route.files/yosys_fir_par-y.svg)
+
+![congestion combined](nnsplace-route.files/yosys_fir_par-combined.svg)
+
+> Peak **50** on one cut at ~80% density — the maps use *all* nets, not just
+> the pad-driven ones drawn above 🗺️.
+]
 
 ---
 

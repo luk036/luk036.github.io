@@ -8,14 +8,14 @@ This document describes how to convert a presentation markdown file (with Mermai
 
 | Approach | File | Description |
 |----------|------|-------------|
-| **Inline** | `quickstart.html` | Markdown lives inside `<textarea id="source">` in the HTML |
-| **External source** | `digraphx-remark.html` | HTML loads `.md` source via `remark.create({ sourceUrl: 'file.md' })` |
+| **Inline** | `net_optim/quickstart.html` | Markdown lives inside `<textarea id="source">` in the HTML |
+| **External source** | `net_optim/digraphx-remark.html` | HTML loads `.md` source via `remark.create({ sourceUrl: 'file.md' })` |
 
-### Inline pattern (`quickstart.html`)
+### Inline pattern (`net_optim/quickstart.html`)
 
 The markdown content is placed directly inside a `<textarea id="source">` element in the HTML. This is self-contained — the HTML has everything it needs. Best for presentations with Mermaid diagrams and KaTeX math (which need to run initialization JS against the DOM).
 
-### External source pattern (`digraphx-remark.html`)
+### External source pattern (`net_optim/digraphx-remark.html`)
 
 The HTML is minimal — it loads the markdown from a separate `.md` file via `sourceUrl`. Best for content that doesn't need custom JS initialization (no mermaid, no katex in that page).
 
@@ -439,4 +439,4 @@ def build_html(remark_content, title):
 - [Remark.js Wiki](https://github.com/gnab/remark/wiki)
 - [Mermaid.js Documentation](https://mermaid.js.org/)
 - [KaTeX Documentation](https://katex.org/docs/autorender.html)
-- Site examples: `quickstart.html`, `digraphx-remark.html`, `hadlock-remark.html`
+- Site examples: `net_optim/quickstart.html`, `net_optim/digraphx-remark.html`, `comb_optim/hadlock-remark.html`

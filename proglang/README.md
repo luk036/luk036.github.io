@@ -193,7 +193,6 @@ proglang/
 ├── CppNote.md                             # C++ notes
 ├── design_pattern.md                      # Design patterns docs
 ├── memory_usage.md                        # Memory usage notes
-├── memory-usage-py-slides.md              # Python memory usage slides source
 ├── modules.md                             # C++ modules
 ├── py2cpp.md                              # Python → C++
 ├── reduce_memory.md                       # Reduce memory notes

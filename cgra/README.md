@@ -185,7 +185,6 @@ cgra/
 ├── FPGA-EDA.md                            # EDA tools for FPGAs
 ├── Hardware Approximation.md              # Approximation techniques
 ├── Approximate Multiplier Design Challeng.md  # Approx multiplier
-├── Nonnegative Matrix and Tensor Factoriz.md   # Matrix factorization
 ├── acm2018.md                             # ACM 2018 paper
 ├── Deep Neural Network for Non-Negative Matrix Factorization towards Low Rank Approximation.md
 │

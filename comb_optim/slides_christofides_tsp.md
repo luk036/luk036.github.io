@@ -645,17 +645,17 @@ graph LR
 
 | Resource | Location |
 |:---------|:---------|
-| 🔬 Demo code | `experiments/tsp_demo.py` (L2, n=20) |
-| 🔬 Demo code | `experiments/tsp2opt_demo.py` (L2, n=100) |
-| 🔬 Demo code | `experiments/tsp_l1_demo.py` (L1, n=20) |
-| 🔬 Demo code | `experiments/tsp_l1_n100_demo.py` (L1, n=100) |
-| 🖼 Figure (L2 n=20) | `experiments/tsp_demo_n20.svg` |
-| 🖼 Figure (L2 n=100) | `experiments/tsp2opt_demo_n100.svg` |
-| 🖼 Figure (L1 n=20) | `experiments/tsp_l1_demo_n20.svg` |
-| 🖼 Figure (L1 n=100) | `experiments/tsp_l1_n100_demo.svg` |
+| 🔬 Demo code | `experiments/tsp_demo.py` (L2, n=20) — [netlistx repo](https://github.com/luk036/netlistx/tree/master/experiments) |
+| 🔬 Demo code | `experiments/tsp2opt_demo.py` (L2, n=100) — [netlistx repo](https://github.com/luk036/netlistx/tree/master/experiments) |
+| 🔬 Demo code | `experiments/tsp_l1_demo.py` (L1, n=20) — [netlistx repo](https://github.com/luk036/netlistx/tree/master/experiments) |
+| 🔬 Demo code | `experiments/tsp_l1_n100_demo.py` (L1, n=100) — [netlistx repo](https://github.com/luk036/netlistx/tree/master/experiments) |
+| 🖼 Figure (L2 n=20) | `outputs/tsp_demo_n20.svg` |
+| 🖼 Figure (L2 n=100) | `outputs/tsp2opt_demo_n100.svg` |
+| 🖼 Figure (L1 n=20) | `outputs/tsp_l1_demo_n20.svg` |
+| 🖼 Figure (L1 n=100) | `outputs/tsp_l1_n100_demo.svg` |
 | 📦 Python lib | `netlistx.tsp` — `make_l2_graph()`, `make_l1_graph()` |
 | ⚡ C++ lib | `netlistx-cpp` — `EuclideanWeight`, `ManhattanWeight` |
-| 📊 Slides | `experiments/slides_christofides_tsp.md` |
+| 📊 Slides | `slides_christofides_tsp.md` |
 
 ### Questions? 🤔
 

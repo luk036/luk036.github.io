@@ -514,7 +514,7 @@ class: nord-light, middle, center
 - Convex fitting using B-splines
 ]
 .pull-right[
-**Key files:** `cvxprog-remark.html`, `quasicvx-remark.html`, `geomprog-remark.html`, `ellipsoid-remark.html`, `ellalgo-remark.html`
+**Key files:** `cvx/cvxprog-remark.html`, `cvx/quasicvx-remark.html`, `cvx/geomprog-remark.html`, `cvx/ellipsoid-remark.html`, `cvx/ellalgo-remark.html`
 
 > 📖 See: [`cvx/`](cvx/index.html)
 ]
@@ -532,7 +532,7 @@ class: nord-light, middle, center
 - Timing closure (STA, ECO)
 ]
 .pull-right[
-**Key files:** `ckpttn-remark.html`, `nnsplace-remark.html`, `steiner-forest-remark.html`, `dme_algorithm-remark.html`, `timing-closure-remark.html`
+**Key files:** `phys_des/ckpttn-remark.html`, `phys_des/nnsplace-remark.html`, `phys_des/steiner-forest-remark.html`, `phys_des/dme_algorithm-remark.html`, `phys_des/timing-closure-remark.html`
 
 > 📖 See: [`phys_des/`](phys_des/index.html)
 ]
@@ -550,7 +550,7 @@ class: nord-light, middle, center
 - Layout decomposition for multiple patterning
 ]
 .pull-right[
-**Key files:** `lec05a-remark.html`, `lec05b-remark.html`, `delay_padding-remark.html`, `psm-opc-remark.html`, `lec09-remark.html`
+**Key files:** `algo4dfm/delay_padding-remark.html`, `algo4dfm/psm-opc-remark.html`, `algo4dfm/lec09-remark.html`
 
 > 📖 See: [`algo4dfm/`](algo4dfm/index.html)
 ]
@@ -568,7 +568,7 @@ class: nord-light, middle, center
 - FIR vs IIR filter comparison
 ]
 .pull-right[
-**Key files:** `csd-remark.html`, `csd_multiplier-remark.html`, `csdigit-remark.html`, `multiplierless-remark.html`, `FIR-IIR-remark.html`
+**Key files:** `AxC/csd-remark.html`, `AxC/csd_multiplier-remark.html`, `AxC/csdigit-remark.html`, `AxC/multiplierless-remark.html`, `AxC/FIR-IIR-remark.html`
 
 > 📖 See: [`AxC/`](AxC/index.html)
 ]

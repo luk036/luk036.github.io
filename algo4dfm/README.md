@@ -117,7 +117,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 - **Statistical approaches**: Gaussian, log-normal, GEV distributions
 - **Parametric shortest path algorithms**: Lawler's, Howard's methods
 
-> 📖 See: [lec05.md](lec05.md), [css_under_pv.md](css_under_pv.md)
+> 📖 See: [css_under_pv.md](css_under_pv.md)
 
 ---
 

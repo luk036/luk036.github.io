@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Refactoring the L1 Voronoi Library</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🗺️ Refactoring the L1 Voronoi Library
+
+## From a Monolith to a Design-Pattern Pipeline
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- What is an L1 (Manhattan) Voronoi diagram? 🏙️
+- The L1 bisector and its degenerate square case ⚠️
+- The original monolith: 820 lines in one file 📦
+
+**Part 2: Architecture** 🧩
+- The target module map and data flow
+- Design patterns: facade, pipeline, factory, strategy, adapter 🎨
+
+]
+.pull-right[
+
+**Part 3: Bugs Uncovered** 🐛
+- The neighbor bug, input mutation, edge cases
+- The square-bisector convention 📐
+
+**Part 4: Safety Net** 🧪
+- Golden-master snapshot tests
+- The JS ↔ Python differential harness
+- CI builds and the green results ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 What Is an L1 (Manhattan) Voronoi Diagram?
+
+---
+
+### From Euclidean to Manhattan 🌆
+
+A **Voronoi diagram** partitions a plane into cells. Every point in a cell is closest to that cell's site.
+
+**Euclidean (L2):** distance = $\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$ → smooth, curved boundaries 🌊
+
+**Manhattan (L1):** distance = $|x_1 - x_2| + |y_1 - y_2|$ → axis-aligned, kinked boundaries 🏙️
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph "Euclidean (L2) 🌊"
+        E1((Site A)) --- E2((Site B))
+    end
+    subgraph "Manhattan (L1) 🏙️"
+        M1((Site A)) -.- M2((Site B))
+    end
+    style E1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style M2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> L1 cells have **staircase boundaries**. That makes them useful for PCB routing, urban planning, and pure computational geometry. 🎨
+
+---
+
+### 📏 The L1 Bisector (Normal Case)
+
+The bisector of two sites holds the points that are equidistant in the Manhattan metric:
+
+$$ |x - x_1| + |y - y_1| = |x - x_2| + |y - y_2| $$
+
+When ${\color{green} |dx|} \ne {\color{red} |dy|}$, that set is a **monotone stair-step chain**: a 1-D polyline made of axis-aligned and 45° pieces.
+
+.mermaid[
+
+<pre>
+graph TB
+    subgraph "|dx| &gt; |dy|: vertical-ish chain"
+        V1["P1 ●"] --- V2["P2 ●"]
+    end
+    subgraph "|dx| &lt; |dy|: horizontal-ish chain"
+        H1["P1 ●"] --- H2["P2 ●"]
+    end
+    style V1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style V2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+</pre>
+
+]
+
+> In the normal case the chain is unambiguous, so the merge step can trim it with confidence. ✅
+
+---
+
+### ⚠️ When ${\color{red} |dx|} = {\color{red} |dy|}$: A Square, Not a Chain
+
+Two sites that sit on opposite corners of an axis-aligned square have **no single "the bisector"**.
+
+Rotate the axes by 45°: $u = x + y$, $v = x - y$. In these coordinates L1 turns into L∞:
+
+$$ |dx| + |dy| = \max(|\Delta u|,\ |\Delta v|) $$
+
+When ${\color{red} |dx|} = {\color{red} |dy|}$, one of $\Delta u$ or $\Delta v$ vanishes, so both sites line up on a single rotated axis. A whole **band of the other coordinate is equidistant**, and the locus has positive area.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "P1 and P2: opposite square corners"
+        P1["P1 ●"] --- P2["P2 ●"]
+    end
+    subgraph "Equal-distance locus"
+        R["a 2D REGION,\nnot a single line"]
+    end
+    P1 --> R
+    P2 --> R
+    style R fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style P1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+</pre>
+
+]
+
+The algorithm must still pick **ONE deterministic 1-D chain**. A wrong pick cascades through every downstream intersection trim. 💥
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ The Original Monolith
+
+---
+
+### One File Did Everything 📦
+
+Before the refactor, `src/voronoi.js` packed the whole Lee &amp; Wong algorithm into **820 lines**.
+
+> The goal was never just cleaner code. The goal was structure that makes the next change safe. 🎯
+
+.pull-left[
+
+**What was wrong** 😬
+- One module mixed the metric, the merge walk, polygonization, and SVG glue 🧶
+- Implicit, order-dependent state made every change risky
+- No tests existed, so regressions shipped silently 🚢
+- Swapping the metric meant touching everything at once
+
+]
+
+.pull-right[
+
+**Why the Python port felt it too** 🐍
+- `py_ai/voronoi.py` mirrored the JS by hand
+- The two implementations drifted apart, and nobody could say who was right
+- Refactoring the JS "by feel" was a gamble with no safety net
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Target Architecture: A Modular Pipeline
+
+---
+
+### 🗺️ The Module Map
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph TD
+    subgraph PIPELINE["Pipeline"]
+        GEN["generator.js\npipeline composition"]
+        PRE["preprocess.js\ncleanData nudges a COPY"]
+        DC["divideConquer.js\nrecursiveSplit"]
+        MW["mergeLine.js\nwalkMergeLine"]
+        POLY["polygonizer.js\nchain + toSVGPath"]
+    end
+    subgraph SUPPORT["Support modules"]
+        GEO["geometry.js\npure predicates"]
+        BIS["bisector.js\nsite + bisector factories"]
+        L1M["l1Metric.js\ncurried findBisector"]
+    end
+    VOR["voronoi.js\npublic facade"]
+
+    GEN --> PRE
+    PRE --> DC
+    DC --> MW
+    MW --> POLY
+    POLY --> VOR
+    GEO -.-> BIS
+    L1M -.-> BIS
+    BIS -.-> DC
+    BIS -.-> MW
+
+    style VOR fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GEN fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L1M fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+]
+.pull-right[
+The monolith became **9 small modules**, each with one job. The data flows through them as a pipeline.
+
+- Core flow: **preprocess → divide &amp; conquer → polygonize → facade**
+- Support modules keep the core metric-agnostic
+- The public API did not change, so consumers kept working 🔁
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎨 Design Patterns Applied
+
+---
+
+### 🚪 Facade: A Stable Front Door
+
+`voronoi.js` shrank from 820 lines to a thin re-export layer:
+
+```js
+// src/voronoi.js: the whole public surface
+export { generateVoronoiPoints, generateL1Voronoi, cleanData };
+```
+
+```js
+// consumers keep working, unchanged
+import { generateL1Voronoi, cleanData } from "./src/voronoi.js";
+const result = generateL1Voronoi(points, width, height, true);
+```
+
+- Internals are free to move around behind the facade 🎭
+- The three public names and their signatures are preserved
+- `nudgeData` still defaults to **true**, so behavior stays compatible
+
+---
+
+### 🪜 Pipeline Composition in `generator.js`
+
+`generator.js` owns `generateL1Voronoi` and composes the stages in order:
+
+1. **Preprocess** → `cleanData` (nudge) or a plain copy, never the caller's array
+2. **Sort + init** → order sites by x-coordinate and set up structures
+3. **Divide &amp; conquer** → `recursiveSplit` on the sorted sites
+4. **Polygonize** → `polygonizeSite` turns each site into its final cell
+
+- `nudgeData` defaults to **true**, and it nudges a **copy**, so the input you pass in is never mutated ✅
+- `generator.js` also keeps a naive `generateVoronoiPoints` as an independent cross-check
+- `mergeLine.js` gained a single de-duped `cropCandidates` that replaces the old duplicate `cropL` / `cropR`
+
+---
+
+### 🏭 Factory + Strategy Seam
+
+**Factories** keep object shapes consistent across the codebase:
+- `createSite` and `createBisector` live in `bisector.js`
+- `curryFindBisector` in `l1Metric.js` builds a finder with the metric baked in
+
+**Strategy seam** 🧵
+- The merge walker never calls an L1 routine directly
+- It receives a curried `findBisector` instead
+- L1 is today's strategy; another metric is simply a new strategy in `l1Metric.js`
+
+.font-sm[
+| Pattern | Home | Role |
+|:--------|:-----|:-----|
+| Factory | `bisector.js` | `createSite`, `createBisector` |
+| Factory | `l1Metric.js` | `curryFindBisector` |
+| Strategy | `l1Metric.js` | `findL1Bisector` as the injectable finder |
+| Helpers | `bisector.js` | link, trim, `findHopTo`, `clearOutOrphans` |
+]
+
+---
+
+### 🔌 Adapter + a Traceable Merge Walk
+
+**Adapter:** the computational core knows nothing about SVG.
+- `chainBisectorPoints` is pure: it links bisector points into cell chains
+- `appendOpenEdgeCorners` closes open cells at the canvas edge
+- `polygonizeSite` + `toSVGPath` present the result as an SVG path
+- Swap the adapter and the same core can feed Canvas or JSON 🎨
+
+**Explicit state machine:** the merge walker used to be tail-recursive, so deep inputs grew a new stack frame per hop.
+- `walkMergeLine` now runs as an explicit-state **while loop**
+- `determineFirstBorderCross`, `cropCandidates`, and `findCorrectW` read top to bottom
+- Easier to trace, easier to debug 🐞
+
+---
+
+class: nord-light, middle, center
+
+## 🐛 Bugs the Refactor Uncovered
+
+---
+
+### 🔗 The Neighbor Bug (JS and Python!)
+
+`findHopTo` walks a bisector to its neighbor site, but it was handed the wrong thing:
+
+```js
+// BEFORE: passed the raw coordinate array
+findHopTo(edge, site.site);   // ❌ garbage neighbors
+
+// AFTER: pass the site object itself
+findHopTo(edge, site);        // ✅ correct neighbor
+```
+
+- The bug lived in the JS port **and** in the Python port 🐍
+- Both were fixed; the Python side is commit `570f93f`
+
+**Input mutation:** the site sort ran on the caller's own array.
+
+```js
+sitePoints.sort(cmp);           // ❌ reordered the caller's data
+sitePoints.slice().sort(cmp);   // ✅ works on a copy
+```
+
+---
+
+### 🧊 Edge Cases, Cleaned Up
+
+.font-sm[
+| Issue | Before | After |
+|:------|:-------|:------|
+| One site ($n = 1$) | crash: "Cannot read properties of undefined" 💥 | full-canvas polygon ✅ |
+| `nudgeData` flag | documented but disabled (code commented out) 🩹 | re-enabled, nudges a copy |
+| Sentinel returns | mixed `false` and `null` | unified to `null` |
+| `isPointonEdge` | typo | `isPointOnEdge` |
+| `checkForOphans` | typo | `checkForOrphans` |
+| `intercetpt` | typo | `intercept` |
+| `segementIntersection` | typo | `segmentIntersection` |
+| `neightborArray` | typo | `neighborArray` |
+]
+
+> These were not cosmetic. Each rename fixed a name that silently invited the wrong call. ✂️
+
+---
+
+### 📐 The Square-Bisector Convention
+
+When the locus is a region, `findL1Bisector` picks **one** deterministic chain:
+
+```js
+} else {
+  // |dx| === |dy|: degenerate square case
+  if (slope === 1)  up = true;   // vertical-ish chain
+  else              up = false;  // horizontal-ish chain
+}
+```
+
+The default-on `cleanData` nudge sidesteps the ambiguity for any pair that is a duplicate or sits on a square diagonal (|dx| === |dy|):
+
+```js
+d[0] = d[0] + 1e-10 * d[1];
+d[1] = d[1] + 2e-10 * d[0];
+```
+
+- The nudge check walks **all pairs**, so it is $O(N^2)$ ⏱️
+- The choice matters: a chain picked at random breaks the downstream trimming in `trimBisector` and `bisectorIntersection` 💥
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 The Test Harness: Making Refactoring Safe
+
+---
+
+### 🏆 Golden-Master Snapshots
+
+A deterministic **42-case corpus** (`tests/corpus.js`, LCG-seeded) drives a golden record of the full output.
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph "record (after an intentional change)"
+        R1["npm run test:golden:record"] --> R2["fixtures/js-golden.json\n42 cases, about 2.5 MB"]
+    end
+    subgraph "every test run"
+        T1["npm test"] --> T2["run the corpus"]
+        T2 --> T3{"matches snapshot?"}
+        T3 -- "yes" --> T4["pass ✅"]
+        T3 -- "no" --> T5["fail ❌"]
+    end
+</pre>
+
+]
+
+- Behavior change on purpose? Re-record with `test:golden:record`
+- Unplanned drift? Loud, immediate failure 🚨
+- `tests/smoke.test.js` layers 6 behavior smoke tests on top
+
+---
+
+### 🔀 The JS ↔ Python Differential Harness
+
+The same corpus drives both implementations, and a runner diffs their outputs.
+
+.mermaid[
+
+<pre>
+graph LR
+    C["tests/corpus.js\n42 deterministic cases"] --> JS["JS library\nsrc/voronoi.js"]
+    C --> PY["Python port\npy_ai/voronoi.py"]
+    JS --> D["tests/differential.js"]
+    PY --> D
+    D --> E{"new divergence?"}
+    E -- "only the 7 known baseline indices\n[9, 11, 12, 34, 37, 38, 39]" --> F["pass ✅"]
+    E -- "anything else" --> G["fail ❌"]
+</pre>
+
+]
+
+- The baseline lives in `tests/fixtures/diff-baseline.json`
+- It fails **only on NEW divergences**, so a refactor can never drift silently
+- `npm run test:diff:refresh` re-records the baseline on purpose
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ CI Builds: Automation
+
+---
+
+### ⚙️ The CI Workflow (`.github/workflows/ci.yml`)
+
+.mermaid[
+
+<pre>
+graph LR
+    A["push or PR"] --> M["matrix: Node 20, Node 22\nubuntu-latest, windows-latest"]
+    M --> B["npm ci"]
+    B --> C["npm test\nbuild + golden + smoke"]
+    C --> D["npm run test:diff"]
+    PY["Python 3.12"] --> E["py_ai pytest"]
+    D --> E
+    E --> F["npx gulp\ndemo bundle"]
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+
+**Two CI failures fixed** 🔧
+- Node 20's test runner will not expand the `tests/**/*.test.js` glob → explicit list: `node --test tests/golden.test.js tests/smoke.test.js`
+- A fresh checkout had no `build/` dir → the gulpfile now runs `fs.mkdirSync('./build', { recursive: true })` before writing the bundle
+
+**Quieter deprecations** 🤫: actions bumped to Node 24 runtimes: `checkout@v5`, `setup-node@v6`, `setup-python@v6`
+
+---
+
+### ✅ Verification Results
+
+.font-sm[
+| Check | Result |
+|:------|:-------|
+| `npm test` | **7/7 pass** (golden 42/42 cases + 6 smoke) |
+| `npm run test:diff` | **no NEW divergences** vs the 7-item baseline |
+| `py_ai` pytest | **49/49 pass** |
+| `npx gulp` | builds both the library and the demo ✅ |
+| CI run `34190554838` | success on all 4 matrix jobs ✅ |
+]
+
+**Git history (master)** 📜
+
+.font-sm[
+| Commit | Message |
+|:-------|:--------|
+| `57e8364` | Bump GitHub Actions to Node 24 runtimes |
+| `466b1f6` | Fix CI test runner glob and demo build output dir |
+| `ca61284` | Add GitHub Actions CI build |
+| `51ece01` | Stop tracking generated build artifacts |
+| `ebbf588` | Document module layout and test commands |
+| `64f12f2` | Split Voronoi generator into pipeline modules |
+| `1cfa338` | Extract geometry, bisector and metric helper modules |
+| `69caa66` | Add JS-Python differential test harness |
+| `3526a8b` | Add golden-master snapshot tests |
+| `cb9a270` | Fix gulp 4 task syntax and add npm test scripts |
+| `570f93f` | Fix neighbor computation in Python port |
+| `8303f24` | Handle special cases; new python translation by opencode |
+]
+
+---
+
+### 🧠 Key Takeaways
+
+.pull-left[
+
+**Architecture** 🧩
+- Small modules beat one 820-line file
+- A facade keeps the public API frozen
+- Factories and a strategy seam make the metric swappable
+- Adapters keep SVG out of the math core
+
+**Bugs** 🐛
+- Refactoring surfaced real bugs: neighbors, mutation, the $n = 1$ crash
+- A degenerate square still needs ONE deterministic bisector choice
+
+]
+
+.pull-right[
+
+**Safety net** 🧪
+- Golden-master snapshots catch unplanned drift
+- The JS ↔ Python diff harness stops silent divergence
+- CI runs 2 Node versions × 2 OSes plus Python 3.12
+
+**Result** ✅
+- npm 7/7, differential clean, pytest 49/49, CI green
+- Same public API, same diagrams, sane code inside
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Refactoring the L1 Voronoi Library**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Happy Voronoi Tiling! 🗺️ 🚀
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

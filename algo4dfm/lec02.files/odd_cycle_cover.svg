@@ -77,6 +77,21 @@
   marker-start: url(#big_open_circle);
 }
 
+
+.svgbob text { fill: #5e81ac; }
+
+.svgbob text.c-sel { fill: #bf616a; }
+
+.svgbob text.c-tit { fill: #2e3440; }
+
+.svgbob rect.solid.filled,
+.svgbob polygon.filled { fill: #bf616a; stroke: #bf616a; }
+
+.svgbob line.solid,
+.svgbob path.solid,
+.svgbob path.nofill { stroke: #00838f; }
+
+.svgbob marker#open_circle circle.bg_filled { stroke: #5e81ac; }
 </style>
   <defs>
     <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -109,8 +124,8 @@
   <polygon points="38.8,108 38.8,100 33.2,100 33.2,108" class="filled"></polygon>
   <line x1="40" y1="104" x2="84" y2="104" class="solid end_marked_open_circle"></line>
   <line x1="88" y1="104" x2="132" y2="104" class="solid end_marked_open_circle"></line>
-  <text x="34" y="124" >d</text>
+  <text class="c-sel" x="34" y="124" >d</text>
   <text x="82" y="124" >e</text>
   <text x="130" y="124" >f</text>
-  <text x="10" y="12" >({d}, 1)</text>
+  <text class="c-tit" x="10" y="12" >({d}, 1)</text>
 </svg>

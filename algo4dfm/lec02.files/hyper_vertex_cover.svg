@@ -77,6 +77,21 @@
   marker-start: url(#big_open_circle);
 }
 
+
+.svgbob text { fill: #5e81ac; }
+
+.svgbob text.c-sel { fill: #bf616a; }
+
+.svgbob text.c-tit { fill: #2e3440; }
+
+.svgbob rect.solid.filled,
+.svgbob polygon.filled { fill: #bf616a; stroke: #bf616a; }
+
+.svgbob line.solid,
+.svgbob path.solid,
+.svgbob path.nofill { stroke: #00838f; }
+
+.svgbob marker#open_circle circle.bg_filled { stroke: #5e81ac; }
 </style>
   <defs>
     <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -96,9 +111,9 @@
     </marker>
   </defs>
   <text x="10" y="44" >a</text>
-  <text x="74" y="44" >b</text>
+  <text class="c-sel" x="74" y="44" >b</text>
   <text x="146" y="44" >e</text>
-  <text x="210" y="44" >g</text>
+  <text class="c-sel" x="210" y="44" >g</text>
   <line x1="24" y1="56" x2="12" y2="56" class="solid end_marked_open_circle"></line>
   <line x1="24" y1="56" x2="72" y2="56" class="solid"></line>
   <rect x="72" y="52" width="8" height="8" class="solid filled" rx="0"></rect>
@@ -112,10 +127,10 @@
   <line x1="152" y1="152" x2="208" y2="152" class="solid"></line>
   <rect x="208" y="148" width="8" height="8" class="solid filled" rx="0"></rect>
   <text x="10" y="172" >c</text>
-  <text x="74" y="172" >d</text>
+  <text class="c-sel" x="74" y="172" >d</text>
   <text x="146" y="172" >f</text>
-  <text x="210" y="172" >h</text>
-  <text x="10" y="12" >({b, d, g, h}, 4)</text>
+  <text class="c-sel" x="210" y="172" >h</text>
+  <text class="c-tit" x="10" y="12" >({b, d, g, h}, 4)</text>
   <g>
     <line x1="124" y1="56" x2="124" y2="80" class="solid"></line>
     <path d="M 124,80 A 12,12 0,0,1 124,96" class="nofill"></path>

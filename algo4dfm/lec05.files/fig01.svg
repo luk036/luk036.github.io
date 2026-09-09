@@ -77,6 +77,32 @@
   marker-start: url(#big_open_circle);
 }
 
+.svgbob text.r { fill: #5e81ac; }
+
+.svgbob text.l { fill: #b48ead; }
+
+.svgbob text.d { fill: #00838f; }
+
+.svgbob text.c { fill: #bf616a; }
+
+.svgbob line.r,
+.svgbob path.r { stroke: #5e81ac; }
+
+.svgbob line.l,
+.svgbob path.l { stroke: #b48ead; }
+
+.svgbob line.d,
+.svgbob path.d { stroke: #00838f; }
+
+.svgbob line.c,
+.svgbob path.c { stroke: #bf616a; }
+
+.svgbob polygon.d { fill: #00838f; stroke: #00838f; }
+
+.svgbob polygon.c { fill: #bf616a; stroke: #bf616a; }
+
+.svgbob marker#circle .filled { fill: #bf616a; }
+
 </style>
   <defs>
     <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -96,65 +122,65 @@
     </marker>
   </defs>
   <rect class="backdrop" x="0" y="0" width="392" height="128"></rect>
-  <text x="42" y="12" >Data</text>
-  <text x="338" y="12" >Data</text>
-  <line x1="32" y1="24" x2="56" y2="24" class="solid"></line>
-  <polygon points="56,20 64,24 56,28" class="filled"></polygon>
-  <text x="98" y="28" >D</text>
-  <text x="130" y="28" >Q</text>
-  <line x1="232" y1="24" x2="248" y2="24" class="solid"></line>
-  <polygon points="248,20 256,24 248,28" class="filled"></polygon>
-  <text x="282" y="28" >D</text>
-  <text x="314" y="28" >Q</text>
-  <polygon points="376,20 384,24 376,28" class="filled"></polygon>
-  <text x="50" y="44" >In</text>
-  <text x="346" y="44" >Out</text>
-  <text x="98" y="60" >CLK</text>
-  <text x="154" y="60" >Combinational</text>
-  <text x="282" y="60" >CLK</text>
-  <text x="170" y="76" >Logic</text>
-  <text x="34" y="92" >CLK</text>
-  <text x="114" y="92" >Ri</text>
-  <text x="298" y="92" >Rj</text>
-  <line x1="32" y1="104" x2="76" y2="104" class="solid end_marked_circle"></line>
-  <line x1="72" y1="104" x2="160" y2="104" class="solid"></line>
-  <polygon points="160,100 168,104 160,108" class="filled"></polygon>
-  <line x1="168" y1="104" x2="260" y2="104" class="solid end_marked_circle"></line>
-  <line x1="256" y1="104" x2="376" y2="104" class="solid"></line>
+  <text x="42" y="12" class="d">Data</text>
+  <text x="338" y="12" class="d">Data</text>
+  <line x1="32" y1="24" x2="56" y2="24" class="solid d"></line>
+  <polygon points="56,20 64,24 56,28" class="filled d"></polygon>
+  <text x="98" y="28" class="r">D</text>
+  <text x="130" y="28" class="r">Q</text>
+  <line x1="232" y1="24" x2="248" y2="24" class="solid d"></line>
+  <polygon points="248,20 256,24 248,28" class="filled d"></polygon>
+  <text x="282" y="28" class="r">D</text>
+  <text x="314" y="28" class="r">Q</text>
+  <polygon points="376,20 384,24 376,28" class="filled d"></polygon>
+  <text x="50" y="44" class="d">In</text>
+  <text x="346" y="44" class="d">Out</text>
+  <text x="98" y="60" class="c">CLK</text>
+  <text x="154" y="60" class="l">Combinational</text>
+  <text x="282" y="60" class="c">CLK</text>
+  <text x="170" y="76" class="l">Logic</text>
+  <text x="34" y="92" class="c">CLK</text>
+  <text x="114" y="92" class="r">Ri</text>
+  <text x="298" y="92" class="r">Rj</text>
+  <line x1="32" y1="104" x2="76" y2="104" class="solid c end_marked_circle"></line>
+  <line x1="72" y1="104" x2="160" y2="104" class="solid c"></line>
+  <polygon points="160,100 168,104 160,108" class="filled c"></polygon>
+  <line x1="168" y1="104" x2="260" y2="104" class="solid c end_marked_circle"></line>
+  <line x1="256" y1="104" x2="376" y2="104" class="solid c"></line>
   <g>
-    <line x1="92" y1="8" x2="140" y2="8" class="solid"></line>
-    <line x1="92" y1="8" x2="92" y2="72" class="solid"></line>
-    <line x1="140" y1="8" x2="140" y2="72" class="solid"></line>
-    <line x1="64" y1="24" x2="92" y2="24" class="solid"></line>
-    <line x1="140" y1="24" x2="176" y2="24" class="solid"></line>
-    <line x1="92" y1="72" x2="140" y2="72" class="solid"></line>
-    <path d="M 80,56 A 4,4 0,0,0 76,60" class="nofill"></path>
-    <line x1="76" y1="60" x2="76" y2="100" class="solid"></line>
-    <line x1="80" y1="56" x2="92" y2="56" class="solid"></line>
+    <line x1="92" y1="8" x2="140" y2="8" class="solid r"></line>
+    <line x1="92" y1="8" x2="92" y2="72" class="solid r"></line>
+    <line x1="140" y1="8" x2="140" y2="72" class="solid r"></line>
+    <line x1="64" y1="24" x2="92" y2="24" class="solid d"></line>
+    <line x1="140" y1="24" x2="176" y2="24" class="solid d"></line>
+    <line x1="92" y1="72" x2="140" y2="72" class="solid r"></line>
+    <path d="M 80,56 A 4,4 0,0,0 76,60" class="nofill c"></path>
+    <line x1="76" y1="60" x2="76" y2="100" class="solid c"></line>
+    <line x1="80" y1="56" x2="92" y2="56" class="solid c"></line>
   </g>
   <g>
-    <path d="M 192,8 A 8,8 0,0,0 186,12" class="nofill"></path>
-    <line x1="186" y1="12" x2="184" y2="16" class="solid"></line>
-    <line x1="192" y1="8" x2="216" y2="8" class="solid"></line>
-    <path d="M 216,8 A 8,8 0,0,1 222,12" class="nofill"></path>
-    <line x1="222" y1="12" x2="224" y2="16" class="solid"></line>
-    <path d="M 184,16 A 16,16 0,0,0 184,32" class="nofill"></path>
-    <path d="M 224,16 A 16,16 0,0,1 224,32" class="nofill"></path>
-    <line x1="184" y1="32" x2="186" y2="36" class="solid"></line>
-    <path d="M 186,36 A 8,8 0,0,0 192,40" class="nofill"></path>
-    <line x1="192" y1="40" x2="216" y2="40" class="solid"></line>
-    <line x1="224" y1="32" x2="222" y2="36" class="solid"></line>
-    <path d="M 222,36 A 8,8 0,0,1 216,40" class="nofill"></path>
+    <path d="M 192,8 A 8,8 0,0,0 186,12" class="nofill l"></path>
+    <line x1="186" y1="12" x2="184" y2="16" class="solid l"></line>
+    <line x1="192" y1="8" x2="216" y2="8" class="solid l"></line>
+    <path d="M 216,8 A 8,8 0,0,1 222,12" class="nofill l"></path>
+    <line x1="222" y1="12" x2="224" y2="16" class="solid l"></line>
+    <path d="M 184,16 A 16,16 0,0,0 184,32" class="nofill l"></path>
+    <path d="M 224,16 A 16,16 0,0,1 224,32" class="nofill l"></path>
+    <line x1="184" y1="32" x2="186" y2="36" class="solid l"></line>
+    <path d="M 186,36 A 8,8 0,0,0 192,40" class="nofill l"></path>
+    <line x1="192" y1="40" x2="216" y2="40" class="solid l"></line>
+    <line x1="224" y1="32" x2="222" y2="36" class="solid l"></line>
+    <path d="M 222,36 A 8,8 0,0,1 216,40" class="nofill l"></path>
   </g>
   <g>
-    <line x1="276" y1="8" x2="324" y2="8" class="solid"></line>
-    <line x1="276" y1="8" x2="276" y2="72" class="solid"></line>
-    <line x1="324" y1="8" x2="324" y2="72" class="solid"></line>
-    <line x1="256" y1="24" x2="276" y2="24" class="solid"></line>
-    <line x1="324" y1="24" x2="376" y2="24" class="solid"></line>
-    <line x1="276" y1="72" x2="324" y2="72" class="solid"></line>
-    <path d="M 264,56 A 4,4 0,0,0 260,60" class="nofill"></path>
-    <line x1="260" y1="60" x2="260" y2="100" class="solid"></line>
-    <line x1="264" y1="56" x2="276" y2="56" class="solid"></line>
+    <line x1="276" y1="8" x2="324" y2="8" class="solid r"></line>
+    <line x1="276" y1="8" x2="276" y2="72" class="solid r"></line>
+    <line x1="324" y1="8" x2="324" y2="72" class="solid r"></line>
+    <line x1="256" y1="24" x2="276" y2="24" class="solid d"></line>
+    <line x1="324" y1="24" x2="376" y2="24" class="solid d"></line>
+    <line x1="276" y1="72" x2="324" y2="72" class="solid r"></line>
+    <path d="M 264,56 A 4,4 0,0,0 260,60" class="nofill c"></path>
+    <line x1="260" y1="60" x2="260" y2="100" class="solid c"></line>
+    <line x1="264" y1="56" x2="276" y2="56" class="solid c"></line>
   </g>
 </svg>

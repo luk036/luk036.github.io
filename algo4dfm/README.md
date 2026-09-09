@@ -89,7 +89,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 - **Lithography-friendly design**: OPC, double patterning, EUV
 - **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
 
-> 📖 See: [dfm4dummies.md](dfm4dummies.md)
+> 📖 See: [dfm4dummies](dfm4dummies-remark.html)
 
 ---
 

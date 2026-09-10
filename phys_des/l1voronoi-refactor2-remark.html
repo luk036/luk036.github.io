@@ -79,7 +79,7 @@ The first refactor split an **820-line monolith** into **9 modules** behind a fa
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     subgraph PIPE["Pipeline"]
         GEN["generator.js"]
         PRE["preprocess.js"]
@@ -246,6 +246,8 @@ A different metric (L∞, L2) is now **one new file**, not a cross-cutting edit.
 
 ### 🪆 Context: Kill the 8-Argument Drilling
 
+> One `metric` object replaces a function **and** two loose dimensions. 🎯
+
 .pull-left[
 
 **Before** 😵
@@ -276,7 +278,6 @@ walkMergeLine(
 
 ]
 
-> One `metric` object replaces a function **and** two loose dimensions. 🎯
 
 ---
 
@@ -483,6 +484,8 @@ class: nord-light, middle, center
 
 ### 🚪 A Nondeterministic Export, Evicted
 
+> If it is a test oracle, it belongs in tests. 🧪
+
 .pull-left[
 
 **Before** 😬
@@ -499,8 +502,6 @@ class: nord-light, middle, center
 - README, demo and test script updated
 
 ]
-
-> If it is a test oracle, it belongs in tests. 🧪
 
 ---
 

@@ -6,6 +6,11 @@
     "svgo": "svgo --folder .",
     "precommit": "pre-commit run --all-files",
     "build": "node scripts/build.js",
-    "check-links": "node scripts/check-links.js"
+    "check-links": "node scripts/check-links.js",
+    "lint:md": "rumdl check .",
+    "fmt:md": "rumdl fmt ."
+  },
+  "devDependencies": {
+    "svgo": "^4.1.0"
   }
 }

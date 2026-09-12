@@ -57,7 +57,7 @@ const REMARK_TEMPLATE = `<!doctype html>
       var slideshow = remark.create(
         {
           sourceUrl: 'README.md',
-          ratio: '16:10',
+          ratio: '{{ratio}}',
           highlightStyle: 'tomorrow-night-blue',
           highlightLines: true,
           countIncrementalSlides: false,
@@ -94,6 +94,10 @@ const SKIP_DIRS = [
 const SITEMAP_SKIP_DIRS = ['gray-code'];
 
 const BASE_URL = 'https://luk036.github.io';
+
+const DEFAULT_RATIO = '16:10';
+// Topic dirs whose decks use a non-default slide aspect ratio.
+const RATIO_OVERRIDES = { algo4dfm: '4:3' };
 
 function extractTitle(content) {
   const match = content.match(/^#\s+(.+)$/m);
@@ -133,8 +137,10 @@ function buildFromReadme(rootDir, dirName) {
 
   const content = fs.readFileSync(readmePath, 'utf-8');
   const title = extractTitle(content);
+  const ratio = RATIO_OVERRIDES[dirName] || DEFAULT_RATIO;
 
-  fs.writeFileSync(indexPath, REMARK_TEMPLATE.replace('{{title}}', title));
+  const html = REMARK_TEMPLATE.replace('{{title}}', title).replace('{{ratio}}', ratio);
+  fs.writeFileSync(indexPath, html);
   console.log(`  ${dirName}: index.html generated`);
   return true;
 }

@@ -41,6 +41,9 @@ const CODE_PATTERNS = [
   /^<\w+/,
   /^&[a-z]/,
   /^&&/,
+  // Regex/code fragments that look like markdown links, e.g. `(double|int)`
+  // or `[/\\]path` inside shell/code blocks.
+  /[|\\]/,
 ];
 
 function isAssetLink(href) {

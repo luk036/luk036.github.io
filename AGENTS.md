@@ -64,7 +64,7 @@ npx svgo --folder .
 
 The project uses GitHub Actions for CI (see `.github/workflows/ci.yml`). It runs on push to `master` and pull requests, executing:
 
-- `pre-commit run --all-files` (trailing-whitespace, check-json, isort, Black, Flake8, ...)
+- `pre-commit run --all-files` (check-json, isort, Black, Flake8, ...)
 - `npm run build` followed by `git diff --exit-code` (generated files must be up to date)
 - `npm run check-links`
 

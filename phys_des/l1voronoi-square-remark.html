@@ -1,0 +1,621 @@
+<!doctype html>
+<html>
+  <head>
+    <title>The Square Bisector Problem</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🟦 The Square Bisector Problem
+
+## Handling degenerate L1 Voronoi configurations
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**The Problem** 🤔
+- What a "square" pair is 📐
+- The 2-D bisector region 🟥
+- Why Lee–Wong breaks 💥
+
+**The Options** 🧭
+- Nudge (current) 💧
+- Canonical bisector 🎯
+- Symbolic perturbation 🧪
+
+]
+.pull-right[
+
+**The Experiment** 🔬
+- A cell-level oracle 🎯
+- Four approaches, one corpus 📊
+
+**The Findings** ✅
+- What regressed, and why 📉
+- The integer constraint 🔒
+- Next steps 🚀
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Part 1 — The Problem
+
+---
+
+### 📐 What Is a "Square" Pair?
+
+Two sites are **square-aligned** when their coordinate differences are equal:
+
+$$|p_x - q_x| \;=\; |p_y - q_y|$$
+
+The L1 bisector is the set of equidistant points:
+
+$$B_1(p,q) = \{\, x : d_1(x,p) = d_1(x,q) \,\}, \qquad d_1(p,q) = |p_x - q_x| + |p_y - q_y|$$
+
+For a **generic** pair this is a 1-D staircase. For a square pair, it is not. 🪜
+
+---
+
+### 🟥 The 2-D Region
+
+Take $p=(0,0)$, $q=(2,2)$. The equation $|x|+|y| = |x-2|+|y-2|$ holds for:
+
+- the diagonal $x+y=2$ in the middle band, and
+- **every** point of the quadrant $x \ge 2,\ y \le 0$ (both sides reduce to $x - y$)
+
+So the bisector is a staircase **plus a whole quadrant** of equidistant points. 🟥
+
+<p align="center">
+
+<svg style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px" xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" font-family="sans-serif">
+<rect x="0" y="0" width="560" height="420" fill="#fff"/>
+<line x1="34" y1="0" x2="34" y2="420" stroke="#eee"/>
+<line x1="102" y1="0" x2="102" y2="420" stroke="#eee"/>
+<line x1="170" y1="0" x2="170" y2="420" stroke="#eee"/>
+<line x1="238" y1="0" x2="238" y2="420" stroke="#eee"/>
+<line x1="306" y1="0" x2="306" y2="420" stroke="#eee"/>
+<line x1="374" y1="0" x2="374" y2="420" stroke="#eee"/>
+<line x1="442" y1="0" x2="442" y2="420" stroke="#eee"/>
+<line x1="510" y1="0" x2="510" y2="420" stroke="#eee"/>
+<line x1="0" y1="368" x2="560" y2="368" stroke="#eee"/>
+<line x1="0" y1="300" x2="560" y2="300" stroke="#eee"/>
+<line x1="0" y1="232" x2="560" y2="232" stroke="#eee"/>
+<line x1="0" y1="164" x2="560" y2="164" stroke="#eee"/>
+<line x1="0" y1="96" x2="560" y2="96" stroke="#eee"/>
+<line x1="0" y1="300" x2="560" y2="300" stroke="#999"/>
+<line x1="170" y1="0" x2="170" y2="420" stroke="#999"/>
+<polygon points="306,300 510,300 510,368 306,368" fill="#ffcdd2"/>
+<line x1="34" y1="164" x2="170" y2="164" stroke="#1565c0" stroke-width="3"/>
+<line x1="170" y1="164" x2="306" y2="300" stroke="#1565c0" stroke-width="3"/>
+<line x1="306" y1="300" x2="510" y2="300" stroke="#1565c0" stroke-width="3"/>
+<line x1="306" y1="300" x2="306" y2="368" stroke="#1565c0" stroke-width="3"/>
+<circle cx="170" cy="300" r="5" fill="#263238"/>
+<circle cx="306" cy="164" r="5" fill="#263238"/>
+<text x="154" y="324" font-size="14" fill="#263238">p = (0,0)</text>
+<text x="316" y="154" font-size="14" fill="#263238">q = (2,2)</text>
+<text x="374" y="330.6" font-size="14" fill="#c62828">2-D region</text>
+<text x="37.400000000000006" y="140.2" font-size="14" fill="#1565c0">staircase</text>
+</svg>
+
+</p>
+
+---
+
+### 💥 Why Lee–Wong Breaks
+
+The merge walk assumes each bisector is a **1-D curve** with a binary `up` flag:
+
+.mermaid[
+<pre>
+flowchart LR
+    A["square pair"] --> B["bisector has a 2-D region"]
+    B --> C["no consistent 1-D curve"]
+    C --> D["merge walk has nothing to follow"]
+    D --> E["wrong or empty diagram"]
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#f44336
+    style D fill:#c62828
+    style E fill:#b71c1c
+</pre>
+]
+
+---
+
+### 💧 The Current Workaround: Nudge
+
+`src/preprocess.js` perturbs every square pair by an epsilon before the algorithm runs:
+
+```javascript
+if(Math.abs(d[0] - e[0]) === Math.abs(d[1] - e[1])){
+    d[0] = d[0] + 1e-10 * d[1];
+    d[1] = d[1] + 2e-10 * d[0];
+}
+```
+
+After the nudge $|dx| \ne |dy|$, so the bisector becomes a proper 1-D staircase. 🩹
+
+---
+
+### ⚠️ The Problem with the Nudge
+
+.pull-left[
+
+**Works, but...** 🩹
+- Approximate, not exact
+- $O(n^2)$ pairwise scan
+- Only catches **exact** equality
+- Direction is arbitrary
+
+]
+.pull-right[
+
+**And it leaks** 💧
+- Input integers become floats
+- Returned sites are perturbed:
+  `[30, 30] → [30.000000003, 30.000000006]`
+
+> For a VLSI-style integer layout, that is **not acceptable**. 🔒
+
+]
+
+
+---
+
+### 🔒 The Constraint
+
+> **Integer site coordinates must stay integers.**
+
+That rules out the nudge *and* any scheme that perturbs the input to floating point.
+
+We need an approach that is **exact** — or at least keeps the inputs exact — while still giving the merge a well-defined bisector. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 2 — The Options
+
+---
+
+### 🗺️ Four Ways Forward
+
+.mermaid[
+<pre>
+flowchart TD
+    P["square bisector"] --> O1["1. Canonical bisector"]
+    P --> O2["2. Symbolic perturbation"]
+    P --> O3["3. Exact arithmetic + region"]
+    P --> O4["4. Post-process merge"]
+
+    style P fill:#ff9800
+    style O1 fill:#2196f3
+    style O2 fill:#4caf50
+    style O3 fill:#9c27b0
+    style O4 fill:#009688
+</pre>
+]
+
+---
+
+### 🎯 Option 1 — Canonical Bisector
+
+Pick **one** fixed 1-D boundary of the 2-D region and make `up`/ordering agree.
+
+For $p=(0,0)$, $q=(2,2)$ the two candidates are:
+
+- diagonal $+$ horizontal ray $y=0$ (the $|dx| < |dy|$ branch)
+- diagonal $+$ vertical ray $x=2$ (the $|dx| > |dy|$ branch)
+
+<p align="center">
+
+<svg style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px" xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" font-family="sans-serif">
+<rect x="0" y="0" width="560" height="420" fill="#fff"/>
+<line x1="34" y1="0" x2="34" y2="420" stroke="#eee"/>
+<line x1="102" y1="0" x2="102" y2="420" stroke="#eee"/>
+<line x1="170" y1="0" x2="170" y2="420" stroke="#eee"/>
+<line x1="238" y1="0" x2="238" y2="420" stroke="#eee"/>
+<line x1="306" y1="0" x2="306" y2="420" stroke="#eee"/>
+<line x1="374" y1="0" x2="374" y2="420" stroke="#eee"/>
+<line x1="442" y1="0" x2="442" y2="420" stroke="#eee"/>
+<line x1="510" y1="0" x2="510" y2="420" stroke="#eee"/>
+<line x1="0" y1="368" x2="560" y2="368" stroke="#eee"/>
+<line x1="0" y1="300" x2="560" y2="300" stroke="#eee"/>
+<line x1="0" y1="232" x2="560" y2="232" stroke="#eee"/>
+<line x1="0" y1="164" x2="560" y2="164" stroke="#eee"/>
+<line x1="0" y1="96" x2="560" y2="96" stroke="#eee"/>
+<line x1="0" y1="300" x2="560" y2="300" stroke="#999"/>
+<line x1="170" y1="0" x2="170" y2="420" stroke="#999"/>
+<line x1="170" y1="164" x2="306" y2="300" stroke="#546e7a" stroke-width="3"/>
+<line x1="306" y1="300" x2="510" y2="300" stroke="#e65100" stroke-width="3"/>
+<line x1="34" y1="164" x2="170" y2="164" stroke="#e65100" stroke-width="3"/>
+<line x1="306" y1="300" x2="306" y2="368" stroke="#2e7d32" stroke-width="3"/>
+<circle cx="170" cy="300" r="5" fill="#263238"/>
+<circle cx="306" cy="164" r="5" fill="#263238"/>
+<text x="374" y="330.6" font-size="14" fill="#e65100">|dx| &lt; |dy| boundary</text>
+<text x="316" y="351" font-size="14" fill="#2e7d32">|dx| &gt; |dy| boundary</text>
+</svg>
+
+</p>
+
+---
+
+### 📍 Option 1 Also Needs a Canonical Intersection Point
+
+Two bisectors can meet in a **point**, a **segment**, or a **region**:
+
+$$B_1 \cap B_2 \;\in\; \{\,\text{point},\ \text{segment},\ \text{region}\,\}$$
+
+`segmentIntersection` returns `null` when `denom == 0`, which lumps **parallel** and **collinear-overlap** together:
+
+```javascript
+if (denom == 0) {
+    return null;   // parallel OR collinear overlap
+}
+```
+
+So a canonical bisector is not enough — an overlapping intersection is **silently dropped**, and you must also pick a **canonical point** on the overlap (e.g. the endpoint with the smallest index). 📍
+
+---
+
+### 🧪 Option 2 — Symbolic Perturbation
+
+Perturb site $i$ by an **infinitesimal**, indexed so no combination cancels:
+
+$$p_i(\varepsilon) = \bigl(x_i + \varepsilon^{2i},\; y_i + \varepsilon^{2i+1}\bigr), \qquad \varepsilon \to 0^+$$
+
+Evaluate every predicate by its lowest-order term. For $|dx| = |dy|$:
+
+$$|dx| > |dy| \iff \operatorname{sign}(dx)\cdot\operatorname{sign}(j-i) > 0$$
+
+The **inputs stay integers**; only ties are resolved. 🧪
+
+---
+
+### 📐 Option 3 — Exact Arithmetic + Region-Aware Merge
+
+Represent the bisector as a polyline **plus** an optional 2-D region, and extend the merge to split along it.
+
+- Exact, keeps integers 🎯
+- But the merge core assumes 1-D curves
+- Effectively a rewrite of `walkMergeLine` 🔧
+
+---
+
+### 🔧 Option 4 — Post-Process Merge
+
+Allow the degenerate bisector, then merge coincident cells/vertices afterwards.
+
+- Smallest conceptual change
+- Cell adjacency becomes messy
+- No guarantee of consistency
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Part 3 — The Experiment
+
+---
+
+### 🎯 A Cell-Level Oracle
+
+.mermaid[
+<pre>
+flowchart LR
+    G["sample grid\n+ site neighbourhoods"] --> N["nearest site\n(L1 distance)"]
+    G --> C["containing cell\npolygon"]
+    N --> A{"same site?"}
+    C --> A
+    A -->|yes| P["✅ pass"]
+    A -->|no| F["❌ violation"]
+
+    style G fill:#4caf50
+    style N fill:#2196f3
+    style C fill:#ff9800
+    style A fill:#9c27b0
+    style P fill:#009688
+    style F fill:#f44336
+</pre>
+]
+
+42-case corpus · sample the grid plus each site's neighbourhood. 🧪
+
+---
+
+### 📊 Results
+
+<p align="center">
+
+<svg style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px" xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="sans-serif">
+<rect x="0" y="0" width="720" height="300" fill="#fff"/>
+<text x="200" y="24" font-size="15" fill="#263238">Corpus violations (lower is better)</text>
+<text x="188" y="63.8" font-size="14" text-anchor="end" fill="#263238">nudge (current)</text>
+<rect x="200" y="40" width="29" height="34" fill="#2e7d32" rx="3"/>
+<text x="237" y="63.8" font-size="14" fill="#263238">182</text>
+<text x="188" y="119.8" font-size="14" text-anchor="end" fill="#263238">global perturbation</text>
+<rect x="200" y="96" width="92" height="34" fill="#f9a825" rx="3"/>
+<text x="300" y="119.8" font-size="14" fill="#263238">577</text>
+<text x="188" y="175.8" font-size="14" text-anchor="end" fill="#263238">minimal SoS</text>
+<rect x="200" y="152" width="440" height="34" fill="#c62828" rx="3"/>
+<text x="648" y="175.8" font-size="14" fill="#263238">2769</text>
+<text x="188" y="231.8" font-size="14" text-anchor="end" fill="#263238">canonical bisector</text>
+<rect x="200" y="208" width="440" height="34" fill="#c62828" rx="3"/>
+<text x="648" y="231.8" font-size="14" fill="#263238">2769</text>
+</svg>
+
+</p>
+
+---
+
+### 📉 Why Minimal SoS Failed
+
+`findL1Bisector` is only **one** of several degenerate predicates:
+
+.mermaid[
+<pre>
+flowchart TD
+    D["square configuration"] --> P1["findL1Bisector"]
+    D --> P2["isNewBisectorUpward"]
+    D --> P3["determineFirstBorderCross"]
+    D --> P4["trimBisector sort"]
+    D --> P5["bisectorIntersection"]
+
+    style D fill:#ff9800
+    style P1 fill:#4caf50
+    style P2 fill:#f44336
+    style P3 fill:#f44336
+    style P4 fill:#f44336
+    style P5 fill:#f44336
+</pre>
+]
+
+Fixing only the bisector leaves the rest degenerate → the merge desyncs. 💥
+
+---
+
+### 📉 Why Canonical Failed
+
+A per-pair canonical choice is **not globally consistent**:
+
+- Pair A may pick the horizontal boundary, pair B the vertical
+- Where two square bisectors meet, the cells can **overlap or gap**
+- The nudge avoids this because a **single** perturbation makes all choices mutually consistent
+
+> Local consistency is not enough. 🌐
+
+---
+
+### 📉 Why Global Perturbation Underperformed
+
+Perturbing **all** sites (577) still lost to the square-only nudge (182):
+
+- It touches generic cases that were previously **exact**
+- The Lee–Wong core is sensitive to non-integer coordinates
+- So a blanket float perturbation introduces new errors 🎯
+
+---
+
+### 🔎 The Residual 182
+
+The nudge's remaining 182 violations are **not square cases**.
+
+.mermaid[
+<pre>
+flowchart LR
+    A["182 residual"] --> B["edge-of-canvas\ndegenerate case"]
+    B --> C["underlying merge bugs"]
+    C --> D["bigger win than\nthe square branch"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#9c27b0
+    style D fill:#009688
+</pre>
+]
+
+Even a perfect square fix cannot go below this floor. 🧱
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Part 4 — Conclusions
+
+---
+
+### 🧠 What We Learned
+
+.pull-left[
+
+**Theory** 📐
+- The degeneracy is a **2-D** region, not a kink
+- A canonical choice needs **global** consistency
+- That consistency is exactly what SoS provides
+
+]
+.pull-right[
+
+**Practice** 🔬
+- The nudge is empirically the best of the four
+- Targeted perturbation beats blanket perturbation
+- Minimal SoS is not enough — every predicate must agree
+
+]
+
+---
+
+### 🔒 Where the Constraint Leaves Us
+
+| Approach | Integers kept? | Violations |
+|:---------|:--------------:|-----------:|
+| nudge (current) | ❌ | **182** |
+| canonical (minimal) | ✅ | 2769 |
+| global float perturbation | ❌ | 577 |
+| **full SoS (integer)** | ✅ | **?** |
+
+The only exact path that respects the constraint is **full symbolic perturbation**. 🧪
+
+---
+
+### 🚀 Next Steps
+
+1. **Full integer-preserving SoS** 🧪
+   - one `signWithTieBreak` layer
+   - applied to **all seven** predicates
+   - verify against the corpus oracle
+2. **Or diagnose the residual 182** 🔎
+   - the non-square failures may matter more
+3. **Duplicates policy** 🔁
+   - throw, or dedupe? (the nudge currently hides them)
+
+---
+
+### 📌 Tracking
+
+.mermaid[
+<pre>
+flowchart LR
+    I["Issue #4\nSoS plan"] --> B["branch dev"]
+    B --> E["experiment\n(negative result)"]
+    E --> R["reverted to clean"]
+    R --> N["next: full SoS\nor residual fix"]
+
+    style I fill:#4caf50
+    style B fill:#2196f3
+    style E fill:#ff9800
+    style R fill:#9c27b0
+    style N fill:#009688
+</pre>
+]
+
+All work committed and pushed; `dev` is clean. 🌿
+
+---
+
+### 🎯 Key Takeaways
+
+.pull-left[
+
+**Degeneracy** 🟥
+- Square pairs hide a 2-D bisector region
+- 1-D machinery cannot follow it
+- The nudge perturbs it away — approximately
+
+]
+.pull-right[
+
+**Discipline** 🧪
+- Measure before you refactor
+- A 42-case oracle settles arguments
+- Negative results are results 📉
+
+]
+
+---
+
+### 📚 References
+
+.pull-left[
+
+**The algorithm** 📐
+- Lee, D.-T., Wong, C. K. *Voronoi Diagrams in L1 (L∞) Metrics with 2-Dimensional Storage Applications.* SIAM J. Comput. 9(1):200–211, 1980.
+
+**Degeneracy & robustness** 🧪
+- Edelsbrunner, H., Mücke, E. P. *Simulation of Simplicity: A Technique to Cope with Degenerate Cases in Geometric Algorithms.* ACM TOG 9(1):66–104, 1990.
+- Shewchuk, J. R. *Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates.* Discrete Comput. Geom. 18(3):305–363, 1997.
+
+]
+.pull-right[
+
+**Software** 🧩
+- `mourner/robust-predicates` (Unlicense) — exact geometric predicates
+
+**Project** 🌿
+- `luk036/manhattan-voronoi`
+- issue #4 — *Handle L1 square bisectors exactly via symbolic perturbation*
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**The Square Bisector Problem**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Happy Voronoi Tiling! 🗺️ 🚀
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

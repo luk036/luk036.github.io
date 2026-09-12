@@ -125,6 +125,7 @@ graph TD
 | ------------------------------------------------------- | --------------------------------------------- |
 | [Multiplierless FIR Design](multiplierless-remark.html) | FIR filter implementation without multipliers |
 | [Multiplierless FIR: Py→Rust→C++](multiplierless-py-rs-cpp-remark.html) | Cross-language performance comparison       |
+| [Multiplierless FIR Performance Deep-Dive](multiplierless-perf-remark.html) | Profiling, 94× vectorization & the C++ port |
 | [Digital Filters: FIR & IIR](FIR-IIR-remark.html)       | Design and implementation                     |
 | [Direct-Form vs Transpose-Form FIR](direct-transpose-remark.html) | Multiplierless filter architecture comparison |
 
@@ -216,6 +217,7 @@ AxC/
 ├── multiplier-free-remark.html            # Multiplierless Designs
 ├── multiplierless-remark.html             # Multiplierless FIR Filter Design
 ├── multiplierless-py-rs-cpp-remark.html   # Multiplierless FIR: Py→Rust→C++
+├── multiplierless-perf-remark.html        # Multiplierless FIR Performance Deep-Dive
 ├── py-rs-cpp-ginger-remark.html           # Root Finding: Py→Rust→C++
 ├── spectral_fact-remark.html              # Spectral Factorization
 │

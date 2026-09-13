@@ -395,7 +395,7 @@ The old loop **re-forwarded** every state during backprop. We cache activations 
 .mermaid[
 
 <pre>
-graph LR
+graph TD
     subgraph OLD["Before · 2T forwards"]
         O1["rollout\nforward × T"] --> O2["backward\nforward × T again"]
     end

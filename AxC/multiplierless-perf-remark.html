@@ -29,9 +29,9 @@ class: nord-dark, middle, center
 
 # ⚡ Making the Multiplierless FIR Designer Fast
 
-## A Python 94× win, a C++ 2× regression, and a cross-repo release
+## A Python 94× win, a C++ 2× regression, and a Rust 1.3× kernel
 
-### 🐍 → ⚙️ → 📦
+### 🐍 → ⚙️ → 🦀
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -59,10 +59,10 @@ class: nord-dark, middle, center
 - Early exit beats a full matvec
 - Raw pointers, not SIMD 🎯
 
-**Part 4 — The Dependency Saga** 📦
-- Two gingers, one codebase 🤹
-- Release v1.1.9 🚀
-- `ginger::Options` everywhere
+**Part 4 — Rust: The Same Lesson** 🦀
+- The scalar `.sum()` trap 🕳️
+- A 4-accumulator kernel ⚡
+- 1.3× on the oracle, flat end-to-end
 
 ]
 
@@ -525,129 +525,160 @@ The CLI uses the **quantized** path, dominated by FFT + CSD — not the scan.
 
 class: nord-light, middle, center
 
-## 📦 Part 4 — The Dependency Saga
+## 🦀 Part 4 — Rust: The Same Lesson
 
 ---
 
-### 🤹 Two Gingers, One Codebase
+### 🦀 The Third Sibling
 
-The two build systems were pulling **different versions of ginger**.
-
-.mermaid[
-
-<pre>
-graph TD
-    SRC["spectral_fact.cpp\nneeds Options"]
-    CM["CMake + CPM\nGinger v1.1.7"]
-    XM["xmake\n../ginger-cpp (dev)"]
-    GLOBAL["global class Options"]
-    NS["ginger::Options"]
-    SRC --> CM --> GLOBAL
-    SRC --> XM --> NS
-    style SRC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style CM fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
-    style XM fill:#ffe0b2,stroke:#e65100,stroke-width:3px
-    style GLOBAL fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
-    style NS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
-</pre>
-
-]
-
-> One file, two incompatible `Options` types — it could only ever compile under one build. 💥
-
----
-
-### 🩹 The Temporary Shim
-
-I deduced the type from the function signature — build-system agnostic.
-
-```cpp
-template <typename R, typename C1, typename C2, typename C3>
-auto options_type(R (*)(C1, C2, C3)) -> std::remove_cvref_t<C3>;
-
-using OptionsT = decltype(options_type(&aberth_autocorr));
-```
-
-- ✅ Both CMake and xmake compiled
-- ⚠️ But it was a **workaround**, not a fix
-- 🎯 The real fix: **release a ginger with `ginger::Options`** and pin it
-
----
-
-### 🚀 Release ginger-cpp v1.1.9
-
-The namespace change (`ginger::Options`) was already on `dev` — it just needed shipping.
+`multiplierless-rs` mirrors the same oracle — same cosine matrix, same
+round-robin, same early-exit scan.
 
 .mermaid[
 
 <pre>
 graph LR
-    R["recon\nv1.1.8 released"]
-    B["bump\n1.1.8 → 1.1.9"]
-    T["build + test\n5/5 ✅"]
-    D["commit + push dev"]
-    M["merge dev → master"]
-    G["gh release v1.1.9"]
-    R --> B --> T --> D --> M --> G
-    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
-    style T fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
-    style D fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
-    style M fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
-    style G fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    PY["multiplierless.py\noracle + FFT + CSD"]
+    CPP["multiplierless-cpp\nArr · RoundRobin · FFTW"]
+    RS["multiplierless-rs\nArr · RoundRobin · rustfft"]
+    PY -.->|"same algorithm"| CPP
+    PY -.->|"same algorithm"| RS
+    style PY fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CPP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style RS fill:#ffe0b2,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
 
-> ⚠️ `origin/dev` had moved — I **rebased** the release commit (no force-push). 🔄
+> Third language, same scan — so we already knew what to expect. 🤔
 
 ---
 
-### 🧹 Simplify to `ginger::Options`
+### 🕳️ The Scalar `.sum()` Trap
 
-Now that v1.1.9 is released, pin it and delete the shim.
+The row dot product was a **single dependent f64 chain**:
 
-```diff
-  CPMAddPackage(
-    NAME Ginger
--   GIT_TAG v1.1.7
-+   GIT_TAG v1.1.9
-    GITHUB_REPOSITORY luk036/ginger-cpp
-  )
+```rust
+let v: f64 = row.iter().zip(x).map(|(a, b)| a * b).sum();
 ```
 
-```diff
--   using OptionsT = decltype(options_type(&aberth_autocorr));
--   OptionsT opts;
-+   ginger::Options opts;
-```
+LLVM **cannot reassociate** floating-point without fast-math, so it cannot
+vectorize the reduction. The chain latency grows with $N$:
 
-> One honest type name beats a clever deduction. 🎯
+$$ T_{\text{chain}} \;\approx\; N \times \text{latency}(\text{add}) $$
+
+> A 32-wide dot becomes ~32 dependent adds — the arithmetic units sit idle. 😴
 
 ---
 
-### ✅ Verification Matrix
+### ⚡ The 4-Accumulator Kernel
 
-Both build systems, both trees, all green.
+```rust
+#[inline]
+fn dot_row(row: &[f64], x: &[f64]) -> f64 {
+    let (mut a0, mut a1, mut a2, mut a3) = (0.0, 0.0, 0.0, 0.0);
+    let mut r = row.chunks_exact(4);
+    let mut xc = x.chunks_exact(4);
+    for (r4, x4) in r.by_ref().zip(xc.by_ref()) {
+        a0 += r4[0] * x4[0];
+        a1 += r4[1] * x4[1];
+        a2 += r4[2] * x4[2];
+        a3 += r4[3] * x4[3];
+    }
+    (a0 + a1) + (a2 + a3)
+}
+```
 
-.font-sm[
+`chunks_exact(4)` removes bounds checks; four independent partial sums expose
+the parallelism **without** asking the compiler to reassociate anything.
 
-| Build | Ginger | Result |
-|:------|:-------|:-------|
-| `xmake build` / `xmake test` | sibling (v1.1.9) | ✅ pass |
-| `cmake --build build` + `ctest -C Debug` | **v1.1.9** | ✅ pass |
-| `cmake --build build-lp` + `ctest -C Debug` | **v1.1.9** | ✅ pass |
-| `clang-format --dry-run --Werror` | — | ✅ clean |
+.mermaid[
+
+<pre>
+graph LR
+    subgraph ONE["1 accumulator · 32 deep"]
+        I1["x0"] --> I2["x1"] --> I3["x2"] --> I4["... x31"]
+    end
+    subgraph FOUR["4 accumulators · 8 deep"]
+        F0["a0: x0, x4, ..."]
+        F1["a1: x1, x5, ..."]
+        F2["a2: x2, x6, ..."]
+        F3["a3: x3, x7, ..."]
+    end
+    style I1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style I2 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style I3 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style I4 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style F0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
 
 ]
 
-> The CMake pin change auto-reconfigured and re-fetched v1.1.9 — no manual `cmake -S`. 🔁
+---
+
+### 📊 Rust Results
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Rust · release, N = 32</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="190" y="66" text-anchor="end">raw dot / row</text>
+    <rect x="200" y="50" width="360" height="20" fill="#bf616a" rx="3"/>
+    <text x="568" y="65" fill="#bf616a">23.3 ns</text>
+    <rect x="200" y="72" width="156" height="20" fill="#a3be8c" rx="3"/>
+    <text x="364" y="87" fill="#2e7d32" font-weight="bold">10.1 ns · 2.3×</text>
+
+    <text x="190" y="131" text-anchor="end">assess_optim (full scan)</text>
+    <rect x="200" y="115" width="360" height="20" fill="#bf616a" rx="3"/>
+    <text x="568" y="130" fill="#bf616a">13.9 µs</text>
+    <rect x="200" y="137" width="278" height="20" fill="#a3be8c" rx="3"/>
+    <text x="486" y="152" fill="#2e7d32" font-weight="bold">10.7 µs · 1.3×</text>
+
+    <text x="190" y="196" text-anchor="end">end-to-end run</text>
+    <rect x="200" y="180" width="356" height="20" fill="#bf616a" rx="3"/>
+    <text x="564" y="195" fill="#bf616a">0.083 s</text>
+    <rect x="200" y="202" width="352" height="20" fill="#a3be8c" rx="3"/>
+    <text x="560" y="217" fill="#2e7d32" font-weight="bold">0.082 s · flat</text>
+  </g>
+</svg>
+
+</p>
+
+> The kernel wins big on the **oracle hot path**, but end-to-end is **unchanged** — 8089 iterations both ways. 🎯
+
+---
+
+### 🎓 The Same Lesson, Third Time
+
+.mermaid[
+
+<pre>
+graph LR
+    Q["Where is the time?"]
+    Q -->|"interpreter overhead"| PY["Python\nhuge win ✅"]
+    Q -->|"compiled, early exit"| CC["C++ / Rust\nscan not the bottleneck"]
+    CC --> K["kernel still faster\n(oracle API) ✅"]
+    CC --> E["end-to-end flat ⚠️"]
+    style Q fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PY fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+- The real trajectory is dominated by **short early-exit scans**, not the dot 🐢
+- So the compiled ports stay flat even when the kernel improves 📏
+- **Port the measurement, not the conclusion** — again 🔬
 
 ---
 
 ### 🧠 Key Takeaways
-
-.pull-left[
 
 **Performance** ⚡
 - **Profile first** — the bottleneck is rarely where you guess
@@ -655,18 +686,7 @@ Both build systems, both trees, all green.
 - Port the **measurement**, not the conclusion
 - Early exit can beat vectorization in compiled code
 - Raw pointers + alias info enable the optimizer 🎯
-
-]
-.pull-right[
-
-**Engineering** 🛠️
-- A workaround shim is a signal, not a solution
-- Version skew across build systems is a real bug class
-- Ship the fix, then delete the shim
-- Verify **both** build systems, both trees ✅
-- Small, honest changes; no force-push 🧯
-
-]
+- Rust's `.sum()` is a scalar chain — 4 accumulators fix it ⚡
 
 ---
 
@@ -677,15 +697,14 @@ Both build systems, both trees, all green.
 | Artifact | Link |
 |:---------|:-----|
 | Python issue | `luk036/multiplierless#3` |
-| Ginger release | `luk036/ginger-cpp` **v1.1.9** 🚀 |
 | Python change | `lowpass_oracle.py` vectorized scan |
 | C++ change | `lowpass_oracle.cpp` raw-pointer dot |
-| C++ change | `spectral_fact.cpp` → `ginger::Options` |
-| Benchmarks | `tests/test_benchmarks.py` (pytest-benchmark) |
+| Rust change | `lowpass_oracle.rs` 4-accumulator dot 🦀 |
+| Benchmarks | `test_benchmarks.py` · `benches/lowpass.rs` |
 
 ]
 
-> 94× on the primitive · 37× on the oracle · 1.6× end-to-end 🎉
+> Python: 94× primitive, 1.6× end-to-end · C++: 7% · Rust: 1.3× oracle 🎉
 
 ---
 

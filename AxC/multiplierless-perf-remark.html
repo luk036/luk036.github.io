@@ -129,15 +129,11 @@ $$ R(\omega) \;=\; r_0 \;+\; 2\sum_{k=1}^{N-1} r_k \cos(k\omega)
 - `pytest --benchmark-only` (pytest-benchmark) 📊
 - Canonical case: $N = 32$, `csd_nnz = 4`
 
-.font-sm[
-
 | Signal | Value |
 |:-------|:------|
 | Iterations | 1 482 |
 | Wall clock | ≈ 3.0 s |
 | Import cost | ≈ 1.4 s (numpy + ellalgo) |
-
-]
 
 > Profiling before optimizing is not optional. 🔎
 
@@ -211,7 +207,7 @@ $$ v = {\color{#1565c0} A}\, x, \qquad
 .mermaid[
 
 <pre>
-graph LR
+graph TD
     subgraph BEFORE["Before · per-row"]
         B1["row k"] --> B2["dot(row, x)"] --> B3["check"] --> B4["row k+1"]
     end
@@ -692,8 +688,6 @@ graph LR
 
 ### 📜 Artifacts From This Session
 
-.font-sm[
-
 | Artifact | Link |
 |:---------|:-----|
 | Python issue | `luk036/multiplierless#3` |
@@ -701,8 +695,6 @@ graph LR
 | C++ change | `lowpass_oracle.cpp` raw-pointer dot |
 | Rust change | `lowpass_oracle.rs` 4-accumulator dot 🦀 |
 | Benchmarks | `test_benchmarks.py` · `benches/lowpass.rs` |
-
-]
 
 > Python: 94× primitive, 1.6× end-to-end · C++: 7% · Rust: 1.3× oracle 🎉
 

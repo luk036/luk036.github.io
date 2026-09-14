@@ -1,0 +1,113 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1272' height='500' viewBox='0 0 1272 500'>
+<rect width='1272' height='500' fill='#ffffff'/>
+<text x='636.0' y='28' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='18' font-weight='bold' fill='#2e3440'>Minimum-Weight Perfect Matching on 12 points (Rust blossom vs greedy vs optimal)</text>
+<text x='636.0' y='48' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='13' fill='#4c566a'>Pink edges = where greedy differs from the optimum</text>
+<g transform='translate(12,60)'>
+<rect x='0' y='0' width='400' height='430' fill='#fafafa' stroke='#d0d0d0' rx='6'/>
+<text x='200.0' y='24' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='15' font-weight='bold' fill='#2e3440'>Greedy heuristic</text>
+<text x='200.0' y='42' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='12' fill='#bf616a' font-weight='bold'>cost = 102.788</text>
+<rect x='34' y='56' width='332' height='340' fill='none' stroke='#e5e9f0'/>
+<line x1='120.8' y1='263.7' x2='123.0' y2='271.6' stroke='#bf616a' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='221.8' y1='69.7' x2='231.7' y2='88.7' stroke='#bf616a' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='122.8' y1='319.6' x2='98.9' y2='315.6' stroke='#bf616a' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='300.7' y1='341.4' x2='274.3' y2='322.9' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='306.4' y1='285.3' x2='181.0' y2='302.0' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='184.5' y1='88.1' x2='57.2' y2='68.6' stroke='#bf616a' stroke-width='2.2' stroke-linecap='round'/>
+<circle cx='300.7' cy='341.4' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='308.7' y='334.4' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>0</text>
+<circle cx='306.4' cy='285.3' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='314.4' y='278.3' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>1</text>
+<circle cx='181.0' cy='302.0' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='189.0' y='295.0' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>2</text>
+<circle cx='184.5' cy='88.1' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='192.5' y='81.1' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>3</text>
+<circle cx='122.8' cy='319.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='130.8' y='312.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>4</text>
+<circle cx='98.9' cy='315.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='106.9' y='308.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>5</text>
+<circle cx='274.3' cy='322.9' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='282.3' y='315.9' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>6</text>
+<circle cx='221.8' cy='69.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='229.8' y='62.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>7</text>
+<circle cx='57.2' cy='68.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='65.2' y='61.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>8</text>
+<circle cx='120.8' cy='263.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='128.8' y='256.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>9</text>
+<circle cx='231.7' cy='88.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='239.7' y='81.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>10</text>
+<circle cx='123.0' cy='271.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='131.0' y='264.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>11</text>
+</g>
+<g transform='translate(436,60)'>
+<rect x='0' y='0' width='400' height='430' fill='#fafafa' stroke='#d0d0d0' rx='6'/>
+<text x='200.0' y='24' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='15' font-weight='bold' fill='#2e3440'>Blossom (this crate)</text>
+<text x='200.0' y='42' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='12' fill='#2e7d32' font-weight='bold'>cost = 100.798</text>
+<rect x='34' y='56' width='332' height='340' fill='none' stroke='#e5e9f0'/>
+<line x1='300.7' y1='341.4' x2='306.4' y2='285.3' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='181.0' y1='302.0' x2='274.3' y2='322.9' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='184.5' y1='88.1' x2='57.2' y2='68.6' stroke='#2e7d32' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='122.8' y1='319.6' x2='98.9' y2='315.6' stroke='#2e7d32' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='221.8' y1='69.7' x2='231.7' y2='88.7' stroke='#2e7d32' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='120.8' y1='263.7' x2='123.0' y2='271.6' stroke='#2e7d32' stroke-width='2.2' stroke-linecap='round'/>
+<circle cx='300.7' cy='341.4' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='308.7' y='334.4' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>0</text>
+<circle cx='306.4' cy='285.3' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='314.4' y='278.3' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>1</text>
+<circle cx='181.0' cy='302.0' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='189.0' y='295.0' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>2</text>
+<circle cx='184.5' cy='88.1' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='192.5' y='81.1' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>3</text>
+<circle cx='122.8' cy='319.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='130.8' y='312.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>4</text>
+<circle cx='98.9' cy='315.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='106.9' y='308.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>5</text>
+<circle cx='274.3' cy='322.9' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='282.3' y='315.9' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>6</text>
+<circle cx='221.8' cy='69.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='229.8' y='62.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>7</text>
+<circle cx='57.2' cy='68.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='65.2' y='61.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>8</text>
+<circle cx='120.8' cy='263.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='128.8' y='256.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>9</text>
+<circle cx='231.7' cy='88.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='239.7' y='81.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>10</text>
+<circle cx='123.0' cy='271.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='131.0' y='264.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>11</text>
+</g>
+<g transform='translate(860,60)'>
+<rect x='0' y='0' width='400' height='430' fill='#fafafa' stroke='#d0d0d0' rx='6'/>
+<text x='200.0' y='24' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='15' font-weight='bold' fill='#2e3440'>Exhaustive optimum</text>
+<text x='200.0' y='42' text-anchor='middle' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='12' fill='#1565c0' font-weight='bold'>cost = 100.798</text>
+<rect x='34' y='56' width='332' height='340' fill='none' stroke='#e5e9f0'/>
+<line x1='300.7' y1='341.4' x2='306.4' y2='285.3' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='181.0' y1='302.0' x2='274.3' y2='322.9' stroke='#c2185b' stroke-width='3.5' stroke-linecap='round'/>
+<line x1='184.5' y1='88.1' x2='57.2' y2='68.6' stroke='#1565c0' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='122.8' y1='319.6' x2='98.9' y2='315.6' stroke='#1565c0' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='221.8' y1='69.7' x2='231.7' y2='88.7' stroke='#1565c0' stroke-width='2.2' stroke-linecap='round'/>
+<line x1='120.8' y1='263.7' x2='123.0' y2='271.6' stroke='#1565c0' stroke-width='2.2' stroke-linecap='round'/>
+<circle cx='300.7' cy='341.4' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='308.7' y='334.4' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>0</text>
+<circle cx='306.4' cy='285.3' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='314.4' y='278.3' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>1</text>
+<circle cx='181.0' cy='302.0' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='189.0' y='295.0' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>2</text>
+<circle cx='184.5' cy='88.1' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='192.5' y='81.1' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>3</text>
+<circle cx='122.8' cy='319.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='130.8' y='312.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>4</text>
+<circle cx='98.9' cy='315.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='106.9' y='308.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>5</text>
+<circle cx='274.3' cy='322.9' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='282.3' y='315.9' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>6</text>
+<circle cx='221.8' cy='69.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='229.8' y='62.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>7</text>
+<circle cx='57.2' cy='68.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='65.2' y='61.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>8</text>
+<circle cx='120.8' cy='263.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='128.8' y='256.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>9</text>
+<circle cx='231.7' cy='88.7' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='239.7' y='81.7' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>10</text>
+<circle cx='123.0' cy='271.6' r='5' fill='#5e81ac' stroke='#2e3440' stroke-width='1.5'/>
+<text x='131.0' y='264.6' font-family='Segoe UI, Helvetica, Arial, sans-serif' font-size='10' fill='#4c566a'>11</text>
+</g>
+</svg>

@@ -61,6 +61,7 @@ This section covers combinatorial optimization problems and their approximation 
 | Topic                                          | Description                                     |
 | ---------------------------------------------- | ----------------------------------------------- |
 | [Christofides Algorithm](christofides_tsp-remark.html) | 3/2-approximation for metric TSP          |
+| [TSP Performance Deep-Dive](tsp-perf-remark.html) | Blossom MWPM in Rust & C++ 🚗 |
 
 > 📖 See: [slides_christofides_tsp.md](slides_christofides_tsp.md)
 

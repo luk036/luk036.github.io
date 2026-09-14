@@ -1,0 +1,838 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Making netlistx Fast</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ Making netlistx Fast
+
+## A profile-driven 99× Python win, a 10,000× C++ cycle-cover, and a Rust crash fix
+
+### 🐍 → ⚙️ → 🦀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — The Method** 🧭
+- Profile before you optimize 📏
+- The three hot-path anti-patterns 🔁
+- How we measured across 3 languages
+
+**Part 2 — Python: The 99× Find** 🐍
+- TSP 2-opt: the $O(n^3)$ surprise
+- Cycle cover & reverse-delete
+- 194 tests still green ✅
+
+]
+.pull-right[
+
+**Part 3 — C++: 10,000× on Cycle Cover** ⚙️
+- `netlistx-cpp` ↔ `xnetwork-cpp` split
+- One BFS per component, not per node
+- The before-run that hung 🥶
+
+**Part 4 — Rust: Same Lesson + a Crash** 🦀
+- `two_opt`: 4,000× on the delta
+- The exponential MWPM abort 💥
+- Greedy fallback, 251 tests green
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — The Method
+
+---
+
+### 📏 Profile Before You Optimize
+
+The rule that never fails: **the bottleneck is not where you guess.** 🔎
+
+.mermaid[
+
+<pre>
+graph LR
+    A["1 · Profile\ncProfile / perf / cargo"] --> B["2 · Read the hot path\ncumulative time"]
+    B --> C["3 · Fix the asymptotics\nnot the constant"]
+    C --> D["4 · Re-measure\nsame workload"]
+    D --> E{"Regression?"}
+    E -->|"no"| F["5 · Verify\nfull test suite"]
+    E -->|"yes"| C
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> A profile is a **measurement**, not an opinion. Every number in this deck is measured. 📐
+
+---
+
+### 🔁 The Three Anti-Patterns
+
+The same three mistakes appeared in **all three languages**: 🎯
+
+.mermaid[
+
+<pre>
+graph TD
+    P["🐌 Slow hot path"]
+    P --> A["① Recompute what never changes\nrebuild BCC / ear decomposition\nevery call"]
+    P --> B["② Re-scan the whole set\nreverse-delete re-checks\nall edges per candidate"]
+    P --> C["③ Look up by name, not index\nnode_indices().find()\nper BFS step"]
+    style P fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+
+- ① → **cache** what depends only on the graph 🗃️
+- ② → **localize** the test to the candidate's neighbourhood 🎯
+- ③ → **store indices**, not names 🧱
+
+---
+
+### 🔬 How We Measured
+
+Each language has its own benchmark harness — same discipline. 📊
+
+.font-sm[
+
+| Language | Profiler | Benchmark | Correctness gate |
+|:---------|:---------|:----------|:-----------------|
+| 🐍 Python | `cProfile` | `pytest-benchmark` | `pytest` + doctests |
+| ⚙️ C++ | manual timing | `nanobench` | `xmake run test_*` |
+| 🦀 Rust | `Instant` | `criterion` | `cargo test` + clippy |
+
+]
+
+- Python 3.14 · networkx 3.6.1
+- MSVC `/W4 /WX` (C++), `rustc 1.96` (Rust)
+- Workloads sized so the **old** code is visibly slow ⏱️
+
+> We keep the same workload before and after — otherwise the speedup is meaningless. 📏
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Part 2 — Python: The 99× Find
+
+---
+
+### 🐌 The TSP 2-opt Surprise
+
+`two_opt` recomputed the **entire tour** for every candidate move:
+
+```python
+new_path = best_path[:i] + best_path[i:j][::-1] + best_path[j:]
+if calculate_total_distance(new_path, G) < calculate_total_distance(best_path, G):
+    best_path = new_path
+```
+
+- Each candidate is $O(n)$ to build **and** $O(n)$ to score 🐢
+- $O(n^2)$ candidates per sweep → $O(n^3)$ per sweep
+
+<p align="center">
+
+<svg width="660" height="250" viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">two_opt wall time · Python (log-free, max = 29.0 s)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="64" text-anchor="end">n=50</text>
+    <rect x="160" y="50" width="6" height="18" fill="#bf616a" rx="2"/>
+    <text x="172" y="64" fill="#bf616a">432 ms</text>
+    <text x="150" y="88" text-anchor="end">n=100</text>
+    <rect x="160" y="74" width="50" height="18" fill="#bf616a" rx="2"/>
+    <text x="216" y="88" fill="#bf616a">3 588 ms</text>
+    <text x="150" y="112" text-anchor="end">n=200</text>
+    <rect x="160" y="98" width="400" height="18" fill="#bf616a" rx="2"/>
+    <text x="566" y="112" fill="#bf616a" font-weight="bold">29 014 ms</text>
+
+    <text x="150" y="152" text-anchor="end">n=50</text>
+    <rect x="160" y="138" width="4" height="18" fill="#a3be8c" rx="2"/>
+    <text x="170" y="152" fill="#2e7d32">13 ms</text>
+    <text x="150" y="176" text-anchor="end">n=100</text>
+    <rect x="160" y="162" width="4" height="18" fill="#a3be8c" rx="2"/>
+    <text x="170" y="176" fill="#2e7d32">52 ms</text>
+    <text x="150" y="200" text-anchor="end">n=200</text>
+    <rect x="160" y="186" width="5" height="18" fill="#a3be8c" rx="2"/>
+    <text x="171" y="200" fill="#2e7d32" font-weight="bold">294 ms · 99×</text>
+  </g>
+  <text x="16" y="232" font-family="sans-serif" font-size="13" fill="#4c566a">Red = before · Green = after — the green bars are the same workload, 99× smaller.</text>
+</svg>
+
+</p>
+
+---
+
+### 🧮 The Delta Identity
+
+A 2-opt move removes two edges and adds two. We only need the **change**, not the whole tour:
+
+$$ \Delta \;=\; {\color{#2e7d32} w(i{-}1,\,j{-}1)} + {\color{#2e7d32} w(i,\,j)}
+   \;-\; {\color{#bf616a} w(i{-}1,\,i)} - {\color{#bf616a} w(j{-}1,\,j)} $$
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph P["Before · remove"]
+        A["i-1"] -->|"w1"| B1["i"]
+        C["j-1"] -->|"w2"| D["j"]
+    end
+    subgraph N["After · add"]
+        A2["i-1"] -->|"w1'"| D2["j-1"]
+        B2["i"] -->|"w2'"| C2["j"]
+    end
+    style A fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style C fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style D fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> Four edge lookups instead of an $O(n)$ sum → each sweep drops from $O(n^3)$ to $O(n^2)$. ⚡
+
+---
+
+### 🕳️ The Infinite-Loop Trap
+
+My first delta version used `delta < 0.0` — and **hung**. 🥶
+
+```python
+# epsilon rejects float-noise no-op reversals that would loop forever
+if delta < -1e-9:
+    best_path[i:j] = best_path[i:j][::-1]
+```
+
+.mermaid[
+
+<pre>
+graph LR
+    M["Compute delta\n(4 lookups)"] --> T{"delta < 0.0 ?"}
+    T -->|"true (noise)"| R["Reverse segment\n(no real change)"]
+    R --> M
+    T -->|"delta < -1e-9"| S["Accept real move ✅"]
+    style M fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style S fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> Floating-point noise made a **no-op reversal** look like an improvement — it oscillated forever. 🔁
+
+---
+
+### 🔄 Cycle Cover: Stop Rebuilding
+
+`_generic_bfs_cycle` rebuilt the **biconnected + ear decomposition** on every call, then ran BFS from *every* node. 🏗️
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph BEFORE["Before · every violation"]
+        B1["biconnected_components()"] --> B2["chain_decomposition()"] --> B3["BFS from every source"] --> B4["first cycle"]
+    end
+    subgraph AFTER["After · cached + one pass"]
+        A1["_collect_cyclable_edges()\ncomputed once 🗃️"] --> A2["one BFS per component\n(global visited)"] --> A3["stop at first cycle ✅"]
+    end
+    style B1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B2 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B3 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B4 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> The cyclable-edge map depends only on the **graph**, not the cover — so compute it once. 🗃️
+
+---
+
+### ✂️ Reverse-Delete: $O(k\cdot E) \to O(\deg)$
+
+Phase 2 removed each candidate and re-ran the **full** violation scan. 🐢
+
+$$ \text{cost} \;=\; \sum_{v \in \text{cover}} \underbrace{O(E)}_{\text{re-scan all edges}} \;=\; O(k \cdot E) $$
+
+But removing $v$ can only expose edges **incident to $v$**:
+
+$$ v \text{ redundant} \iff \forall u \in N(v):\; u \in \text{cover} $$
+
+```python
+def redundant(vtx: Any) -> bool:
+    return all(neighbor in coverset for neighbor in ugraph[vtx])
+```
+
+- Python: `pd_cover` gained an optional `redundant` predicate
+- `min_vertex_cover` passes the exact $O(\deg)$ test 🎯
+- Post-processing becomes $O(E)$ total
+
+---
+
+### 📊 Python Results
+
+<p align="center">
+
+<svg width="660" height="260" viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Before (red) vs After (green) · Python</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="210" y="70" text-anchor="end">min_cycle_cover 150/400</text>
+    <rect x="220" y="54" width="400" height="16" fill="#bf616a" rx="2"/>
+    <text x="626" y="67" fill="#bf616a">1 859 ms</text>
+    <rect x="220" y="72" width="5" height="16" fill="#a3be8c" rx="2"/>
+    <text x="231" y="85" fill="#2e7d32" font-weight="bold">21 ms · 88×</text>
+
+    <text x="210" y="135" text-anchor="end">min_vertex_cover 500/2500</text>
+    <rect x="220" y="119" width="82" height="16" fill="#bf616a" rx="2"/>
+    <text x="308" y="132" fill="#bf616a">380 ms</text>
+    <rect x="220" y="137" width="5" height="16" fill="#a3be8c" rx="2"/>
+    <text x="231" y="150" fill="#2e7d32" font-weight="bold">4.7 ms · 81×</text>
+
+    <text x="210" y="200" text-anchor="end">two_opt n=200</text>
+    <rect x="220" y="184" width="400" height="16" fill="#bf616a" rx="2"/>
+    <text x="626" y="197" fill="#bf616a">29 014 ms</text>
+    <rect x="220" y="202" width="4" height="16" fill="#a3be8c" rx="2"/>
+    <text x="230" y="215" fill="#2e7d32" font-weight="bold">294 ms · 99×</text>
+  </g>
+  <text x="16" y="246" font-family="sans-serif" font-size="13" fill="#4c566a">Cycle cover went from super-linear to near-linear in graph size.</text>
+</svg>
+
+</p>
+
+---
+
+### ✅ Python Verification
+
+The optimized code must be **behaviour-identical**, not just fast. 🧪
+
+.font-sm[
+
+| Check | Result |
+|:------|:-------|
+| `pytest` | 194 passed · 10 skipped ✅ |
+| doctests | 12 passed (pinned exact outputs) ✅ |
+| `pytest-benchmark` | 20 passed 📊 |
+| `mypy` / `flake8` / `isort` | clean 🧹 |
+
+]
+
+- `min_cycle_cover` doctest still returns exactly `({2}, 1)`
+- `min_vertex_cover` doctest still returns `({0, 2, 3}, 3)`
+- Full suite runtime dropped from ~75 s to ~42 s ⏱️
+
+> Cache the structure, localize the test, keep the output **bit-identical**. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Part 3 — C++: 10,000× on Cycle Cover
+
+---
+
+### 👥 The Sibling Split
+
+The Python `netlistx` maps onto **two** C++ repos — and the algorithms are split across them. 🧩
+
+.mermaid[
+
+<pre>
+graph LR
+    PY["netlistx.py\ncover · tsp · hadlock"]
+    NC["netlistx-cpp\npd_cover · reverse_delete"]
+    XN["xnetwork-cpp\ngeneric_bfs_cycle · tsp · hadlock"]
+    PY -.->|"hypergraph cover"| NC
+    PY -.->|"graph cover · TSP · MAX-CUT"| XN
+    NC -->|"depends on"| XN
+    style PY fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style NC fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style XN fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> "Enhance the sibling accordingly" turned out to mean **two** siblings. 😅
+
+---
+
+### 🎯 What Was Already Fast
+
+Before changing anything, we checked — two of the three Python fixes were **already present** in C++. ✅
+
+.font-sm[
+
+| Python fix | C++ location | Status |
+|:-----------|:-------------|:-------|
+| `two_opt` O(1) delta | `xnetwork-cpp/tsp.hpp` | already optimal ✅ |
+| Hadlock all-pairs | `xnetwork-cpp/hadlock.hpp` | one Dijkstra per face ✅ |
+| cycle cover | `xnetwork-cpp/cover.cpp` | **needed work** 🔧 |
+| reverse-delete | both repos | **needed work** 🔧 |
+
+]
+
+> Don't port a fix that's already there — **verify first**. 🔬
+
+---
+
+### 🌲 Cycle Cover: One BFS per Component
+
+The C++ `generic_bfs_cycle` ran a full BFS from **every node** and copied the whole BFS `info` dict for **every back edge**. 📋
+
+$$ T_{\text{per search}} \;=\; O\bigl(V \cdot (V+E)\bigr) \;+\; O(V \cdot E)\text{ copies} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    S["for source in nodes\n(no visited set)"] --> BFS["BFS whole component"]
+    BFS --> CP["copy info dict\nper back edge 📋"]
+    CP --> S
+    NEW["visited set\none BFS / component"] --> EXIT["stop at first cycle"]
+    style S fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style BFS fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style CP fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style NEW fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style EXIT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> A component with no odd back edge is **bipartite** — so skipping already-visited sources is exact. 🎯
+
+---
+
+### ✂️ Reverse-Delete in C++
+
+Same fix, two repos. A removed vertex can only expose **incident** nets/edges. 🎯
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph OLD["O(k·E) · rescan everything"]
+        O1["remove v"] --> O2["is_valid()\nscan all nets/edges"] --> O3["re-add if broken"]
+    end
+    subgraph NEW["O(deg) · local test"]
+        N1["remove v"] --> N2["all(neighbour ∈ cover)\nfor gr[v] only"] --> N3["re-add if broken"]
+    end
+    style O1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style O2 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style O3 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style N1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style N2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style N3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+- `netlistx-cpp`: `detail::reverse_delete_by` + a `pd_cover` overload 🧩
+- `xnetwork-cpp`: `pd_cover` `RedundantFunc` overload 🧩
+
+---
+
+### 📊 C++ Results
+
+<p align="center">
+
+<svg width="660" height="250" viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">min_cycle_cover on grid graphs · C++ (max = 20.3 s)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="68" text-anchor="end">8×8 before</text>
+    <rect x="160" y="52" width="17" height="16" fill="#bf616a" rx="2"/>
+    <text x="183" y="65" fill="#bf616a">890 ms</text>
+    <text x="150" y="92" text-anchor="end">10×10 before</text>
+    <rect x="160" y="76" width="111" height="16" fill="#bf616a" rx="2"/>
+    <text x="277" y="89" fill="#bf616a">5 661 ms</text>
+    <text x="150" y="116" text-anchor="end">12×12 before</text>
+    <rect x="160" y="100" width="400" height="16" fill="#bf616a" rx="2"/>
+    <text x="566" y="113" fill="#bf616a" font-weight="bold">20 327 ms</text>
+
+    <text x="150" y="158" text-anchor="end">8×8 after</text>
+    <rect x="160" y="142" width="4" height="16" fill="#a3be8c" rx="2"/>
+    <text x="170" y="155" fill="#2e7d32">&lt;1 ms</text>
+    <text x="150" y="182" text-anchor="end">10×10 after</text>
+    <rect x="160" y="166" width="4" height="16" fill="#a3be8c" rx="2"/>
+    <text x="170" y="179" fill="#2e7d32">1 ms</text>
+    <text x="150" y="206" text-anchor="end">12×12 after</text>
+    <rect x="160" y="190" width="4" height="16" fill="#a3be8c" rx="2"/>
+    <text x="170" y="203" fill="#2e7d32" font-weight="bold">2 ms · ~10 000×</text>
+  </g>
+  <text x="16" y="236" font-family="sans-serif" font-size="13" fill="#4c566a">The old 40×40 grid effectively hung; the new code does it in ~325 ms.</text>
+</svg>
+
+</p>
+
+---
+
+### 🥶 The Before-Run That Hung
+
+To measure the old C++ code I stashed my changes and re-ran the grid benchmark. 🧊
+
+.mermaid[
+
+<pre>
+graph LR
+    B["12×12 grid\nold code"] --> T["20.3 s ⏱️"]
+    T --> G["40×40 grid\nold code"] --> H["never finished 🥶"]
+    H --> R["restore stash\n(mandatory!) 🔐"]
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style T fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style G fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style H fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style R fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+- The abort skipped the `git stash pop` — so I **restored the stash first** 🔐
+- Then re-measured on **small** grids only ✅
+- Lesson: bound every "before" measurement with a timeout ⏲️
+
+> An algorithm that hangs *is* a benchmark result. 🧪
+
+---
+
+class: nord-light, middle, center
+
+## 🦀 Part 4 — Rust: Same Lesson + a Crash
+
+---
+
+### 🦀 Rust `two_opt`: The Same Trap
+
+The Rust port had the same full-recompute loop — made worse by `petgraph`'s `find_edge`. 🐢
+
+```rust
+let mut new_path = best_path[..i].to_vec();
+new_path.extend(best_path[i..j].iter().rev());
+new_path.extend_from_slice(&best_path[j..]);
+if total_distance(&new_path, grph) &lt; total_distance(&best_path, grph) {
+    best_path = new_path;
+}
+```
+
+- `total_distance` calls `grph.find_edge(u, v)` — $O(\deg)$ **per hop** 🔍
+- So each candidate was $O(n \cdot \deg) = O(n^2)$ on a complete graph 💥
+
+$$ T_{\text{sweep}} \;=\; O(n^2) \cdot O(n^2) \;=\; O(n^4) $$
+
+---
+
+### 🧱 The Adjacency-Matrix Trick
+
+Build an $O(1)$ weight lookup **once**, then apply the same delta identity: 🗃️
+
+```rust
+let mut w = vec![vec![f64::INFINITY; nnodes]; nnodes];
+for edge_idx in grph.edge_indices() {
+    let (a, b) = grph.edge_endpoints(edge_idx).unwrap();
+    let (ai, bi) = (a.index(), b.index());
+    w[ai][bi] = grph[edge_idx];
+    w[bi][ai] = grph[edge_idx];
+}
+```
+
+$$ \Delta \;=\; w_{i-1,\,j-1} + w_{i,\,j} - w_{i-1,\,i} - w_{j-1,\,j} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    F["find_edge()\nO(deg) per hop 🔍"] --> BAD["O(n^4) sweep 🐢"]
+    M["adjacency matrix\nO(1) lookup 🗃️"] --> GOOD["O(n^2) sweep ⚡"]
+    style F fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style BAD fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style M fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GOOD fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### 💥 The MWPM Crash
+
+While benchmarking, `solve_christofides_2opt_tsp` **aborted** at $n = 100$. 💥
+
+$$ \texttt{let size = 1} \ll k; \qquad \texttt{vec![}\,\infty\,;\; \texttt{size}\texttt{]} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    M["MST"] --> O["k odd-degree\nvertices"]
+    O --> D{"k ≤ 18 ?"}
+    D -->|"yes"| E["exact DP\n2^k states ✅"]
+    D -->|"no"| X["1 &lt;&lt; k\nastronomical ❌"]
+    X --> AB["allocation fails\nabort() 💥"]
+    style M fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style O fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style X fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style AB fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+> On Windows this surfaced as `STATUS_STACK_BUFFER_OVERRUN` (`0xC0000409`) — an **abort**, not a panic. 🔍
+
+---
+
+### 🩹 The Greedy Fallback
+
+Match the C++ `xnetwork-cpp` dispatch: exact for small $k$, **greedy** beyond. 🎯
+
+```rust
+const EXACT_MWPM_MAX: usize = 18;
+if k &gt; EXACT_MWPM_MAX {
+    return greedy_matching(&dist, odd_nodes, k);
+}
+```
+
+Greedy: sort candidate pairs by distance, take the cheapest non-conflicting pair.
+
+$$ T_{\text{greedy}} \;=\; O(k^2 \log k) \quad \ll \quad O(2^k) $$
+
+.mermaid[
+
+<pre>
+graph LR
+    K{"k odd vertices"} -->|"k ≤ 18"| EX["exact DP\n3/2 guarantee ✅"]
+    K -->|"k &gt; 18"| GR["greedy matching\nheuristic ⚠️"]
+    style K fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style EX fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GR fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+</pre>
+
+]
+
+> Trade-off: no 3/2 guarantee for large $k$ — but it **runs**. 🏃
+
+---
+
+### 📊 Rust Results
+
+<p align="center">
+
+<svg width="660" height="240" viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">two_opt · Rust release (max = 979 ms)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="70" text-anchor="end">n=50 before</text>
+    <rect x="160" y="54" width="28" height="18" fill="#bf616a" rx="2"/>
+    <text x="194" y="68" fill="#bf616a">69.09 ms</text>
+    <text x="150" y="98" text-anchor="end">n=100 before</text>
+    <rect x="160" y="82" width="400" height="18" fill="#bf616a" rx="2"/>
+    <text x="566" y="96" fill="#bf616a" font-weight="bold">978.6 ms</text>
+
+    <text x="150" y="140" text-anchor="end">n=50 after</text>
+    <rect x="160" y="124" width="4" height="18" fill="#a3be8c" rx="2"/>
+    <text x="170" y="138" fill="#2e7d32">0.072 ms · ~955×</text>
+    <text x="150" y="168" text-anchor="end">n=100 after</text>
+    <rect x="160" y="152" width="4" height="18" fill="#a3be8c" rx="2"/>
+    <text x="170" y="166" fill="#2e7d32" font-weight="bold">0.246 ms · ~3 986×</text>
+
+    <text x="150" y="208" text-anchor="end">n=200 after</text>
+    <rect x="160" y="192" width="4" height="18" fill="#a3be8c" rx="2"/>
+    <text x="170" y="206" fill="#2e7d32">1.2 ms ⚡</text>
+  </g>
+</svg>
+
+</p>
+
+---
+
+### ✅ Rust Verification
+
+.font-sm[
+
+| Check | Result |
+|:------|:-------|
+| `cargo test --all-features --workspace` | 251 passed ✅ |
+| `cargo clippy --all-targets --all-features` | clean 🧹 |
+| `cargo fmt --all -- --check` | no content diffs ✅ |
+| `two_opt` local optimum | 0 remaining improving moves ✅ |
+| `christofides_tsp` n=100 | no longer crashes 🩹 |
+
+]
+
+- New regression tests: `test_mwpm_greedy_fallback_large_k`, `test_christofides_large_no_crash` 🧪
+- 3 clippy lints the new code introduced — fixed before committing 🔧
+
+> A heuristic local optimum can differ from the old one — verified it's still a **genuine** local optimum. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Part 5 — Synthesis
+
+---
+
+### 🎓 The Common Lessons
+
+.mermaid[
+
+<pre>
+graph TD
+    Q["Where does the time go?"]
+    Q -->|"interpreted"| PY["Python\nrecompute + re-scan 🐍"]
+    Q -->|"compiled"| CC["C++ / Rust\nsame asymptotics ⚙️🦀"]
+    PY --> P1["cache · localize · index ✅"]
+    CC --> C1["early-exit scan\none BFS / component ✅"]
+    CC --> C2["index, not name 🧱"]
+    CC --> C3["bound the allocation\n(greedy fallback) 🩹"]
+    style Q fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PY fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C3 fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+</pre>
+
+]
+
+- Fix the **asymptotics** first — constants only after 📐
+- **Verify the port** — two of three fixes were already in C++ ✅
+- **Bound every allocation** that scales exponentially 🛡️
+
+---
+
+### 📜 Artifacts From This Session
+
+.font-sm[
+
+| Repo | Artifact | Status |
+|:-----|:---------|:-------|
+| `luk036/netlistx` 🐍 | issue [#3](https://github.com/luk036/netlistx/issues/3) · PR [#4](https://github.com/luk036/netlistx/pull/4) | open |
+| `luk036/netlistx-cpp` ⚙️ | PR [#4](https://github.com/luk036/netlistx-cpp/pull/4) | open |
+| `luk036/xnetwork-cpp` ⚙️ | PR [#4](https://github.com/luk036/xnetwork-cpp/pull/4) | open |
+| `luk036/netlistx-rs` 🦀 | PR [#9](https://github.com/luk036/netlistx-rs/pull/9) | open |
+
+]
+
+- All four PRs target the **`dev`** branch 🌿
+- Green gates: pytest 194 · xmake 103 + 45 · cargo 251 ✅
+- Every PR body carries the **measured** before/after table 📊
+
+> 99× · 88× · 81× (Python) — 10 000× (C++) — 4 000× (Rust) 🎉
+
+---
+
+### 🧠 Key Takeaways
+
+**Method** 🔬
+- Profile first — the bottleneck is rarely where you guess
+- Cache what never changes; localize what does 🗃️
+- Store indices, not names 🧱
+
+**Cross-language** 🌍
+- The same three anti-patterns in Python, C++, and Rust
+- Verify a fix isn't already present before porting ✅
+- Bound exponential allocations — or they abort 💥
+
+**Discipline** 🧪
+- Keep outputs bit-identical; pin them with tests
+- Every "before" measurement needs a timeout ⏲️
+- Speed is only real if the **tests still pass** 🎯
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Making netlistx Fast**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Profile. Localize. Verify. 🎯
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -140,7 +140,7 @@ graph TD
 
 | #   | Topic                          | Materials                                                               |
 | --- | ------------------------------ | ----------------------------------------------------------------------- |
-| 13  | Netlist & Graph Algorithms     | [netlistx package](netlistx-remark.html) — covering, matching           |
+| 13  | Netlist & Graph Algorithms     | [netlistx package](netlistx-remark.html) — covering, matching, [performance deep-dive](netlistx-perf-remark.html) |
 | 14  | EDA Data Formats               | [Liberty ↔ JSON](lib-to-json-remark.html)                                |
 | 15  | Design for Manufacturing (DFM) | [See algo4dfm](../algo4dfm/index.html) — OPC, PSM, layout decomposition |
 

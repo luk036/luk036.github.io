@@ -204,8 +204,9 @@ class: nord-light, middle, center
 
 ---
 
-### 📛 Improved Naming Conventions (1/2) — Geometry & Domain
+### 📛 Improved Naming Conventions (1/2)
 
+.font-sm[
 | Letter | Meaning |
 |--------|---------|
 | `p` | point, polygon, polynomial, previous |
@@ -217,6 +218,7 @@ class: nord-light, middle, center
 | `u, v, w` | vertex₁, vertex₂, vertex₃ |
 | `l, m` | line₁, line₂ |
 | `w` | weight, frequency (ω) |
+]
 
 **Consistency beats cleverness** — pick a convention and stick to it 💎
 
@@ -268,8 +270,9 @@ class: nord-light, middle, center
 
 ### ✅ When 3-Letter Names Are Good Enough
 
-In **math & EDA code**, the equation is the documentation — abbreviations are canonical.
+In **math & EDA code**, abbreviations are canonical.
 
+.font-sm[
 | Abbrev | Meaning | Abbrev | Meaning |
 |--------|---------|--------|---------|
 | `dst` | distance | `wgt` | weight |
@@ -277,6 +280,7 @@ In **math & EDA code**, the equation is the documentation — abbreviations are 
 | `prv` | previous | `nxt` | next |
 | `idx` | index | `len` | length |
 | `min` / `max` | minimum / maximum | `cnt` | count |
+]
 
 ```python
 # Tight loop: the 3-letter name tracks the equation
@@ -292,6 +296,7 @@ for u, v in G.edges():
 
 ### ❌ When They're Bad: Ambiguity
 
+.font-sm[
 | Abbrev | Ambiguous expansions |
 |--------|---------------------|
 | `dst` | distance, destination, distribution |
@@ -300,6 +305,7 @@ for u, v in G.edges():
 | `siz` | size, sizing |
 | `rgn` | region, range |
 | `bnd` | bound, boundary, band |
+]
 
 **Without a shared glossary, every abbreviation is a guessing game 🎲**
 

@@ -1,0 +1,690 @@
+<!doctype html>
+<html>
+  <head>
+    <title>pyfractions vs extfractions — A Fraction Performance Deep-Dive</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚖️ pyfractions vs extfractions
+
+## Two rational libraries, one repo — a 2.5× gap and the 20% hiding in a guard
+
+### 🐍 → ⚡
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — Two Libraries, One Repo** 🧭
+- Three headers, two designs
+- Where they diverge
+
+**Part 2 — The Head-to-Head** ⚔️
+- Method & harness 📏
+- Small / large results
+
+**Part 3 — Profiling the Guards** 🔬
+- Zero fires, 20% cost
+- A latent crash 🐛
+
+]
+.pull-right[
+
+**Part 4 — The Fix** 🔧
+- `_mul_overflows`
+- Verification ✅
+
+**Part 5 — Optimizing extfractions** ⚡
+- The gcd-count insight 🔢
+- Rust sibling 🦀
+
+**Part 6 — Takeaways** 🧠
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — Two Libraries, One Repo
+
+---
+
+### 🗂️ One Repo, Three Headers
+
+`fractions-cpp` ships **three** independent rational-number headers:
+
+| Header | Type | Design goal |
+|:-------|:-----|:------------|
+| `fractions.hpp` | `Fraction&lt;T&gt;` | Lean C++-native |
+| `extfractions.hpp` | `ExtFraction&lt;T&gt;` | Same, extended API |
+| `pyfractions.hpp` | `Fraction&lt;T&gt;` | Python `fractions.Fraction` clone 🐍 |
+
+> Today's match: the **C++-native** `ExtFraction` vs the **Python-compatible** `Fraction`. ⚔️
+
+---
+
+### 🧬 Two Design Philosophies
+
+.mermaid[
+
+<pre>
+graph TD
+    H["fractions-cpp"]
+    H --> EXT["extfractions.hpp\nExtFraction\nC++-native"]
+    H --> PY["pyfractions.hpp\nFraction\nPython clone"]
+    EXT --> E1["no exceptions\nconstexpr ctor\ntail-recursive gcd"]
+    PY --> P1["throws on zero\nexplicit overflow guards\ndouble fallback"]
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style EXT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style PY fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style P1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### 🔍 Where They Diverge
+
+| Aspect | `ExtFraction` ⚡ | `Fraction` (py) 🐍 |
+|:-------|:----------------|:------------------|
+| Zero denominator | valid state (±∞, NaN) | `throw std::runtime_error` |
+| Overflow | unchecked integer math | guard + `double` fallback |
+| Compound ops | in-place | `*this = *this + other` |
+| Constructor | `constexpr` | throws, non-`constexpr` |
+| Equality | 2-field compare | 2-field compare |
+
+> Python semantics cost speed — but **how much**, and **where**? 📏
+
+---
+
+class: nord-light, middle, center
+
+## ⚔️ Part 2 — The Head-to-Head
+
+---
+
+### 🔬 How We Measure
+
+- **Compiler**: g++ 15.2.0 `-O3 -DNDEBUG` ⚙️
+- **Harness**: [nanobench](https://github.com/martinus/nanobench) 📊
+- **`volatile` inputs** to defeat constant folding 🛡️
+- **Median ns/op**, error ≤ 2.2%
+- Both types are **two `int64_t`** fields — apples to apples 🍎
+
+```cpp
+template &lt;typename F&gt;
+static void bench_type(Bench& b, const std::string& tag, T a, T d, T c, T e) {
+    volatile T va = a, vd = d, vc = c, ve = e;
+    F x(va, vd), y(vc, ve);
+    b.run(tag + " add", [&]{ auto r = x + y; doNotOptimizeAway(r); });
+    b.run(tag + " mul", [&]{ auto r = x * y; doNotOptimizeAway(r); });
+}
+```
+
+---
+
+### 📊 Small `1/2, 1/3` — ext wins everywhere
+
+| op | `ext` (ns) | `py` (ns) | py/ext |
+|:---|-----------:|----------:|-------:|
+| construct | 14.4 | 28.8 | **2.00×** |
+| add | 57.7 | 73.6 | 1.27× |
+| sub | 50.5 | 65.8 | 1.30× |
+| mul | 28.9 | 72.2 | **2.50×** |
+| div | 28.9 | 66.2 | **2.29×** |
+| add-assign | 21.6 | 72.9 | **3.37×** |
+| sub-assign | 21.6 | 64.9 | **3.00×** |
+| lt | 28.9 | 43.2 | 1.50× |
+| eq | 1.46 | 1.45 | 0.99× |
+
+---
+
+### 📈 Small Values, Side by Side
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Small 1/2, 1/3 · ns/op (lower is better)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="118" y="64" text-anchor="end">add</text>
+    <rect x="128" y="52" width="288" height="13" fill="#a3be8c" rx="2"/>
+    <text x="422" y="63" fill="#2e7d32" font-weight="bold">57.7</text>
+    <rect x="128" y="67" width="368" height="13" fill="#bf616a" rx="2"/>
+    <text x="502" y="78" fill="#bf616a">73.6</text>
+
+    <text x="118" y="116" text-anchor="end">mul</text>
+    <rect x="128" y="104" width="144" height="13" fill="#a3be8c" rx="2"/>
+    <text x="278" y="115" fill="#2e7d32" font-weight="bold">28.9</text>
+    <rect x="128" y="119" width="361" height="13" fill="#bf616a" rx="2"/>
+    <text x="495" y="130" fill="#bf616a">72.2</text>
+
+    <text x="118" y="168" text-anchor="end">div</text>
+    <rect x="128" y="156" width="145" height="13" fill="#a3be8c" rx="2"/>
+    <text x="279" y="167" fill="#2e7d32" font-weight="bold">28.9</text>
+    <rect x="128" y="171" width="331" height="13" fill="#bf616a" rx="2"/>
+    <text x="465" y="182" fill="#bf616a">66.2</text>
+
+    <text x="118" y="220" text-anchor="end">add-assign</text>
+    <rect x="128" y="208" width="108" height="13" fill="#a3be8c" rx="2"/>
+    <text x="242" y="219" fill="#2e7d32" font-weight="bold">21.6</text>
+    <rect x="128" y="223" width="364" height="13" fill="#bf616a" rx="2"/>
+    <text x="498" y="234" fill="#bf616a">72.9</text>
+  </g>
+</svg>
+
+</p>
+
+> Green = `extfractions` ⚡ · Red = `pyfractions` 🐍
+
+---
+
+### 📊 Large `5/987654321, 7/999999999`
+
+| op | `ext` (ns) | `py` (ns) | py/ext |
+|:---|-----------:|----------:|-------:|
+| construct | 21.6 | 36.2 | 1.67× |
+| add | 269.2 | 372.2 | 1.38× |
+| sub | 245.2 | 343.0 | 1.40× |
+| mul | 57.7 | 131.8 | **2.28×** |
+| div | 94.9 | 231.8 | **2.44×** |
+| mul-assign | 57.7 | 129.6 | **2.24×** |
+| div-assign | 93.5 | 234.8 | **2.51×** |
+| lt | 93.5 | 107.8 | 1.15× |
+| eq | 0.99 | 0.98 | 0.99× |
+
+---
+
+### 📉 The Ratio Is What Matters
+
+$$ \text{speedup} \;=\; \frac{T_{\text{py}}}{T_{\text{ext}}}
+   \;\in\; [\,{\color{#2e7d32}1.2},\; {\color{#c2185b}3.4}\,] $$
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Large values · py / ext ratio (1.0 = parity)</text>
+  <line x1="310" y1="44" x2="310" y2="230" stroke="#4c566a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="310" y="42" font-family="sans-serif" font-size="11" fill="#4c566a" text-anchor="middle">1.0×</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="170" y="74" text-anchor="end">add</text>
+    <rect x="180" y="60" width="179" height="18" fill="#ebcb8b" rx="3"/>
+    <text x="367" y="74" fill="#b58900">1.38×</text>
+
+    <text x="170" y="114" text-anchor="end">sub</text>
+    <rect x="180" y="100" width="182" height="18" fill="#ebcb8b" rx="3"/>
+    <text x="370" y="114" fill="#b58900">1.40×</text>
+
+    <text x="170" y="154" text-anchor="end">mul</text>
+    <rect x="180" y="140" width="296" height="18" fill="#bf616a" rx="3"/>
+    <text x="484" y="154" fill="#bf616a" font-weight="bold">2.28×</text>
+
+    <text x="170" y="194" text-anchor="end">div</text>
+    <rect x="180" y="180" width="317" height="18" fill="#bf616a" rx="3"/>
+    <text x="505" y="194" fill="#bf616a" font-weight="bold">2.44×</text>
+
+    <text x="170" y="234" text-anchor="end">div-assign</text>
+    <rect x="180" y="220" width="326" height="18" fill="#bf616a" rx="3"/>
+    <text x="514" y="234" fill="#bf616a" font-weight="bold">2.51×</text>
+  </g>
+</svg>
+
+</p>
+
+> Multiply / divide pay the most — and that is where the guards live. 🔍
+
+---
+
+### 🤔 Why Is `py` Slower?
+
+.mermaid[
+
+<pre>
+graph LR
+    PY["pyfractions\nslower"]
+    PY --> G["overflow guards\ninteger division per op"]
+    PY --> T["compound ops\ncopy + temp"]
+    PY --> C["ctor throws\nblocks fast path"]
+    G --> FIX["→ mul-overflow check"]
+    T --> KEEP["design choice"]
+    C --> KEEP2["design choice"]
+    style PY fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style T fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FIX fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style KEEP fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style KEEP2 fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+</pre>
+
+]
+
+> One of these is a bug-sized opportunity. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Part 3 — Profiling the Guards
+
+---
+
+### 🛡️ The Overflow Guard
+
+Every `py` arithmetic op checks products with an **integer division**:
+
+$$ \text{overflow?} \quad\Longleftrightarrow\quad
+   {\color{red}|a|} \;>\; \frac{{\color{#1565c0}\text{MAX}}}{{\color{red}|b|}} $$
+
+```cpp
+if (std::abs(na) &gt; std::numeric_limits&lt;T&gt;::max() / std::abs(db)
+    || std::abs(da) &gt; std::numeric_limits&lt;T&gt;::max() / std::abs(nb)) {
+    // use floating point as fallback
+}
+```
+
+> Two `idivq` per check, up to **four** per `operator+`. 💸
+
+---
+
+### 🔥 Do the Guards Ever Fire?
+
+Instrumented the fallback branch and ran a randomized workload:
+
+| Workload | Iterations | Guard fires |
+|:---------|-----------:|------------:|
+| small `±1000` | 1 000 000 | **0** |
+| large `1e9` | 1 000 000 | **0** |
+| **total** | **2 000 000** | **0** ✅ |
+
+> For in-range values the guards are **pure overhead**. 🎯
+
+---
+
+### 💸 What the Guards Cost
+
+Same-process A/B against a guard-neutralized build:
+
+| case | op | with guards | no guards | Δ |
+|:-----|:---|------------:|----------:|---:|
+| small | add | 71.94 | 58.10 | **−19%** |
+| small | sub | 64.77 | 50.52 | **−22%** |
+| small | mul | 71.96 | 57.68 | **−20%** |
+| small | div | 64.80 | 50.43 | **−22%** |
+| large | add | 365.54 | 341.42 | −7% |
+| large | mul | 129.53 | 115.26 | −11% |
+| large | div | 225.25 | 212.70 | −6% |
+
+---
+
+### 📊 Guard Overhead at a Glance
+
+<p align="center">
+
+<svg width="640" height="285" viewBox="0 0 640 285" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Cost of the division-based guards (% of runtime)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="16" y="56" font-weight="bold" fill="#bf616a">small 1/2, 1/3</text>
+    <text x="150" y="76" text-anchor="end">add</text>
+    <rect x="160" y="64" width="285" height="14" fill="#bf616a" rx="2"/>
+    <text x="452" y="76" fill="#bf616a" font-weight="bold">19%</text>
+    <text x="150" y="98" text-anchor="end">sub</text>
+    <rect x="160" y="86" width="330" height="14" fill="#bf616a" rx="2"/>
+    <text x="497" y="98" fill="#bf616a" font-weight="bold">22%</text>
+    <text x="150" y="120" text-anchor="end">mul</text>
+    <rect x="160" y="108" width="300" height="14" fill="#bf616a" rx="2"/>
+    <text x="467" y="120" fill="#bf616a" font-weight="bold">20%</text>
+    <text x="150" y="142" text-anchor="end">div</text>
+    <rect x="160" y="130" width="330" height="14" fill="#bf616a" rx="2"/>
+    <text x="497" y="142" fill="#bf616a" font-weight="bold">22%</text>
+
+    <text x="16" y="176" font-weight="bold" fill="#b58900">large values</text>
+    <text x="150" y="196" text-anchor="end">add</text>
+    <rect x="160" y="184" width="105" height="14" fill="#ebcb8b" rx="2"/>
+    <text x="272" y="196" fill="#b58900">7%</text>
+    <text x="150" y="218" text-anchor="end">sub</text>
+    <rect x="160" y="206" width="135" height="14" fill="#ebcb8b" rx="2"/>
+    <text x="302" y="218" fill="#b58900">9%</text>
+    <text x="150" y="240" text-anchor="end">mul</text>
+    <rect x="160" y="228" width="165" height="14" fill="#ebcb8b" rx="2"/>
+    <text x="332" y="240" fill="#b58900">11%</text>
+    <text x="150" y="262" text-anchor="end">div</text>
+    <rect x="160" y="250" width="90" height="14" fill="#ebcb8b" rx="2"/>
+    <text x="257" y="262" fill="#b58900">6%</text>
+  </g>
+</svg>
+
+</p>
+
+---
+
+### 🔎 The Root Cause: `idivq`
+
+```asm
+; division-based check   → ~20-40 cycles
+divcheck:
+    movabsq 0x7fffffffffffffff, %rax
+    cqto
+    idivq   %rcx          ; ← integer divide
+    cmpq    %rax, %r8
+    setg    %al
+
+; multiply-overflow check → ~2 cycles
+mulcheck:
+    imulq   %rdx, %rcx
+    seto    %al           ; ← overflow flag
+```
+
+> Same semantics, an order of magnitude cheaper. 🏎️
+
+---
+
+### 🐛 A Latent Crash
+
+The guard `MAX / std::abs(nb)` divides by **zero** when an operand's numerator is `0`:
+
+```cpp
+Fraction&lt;long long&gt; x(1, 2), z(0, 1);
+auto r = x + z;          // ← MAX / 0  💥
+```
+
+| | before |
+|:--|:--|
+| `x + 0` | `STATUS_INTEGER_DIVIDE_BY_ZERO` (`0xC0000094`) |
+
+> The `||` short-circuit does not save it — the first clause is `false`. 😱
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Part 4 — The Fix
+
+---
+
+### 🔧 The Fix: `_mul_overflows`
+
+Replace the division test with a **multiply-overflow intrinsic**:
+
+```cpp
+static bool _mul_overflows(T a, T b) {
+#if defined(__GNUC__) || defined(__clang__)
+    T result;
+    return __builtin_mul_overflow(a, b, &amp;result);
+#else
+    if (a == 0 || b == 0) return false;      // ← fixes the crash
+    T abs_a = a &lt; 0 ? -a : a, abs_b = b &lt; 0 ? -b : b;
+    return abs_a &gt; std::numeric_limits&lt;T&gt;::max() / abs_b;
+#endif
+}
+```
+
+- Same overflow **decision** → same `double` fallback ✅
+- `a == 0` short-circuits → no division by zero ✅
+- **14 guard sites** replaced across `+ − × ÷ < % floor_div`
+
+---
+
+### 🧭 Guard Decision Flow
+
+.mermaid[
+
+<pre>
+graph TD
+    OP["operator + - * /"]
+    OP --> CHK["_mul_overflows(a, b)?"]
+    CHK -->|"no"| FAST["exact integer path"]
+    CHK -->|"yes"| SLOW["double fallback"]
+    FAST --> RES["Fraction(n, d)"]
+    SLOW --> RES
+    style OP fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CHK fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style FAST fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style SLOW fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style RES fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### ⚡ After the Fix: `new ≈ no-guard`
+
+| case | op | old (div) | new (mul) | no-guard |
+|:-----|:---|----------:|----------:|---------:|
+| small | add | 71.94 | **57.54** | 58.10 |
+| small | sub | 64.77 | **50.47** | 50.52 |
+| small | mul | 71.96 | **58.14** | 57.68 |
+| small | div | 64.80 | **50.47** | 50.43 |
+| large | add | 365.54 | **339.38** | 341.42 |
+| large | mul | 129.53 | **115.21** | 115.26 |
+| large | div | 225.25 | **212.14** | 212.70 |
+
+> The fix recovers **100%** of the available win. 🎯
+
+---
+
+### ✅ Verification
+
+| Check | Result |
+|:------|:-------|
+| `Fraction(1,2) + Fraction(0,1)` | was 💥 → now `1/2` ✅ |
+| Full test suite | **137 / 137 cases · 958 / 958 assertions** ✅ |
+| Differential old vs new (scales 1e3, 1e6, 3e9) | **0 mismatches** ✅ |
+| Performance | matches no-guard baseline ✅ |
+
+> Semantics preserved, crash removed. 🛡️
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 5 — Optimizing extfractions
+
+---
+
+### 🔢 Rational Arithmetic Is gcd-bound
+
+Every normalization is a `gcd`. The C++-native ops called it **one time too many**:
+
+$$ \text{normalize}\!\left(\frac{a}{b}\right)
+   = \frac{{\color{red}a}\,/\,{\color{#1565c0}g}}{{\color{red}b}\,/\,{\color{#1565c0}g}},
+   \qquad {\color{#1565c0}g} = \gcd({\color{red}a}, {\color{red}b}) $$
+
+.mermaid[
+
+<pre>
+graph LR
+    ADD["operator+"]
+    ADD --> A1["gcd(b, d)"]
+    A1 --> A2["ctor normalize\ngcd(n, d)"]
+    A2 --> A3["redundant\nnormalize"]
+    style ADD fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A3 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+> The constructor already normalized — the extra call was pure waste. 🗑️
+
+---
+
+### ⚡ Three Surgical Fixes
+
+| # | Fix | gcd count |
+|:--|:----|:----------|
+| 1 | drop redundant `normalize()` after the ctor | 3 → **2** |
+| 2 | `+=` / `-=`: 2-gcd + `common == 1` fast path | 4 → **2** |
+| 3 | `*=` / `/=` final `normalize` → `keep_denom_positive` | 3 → **2** |
+
+```cpp
+let common = gcd(self.denom, other.denom);
+if common == One::one() {          // coprime: no divisions, no final gcd
+    self.numer = self.numer * other.denom + self.denom * other.numer;
+    self.denom *= other.denom;
+    self.keep_denom_positive();
+    return;
+}
+```
+
+---
+
+### 📈 extfractions Before → After
+
+| case | op | before | after | Δ |
+|:-----|:---|-------:|------:|---:|
+| small | add | 79.1 | 57.8 | **−27%** |
+| small | add-assign | 50.4 | 21.6 | **−57%** |
+| small | mul | 43.2 | 28.8 | **−33%** |
+| large | add | 479.2 | 268.8 | **−44%** |
+| large | div | 204.0 | 93.4 | **−54%** |
+| large | div-assign | 202.9 | 93.4 | **−54%** |
+
+> 137 / 137 tests pass; normalized inputs byte-identical. ✅
+
+---
+
+### 🦀 The Rust Sibling
+
+`fractions-rs` received the **same** `add_assign` / `sub_assign` rewrite.
+
+| case | op | before | after | Δ |
+|:-----|:---|-------:|------:|---:|
+| small | add | 70.24 | 31.35 | **−55%** |
+| small | sub | 58.19 | 32.41 | **−44%** |
+| common&gt;1 | add | 82.02 | 50.83 | −38% |
+| large | sub | 331.30 | 230.14 | −31% |
+
+> Same-process A/B; 121 tests pass, clippy &amp; fmt clean. ✅
+
+---
+
+### 🎓 The Same Lesson
+
+.mermaid[
+
+<pre>
+graph TD
+    Q["Where is the time?"]
+    Q --> G["gcd count\n+ divisions"]
+    Q --> B["branch overhead"]
+    G --> F["fewer gcds\ncheaper overflow check"]
+    B --> F
+    style Q fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> Profile first, then remove the *right* work. 🔬
+
+---
+
+### 🧠 Key Takeaways
+
+**Measurement** 📏
+- `ext` is **1.2–3.4× faster** than `py` on almost every op
+- Guards fired **0 / 2 000 000** times — pure overhead
+- `idivq` → `imulq` + `seto` recovers **~20%** on small values
+- Never trust a single run — use **same-process A/B** 🎯
+
+**Correctness** ✅
+- The guard hid a **division-by-zero crash** 🐛
+- `_mul_overflows` fixes both the crash and the cost
+- 137 / 137 tests, 0 differential mismatches
+
+---
+
+### 📜 Artifacts From This Session
+
+| Artifact | Change |
+|:---------|:-------|
+| `extfractions.hpp` | 3 gcd-count fixes ⚡ |
+| `fractions.hpp` | mirror of the above |
+| `pyfractions.hpp` | `_mul_overflows` · 14 guard sites 🛡️ |
+| `fractions-rs` | `add_assign` / `sub_assign` rewrite 🦀 |
+| Benchmarks | `bench_comparison.cpp` · nanobench 📊 |
+
+> py: −20% · ext: −27…−57% · Rust: −31…−55% 🎉
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**pyfractions vs extfractions**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Profile. Measure. Remove the *right* work. 🎯
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

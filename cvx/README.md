@@ -121,6 +121,7 @@ graph TD
 | [Ellipsoid Method Revisited](ellipsoid.html)                          | Detailed notes on ellipsoid method             |
 | [Understanding the ellalgo Package](ellalgo-remark.html)              | Python implementation of ellipsoid method      |
 | [Ellipsoid Method: Py→Rust→C++](ellalgo-py-rs-cpp-remark.html)        | Cross-language ellipsoid implementation        |
+| [Making Ellalgo Fast](ellalgo-perf-remark.html)                      | Profiling & per-iteration allocation fixes (Py/C++/Rust) |
 | [Normal vs Stable Ellipsoid](normal-vs-stable-remark.html)             | Performance comparison of ellipsoid variants   |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |

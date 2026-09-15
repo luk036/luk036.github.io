@@ -1,0 +1,887 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Making Ellalgo Fast</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ Making Ellalgo Fast
+
+## One bug class, three languages: 🐍 → ⚙️ → 🦀
+
+### A profile-first tour of per-iteration temporaries
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — The Setup** 🧭
+- What the ellipsoid method solves
+- The polyglot family 🌍
+- How we measure 📏
+
+**Part 2 — Python: the vectorization win** 🐍
+- The profile surprise 🔍
+- One gemv, masks, round-robin
+- Results & equivalence ✅
+
+]
+
+.pull-right[
+
+**Part 3 — C++: valarray temporaries** ⚙️
+- Expression temps & scratch buffers
+- The negative results 📉
+
+**Part 4 — Rust: the allocation tax** 🦀
+- `dot_mv` every iteration
+- ndarray view/`dot` overhead
+
+**Part 5 — The cross-language lesson** 🎓
+
+]
+
+> One recurring bug: **a heap allocation inside the hot update loop**. 🔁
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — The Setup
+
+---
+
+### 👁️ What Ellalgo Solves
+
+The **ellipsoid method** (Khachiyan, 1979) solves convex feasibility / optimization
+by shrinking an ellipsoid until it isolates a solution. 🎯
+
+$$ \mathcal{E} = \{\, x \mid (x - x_c)^\top M^{-1} (x - x_c) \le \kappa \,\} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    XC["Center x_c\ncurrent guess"]
+    OR["Oracle\nassess(x_c)"]
+    CUT["Cut\n(g, beta)"]
+    UPD["Ellipsoid update\nshrink M, kappa"]
+    XC -->|"x_c"| OR
+    OR -->|"infeasible"| CUT
+    CUT --> UPD
+    UPD -->|"next iter"| XC
+    OR -->|"feasible ✅"| DONE["Return x_c"]
+    style XC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style OR fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CUT fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style UPD fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style DONE fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+</pre>
+
+]
+
+> The loop runs $10^3$–$10^5$ times. Every microsecond per iteration matters. ⏱️
+
+---
+
+### 🧮 The Hot Equation
+
+Each iteration performs a **rank-1 update** of the shape matrix:
+
+$$ \tilde g = {\color{#1565c0} M}\,g, \qquad
+   \omega = {\color{#1565c0} g^\top \tilde g}, \qquad
+   \tau^2 = \kappa\,\omega $$
+
+$$ x_c \;\leftarrow\; x_c - \frac{\rho}{\omega}\,{\color{#c2185b}\tilde g},
+   \qquad
+   M \;\leftarrow\; M - \frac{\sigma}{\omega}\,
+   {\color{#c2185b}\tilde g\,\tilde g^\top},
+   \qquad
+   \kappa \;\leftarrow\; \delta\,\kappa $$
+
+- $\tilde g$ is a **matrix–vector product** — the only $O(n^2)$ work per iteration 🔁
+- $\rho, \sigma, \delta$ come from the cut strategy (central / deep / parallel) ✂️
+- `EllStable` keeps an $LDL^\top$ factorization instead of $M$ directly 🧱
+
+> We will see the **same allocation bug** hide behind this equation in all three ports. 🐛
+
+---
+
+### 🌍 The Polyglot Family
+
+Five repos, three languages, one algorithm — plus two LMI solver siblings:
+
+.mermaid[
+
+<pre>
+graph LR
+    PY["ellalgo 🐍\nnumpy"]
+    CPP["ellalgo-cpp ⚙️\nvalarray + Matrix"]
+    RS["ellalgo-rs 🦀\ncustom Arr"]
+    LMIC["lmi-solver-cpp ⚙️\nEigen"]
+    LMIR["lmi-solver-rs 🦀\nndarray"]
+    PY -.->|"same math"| CPP
+    PY -.->|"same math"| RS
+    CPP -->|"Ell engine"| LMIC
+    RS -->|"Ell engine"| LMIR
+    style PY fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CPP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style RS fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style LMIC fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style LMIR fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+> "Enhance the sibling accordingly" — three times, with three different profiles. 😅
+
+---
+
+### 📏 How We Measure
+
+| Language | Profiler | Benchmark harness | Build |
+|:---------|:---------|:------------------|:------|
+| 🐍 Python | `cProfile` + `pstats` | `pytest-benchmark` | `pytest` |
+| ⚙️ C++ | nanobench + micro-benches | `nanobench` | **xmake** (not CMake) |
+| 🦀 Rust | `criterion` + `Instant` | `criterion` | `cargo` |
+
+**Discipline** 🎯
+- Capture a **baseline** first (and re-capture it honestly — `git stash` A/B)
+- Use **best-of-N**; the machine is thermally noisy 🌡️
+- Re-run the **full test suite** after every change
+- Record **negative results** — they are findings too 📝
+
+> I was fooled once by a "2× regression" that was just a concurrent profile run. 🎲
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Part 2 — Python: The Vectorization Win
+
+---
+
+### 🔍 The Profile Surprise
+
+The oracle's **per-row `dot`** dominated — not the matrix update.
+
+<p align="center">
+
+<svg width="640" height="280" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Lowpass benchmark · cProfile (13.5 s)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="210" y="64" text-anchor="end">ndarray.dot (1.6 M calls)</text>
+    <rect x="220" y="50" width="380" height="20" fill="#bf616a" rx="3"/>
+    <text x="608" y="65" fill="#bf616a" font-weight="bold">45%</text>
+
+    <text x="210" y="104" text-anchor="end">assess_feas Python loop</text>
+    <rect x="220" y="90" width="279" height="20" fill="#d08770" rx="3"/>
+    <text x="507" y="105" fill="#bf616a">33%</text>
+
+    <text x="210" y="144" text-anchor="end">Ell._update_core</text>
+    <rect x="220" y="130" width="59" height="20" fill="#5e81ac" rx="3"/>
+    <text x="287" y="145" fill="#5e81ac">7%</text>
+
+    <text x="210" y="184" text-anchor="end">RoundRobin.next (1.6 M calls)</text>
+    <rect x="220" y="170" width="42" height="20" fill="#ebcb8b" rx="3"/>
+    <text x="270" y="185" fill="#b58900">5%</text>
+
+    <text x="210" y="224" text-anchor="end">np.outer + np.finfo + np.all</text>
+    <rect x="220" y="210" width="25" height="20" fill="#b48ead" rx="3"/>
+    <text x="253" y="225" fill="#b48ead">3%</text>
+  </g>
+  <text x="16" y="262" font-family="monospace" font-size="13" fill="#bf616a">1.6 M</text>
+  <text x="76" y="262" font-family="sans-serif" font-size="13" fill="#4c566a">tiny per-row dots — ~128 per oracle call, in pure Python</text>
+</svg>
+
+</p>
+
+---
+
+### 🐌 The Offending Loop
+
+```python
+def assess_feas(self, x):
+    for _ in range(self.nwpass):              # passband
+        col_k = self.spectrum[self.idx1.next(), :]
+        v = col_k.dot(x)                      # &lt;-- 1.6 M numpy calls!
+        if v > self.up_sq:
+            return col_k, (v - self.up_sq, v - self.lp_sq)
+        if v < self.lp_sq:
+            return -col_k, (-v + self.lp_sq, -v + self.up_sq)
+    # ... then stopband, then transition band ...
+```
+
+- Each `dot` is length $N = 32$ — **pure interpreter dispatch overhead** dominates 🐢
+- Three bands are scanned; the round-robin cursor rotates across calls 🔄
+- The math is trivial; the *call count* is the problem
+
+---
+
+### 💡 The Insight: One gemv, Then Masks
+
+Replace ~480 tiny dots with **one BLAS matrix–vector product** per band:
+
+$$ v = {\color{#1565c0} A}\, x, \qquad v_i = \sum_{j} A_{ij}\, x_j $$
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph BEFORE["Before · per-row"]
+        B1["row k"] --> B2["dot(row, x)"] --> B3["check"] --> B4["row k+1 🔁"]
+    end
+    subgraph AFTER["After · one gemv"]
+        A1["A @ x\none BLAS call"] --> A2["boolean masks\n+ first-true"] --> A3["land cursor"]
+    end
+    style B1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B2 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B3 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B4 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### ⚡ The Micro-Benchmark
+
+<p align="center">
+
+<svg width="640" height="220" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Scan primitive on the real (480 × 32) spectrum</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="150" y="70" text-anchor="end">per-row dots</text>
+    <rect x="160" y="54" width="450" height="24" fill="#bf616a" rx="3"/>
+    <text x="618" y="71" fill="#bf616a" font-weight="bold">2 487 µs</text>
+
+    <text x="150" y="126" text-anchor="end">spectrum @ x</text>
+    <rect x="160" y="110" width="20" height="24" fill="#a3be8c" rx="3"/>
+    <text x="190" y="127" fill="#2e7d32" font-weight="bold">112 µs</text>
+  </g>
+  <text x="160" y="178" font-family="sans-serif" font-size="18" font-weight="bold" fill="#5e81ac">≈ 22× faster on the primitive</text>
+</svg>
+
+</p>
+
+> Same reason as before: the win is **call-count reduction**, not arithmetic. 🧠
+
+---
+
+### 🧩 The Vectorized `assess_feas`
+
+```python
+def assess_feas(self, x):
+    v1 = self.spectrum[: self.nwpass] @ x          # one gemv, passband
+    over1  = v1 > self.up_sq
+    under1 = v1 < self.lp_sq
+    j1 = self._first_rotated(over1 | under1, self.idx1.peek_next())
+    if j1 >= 0:
+        self.idx1.seek(j1)                          # preserve the cursor
+        col_k = self.spectrum[j1, :]
+        ...
+```
+
+- `_first_rotated(mask, offset)` finds the first violation in **cyclic order**
+- No index array is materialised — just a **tail slice, then head slice** 🪓
+- Bands are still evaluated **lazily**: stopband is skipped if the passband violates
+
+---
+
+### 🔄 Preserving Round-Robin Semantics
+
+The cursor is what stops the ellipsoid from re-adding the same cut. It must survive. 🧷
+
+.mermaid[
+
+<pre>
+graph LR
+    PEEK["peek_next()\nread cursor\n(no advance)"]
+    MASK["_first_rotated\nfirst True in\ncyclic order"]
+    SET["seek(k)\nland on violation"]
+    NONE["no violation\ncursor unchanged"]
+    PEEK --> MASK
+    MASK -->|"found ✅"| SET
+    MASK -->|"none"| NONE
+    style PEEK fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SET fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style NONE fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+
+> Added `RoundRobin.peek_next()` and `seek()` so the vectorized path stays faithful. 🔧
+
+---
+
+### 🧹 Bonus: The Ellipsoid Update Itself
+
+Three micro-fixes inside `Ell._update_core`:
+
+```python
+_TINY = float(np.finfo(np.float64).tiny)        # hoist the constant
+
+if not grad.any():                              # was: np.all(grad == 0.0)
+    raise ValueError("Gradient cannot be a zero vector.")
+...
+self._mq -= (sigma / omega) * (grad_t[:, None] * grad_t)   # was: np.outer(...)
+```
+
+| Fix | Why |
+|:----|:----|
+| `_TINY` module constant | `np.finfo(...)` rebuilt **every call** (~1.3 µs) |
+| `not grad.any()` | avoids a temporary boolean array (~10 µs) |
+| `grad_t[:, None] * grad_t` | skips the `np.outer` Python wrapper |
+
+> Each is small — but they compound across $10^4$ iterations. 🧱
+
+---
+
+### 📊 Python Results
+
+<p align="center">
+
+<svg width="660" height="270" viewBox="0 0 660 270" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Lowpass · honest git-stash A/B · best-of-3</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="190" y="70" text-anchor="end">parallel cut</text>
+    <rect x="200" y="54" width="380" height="16" fill="#bf616a" rx="2"/>
+    <text x="588" y="67" fill="#bf616a">14.60 s</text>
+    <rect x="200" y="72" width="97" height="16" fill="#a3be8c" rx="2"/>
+    <text x="305" y="85" fill="#2e7d32" font-weight="bold">3.73 s · 3.91×</text>
+
+    <text x="190" y="140" text-anchor="end">single cut</text>
+    <rect x="200" y="124" width="380" height="16" fill="#bf616a" rx="2"/>
+    <text x="588" y="137" fill="#bf616a">35.29 s</text>
+    <rect x="200" y="142" width="88" height="16" fill="#a3be8c" rx="2"/>
+    <text x="296" y="155" fill="#2e7d32" font-weight="bold">8.16 s · 4.33×</text>
+  </g>
+  <text x="16" y="210" font-family="sans-serif" font-size="13" fill="#4c566a">Ell core micro-fixes (separate micro-bench): <tspan font-weight="bold" fill="#2e7d32">1.09–1.40×</tspan> across n = 3, 8, 32.</text>
+  <text x="16" y="236" font-family="sans-serif" font-size="13" fill="#4c566a">Suite: <tspan font-weight="bold" fill="#5e81ac">163 tests + 41 doctests + 14 bench asserts</tspan> green; black / isort / flake8 clean. ✅</text>
+</svg>
+
+</p>
+
+---
+
+### ✅ Behavior Equivalence
+
+Only **last-bit float noise** differs — the trajectory is equally valid. 🎲
+
+.font-sm[
+
+| Property | Before | After |
+|:---------|:-------|:------|
+| Cut selected | first violation in cyclic order | **same** |
+| Round-robin cursor | advanced past the cut | **same** |
+| Iterations (parallel) | 12 442 | 12 417 |
+| Iterations (single) | 26 624 | 26 625 |
+| Test bands | `[12300, 12600]` / `[26399, 30000]` | **within band** ✅ |
+
+]
+
+> `gemv` vs `ddot` accumulate in different orders; the chaotic iteration amplifies it
+> into a slightly different but **equally valid** path. 🌊
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Part 3 — C++: Expression Temporaries
+
+---
+
+### 🧾 Finding 1 — valarray Expression Temporaries
+
+`EllCore::_update_core` used valarray expression templates — **three temporaries per call**:
+
+```cpp
+this->_v = 0.0;
+for (i) for (j) this->_v[i] += this->_mq(i, j) * grad[j];
+
+const auto omega = (this->_v * grad).sum();     // temp #1
+...
+grad = this->_v * (result.rho / omega);         // temp #2 + copy
+```
+
+Replaced with explicit loops that write straight into the pre-allocated buffers:
+
+```cpp
+for (size_t i = 0; i != this->_n; ++i) {
+    auto s = 0.0;
+    for (size_t j = 0; j != this->_n; ++j) s += this->_mq(i, j) * grad[j];
+    this->_v[i] = s;
+}
+auto omega = 0.0;
+for (size_t i = 0; i != this->_n; ++i) omega += this->_v[i] * grad[i];
+```
+
+> `std::valarray` arithmetic allocates. In a hot loop, that is the whole cost. 💸
+
+---
+
+### 🧾 Finding 2 — A Fresh Buffer Every Iteration
+
+The **outer** wrapper allocated a valarray on every call:
+
+```cpp
+template <typename T, typename Fn>
+auto _update_core(const std::pair&lt;Arr, T&gt;& cut, Fn&& cut_strategy) -> CutStatus {
+    const auto& grad = cut.first;
+    std::valarray&lt;double&gt; g(this->_n);   // &lt;-- heap allocation, every iteration!
+    for (size_t i = 0; i != this->_n; ++i) g[i] = grad[i];
+    ...
+}
+```
+
+Fix: a **pre-allocated scratch member**, matching what `EllStable` already did:
+
+```cpp
+class EllBase {
+    Vec _g;   // scratch buffer for the cut gradient / center displacement
+};
+...
+auto& g = this->_g;                 // no allocation
+for (size_t i = 0; i != this->_n; ++i) g[i] = grad[i];
+```
+
+> The stable variant was already clean — the classic path had been forgotten. 😴
+
+---
+
+### 🧾 Finding 3 — LMI Oracle: Reuse the Cut Buffer
+
+`lmi-solver-cpp` built a **fresh Eigen vector** on every infeasible assessment:
+
+```cpp
+// before
+Vec g{x};                                     // heap alloc + copy of x
+for (i) g[i] = sign * mgr.sym_quad(this->m_F[i]);
+this->cut->first = std::move(g);
+
+// after — reuse the persistent cut buffer
+auto& g = this->cut->first;
+g = x;                                        // reuses storage after first call
+for (i) g[i] = sign * mgr.sym_quad(this->m_F[i]);
+```
+
+Also added `v = cv;` to the internal `VecConcept` so the reuse is generic. 🔧
+
+> Three files, three allocations removed, one idea. 🎯
+
+---
+
+### 📊 C++ Results
+
+<p align="center">
+
+<svg width="660" height="300" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">xmake · MSVC release · /arch:AVX2 · /W4 /WX</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="215" y="66" text-anchor="end">lowpass parallel</text>
+    <rect x="225" y="52" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="593" y="63" fill="#bf616a">229.3 ms</text>
+    <rect x="225" y="68" width="272" height="14" fill="#a3be8c" rx="2"/>
+    <text x="505" y="79" fill="#2e7d32" font-weight="bold">173.1 ms · 1.32×</text>
+
+    <text x="215" y="116" text-anchor="end">LMI_Lazy</text>
+    <rect x="225" y="102" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="593" y="113" fill="#bf616a">206.4 µs</text>
+    <rect x="225" y="118" width="252" height="14" fill="#a3be8c" rx="2"/>
+    <text x="485" y="129" fill="#2e7d32" font-weight="bold">144.7 µs · 1.43×</text>
+
+    <text x="215" y="166" text-anchor="end">ELL_normal (micro)</text>
+    <rect x="225" y="152" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="593" y="163" fill="#bf616a">72.8 µs</text>
+    <rect x="225" y="168" width="261" height="14" fill="#a3be8c" rx="2"/>
+    <text x="494" y="179" fill="#2e7d32" font-weight="bold">52.8 µs · 1.38×</text>
+
+    <text x="215" y="216" text-anchor="end">lmi-solver solve</text>
+    <rect x="225" y="202" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="593" y="213" fill="#bf616a">26.99 µs</text>
+    <rect x="225" y="218" width="217" height="14" fill="#a3be8c" rx="2"/>
+    <text x="450" y="229" fill="#2e7d32" font-weight="bold">16.24 µs · 1.66×</text>
+  </g>
+  <text x="16" y="266" font-family="sans-serif" font-size="13" fill="#4c566a">Zero warnings; <tspan font-weight="bold" fill="#5e81ac">xmake test</tspan> green in both repos. ✅</text>
+</svg>
+
+</p>
+
+---
+
+### 📉 The Negative Results (Equally Important)
+
+I tried the "obvious" ports of the Python win. **None helped.**
+
+.font-sm[
+
+| Idea | Result | Verdict |
+|:-----|:-------|:--------|
+| Flatten the spectrum to contiguous storage | 15.1 → 17.6 µs | nested valarray already fastest ❌ |
+| One `valarray` expression `(row * x).sum()` | 81.2 µs | allocates per row ❌ |
+| Dense Eigen assembly `A -= x[k]*F[k]` | 2.1× worse (m=2), 1.29× (m=16) | lazy per-element wins ❌ |
+| Eigen segment `.dot()` in LDLᵀ | 1.16× worse | scalar loop wins ❌ |
+
+]
+
+**Why?** In compiled code the per-row dot is already tight, and the scan
+**stops at the first violation**:
+
+$$ \underbrace{\textstyle\sum_{\text{scanned}} \|\text{row}\|}_{\text{early exit} \approx \frac{1}{2}m}
+   \;<\; \underbrace{\textstyle\sum_{i=1}^{m} \|\text{row}\|}_{\text{full matvec} = m} $$
+
+> Port the **measurement**, not the conclusion. 🔬
+
+---
+
+### 🔗 lmi-solver-cpp: The Inherited Win
+
+The solver compiles the local EllAlgo engine — so it gets the fix for free.
+
+<p align="center">
+
+<svg width="620" height="230" viewBox="0 0 620 230" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">lmi-solver-cpp · full LMI solve (stash A/B)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="180" y="76" text-anchor="end">Ell&lt;VectorXd&gt;</text>
+    <rect x="190" y="58" width="330" height="24" fill="#bf616a" rx="3"/>
+    <text x="528" y="75" fill="#bf616a">26.99 µs</text>
+    <rect x="190" y="84" width="199" height="24" fill="#a3be8c" rx="3"/>
+    <text x="397" y="101" fill="#2e7d32" font-weight="bold">16.24 µs · 1.66×</text>
+
+    <text x="180" y="146" text-anchor="end">EllStable&lt;VectorXd&gt;</text>
+    <rect x="190" y="128" width="330" height="24" fill="#bf616a" rx="3"/>
+    <text x="528" y="145" fill="#bf616a">25.81 µs</text>
+    <rect x="190" y="154" width="228" height="24" fill="#a3be8c" rx="3"/>
+    <text x="426" y="171" fill="#2e7d32" font-weight="bold">17.80 µs · 1.45×</text>
+  </g>
+</svg>
+
+</p>
+
+> ⚠️ Its **CMake** build pins EllAlgo `v1.6.12`; only the local `xmake` path sees the fix.
+
+---
+
+class: nord-light, middle, center
+
+## 🦀 Part 4 — Rust: The Allocation Tax
+
+---
+
+### 🕳️ Finding 1 — `dot_mv` Allocated Every Iteration
+
+`Ell::update_core` called `dot_mv`, which returns a **brand-new `Arr`**:
+
+```rust
+let grad_t = self.mq.dot_mv(grad);   // vec![0.0; n] — allocation per iteration!
+let omega = grad.dot(&grad_t);
+```
+
+`EllStable` already pre-allocated four scratch buffers. The classic `Ell` did not. 🐛
+
+Fix — a pre-allocated `grad_t` field plus a `dot_mv_into` that writes in place:
+
+```rust
+pub struct Ell {
+    ...
+    grad_t: Arr,                     // scratch, sized once
+}
+...
+self.mq.dot_mv_into(grad, &mut self.grad_t);   // no allocation
+let omega = grad.dot(&self.grad_t);
+```
+
+> This was the **single biggest win of the whole session**. 🚀
+
+---
+
+### 🕳️ Finding 2 — `sym_quad` Did 2× the Flops
+
+The Rust LMI oracle summed the **full** square; C++/Python sum only the upper triangle:
+
+```rust
+// before — O(k²) with two multiplies per term
+for i in start..end {
+    for j in start..end {
+        result += self.wit[i] * mat.at(i, j) * self.wit[j];
+    }
+}
+
+// after — upper triangle + 2× off-diagonal
+for i in start..end {
+    let mut s = 0.0;
+    for j in (i + 1)..end {
+        s += mat.at(i, j) * self.wit[j];
+    }
+    result += self.wit[i] * (mat.at(i, i) * self.wit[i] + 2.0 * s);
+}
+```
+
+> Consistency with the siblings *is* an optimization. 🤝
+
+---
+
+### 🕳️ Finding 3 — ndarray Views Were Expensive
+
+`lmi-solver-rs` built two `ArrayView1`s and called `.dot()` on **1–3 element slices**:
+
+```rust
+// before
+diag = get_elem(i, stop)
+    - self.storage.slice(s![i, start..stop])
+        .dot(&self.storage.slice(s![start..stop, stop]));
+
+// after — a flat slice, no view objects, no bounds checks
+let data = self.storage.as_slice().unwrap();
+let mut s = 0.0;
+for k in start..stop {
+    s += data[i * n + k] * data[k * n + stop];
+}
+diag = get_elem(i, stop) - s;
+```
+
+The same treatment for `witness` and `sym_quad` via `as_slice()`. 🪓
+
+> Small slices make **per-call overhead** the entire cost. 🐢
+
+---
+
+### 📊 Rust Results
+
+<p align="center">
+
+<svg width="660" height="290" viewBox="0 0 660 290" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">cargo · release</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="235" y="66" text-anchor="end">ellalgo-rs · dim 50</text>
+    <rect x="245" y="52" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="613" y="63" fill="#bf616a">20.37 µs</text>
+    <rect x="245" y="68" width="123" height="14" fill="#a3be8c" rx="2"/>
+    <text x="376" y="79" fill="#2e7d32" font-weight="bold">6.99 µs · 2.91×</text>
+
+    <text x="235" y="116" text-anchor="end">ellalgo-rs · dim 100</text>
+    <rect x="245" y="102" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="613" y="113" fill="#bf616a">82.95 µs</text>
+    <rect x="245" y="118" width="138" height="14" fill="#a3be8c" rx="2"/>
+    <text x="391" y="129" fill="#2e7d32" font-weight="bold">31.70 µs · 2.62×</text>
+
+    <text x="235" y="166" text-anchor="end">lmi assess 2×2</text>
+    <rect x="245" y="152" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="613" y="163" fill="#bf616a">0.873 µs</text>
+    <rect x="245" y="168" width="71" height="14" fill="#a3be8c" rx="2"/>
+    <text x="324" y="179" fill="#2e7d32" font-weight="bold">0.172 µs · 5.08×</text>
+
+    <text x="235" y="216" text-anchor="end">lmi-solver solve</text>
+    <rect x="245" y="202" width="360" height="14" fill="#bf616a" rx="2"/>
+    <text x="613" y="213" fill="#bf616a">222.8 µs</text>
+    <rect x="245" y="218" width="243" height="14" fill="#a3be8c" rx="2"/>
+    <text x="496" y="229" fill="#2e7d32" font-weight="bold">150.2 µs · 1.48×</text>
+  </g>
+  <text x="16" y="266" font-family="sans-serif" font-size="13" fill="#4c566a">Suite green incl. <tspan font-family="monospace">assert_eq!(result, 281)</tspan>; <tspan font-weight="bold" fill="#5e81ac">cargo clippy</tspan> clean. ✅</text>
+</svg>
+
+</p>
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part 5 — The Cross-Language Lesson
+
+---
+
+### 🐛 One Bug Class, Three Languages
+
+Every port had **the same defect**: a heap allocation / expression temporary inside
+the hot update loop. 🎯
+
+.mermaid[
+
+<pre>
+graph TD
+    ROOT["Hot loop:\nM, x_c update"]
+    ROOT --> PY["🐍 Python\nnp.outer + np.finfo\nper call"]
+    ROOT --> CPP["⚙️ C++\nvalarray temps +\nstd::valarray g(n)"]
+    ROOT --> RS["🦀 Rust\ndot_mv Vec +\nndarray view/dot"]
+    PY --> FIX["Fix:\npre-allocate scratch\n(EllStable already did!)"]
+    CPP --> FIX
+    RS --> FIX
+    style ROOT fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PY fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style CPP fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style RS fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style FIX fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+> The numerically-stable variant was always clean — the *classic* path was the culprit. 😅
+
+---
+
+### 📊 Cross-Language Summary
+
+.font-sm[
+
+| Project | Change | Speedup |
+|:--------|:-------|:--------|
+| 🐍 `ellalgo` | vectorized lowpass oracle + Ell micro-fixes | **3.91× / 4.33×** lowpass |
+| ⚙️ `ellalgo-cpp` | valarray temps + `_g` scratch + LMI cut reuse | **1.32×–1.43×** |
+| ⚙️ `lmi-solver-cpp` | cut-buffer reuse + inherited engine | **1.66× / 1.45×** |
+| 🦀 `ellalgo-rs` | `grad_t` scratch + `sym_quad` flops | **1.46×–2.91×** |
+| 🦀 `lmi-solver-rs` | flat-slice LDLᵀ + inherited engine | **5.08× assess · 1.48× solve** |
+
+]
+
+**Verification, everywhere** ✅
+- 🐍 163 tests + 41 doctests + 14 bench asserts · black / isort / flake8
+- ⚙️ `xmake test` green, zero warnings (`/W4 /WX`)
+- 🦀 `cargo test` green (exact iteration counts!) · `cargo clippy` clean
+
+> Exact-count tests are a gift: they prove the change was **behavior-preserving**. 🎁
+
+---
+
+### ⚠️ The Dependency-Pin Caveat
+
+The solver siblings consume the engine as a **pinned dependency**:
+
+.mermaid[
+
+<pre>
+graph LR
+    ENG["engine fix\n(uncommitted on dev)"]
+    ENG -->|"xmake / local path ✅"| OKC["lmi-solver-cpp\nsees it now"]
+    ENG -->|"CMake v1.6.12 ⏳"| WAITC["lmi-solver-cpp\nsees it after release"]
+    ENG -->|"cargo local patch ✅"| OKR["lmi-solver-rs\nsees it now"]
+    ENG -->|"crates.io 0.1.8 ⏳"| WAITR["lmi-solver-rs\nsees it after release"]
+    style ENG fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style OKC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style OKR fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style WAITC fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style WAITR fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+> I measured the inherited win with a **temporary** `[patch.crates-io]` / local path, then reverted it. 🔬
+
+---
+
+### 🧠 Key Takeaways
+
+**Performance** ⚡
+- **Profile first** — the bottleneck is rarely where you guess 🔍
+- Python's wins came from **call-count**, not FLOPs 🐍
+- The same bug — **per-iteration allocation** — hid in all three languages 🐛
+- `EllStable` was already fast; the classic `Ell` path had been forgotten 😴
+- In compiled code, **early exit can beat vectorization** 🏁
+- `ndarray` / Eigen **view + dot** overhead dominates tiny slices 🪓
+
+**Process** 🧭
+- Port the **measurement**, not the conclusion 🔬
+- Record **negative results** — they prevent wasted ports 📝
+- Re-capture baselines honestly (`git stash` A/B); the machine lies 🌡️
+- **Exact-count tests** prove behavior preservation 🎁
+
+---
+
+### 📜 Artifacts From This Session
+
+.font-sm[
+
+| Artifact | Where |
+|:---------|:------|
+| 📋 Profiling report & suggestions | `luk036/ellalgo#5` |
+| 🐍 Python change | `lowpass_oracle.py` · `ell.py` · `round_robin.py` |
+| ⚙️ C++ engine change | `ellalgo-cpp` · `ell_core.hpp` · `ell_base.hpp` |
+| ⚙️ C++ solver change | `lmi-solver-cpp` · `lmi_oracle_base.hpp` · `ldlt_mgr.hpp` |
+| 🦀 Rust engine change | `ellalgo-rs` · `arr.rs` · `ell.rs` · `ldlt_mgr.rs` |
+| 🦀 Rust solver change | `lmi-solver-rs` · `ldlt_mgr.rs` |
+
+]
+
+> 🐍 3.9× lowpass · ⚙️ 1.3–1.7× · 🦀 up to 5.1× · **all uncommitted, all verified** 🎉
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Making Ellalgo Fast**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Profile. Measure. Pre-allocate. 🎯
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

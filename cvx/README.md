@@ -123,6 +123,7 @@ graph TD
 | [Ellipsoid Method: Py→Rust→C++](ellalgo-py-rs-cpp-remark.html)        | Cross-language ellipsoid implementation        |
 | [Making Ellalgo Fast](ellalgo-perf-remark.html)                      | Profiling & per-iteration allocation fixes (Py/C++/Rust) |
 | [Normal vs Stable Ellipsoid](normal-vs-stable-remark.html)             | Performance comparison of ellipsoid variants   |
+| [Ell vs EllStable: Runtime](ellalgo-stable-remark.html)                | Normal vs stable across Python, C++ and Rust    |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |
 | [Rust Trait Architecture for Ellipsoid](rust-in-ellipsoid-remark.html)| Generic cutting-plane via trait composition    |

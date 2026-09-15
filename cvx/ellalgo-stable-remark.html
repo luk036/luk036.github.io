@@ -1,0 +1,631 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Normal vs Stable: Ell vs EllStable</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚖️ Normal vs Stable
+
+## `Ell` vs `EllStable` — runtime across 🐍 Python, ⚙️ C++, and 🦀 Rust
+
+### One comparison, three surprises, three fixes
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — Two Update Strategies** 🧭
+- Direct $M$-update vs $LDL^\top$ factors
+- The pipeline ⚙️
+- Correctness first ✅
+
+**Part 2 — The Comparison** 📊
+- Profit, lowpass, random cuts
+- The ratio that isn't constant 🔀
+
+]
+
+.pull-right[
+
+**Part 3 — Three Fixes** 🔧
+- 🦀 Rust: a real bug found 🐛
+- 🦀 Rust: slice reborrow
+- 🐍 Python: vectorize the loops
+
+**Part 4 — After** ✅
+- Updated numbers
+- The trade-off ⚖️
+
+**Part 5 — Lessons** 🎓
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — Two Update Strategies
+
+---
+
+### 🧮 Same Ellipsoid, Two Ways to Update It
+
+Both represent $\mathcal{E} = \{\,x : (x-x_c)^\top M^{-1}(x-x_c) \le \kappa\,\}$, but update differently.
+
+**`Ell` — direct $M$-update** (classic):
+$$ \tilde g = {\color{#1565c0}M}\,g, \qquad
+   \omega = g^\top \tilde g, \qquad
+   M \leftarrow M - \frac{\sigma}{\omega}\,{\color{#c2185b}\tilde g \tilde g^\top} $$
+
+**`EllStable` — factorized** $M = \kappa\,{\color{#2e7d32}L\,D\,L^\top}$:
+$$ w = L^{-1}g, \quad z = D^{-1}w, \quad q = L^{-\top}z, \quad \omega = w^\top z $$
+$$ x_c \leftarrow x_c - \frac{\rho}{\omega}\,q, \qquad
+   ({\color{#2e7d32}L}, {\color{#2e7d32}D}) \leftarrow \text{rank-1 update} $$
+
+> Same math, **same cuts**, different arithmetic — so the relative cost is an implementation question. 🤔
+
+---
+
+### ⚙️ The `EllStable` Pipeline
+
+.mermaid[
+
+<pre>
+graph LR
+    G["gradient g"] --> FWD["forward sub\nw = L⁻¹ g"]
+    FWD --> Z["z = D⁻¹ w"]
+    Z --> OM["omega = wᵀ z"]
+    OM --> CUT["cut strategy\nrho, sigma, delta"]
+    CUT --> BACK["back sub\nq = L⁻ᵀ z"]
+    BACK --> XC["x_c -= (rho/omega) q"]
+    CUT --> R1["rank-1 update\nof L, D"]
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FWD fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Z fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style OM fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CUT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style BACK fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style XC fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style R1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+</pre>
+
+]
+
+> Three triangular sweeps + a rank-1 update — all $O(n^2)$. How you write those loops **is** the story. 📖
+
+---
+
+### ✅ Correctness First
+
+Before timing anything, the C++ harness verifies **9/9** cases agree:
+
+.font-sm[
+
+| Case | Ell iters | Stable iters | $\lVert x_{Ell} - x_{Stable}\rVert_\infty$ |
+|:-----|:----------|:-------------|:----------------------------|
+| Profit normal | 83 | 83 | $< 10^{-6}$ ✅ |
+| Profit robust | 90 | 90 | $< 10^{-6}$ ✅ |
+| LP-32 parallel | 26 027 | 26 125 | $< 10^{-6}$ ✅ |
+| LP-32 serial | 40 740 | 40 621 | $< 10^{-6}$ ✅ |
+| LP-48 / LP-64 | 35 014 / 27 805 | 35 098 / 27 926 | $< 10^{-6}$ ✅ |
+
+]
+
+> The two paths land on the **same solution** — only the arithmetic differs. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Part 2 — The Comparison
+
+---
+
+### 💹 Profit (2-D, 83 iterations)
+
+<p align="center">
+
+<svg width="640" height="230" viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Stable / Ell ratio (lower = Ell faster)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="150" y="70" text-anchor="end">🐍 Python</text>
+    <rect x="160" y="54" width="200" height="24" fill="#5e81ac" rx="3"/>
+    <text x="368" y="71" fill="#5e81ac">0.97× — a tie</text>
+
+    <text x="150" y="120" text-anchor="end">⚙️ C++</text>
+    <rect x="160" y="104" width="214" height="24" fill="#a3be8c" rx="3"/>
+    <text x="382" y="121" fill="#2e7d32">1.04×</text>
+
+    <text x="150" y="170" text-anchor="end">🦀 Rust</text>
+    <rect x="160" y="154" width="253" height="24" fill="#ebcb8b" rx="3"/>
+    <text x="421" y="171" fill="#b58900">1.23×</text>
+  </g>
+</svg>
+
+</p>
+
+> At $n = 2$ everything is **call overhead** — the ratios are all close to 1. 📏
+
+---
+
+### 🎛️ Lowpass-32 (parallel cut)
+
+<p align="center">
+
+<svg width="660" height="250" viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Wall time · Ell (blue) vs EllStable (red)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="66" text-anchor="end">🐍 Python</text>
+    <rect x="160" y="50" width="60" height="16" fill="#5e81ac" rx="2"/>
+    <text x="228" y="63" fill="#5e81ac">3.89 s</text>
+    <rect x="160" y="70" width="400" height="16" fill="#bf616a" rx="2"/>
+    <text x="568" y="83" fill="#bf616a" font-weight="bold">37.97 s · 9.8×</text>
+
+    <text x="150" y="136" text-anchor="end">⚙️ C++</text>
+    <rect x="160" y="120" width="220" height="16" fill="#5e81ac" rx="2"/>
+    <text x="388" y="133" fill="#5e81ac">184 ms</text>
+    <rect x="160" y="140" width="250" height="16" fill="#bf616a" rx="2"/>
+    <text x="418" y="153" fill="#bf616a">209 ms · 1.14×</text>
+
+    <text x="150" y="206" text-anchor="end">🦀 Rust</text>
+    <rect x="160" y="190" width="400" height="16" fill="#bf616a" rx="2"/>
+    <text x="568" y="203" fill="#bf616a" font-weight="bold">broken — 0 iterations 🐛</text>
+  </g>
+</svg>
+
+</p>
+
+> Python: `EllStable` is **~10× slower**. Rust: the benchmark never even ran. 😬
+
+---
+
+### 📐 Random Cuts — the Ratio Grows with $n$
+
+.font-sm[
+
+| dim $n$ | 🐍 Python | ⚙️ C++ | 🦀 Rust |
+|:--------|:----------|:-------|:--------|
+| 16 | 11.1× | 1.07× | 1.55× |
+| 32 | 37.6× | 1.19× | 1.86× |
+| 64 | **122.3×** | 1.38× | 2.01× |
+| 128 | — | 1.07× | **0.90×** |
+| 256 | — | 1.12× | **0.77×** |
+
+]
+
+*Stable/Ell ratio — below 1.0 means **EllStable wins**.*
+
+.mermaid[
+
+<pre>
+graph LR
+    N["dimension n"] --> PY["🐍 Python\nratio explodes\n(interpreter loops)"]
+    N --> CPP["⚙️ C++\nratio flat ~1.1x\n(Ell always ahead)"]
+    N --> RS["🦀 Rust\ncrosses over at n≈128\n(Stable wins ≥128)"]
+    style N fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PY fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style CPP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style RS fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### 🔀 The Ratio Is Not a Constant
+
+<p align="center">
+
+<svg width="660" height="300" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Stable/Ell ratio vs dimension</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="60" y="300" text-anchor="middle">n</text>
+    <text x="150" y="66" text-anchor="end">🐍 n=64</text>
+    <rect x="160" y="50" width="420" height="18" fill="#bf616a" rx="3"/>
+    <text x="588" y="64" fill="#bf616a" font-weight="bold">122×</text>
+
+    <text x="150" y="112" text-anchor="end">🦀 n=64</text>
+    <rect x="160" y="96" width="7" height="18" fill="#b48ead" rx="2"/>
+    <text x="175" y="110" fill="#b48ead">2.0×</text>
+
+    <text x="150" y="158" text-anchor="end">⚙️ n=64</text>
+    <rect x="160" y="142" width="5" height="18" fill="#a3be8c" rx="2"/>
+    <text x="173" y="156" fill="#2e7d32">1.38×</text>
+
+    <text x="150" y="204" text-anchor="end">🦀 n=128</text>
+    <rect x="160" y="188" width="3" height="18" fill="#5e81ac" rx="1"/>
+    <text x="171" y="202" fill="#5e81ac">0.90× ← Stable wins</text>
+
+    <text x="150" y="250" text-anchor="end">⚙️ n=128</text>
+    <rect x="160" y="234" width="4" height="18" fill="#a3be8c" rx="1"/>
+    <text x="172" y="248" fill="#2e7d32">1.07×</text>
+  </g>
+</svg>
+
+</p>
+
+> 🐍 interpreter loops **diverge**; ⚙️/🦀 compiled loops **converge** — and Rust crosses over. 🔁
+
+---
+
+### 🤔 Why the Languages Differ
+
+.mermaid[
+
+<pre>
+graph TD
+    Q["Where does the time go?"]
+    Q --> PY["🐍 Python\nEll = one BLAS gemv\nStable = O(n²) Python ops"]
+    Q --> CPP["⚙️ C++\nboth are tight loops\nEll's flat rank-1 wins"]
+    Q --> RS["🦀 Rust\nEll re-borrowed a slice\nper element in the loop"]
+    PY --> R1["→ 10–122x slower"]
+    CPP --> R2["→ Ell ~1.1x ahead"]
+    RS --> R3["→ degraded at large n"]
+    style Q fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PY fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style CPP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style RS fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R1 fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style R2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+
+> "Stable is slower" is **not a law** — it is an implementation artifact. 🔬
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Part 3 — Three Fixes
+
+---
+
+### 🐛 Fix 1 — A Real Bug in Rust's Lowpass Case
+
+`create_lowpass_case` used the **wrong** formulas:
+
+```rust
+// before — multiplies by PI ✗
+let delta1 = 20.0 * (delta0_wpass * PI).log10();
+let delta2 = 20.0 * (delta0_wstop * PI).log10();
+
+// after — matches Python / C++ ✓
+let delta1 = 20.0 * (1.0 + delta0_wpass).log10();
+let delta2 = 20.0 * delta0_wstop.log10();
+```
+
+The bug **inverted the passband bounds**:
+$$ {\color{#2e7d32}L^2} = 161 \;>\; {\color{#c2185b}U^2} = 0.006 \quad\Rightarrow\quad \text{cut is } \texttt{NoSoln} \Rightarrow \text{loop exits at iteration 0} $$
+
+> The Rust lowpass **benchmark and test were vacuous** — they never ran a single iteration. 😳
+
+---
+
+### 🐛 Fix 1 — Impact
+
+<p align="center">
+
+<svg width="640" height="230" viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Rust lowpass-32 bounds</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="180" y="76" text-anchor="end">before (buggy)</text>
+    <rect x="190" y="58" width="200" height="24" fill="#bf616a" rx="3"/>
+    <text x="398" y="75" fill="#bf616a">lp_sq=161 &gt; up_sq=0.006 · 0 iters</text>
+
+    <text x="180" y="136" text-anchor="end">after (fixed)</text>
+    <rect x="190" y="118" width="200" height="24" fill="#a3be8c" rx="3"/>
+    <text x="398" y="135" fill="#2e7d32" font-weight="bold">lp_sq=0.952 &lt; up_sq=1.051 · 12 515 iters</text>
+  </g>
+  <text x="16" y="186" font-family="sans-serif" font-size="13" fill="#4c566a">Now the Rust lowpass actually exercises the ellipsoid method — and the test runs for ~14 s.</text>
+</svg>
+
+</p>
+
+---
+
+### 🪓 Fix 2 — Rust `Ell`: Hoist the Slice Reborrow
+
+The $O(n^2)$ rank-1 loop re-borrowed the matrix slice **on every element**:
+
+```rust
+// before
+for j in 0..=i {
+    self.mq.data_mut()[idx] -= update;              // re-borrow each time
+    self.mq.data_mut()[j * n + i] = self.mq.data()[idx];
+}
+
+// after — borrow once, outside the loop
+let mq = self.mq.data_mut();
+let gt = self.grad_t.data();
+for j in 0..=i {
+    mq[idx] -= r_qg * gt[j];
+    if i != j { mq[j * n + i] = mq[idx]; }
+}
+```
+
+> Same arithmetic, **bit-identical** result — just no repeated slice construction. 🎯
+
+---
+
+### 🐍 Fix 3 — Vectorize Python `EllStable`
+
+`_update_core` was pure-Python $O(n^2)$ loops. Now whole-slice numpy ops:
+
+```python
+# forward substitution: w = L^{-1} g
+for j in range(ndim - 1):
+    col = self._mq[j + 1 :, j] * self._inv_lower_g[j]
+    self._mq[j, j + 1 :] = col
+    self._inv_lower_g[j + 1 :] -= col
+
+# back substitution: q = L^{-T} z
+for i in range(ndim - 1, 0, -1):
+    self._g_t[i - 1] -= self._mq[i:, i - 1] @ self._g_t[i:]
+```
+
+Only the **outer $O(n)$ sweep** stays in Python; the inner work is vectorized. 🚀
+
+---
+
+### ⚖️ Fix 3 — The Trade-off
+
+<p align="center">
+
+<svg width="660" height="260" viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">EllStable speedup from vectorization (controlled A/B)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="150" y="76" text-anchor="end">n = 2</text>
+    <rect x="160" y="58" width="300" height="24" fill="#bf616a" rx="3"/>
+    <text x="468" y="75" fill="#bf616a">0.60× — slower ⚠️</text>
+
+    <text x="150" y="126" text-anchor="end">n = 32</text>
+    <rect x="160" y="108" width="140" height="24" fill="#a3be8c" rx="3"/>
+    <text x="308" y="125" fill="#2e7d32" font-weight="bold">2.3× faster</text>
+
+    <text x="150" y="176" text-anchor="end">n = 64</text>
+    <rect x="160" y="158" width="270" height="24" fill="#a3be8c" rx="3"/>
+    <text x="438" y="175" fill="#2e7d32" font-weight="bold">4.5× faster</text>
+  </g>
+  <text x="16" y="226" font-family="sans-serif" font-size="13" fill="#4c566a">Crossover ≈ n = 8–15: below it numpy slice overhead dominates; above it the $O(n^2)$ win dominates.</text>
+</svg>
+
+</p>
+
+> Accepted: a ~2 ms regression at $n=2$ for a multi-second win at $n \ge 32$. ✅
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Part 4 — After the Fixes
+
+---
+
+### 🦀 Rust — Updated Comparison
+
+<p align="center">
+
+<svg width="660" height="290" viewBox="0 0 660 290" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Stable/Ell after the fix (stable, best-of-3)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="66" text-anchor="end">profit 2-D</text>
+    <rect x="160" y="50" width="120" height="16" fill="#ebcb8b" rx="2"/>
+    <text x="288" y="63" fill="#b58900">1.20×</text>
+
+    <text x="150" y="106" text-anchor="end">lowpass-32 par</text>
+    <rect x="160" y="90" width="150" height="16" fill="#ebcb8b" rx="2"/>
+    <text x="318" y="103" fill="#b58900">1.50×</text>
+
+    <text x="150" y="146" text-anchor="end">Rand-64</text>
+    <rect x="160" y="130" width="215" height="16" fill="#d08770" rx="2"/>
+    <text x="383" y="143" fill="#d08770">2.15×</text>
+
+    <text x="150" y="186" text-anchor="end">Rand-128</text>
+    <rect x="160" y="170" width="90" height="16" fill="#5e81ac" rx="2"/>
+    <text x="258" y="183" fill="#5e81ac" font-weight="bold">0.90× ← Stable</text>
+
+    <text x="150" y="226" text-anchor="end">Rand-256</text>
+    <rect x="160" y="210" width="111" height="16" fill="#a3be8c" rx="2"/>
+    <text x="279" y="223" fill="#2e7d32">1.11×</text>
+  </g>
+  <text x="16" y="266" font-family="sans-serif" font-size="13" fill="#4c566a">Ell is ~20% faster at dim 16–64; the crossover is now a narrow window around n = 128.</text>
+</svg>
+
+</p>
+
+---
+
+### 🐍 Python — Updated Comparison
+
+<p align="center">
+
+<svg width="660" height="260" viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Stable/Ell before (red) vs after (green)</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="76" text-anchor="end">Rand-32</text>
+    <rect x="160" y="60" width="300" height="14" fill="#bf616a" rx="2"/>
+    <text x="468" y="72" fill="#bf616a">17.5×</text>
+    <rect x="160" y="78" width="127" height="14" fill="#a3be8c" rx="2"/>
+    <text x="295" y="90" fill="#2e7d32" font-weight="bold">7.4×</text>
+
+    <text x="150" y="146" text-anchor="end">Rand-64</text>
+    <rect x="160" y="130" width="400" height="14" fill="#bf616a" rx="2"/>
+    <text x="568" y="142" fill="#bf616a">51.8×</text>
+    <rect x="160" y="148" width="103" height="14" fill="#a3be8c" rx="2"/>
+    <text x="271" y="160" fill="#2e7d32" font-weight="bold">13.4×</text>
+  </g>
+  <text x="16" y="210" font-family="sans-serif" font-size="13" fill="#4c566a">Still the slowest language for EllStable — but the gap shrank by 2.4× / 4.0×.</text>
+</svg>
+
+</p>
+
+> Python's `Ell` uses one BLAS gemv; `EllStable` needs $\sim 4n$ numpy calls. Ell keeps the edge. 🐍
+
+---
+
+### 📊 Before / After Summary
+
+.font-sm[
+
+| Change | Metric | Before | After |
+|:-------|:-------|:-------|:------|
+| 🐛 Rust lowpass bounds | iterations | **0** (vacuous) | 12 515 ✅ |
+| 🦀 Rust `Ell` slice hoist | dim 16–64 | — | **~20% faster** |
+| 🦀 Rust crossover | Rand-256 | 0.77× (Stable) | **1.11×** (Ell) |
+| 🐍 Python `EllStable` | Rand-64 ratio | 51.8× | **13.4×** |
+| 🐍 Python `EllStable` | n=32 / n=64 | — | **2.3× / 4.5×** |
+
+]
+
+**Verification** ✅
+- 🦀 `cargo test` (110 + 13 + …) · `cargo clippy` clean
+- 🐍 163 tests + 14 bench asserts (exact counts!) + 41 doctests
+
+> All exact-iteration tests still pass → the changes are **behaviour-preserving**. 🎁
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part 5 — Lessons
+
+---
+
+### 🧠 The One Rule
+
+.mermaid[
+
+<pre>
+graph LR
+    M["Measure both\nin the SAME run"]
+    M --> R["Ratio is valid\neven if the machine drifts"]
+    R --> C["Controlled git-stash A/B"]
+    C --> K["Keep what wins\nrecord what loses"]
+    style M fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style K fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+</pre>
+
+]
+
+- The machine drifted **3×** between runs — absolute times lied, ratios didn't 📉
+- The **first** C++ Rand-128 flip was pure noise; a second sample settled it 🎲
+- A vacuous benchmark is worse than none — it hides a bug 🕳️
+
+---
+
+### 🧠 Key Takeaways
+
+**Performance** ⚡
+- `EllStable` is **not** universally slower — it's implementation-dependent 🔀
+- 🐍 Python: interpreter loops are catastrophic ($O(n^2)$ Python vs BLAS) 🐢
+- ⚙️ C++: `Ell`'s flat rank-1 update edges out the factorized path 🎯
+- 🦀 Rust: a per-element slice reborrow quietly degraded `Ell` at large $n$ 🪓
+- Vectorizing the inner loops flipped Python's gap from 122× to 13× 🚀
+
+**Correctness & Process** 🧭
+- Fix the **bounds before** you trust the benchmark 🐛
+- Exact-iteration tests prove behaviour preservation 🎁
+- **Compare in the same run** — thermal drift is real 🌡️
+- One bug class (per-element overhead) showed up in **both** languages 🐛
+
+---
+
+### 📜 Artifacts From This Session
+
+.font-sm[
+
+| Artifact | Where |
+|:---------|:------|
+| 🐛 Rust lowpass fix | `ellalgo-rs` · `e1614ea` |
+| 🦀 Rust `Ell` slice hoist | `ellalgo-rs` · `643a892` |
+| 🐍 Python `EllStable` vectorization | `ellalgo` · `b6e49cd` |
+| ⚙️ C++ comparison harness | `ellalgo-cpp` · `bench/BM_ell_compare.cpp` |
+| 📊 This deck | `cvx/ellalgo-stable-remark.html` |
+
+]
+
+> Three commits, two languages, one bug — all pushed and verified. 🎉
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Normal vs Stable: Ell vs EllStable**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Measure both. Trust the ratio, not the clock. ⚖️
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -73,6 +73,7 @@ This section covers combinatorial optimization problems and their approximation 
 | ---------------------------------------------- | ----------------------------------------------- |
 | [Vertex Cover Algorithms](vertex-cover-remark.html) | From exact to GPU-accelerated             |
 | [Covering via Primal-Dual](pd_cover-remark.html) | Primal-dual framework with reverse-delete |
+| [Odd Cycle Cover Performance](odd-cycle-cover-perf-remark.html) | One oracle, three languages: 🐍 ⚙️ 🦀 |
 | [GPU Vertex Cover (C++)](netlistx-cpp-gpu-remark.html) | CUDA port of randomized vertex cover |
 | [GPU Vertex Cover (Rust)](netlistx-rust-gpu-remark.html) | Rust port of randomized vertex cover |
 | [Porting netlistx to Rust](netlistx-rust-remark.html) | EDA algorithms in systems programming |

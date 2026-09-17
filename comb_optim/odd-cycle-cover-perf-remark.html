@@ -178,14 +178,16 @@ graph LR
 
 `pd_cover` calls `violate()` about $2|C|$ times — once per added vertex, plus once per reverse-delete check.
 
-$$ T_{\text{total}} \;=\; O\!\left({\color{#b58900}|C|} \cdot {\color{#bf616a}T_{\text{oracle}}}\right) $$
+$$ T_{\text{total}} \;=\; O\!\left({\color{#b58900}c} \cdot {\color{#bf616a}T_{\text{oracle}}}\right) $$
+
+where $c = |C|$.
 
 .font-sm[
 
 | | $T_{\text{oracle}}$ per call | Total |
 |:--|:--|:--|
-| **Before** | $O\!\big(V \cdot (V+E)\big)$ | $O\!\big(|C| \cdot V \cdot (V+E)\big)$ 🐢 |
-| **After** | $O(V + E)$ | $O\!\big(|C| \cdot (V+E)\big)$ 🚀 |
+| **Before** | $O\!\big(V \cdot (V+E)\big)$ | $O\!\big(c \cdot V \cdot (V+E)\big)$ 🐢 |
+| **After** | $O(V + E)$ | $O\!\big(c \cdot (V+E)\big)$ 🚀 |
 
 ]
 

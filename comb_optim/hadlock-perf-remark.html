@@ -405,17 +405,26 @@ The test suite only checked that the cut was **bipartite** — never that it was
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     F1["1. dist_mat keyed by face id\n(correctness)"]
     F2["2. throw on odd parity\n(was a silent pop_back)"]
     F3["3. skip bridge self-loops\nin build_dual"]
-    F4["4. drop the O(k²) path table\nreconstruct lazily"]
-    F5["5. std::map → unordered_map\n+ reserve"]
-    F6["6. flat is_odd array\n(no hash lookup)"]
-    F1 --> F2 --> F3 --> F4 --> F5 --> F6
+    F1 --> F2 --> F3 --> N(( ))
     style F1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
     style F2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
     style F3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+.mermaid[
+
+<pre>
+graph LR
+    F4["4. drop the O(k²) path table\nreconstruct lazily"]
+    F5["5. std::map → unordered_map\n+ reserve"]
+    F6["6. flat is_odd array\n(no hash lookup)"]
+    N(( )) --> F4 --> F5 --> F6
     style F4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style F5 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style F6 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
@@ -543,7 +552,7 @@ New `src/planar.rs` — the **Demoucron–Malgrange–Pertuiset** path-addition 
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     CYC["Start from a cycle\n→ embedded subgraph H"] --> FRAG["Find fragments\nof G − H"]
     FRAG --> ADM["Admissible faces\n= faces containing\nall attachments"]
     ADM -->|"none"| NONPLAN["NOT PLANAR\nreturn None ❌"]

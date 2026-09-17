@@ -122,6 +122,7 @@ graph TD
 | [Understanding the ellalgo Package](ellalgo-remark.html)              | Python implementation of ellipsoid method      |
 | [Ellipsoid Method: Py→Rust→C++](ellalgo-py-rs-cpp-remark.html)        | Cross-language ellipsoid implementation        |
 | [Making Ellalgo Fast](ellalgo-perf-remark.html)                      | Profiling & per-iteration allocation fixes (Py/C++/Rust) |
+| [Making Corr-Solver Fast](corr-solver-perf-remark.html)               | Oracle JIT + a bsearch termination bug (Py/C++) |
 | [Normal vs Stable Ellipsoid](normal-vs-stable-remark.html)             | Performance comparison of ellipsoid variants   |
 | [Ell vs EllStable: Runtime](ellalgo-stable-remark.html)                | Normal vs stable across Python, C++ and Rust    |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |

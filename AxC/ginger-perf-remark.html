@@ -1,0 +1,844 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Making Ginger Fast — One Unreachable Tolerance, Three Languages</title>
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🫚 Making Ginger Fast
+
+## An unreachable tolerance, a thread pool that made things *slower*, and the same fix in three languages
+
+### 🐍 → ⚙️ → 🦀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — The Setup** 🧭
+- Three ports, one algorithm
+- Why `niter` is the only honest metric 📏
+- What the profiler found 🔍
+
+**Part 2 — The Bug** 🐛
+- 2000 iterations, accurate roots 😳
+- An absolute test on a scale-dependent residual
+- $P \mapsto P/s$: 2000 → 7 ⚡
+
+**Part 3 — The Python Trap** ⚠️
+- `aberth_mt` is **2–9× slower** 🐌
+- The GIL does not negotiate
+
+]
+
+.pull-right[
+
+**Part 4 — The Constant Factors** 🔥
+- Fused Horner: one pass, not two
+- Bairstow: stop allocating 📦
+- Measure *before* you optimize 🎯
+
+**Part 5 — `leja_order`** 📐
+- A comment that lied about complexity
+- $O(n^3) \to O(n^2)$, bit-identical ✅
+
+**Part 6 — Porting** 🌍
+- C++ and Rust: same bug, different physics ⚙️🦀
+- The finding that did **not** transfer 🧩
+
+**Part 7 — Results & Lessons** 🎓
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — The Setup
+
+---
+
+### 🫚 Three Implementations, One Algorithm
+
+`ginger` is a **pure-Python** polynomial root-finder with C++ and Rust siblings — all sharing the same *Aberth–Ehrlich* and *Bairstow* structure. 🔗
+
+.mermaid[
+
+<pre>
+graph LR
+    P["🐍 ginger\npure Python"] --> A["Aberth-Ehrlich\nsimultaneous roots"]
+    C["⚙️ ginger-cpp\nCMake / xmake"] --> A
+    R["🦀 ginger-rs\ncargo / rayon"] --> A
+    P --> B["Bairstow\nquadratic factors"]
+    C --> B
+    R --> B
+    A --> F["One convergence test\nOne scaling bug"]
+    B --> F
+    style P fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style R fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:4px
+</pre>
+
+]
+
+- No NumPy, no BLAS — **pure arithmetic**, so every constant factor counts 🧮
+- Used by [`multiplierless`](https://github.com/luk036/multiplierless) for **spectral factorization** 📡
+- Same algorithms, three runtimes → a natural **controlled experiment** 🧪
+
+> When the same bug appears in three languages, the bug is in the **mathematics**, not the language. 🎯
+
+---
+
+### 📏 What We Measure — and Why `niter` Is the Truth
+
+These solvers cost $O(\texttt{niter} \times n^2)$. So the *only* number that matters is the iteration count. 📐
+
+$$ T_{\text{total}} \;=\; \underbrace{\texttt{niter}}_{\text{deterministic}} \;\times\; \underbrace{O(n^2)}_{\text{per-iteration}} \;+\; \underbrace{\text{startup}}_{\text{noise}} $$
+
+**The protocol** 🧪
+- Report **iteration counts first** — deterministic, machine-independent ✅
+- Take **min of 3** for wall time; never trust a single run 🔁
+- Use the **same generated polynomial** across languages so the *shape* of the failure is comparable 🌍
+
+**Why this matters here:** 🔍
+
+A change that pushes `niter` from 7 to 2000 is a **285× regression** that a wall-clock-only benchmark can hide behind a fast machine. 🫥
+
+> Wall time tells you *something* changed. `niter` tells you **what**. ✅
+
+---
+
+### 🔬 The Profiler Doesn't Lie
+
+`python -m cProfile` on `aberth` at degree 32 — **4.42 M function calls**, and the top of the list is not what you'd guess. 🐍
+
+<p align="center">
+
+<svg width="640" height="260" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">aberth, degree 32 — cumulative time (before)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="230" y="66" text-anchor="end">horner_eval</text>
+    <rect x="240" y="50" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="606" y="66" fill="#bf616a" font-weight="bold" text-anchor="end">3.51 s · 70%</text>
+
+    <text x="230" y="118" text-anchor="end">　└ accumulate lambda</text>
+    <rect x="240" y="102" width="162" height="22" fill="#ebcb8b" rx="3"/>
+    <text x="410" y="118" fill="#b58900" font-weight="bold">1.58 s · 31%</text>
+
+    <text x="230" y="170" text-anchor="end">aberth_job</text>
+    <rect x="240" y="154" width="128" height="22" fill="#5e81ac" rx="3"/>
+    <text x="376" y="170" fill="#5e81ac" font-weight="bold">1.26 s</text>
+  </g>
+  <text x="16" y="216" font-family="sans-serif" font-size="13" fill="#4c566a">4,032,000 lambda invocations — one per polynomial coefficient, per root, per sweep.</text>
+  <text x="16" y="238" font-family="sans-serif" font-size="13" fill="#4c566a">The arithmetic is $O(n^2)$. The <tspan font-weight="bold" fill="#bf616a">dispatch</tspan> is the bottleneck.</text>
+</svg>
+
+</p>
+
+> No FLOPs to save. Only **overhead to remove**. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🐛 Part 2 — An Unreachable Tolerance
+
+---
+
+### 😳 2000 Iterations, and the Roots Were Already Correct
+
+The degree-16 case ran to `max_iters` and reported **failure** — but its roots were accurate to $4.7 \times 10^{-14}$. 🤨
+
+| degree | $\max_k \lvert a_k \rvert$ | `niter` | converged | relative residual |
+|:-------|---------------------------:|--------:|:---------:|------------------:|
+| 8 | $1.7 \times 10^{2}$ | 7 | ✅ | $3.6 \times 10^{-15}$ |
+| 16 | $1.7 \times 10^{4}$ | **2000** | ❌ | **$4.7 \times 10^{-14}$** |
+| 32 | $1.9 \times 10^{10}$ | **2000** | ❌ | $2.0 \times 10^{-10}$ |
+
+Read the last column again. At degree 16 the answer is **better than the requested tolerance** — and the solver says `converged = False`. 😵
+
+- At degree 32 the absolute residual plateaus at $3.67$ — a number that means nothing without a scale 📉
+- Division by the leading coefficient makes it $2 \times 10^{-10}$ — small, but a different story 📐
+
+> The roots were right. The **stopping rule** was wrong. 🎯
+
+---
+
+### 🧮 Why: An Absolute Test on a Scale-Dependent Residual
+
+Both solvers compared an **absolute** residual against a **fixed** `tolerance = 1e-12`:
+
+```python
+tol_i = abs(p_eval)                       # Aberth
+tol_i = max(abs(vA.x), abs(vA.y))         # Bairstow
+if tolerance &lt; options.tolerance: ...     # 1e-12, absolute
+```
+
+.mermaid[
+
+<pre>
+flowchart TD
+    Z["root estimate z_i"] --> E["evaluate P at z_i"]
+    E --> T{"residual below tolerance?"}
+    T -->|yes| D["converged"]
+    T -->|no| U["Newton update"]
+    U --> Z
+    style Z fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T fill:#fff9c4,stroke:#f57f17,stroke-width:4px
+    style D fill:#a3be8c,stroke:#2e7d32,stroke-width:4px
+    style U fill:#5e81ac,stroke:#2e3440,stroke-width:3px,color:#ffffff
+</pre>
+
+]
+
+But the residual is **not** scale-free. For a polynomial with coefficients $a_k$:
+
+$$ R(z) \;=\; \frac{\lvert P(z) \rvert}{\lVert a \rVert_\infty} \quad\text{is meaningful, while}\quad \lvert P(z) \rvert \quad\text{is not} $$
+
+At any root, $\lvert P(z) \rvert$ has a **floating-point floor** proportional to the coefficient magnitudes:
+
+$$ \min_z \lvert P(z) \rvert \;\gtrsim\; \epsilon_{\text{mach}} \cdot \max_k \lvert a_k \rvert \;\approx\; {\color{#bf616a}2.2 \times 10^{-16}} \max_k \lvert a_k \rvert $$
+
+$$ \text{degree 16: } {\color{#bf616a}2.2\times10^{-16}} \times {\color{#5e81ac}1.7\times10^{4}} \;\approx\; {\color{#bf616a}4 \times 10^{-12}} \;>\; {\color{#5e81ac}10^{-12}} $$
+
+> The threshold was **mathematically unreachable**. Not hard — impossible. 💣
+
+---
+
+### 📉 The Floor, Visualised
+
+<p align="center">
+
+<svg width="640" height="300" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Achievable residual floor vs the fixed 1e-12 threshold (log scale)</text>
+
+  <line x1="70" y1="52" x2="70" y2="228" stroke="#d0d0d0" stroke-width="1"/>
+  <line x1="70" y1="228" x2="612" y2="228" stroke="#d0d0d0" stroke-width="1"/>
+  <g font-family="monospace" font-size="11" fill="#4c566a">
+    <text x="64" y="56" text-anchor="end">1e-10</text>
+    <text x="64" y="114" text-anchor="end">1e-12</text>
+    <text x="64" y="172" text-anchor="end">1e-14</text>
+    <text x="64" y="224" text-anchor="end">1e-16</text>
+  </g>
+
+  <line x1="70" y1="114" x2="612" y2="114" stroke="#5e81ac" stroke-width="2" stroke-dasharray="7,4"/>
+  <text x="608" y="108" font-family="sans-serif" font-size="11" fill="#5e81ac" text-anchor="end" font-weight="bold">tolerance = 1e-12 — never reached ⛔</text>
+
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="90" text-anchor="end">deg 8</text>
+    <rect x="160" y="76" width="60" height="20" fill="#a3be8c" rx="3"/>
+    <text x="228" y="90" fill="#2e7d32" font-weight="bold">converges ✅</text>
+
+    <text x="150" y="146" text-anchor="end">deg 16</text>
+    <rect x="160" y="132" width="180" height="20" fill="#bf616a" rx="3"/>
+    <text x="348" y="146" fill="#bf616a" font-weight="bold">floor above threshold ❌</text>
+
+    <text x="150" y="200" text-anchor="end">deg 32</text>
+    <rect x="160" y="186" width="420" height="20" fill="#bf616a" rx="3"/>
+    <text x="588" y="200" fill="#bf616a" font-weight="bold" text-anchor="end">hopeless ❌</text>
+  </g>
+
+  <text x="16" y="258" font-family="sans-serif" font-size="13" fill="#4c566a">Bar length is proportional to the floating-point floor. It grows with the coefficients; the threshold does not.</text>
+  <text x="16" y="280" font-family="sans-serif" font-size="13" fill="#4c566a">An absolute tolerance on a scale-dependent quantity is a bug <tspan font-weight="bold">waiting for a scale</tspan>. 💣</text>
+</svg>
+
+</p>
+
+---
+
+### ✅ The Fix: Normalise the Polynomial
+
+Divide the coefficients by a scale factor. **The roots do not move** — only the residual's units change. 🪄
+
+$$ s \;=\; \max\!\Bigl({\color{#5e81ac}1.0},\; \max_k \lvert a_k \rvert\Bigr), \qquad P_{\text{scaled}} \;=\; \frac{P}{s} $$
+
+```python
+def residual_scale(coeffs):
+    return max(1.0, max(abs(c) for c in coeffs))
+```
+
+And the iteration is **scale-equivariant**, so the *trajectory* is untouched:
+
+$$ \text{Aberth:}\quad \frac{P/s}{P'/s} = \frac{P}{P'} \qquad\qquad \text{Bairstow:}\quad \Delta \;=\; \frac{\operatorname{adj}(J)\,{\color{#bf616a}vA}}{\det(J)} \;\longrightarrow\; \frac{(1/s^2)\,\cdot}{(1/s^2)\,\cdot} \;=\; \text{invariant} $$
+
+The Bairstow numerator **and** denominator both scale as $1/s^2$ — the correction $\Delta$ is unchanged. 🎯
+
+> Same path, same roots, same `niter` — but now `tolerance` means something **relative**. ✅
+
+---
+
+### ⚖️ The `max(1.0, ...)` Decision
+
+Why floor the scale at $1.0$? Because the bug only makes the test **too strict**, never too loose. 🧭
+
+| coefficient scale | $s$ | effect on the test |
+|:------------------|----:|:-------------------|
+| $\max_k \lvert a_k \rvert > 1$ | $\max_k \lvert a_k \rvert$ | **loosens** it — fixes the unreachable case ✅ |
+| $\max_k \lvert a_k \rvert \le 1$ | $1.0$ | **unchanged** — historical behaviour preserved 🔒 |
+
+- For a polynomial like the FIR test vector ($\max_k \lvert a_k \rvert = 0.15$), $s = 1$ → **bit-for-bit the same as before** ✅
+- No test bound had to be relaxed to accommodate the change 🧪
+- Both branches are pinned by doctests: `residual_scale([10, 150, 10]) == 150` and `residual_scale([0.1, 0.2]) == 1.0` 📌
+
+> A fix that only ever *loosens* an impossible test cannot break a passing one. 🔐
+
+---
+
+### 📊 Result: 2000 → 7
+
+<p align="center">
+
+<svg width="640" height="290" viewBox="0 0 640 290" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Iterations to converge — bar length ∝ niter (log scale)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="170" y="70" text-anchor="end">deg 16 · before 🐍</text>
+    <rect x="180" y="54" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="546" y="70" fill="#bf616a" font-weight="bold" text-anchor="end">2000 · FAILED 😬</text>
+
+    <text x="170" y="122" text-anchor="end">deg 16 · after 🐍</text>
+    <rect x="180" y="106" width="72" height="22" fill="#a3be8c" rx="3"/>
+    <text x="260" y="122" fill="#2e7d32" font-weight="bold">7 iters · 285× ✅</text>
+
+    <text x="170" y="182" text-anchor="end">deg 8 · before 🐍</text>
+    <rect x="180" y="166" width="303" height="22" fill="#bf616a" rx="3"/>
+    <text x="490" y="182" fill="#bf616a" font-weight="bold">pbairstow 186 ms</text>
+
+    <text x="170" y="234" text-anchor="end">deg 8 · after 🐍</text>
+    <rect x="180" y="218" width="12" height="22" fill="#a3be8c" rx="3"/>
+    <text x="200" y="234" fill="#2e7d32" font-weight="bold">0.43 ms · 432× ✅</text>
+  </g>
+  <text x="16" y="272" font-family="sans-serif" font-size="13" fill="#4c566a">Degree-8 pbairstow was <tspan font-weight="bold">also</tspan> silently running to 2000 — its floor was just above the line.</text>
+</svg>
+
+</p>
+
+> The speedup came from **termination**, not from a better algorithm. 📉
+
+---
+
+class: nord-light, middle, center
+
+## ⚠️ Part 3 — The Python-Specific Trap
+
+---
+
+### 🐌 Threads That Make It Slower
+
+`jacobi_mt_run` submits `n` futures per iteration to a `ThreadPoolExecutor`. The work is pure-Python complex arithmetic that **never releases the GIL**. 🧵
+
+| degree | `aberth` | `aberth_mt` | ratio |
+|-------:|---------:|------------:|:------|
+| 8 | 1.00 ms | 7.55 ms | **7.5× slower** 🐌 |
+| 16 | 876 ms | 2749 ms | **3.1× slower** 🐌 |
+| 32 | 3181 ms | 6513 ms | **2.1× slower** 🐌 |
+
+And the facade **auto-selected it**:
+
+```python
+should_parallelize(num_roots) -&gt; num_roots &gt; PARALLEL_THRESHOLD   # = 4
+```
+
+So every realistic input got the slower path **by default**. 🤦
+
+> `should_parallelize` describes how many roots there are. It does not describe whether **threads help**. 🎯
+
+---
+
+### ✅ Fix: `AUTOMATIC` Means Sequential
+
+The C++/Rust siblings keep the auto-dispatch — **real threads really do parallelize there**. Python is different. ⚖️
+
+```python
+class SolveMode(Enum):
+    AUTOMATIC = "automatic"        # -&gt; sequential: the jobs never release the GIL
+    SEQUENTIAL = "sequential"
+    MULTI_THREADED = "multi_threaded"   # kept: API parity with ginger-cpp
+```
+
+- `AUTOMATIC` and `SEQUENTIAL` now both take the single-threaded path ✅
+- `MULTI_THREADED` stays available for callers who supply **GIL-releasing** work 🔓
+- `should_parallelize` is unchanged — it is public API and still tested 📌
+- `solve_pbairstow_even` / `solve_pbairstow_autocorr` already ignored `mode`; now Aberth agrees 🤝
+
+> The thread pool was never fast. It was just **available**. 🧵
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 4 — The Constant Factors
+
+---
+
+### 🔥 Fused Horner: One Pass, Not Two
+
+`aberth_job` evaluated $P$ and $P'$ with **two** `accumulate` calls, each allocating a full intermediate list. 🗑️
+
+```python
+def horner_eval_pp(coeffs, z):
+    p = dp = 0.0
+    for c in coeffs:
+        dp = dp * z + p
+        p = p * z + c
+    return p, dp
+```
+
+This computes both values in a **single pass** — no lambda, no intermediate list:
+
+$$ p' \leftarrow p' z + p, \qquad p \leftarrow p z + c_k $$
+
+| | before | after |
+|:--|-------:|------:|
+| `horner_eval` calls (deg 32) | 128,000 | **64,000** |
+| `accumulate` lambda calls | 4,032,000 | **0** ✅ |
+| total profiled calls | 4,418,003 | **324,313** · 13.6× fewer 🚀 |
+| wall time (deg 32, 2000 iters) | 3181 ms | 2263 ms · 1.46× |
+
+> Removing a per-element **lambda call** beat every arithmetic trick we tried. 🎯
+
+---
+
+### 📦 Bairstow: Stop Allocating Vectors
+
+The Bairstow hot step allocated `Vector2`/`Matrix2` objects just to do 6 multiplications. 💸
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">pbairstow_even, degree 32 — object churn in the hot loop</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="230" y="66" text-anchor="end">Vector2.x / .y getters</text>
+    <rect x="240" y="50" width="216" height="22" fill="#bf616a" rx="3"/>
+    <text x="464" y="66" fill="#bf616a" font-weight="bold">1.80 s · 18%</text>
+
+    <text x="230" y="118" text-anchor="end">Vector2.__sub__</text>
+    <rect x="240" y="102" width="180" height="22" fill="#ebcb8b" rx="3"/>
+    <text x="428" y="118" fill="#b58900" font-weight="bold">1.32 s · 13%</text>
+
+    <text x="230" y="170" text-anchor="end">Vector2.__init__</text>
+    <rect x="240" y="154" width="60" height="22" fill="#5e81ac" rx="3"/>
+    <text x="308" y="170" fill="#5e81ac" font-weight="bold">0.20 s</text>
+  </g>
+  <text x="16" y="214" font-family="sans-serif" font-size="13" fill="#4c566a">704,000 object constructions · 5,056,000 property calls — for ~35% of total runtime.</text>
+  <text x="16" y="236" font-family="sans-serif" font-size="13" fill="#4c566a">Fix: private <tspan font-family="monospace" fill="#bf616a">_suppress_old_step</tspan> / <tspan font-family="monospace" fill="#bf616a">_delta_step</tspan> float cores, one source of truth. <tspan font-weight="bold" fill="#2e7d32">1.95×</tspan></text>
+</svg>
+
+</p>
+
+> The public `delta` / `suppress_old` remain — they now **delegate** to the float cores. 🎯
+
+---
+
+### 🎯 Measure Before You Optimize (Including Your Own Ideas)
+
+The profile suggested four fixes. I measured all four. **Two were worth it.** 📏
+
+| candidate | measured share | verdict |
+|:----------|---------------:|:--------|
+| `robin.exclude(i)` iterator | **13%** (416k `__next__` calls) | ✅ precompute neighbour lists |
+| `coeffs.copy()` per step | **0.7%** (0.018 s of 2.58 s) | ❌ **skipped** — not worth a signature change |
+| `horner_eval_f` uses `reduce` | not a hot path | ❌ skipped |
+| `Vector2.__itruediv__` | no hot path uses it | ❌ skipped |
+
+And the Robin result was the **4th-largest cost** after the arithmetic — the profile found it, not intuition:
+
+```python
+neighbors = [list(robin.exclude(i)) for i in range(num_factors)]   # once per solve
+```
+
+.mermaid[
+
+<pre>
+flowchart LR
+    C["candidate optimization"] --> M["measure its share"]
+    M --> B{"a real share of runtime?"}
+    B -->|yes| D["implement and verify"]
+    B -->|no| S["skip it - it is noise"]
+    D --> D1["Robin neighbours 13 percent"]
+    S --> S1["coeffs.copy 0.7 percent"]
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:4px
+    style D fill:#a3be8c,stroke:#2e7d32,stroke-width:4px
+    style S fill:#bf616a,stroke:#8b2c3a,stroke-width:3px,color:#ffffff
+    style D1 fill:#a3be8c,stroke:#2e7d32,stroke-width:3px
+    style S1 fill:#bf616a,stroke:#8b2c3a,stroke-width:3px,color:#ffffff
+</pre>
+
+]
+
+> Three of my four "obvious" optimizations were **noise**. Only measurement separated them. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Part 5 — `leja_order`
+
+---
+
+### 🐛 A Comment That Lied
+
+`leja_order` is used by `poly_from_roots` for numerical stability. Its comment claimed:
+
+```python
+# Greedy Leja ordering (O(n^2)):
+#   start with the smallest-magnitude point
+#   each subsequent point maximizes the MIN distance to ALL selected points
+```
+
+The **second** line is the problem. "MIN distance to ALL selected" is inside a `for` over all remaining points: 🌀
+
+$$ \underbrace{n}_{\text{outer}} \times \underbrace{n}_{\text{candidates}} \times \underbrace{n}_{\text{selected}} \;=\; {\color{#bf616a}O(n^3)} $$
+
+Measured scaling — a clean factor of **~8× per doubling** ($2^3$): 📉
+
+| $n$ | 50 | 100 | 200 | 400 |
+|:----|----:|----:|----:|----:|
+| time | 0.34 ms | 2.33 ms | 18.3 ms | 146.8 ms |
+
+> The comment was **wrong**, and it hid the bug for exactly as long as nobody read it. 📝
+
+---
+
+### 🪄 Incremental Minimum Distances
+
+The naive form recomputes $\min_q \lvert p - q \rvert$ from scratch. But it only ever **decreases** — so keep it. 🧠
+
+$$ d_i \;\leftarrow\; \min\Bigl(d_i,\; \lvert p_i - {\color{#5e81ac}\text{chosen}} \rvert\Bigr) \quad\text{after each selection} $$
+
+```rust
+let mut dists: Vec&lt;f64&gt; = points.iter().map(|p| (*p - result[0]).norm()).collect();
+while !points.is_empty() {
+    let chosen = points[best_idx];
+    points.remove(best_idx);
+    dists.remove(best_idx);
+    result.push(chosen);
+    for (d, p) in dists.iter_mut().zip(points.iter()) {
+        let nd = (*p - chosen).norm();
+        if nd &lt; *d { *d = nd; }          // running minimum — the whole trick
+    }
+}
+```
+
+$$ \underbrace{O(n^3)}_{\text{rescan}} \;\longrightarrow\; \underbrace{O(n^2)}_{\text{one update per pair}} \qquad\text{with} \quad \min \text{ exact} \;\Rightarrow\; \text{bit-identical} ✅ $$
+
+> `min` of floating-point values is exact — so the reordering **cannot** change the output. 🔐
+
+---
+
+### ✅ Bit-Identical, and Much Faster
+
+Because the running minimum is computed over exactly the same values, the result is **bit-for-bit** the naive ordering. 🎯
+
+<p align="center">
+
+<svg width="640" height="280" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">leja_order — bar length ∝ speedup (log scale)</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="150" y="70" text-anchor="end">n = 50 🐍</text>
+    <rect x="160" y="54" width="86" height="22" fill="#a3be8c" rx="3"/>
+    <text x="254" y="70" fill="#2e7d32" font-weight="bold">16× · 10.9 → 0.66 ms</text>
+
+    <text x="150" y="122" text-anchor="end">n = 100 🐍</text>
+    <rect x="160" y="106" width="141" height="22" fill="#a3be8c" rx="3"/>
+    <text x="309" y="122" fill="#2e7d32" font-weight="bold">33× · 80.7 → 2.45 ms</text>
+
+    <text x="150" y="174" text-anchor="end">n = 200 🐍</text>
+    <rect x="160" y="158" width="196" height="22" fill="#a3be8c" rx="3"/>
+    <text x="364" y="174" fill="#2e7d32" font-weight="bold">56× · 588 → 10.4 ms</text>
+
+    <text x="150" y="226" text-anchor="end">n = 200 ⚙️🦀</text>
+    <rect x="160" y="210" width="150" height="22" fill="#5e81ac" rx="3"/>
+    <text x="318" y="226" fill="#5e81ac" font-weight="bold">39× / 41× — same order</text>
+  </g>
+  <text x="16" y="262" font-family="sans-serif" font-size="13" fill="#4c566a">Validated bit-identical against the naive reference at n = 2, 3, 10, 37, 100 in all three languages. ✅</text>
+</svg>
+
+</p>
+
+---
+
+class: nord-light, middle, center
+
+## 🌍 Part 6 — Porting the Fixes
+
+---
+
+### ⚙️ C++: Same Bug — and the Same Allocation Trap
+
+The C++ port had the **identical** absolute-residual defect, in `execution_policy.hpp`: 🐛
+
+```cpp
+auto vA = horner(local_coeffs, degree, vri);
+const auto tol_i = std::max(std::abs(vA.x()), std::abs(vA.y()));   // absolute!
+if (tol_i &lt; options.tol_ind) return 0.0;
+```
+
+The fix centralises scaling in the **step constructors**, so all 12 call sites keep working:
+
+```cpp
+struct even_bairstow_step {
+    std::vector&lt;double&gt; coeffs;          // scaled — makes tolerance relative
+    std::size_t degree;
+    const Options& options;
+    even_bairstow_step(const std::vector&lt;double&gt;& raw, const Options& opts)
+        : coeffs(scaled_coeffs(raw)), degree(raw.size() - 1), options(opts) {}
+};
+```
+
+| | before | after |
+|:--|-------:|------:|
+| `aberth` deg 16 | 2000 iters, **FAIL**, 8.88 ms | **8 iters**, 0.045 ms · **~197×** ✅ |
+| `leja_order` n=200 | 18.33 ms | 0.472 ms · 39× ✅ |
+
+> `xmake build` under `/W4 /WX` · 103 test cases / 868 assertions ✅
+
+---
+
+### 🦀 Rust: `rayon` Changes the Answer
+
+Rust uses **rayon**, not a GIL-bound thread pool — so the Python threading finding **does not transfer**. 🧩
+
+```rust
+pub fn aberth_mt(coeffs: &[f64], zs: &mut [Complex&lt;f64&gt;], options: &Options) -&gt; (usize, bool) {
+    let scaled = scaled_coeffs(coeffs);          // the bug fix DOES transfer
+    let coeffs1 = derivative_coeffs(&scaled);    // also de-duplicates 4 copies
+    let step = AberthStep { coeffs: &scaled, coeffs1: &coeffs1 };
+    jacobi_mt_run(zs, options, &step)            // ...but this stays
+}
+```
+
+| | before | after |
+|:--|-------:|------:|
+| `aberth` deg 16 | 2000 iters, **FAIL**, 7.48 ms | **10 iters**, 0.045 ms · **~166×** ✅ |
+| `pbairstow` deg 8 | 2000 iters, **FAIL**, 1.45 ms | **3 iters**, 0.004 ms · **~364×** ✅ |
+| `leja_order` n=400 | 146.8 ms | 1.638 ms · **90×** ✅ |
+
+> The same bug, three languages. The same *cause* — but only Python had the threading pathology. 🎯
+
+---
+
+### 🧩 Which Findings Actually Transfer
+
+Not everything ports. Separating a **mathematical** finding from a **runtime** finding is the whole job. 🔬
+
+.mermaid[
+
+<pre>
+flowchart LR
+    F["finding from the profile"] --> K{"mathematical or runtime?"}
+    K -->|mathematics| All["port to all three"]
+    K -->|runtime| One["language specific"]
+    All --> A1["unreachable tolerance"]
+    All --> A2["leja_order complexity"]
+    One --> O1["GIL threading - Python only"]
+    One --> O2["lambda dispatch - Python only"]
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style K fill:#fff9c4,stroke:#f57f17,stroke-width:4px
+    style All fill:#a3be8c,stroke:#2e7d32,stroke-width:4px
+    style One fill:#d1c4e9,stroke:#6a1b9a,stroke-width:4px
+    style A1 fill:#a3be8c,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#a3be8c,stroke:#2e7d32,stroke-width:3px
+    style O1 fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style O2 fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+</pre>
+
+]
+
+| Finding | 🐍 Python | ⚙️ C++ | 🦀 Rust | why |
+|:--------|:--------:|:-----:|:------:|:----|
+| 🐛 unreachable tolerance | ✅ | ✅ | ✅ | **mathematics** — same formula everywhere |
+| 📐 `leja_order` $O(n^3)$ | ✅ | ✅ | ✅ | **algorithm** — same code shape |
+| 🔥 fused Horner | ✅ | — | — | Python's per-element lambda; compiled loops don't pay it |
+| 📦 object/alloc churn | ✅ | ✅ | ✅ | all three allocate in the hot loop |
+| 🧵 threads are slower | ✅ | ❌ | ❌ | **GIL only** — rayon and `ThreadPool` really parallelize |
+
+- C++/Rust keep `should_parallelize` auto-dispatch; Python no longer does ⚖️
+- The `leja_order` comment claimed `O(n^2)` in **all three** codebases — fixed in all three 📝
+
+> Port the **cause**, not the **fix**. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part 7 — Results & Lessons
+
+---
+
+### 🏁 Cross-Language Scoreboard
+
+<p align="center">
+
+<svg width="640" height="300" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Speedup — bar width ∝ speedup; iteration counts are the real evidence</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="230" y="68" text-anchor="end">aberth deg 16 🐍</text>
+    <rect x="240" y="52" width="200" height="22" fill="#a3be8c" rx="3"/>
+    <text x="448" y="68" fill="#2e7d32" font-weight="bold">362× · niter 2000 → 7</text>
+
+    <text x="230" y="120" text-anchor="end">pbairstow deg 8 🐍</text>
+    <rect x="240" y="104" width="238" height="22" fill="#a3be8c" rx="3"/>
+    <text x="486" y="120" fill="#2e7d32" font-weight="bold">432× · niter 2000 → 6</text>
+
+    <text x="230" y="172" text-anchor="end">aberth deg 16 ⚙️🦀</text>
+    <rect x="240" y="156" width="180" height="22" fill="#d1c4e9" rx="3"/>
+    <text x="428" y="172" fill="#6a1b9a" font-weight="bold">~197× / ~166×</text>
+
+    <text x="230" y="224" text-anchor="end">leja_order n=200 🐍</text>
+    <rect x="240" y="208" width="86" height="22" fill="#5e81ac" rx="3"/>
+    <text x="334" y="224" fill="#5e81ac" font-weight="bold">56×</text>
+
+    <text x="230" y="276" text-anchor="end">leja_order n=400 🦀</text>
+    <rect x="240" y="260" width="110" height="22" fill="#5e81ac" rx="3"/>
+    <text x="358" y="276" fill="#5e81ac" font-weight="bold">90×</text>
+  </g>
+</svg>
+
+</p>
+
+> The two biggest numbers are **not** constant-factor wins. They are **termination** wins. 📉
+
+---
+
+### 🧪 Verification Matrix
+
+A speedup that changes the answer is a bug with a nice benchmark. 🚨
+
+| check | 🐍 Python | ⚙️ C++ | 🦀 Rust |
+|:------|:---------:|:-----:|:------:|
+| unit tests | 86 ✅ | 103 cases / 868 asserts ✅ | 122 ✅ |
+| doctests | 43 / 44 ✅ | 43 / 44 ✅ | 45 ✅ |
+| formatter | black · isort ✅ | clang-format 18.1.2 ✅ | rustfmt ✅ |
+| linter | flake8 ✅ | `/W4 /WX` ✅ | clippy ✅ |
+| `leja_order` bit-identical | n=10, 37, 100 ✅ | n=2, 3, 10, 37, 100 ✅ | n=2, 3, 10, 37, 100 ✅ |
+| scaling leaves roots fixed | ✅ | ✅ | ✅ |
+
+**Two pre-existing failures — reported, not "fixed":** 📋
+- `suppress_old` doctest fails on pristine `HEAD` in **Python and C++** (expected value differs at ~$10^{-13}$) — verified by stashing my changes 🧷
+- 2 mypy errors in `_policy.py`, untouched by this work 🐛
+
+> Before blaming a regression, **stash and re-run**. It costs 30 seconds. ⏱️
+
+---
+
+### 🧠 Lessons
+
+**Performance** ⚡
+- Report **`niter` first** — it is deterministic; wall time is not 📏
+- An absolute tolerance on a scale-dependent residual is a **latent bug**, not a tuning knob 💣
+- Match the fix to the **runtime**: Python → remove dispatch; C++ → stop allocating; Rust → already fine 🔧
+- Measure your own ideas — **3 of 4** "obvious" optimizations were noise 🎯
+
+**Correctness** ✅
+- The roots were **already correct** while the solver reported failure 😳
+- **Bit-identical** is a feature: it proves you changed the cost, not the math 🔐
+- `min` of floats is exact → reordering is provably safe 📐
+- A wrong **comment** hid an $O(n^3)$ algorithm in all three codebases 📝
+
+**Process** 🔁
+- Port the **cause**, not the fix — the GIL finding is Python-only 🧩
+- "Same bug in three languages" means the bug is in the **mathematics** 🌍
+- Profile the **scaled** quantity — my first reading was off by 4× because I measured a different polynomial 🔬
+
+---
+
+### 📜 Artifacts From This Session
+
+.font-sm[
+
+| Repo | Change |
+|:-----|:-------|
+| `py/ginger` | issue #2 filed: scale-aware convergence + inner-loop plan 📋 |
+| `py/ginger` | `residual_scale`, `horner_eval_pp`, float cores `_delta_step` / `_suppress_old_step` / `_horner_quadratic` 🐍 |
+| `py/ginger` | `leja_order` $O(n^3) \to O(n^2)$; `AUTOMATIC` → sequential; Robin neighbours precomputed 📐 |
+| `py/ginger` | `bench/test_scaling.py` — degree scaling + `niter`/`converged` regression guards 🧪 |
+| `cpp/ginger-cpp` | `residual_scale` / `scaled_coeffs`; steps own scaled coeffs; 12 call sites simplified ⚙️ |
+| `cpp/ginger-cpp` | `leja_order` $O(n^3) \to O(n^2)$; `bench/BM_scaling.cpp` + `test_scaling.cpp`; xmake target 📊 |
+| `rs/ginger-rs` | `src/scaling.rs`; 10 entry points scaled; 4 duplicated derivative blocks removed 🦀 |
+| `rs/ginger-rs` | `leja_order` $O(n^3) \to O(n^2)$; `examples/scaling.rs`; +5 unit / +3 doc tests 📐 |
+
+]
+
+> Three repos, one mathematics bug, and 4 of 5 proposed optimizations verified **before** shipping. 🎉
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Making Ginger Fast — One Unreachable Tolerance, Three Languages**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Profile. Measure. Verify the *answer*, not just the clock. 🎯
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

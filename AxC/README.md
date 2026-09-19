@@ -153,6 +153,7 @@ graph TD
 | [ginger-cpp: Root Finding & Reconstruction](ginger-cpp-remark.html) | C++ root-finding & reconstruction |
 | [Spectral Factorization](spectral_fact-remark.html) | FFT vs root-finding |
 | [Root Finding: Py→Rust→C++](py-rs-cpp-ginger-remark.html) | Cross-language root-finding performance |
+| [Making ginger Fast](ginger-perf-remark.html) | Unreachable tolerance, GIL threads, O(n³)→O(n²) across Py/C++/Rust |
 
 ---
 
@@ -214,6 +215,7 @@ AxC/
 ├── FIR-IIR-remark.html                    # Digital Filters: FIR & IIR
 ├── ginger-remark.html                     # ginger Polynomial Root Finding Package
 ├── ginger-cpp-remark.html                 # ginger-cpp Root Finding & Reconstruction
+├── ginger-perf-remark.html                # Making ginger Fast (Py/C++/Rust performance)
 ├── multiplier-free-remark.html            # Multiplierless Designs
 ├── multiplierless-remark.html             # Multiplierless FIR Filter Design
 ├── multiplierless-py-rs-cpp-remark.html   # Multiplierless FIR: Py→Rust→C++

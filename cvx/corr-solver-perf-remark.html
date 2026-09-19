@@ -471,7 +471,8 @@ For the MLE path, $\alpha = 0.1$ fails outright: $\gamma = \texttt{inf}$. 💀
 
 **A claim I published and then had to retract:** 📝
 
-$$ \text{I claimed } \Sigma_k = D_1^k \text{ are matrix powers} \implies \text{they commute} \implies \text{shared eigenbasis} \implies O(n^2) \text{ per iteration} $$
+$$ \text{I claimed } \Sigma_k = D_1^k \text{ are matrix powers} \implies \text{they commute} \\
+   \implies \text{shared eigenbasis} \implies O(n^2) \text{ per iteration} $$
 
 But the code says:
 
@@ -501,17 +502,20 @@ if (tau < options.tolerance) return {upper, niter};
 // ... spins to max_iters for the same reason
 ```
 
+.pull-left[
 Same guard, same proof:
 
 | | before | after |
 |:--|-------:|------:|
 | iterations | 2000 | **< 200** |
 | threshold found | 500.0 | 500.0 ✅ |
-
+]
+.pull-right[
 - Regression test **fails without the guard**: `CHECK( 2000 < 200 )` 🧪
 - Released as **`ellalgo-cpp` v1.6.14**; 138 cases / 502 assertions ✅
 
 > Interesting: corr-solver-cpp's LSQ driver uses `cutting_plane_optim`, **not** `bsearch` — so it never hit this. The bug was live for every *other* consumer. 🌍
+]
 
 ---
 

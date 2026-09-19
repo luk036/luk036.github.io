@@ -87,10 +87,11 @@ class: nord-light, middle, center
 
 `ginger` is a **pure-Python** polynomial root-finder with C++ and Rust siblings — all sharing the same *Aberth–Ehrlich* and *Bairstow* structure. 🔗
 
+.pull-left[
 .mermaid[
 
 <pre>
-graph LR
+graph TD
     P["🐍 ginger\npure Python"] --> A["Aberth-Ehrlich\nsimultaneous roots"]
     C["⚙️ ginger-cpp\nCMake / xmake"] --> A
     R["🦀 ginger-rs\ncargo / rayon"] --> A
@@ -106,12 +107,14 @@ graph LR
 </pre>
 
 ]
-
+]
+.pull-right[
 - No NumPy, no BLAS — **pure arithmetic**, so every constant factor counts 🧮
 - Used by [`multiplierless`](https://github.com/luk036/multiplierless) for **spectral factorization** 📡
 - Same algorithms, three runtimes → a natural **controlled experiment** 🧪
 
 > When the same bug appears in three languages, the bug is in the **mathematics**, not the language. 🎯
+]
 
 ---
 
@@ -156,7 +159,7 @@ A change that pushes `niter` from 7 to 2000 is a **285× regression** that a wal
     <text x="376" y="170" fill="#5e81ac" font-weight="bold">1.26 s</text>
   </g>
   <text x="16" y="216" font-family="sans-serif" font-size="13" fill="#4c566a">4,032,000 lambda invocations — one per polynomial coefficient, per root, per sweep.</text>
-  <text x="16" y="238" font-family="sans-serif" font-size="13" fill="#4c566a">The arithmetic is $O(n^2)$. The <tspan font-weight="bold" fill="#bf616a">dispatch</tspan> is the bottleneck.</text>
+  <text x="16" y="238" font-family="sans-serif" font-size="13" fill="#4c566a">The arithmetic is O(n^2). The <tspan font-weight="bold" fill="#bf616a">dispatch</tspan> is the bottleneck.</text>
 </svg>
 
 </p>
@@ -175,18 +178,23 @@ class: nord-light, middle, center
 
 The degree-16 case ran to `max_iters` and reported **failure** — but its roots were accurate to $4.7 \times 10^{-14}$. 🤨
 
-| degree | $\max_k \lvert a_k \rvert$ | `niter` | converged | relative residual |
+.pull-left[
+.font-sm[
+| degree | $\max_k \lvert a_k \rvert$ | niter | converged | relative residual |
 |:-------|---------------------------:|--------:|:---------:|------------------:|
 | 8 | $1.7 \times 10^{2}$ | 7 | ✅ | $3.6 \times 10^{-15}$ |
 | 16 | $1.7 \times 10^{4}$ | **2000** | ❌ | **$4.7 \times 10^{-14}$** |
 | 32 | $1.9 \times 10^{10}$ | **2000** | ❌ | $2.0 \times 10^{-10}$ |
-
+]
+]
+.pull-right[
 Read the last column again. At degree 16 the answer is **better than the requested tolerance** — and the solver says `converged = False`. 😵
 
 - At degree 32 the absolute residual plateaus at $3.67$ — a number that means nothing without a scale 📉
 - Division by the leading coefficient makes it $2 \times 10^{-10}$ — small, but a different story 📐
 
 > The roots were right. The **stopping rule** was wrong. 🎯
+]
 
 ---
 
@@ -203,7 +211,7 @@ if tolerance &lt; options.tolerance: ...     # 1e-12, absolute
 .mermaid[
 
 <pre>
-flowchart TD
+flowchart LR
     Z["root estimate z_i"] --> E["evaluate P at z_i"]
     E --> T{"residual below tolerance?"}
     T -->|yes| D["converged"]
@@ -217,6 +225,8 @@ flowchart TD
 </pre>
 
 ]
+
+---
 
 But the residual is **not** scale-free. For a polynomial with coefficients $a_k$:
 
@@ -353,11 +363,13 @@ class: nord-light, middle, center
 
 `jacobi_mt_run` submits `n` futures per iteration to a `ThreadPoolExecutor`. The work is pure-Python complex arithmetic that **never releases the GIL**. 🧵
 
+.font-sm[
 | degree | `aberth` | `aberth_mt` | ratio |
 |-------:|---------:|------------:|:------|
 | 8 | 1.00 ms | 7.55 ms | **7.5× slower** 🐌 |
 | 16 | 876 ms | 2749 ms | **3.1× slower** 🐌 |
 | 32 | 3181 ms | 6513 ms | **2.1× slower** 🐌 |
+]
 
 And the facade **auto-selected it**:
 

@@ -48,6 +48,7 @@ class: nord-dark, middle, center
 - LSQ tracks the true kernel 📈
 - MLE does not 😬
 - Sample size: $N = 5 \dots 2000$ 🔢
+- Low end: $N = 1 \dots 200$ — failure regimes 💀
 
 **Part 3 — The Non-Convexity** 📉
 
@@ -211,6 +212,42 @@ class: nord-light, middle, center
 - **$N \geq n$**: the MLE improves ($0.97 \to 0.65$) but stays **2–5× worse** than LSQ — the boundary pin dominates 🧲
 - **The gap never closes**: as $N \to \infty$, $Y \to \Sigma_{\text{true}}$, yet the family projection stays **outside** $\Delta_{2\Sigma_{\text{true}}}$ by $\approx 1.0$ → a **misspecification floor**, not a sample-size artifact 🧱
 - CCP's $N$-dependence is the *healthy* one: it converges to the true likelihood projection ($\approx 0.29$) ✅
+
+---
+
+### 🔍 The Low End: $N = 1 \dots 200$
+
+<p align="center">
+<img src="lsq-vs-mle-remark.files/fig_samples_fine.svg" style="width:97%" />
+</p>
+
+| regime | LSQ | MLE(2Y) | CCP |
+|:--|:--|:--|:--|
+| **$N \le 3$** | **broken** (1.08–3.32) 💀 | infeasible | **broken** (1.96–5.57) 💀 |
+| **$4 \le N < 20$** | ~0.40–0.67 | **infeasible** 💀 | ~0.23–0.43 |
+| **$N \ge 20$** | **0.16–0.45** | 0.36–0.99 (pinned) | 0.20–0.68 |
+
+- rel-err $> 1.0$ means *worse than predicting the zero matrix* — both solvers do this at $N = 1, 2, 3$ 💀
+- At $N = 1$: LSQ $3.32$, CCP $\mathbf{5.57}$ — the sample covariance is a single rank-1 outer product
+
+---
+
+### ⚠️ Nothing Is Monotone
+
+| | min | max | spread |
+|:--|--:|--:|--:|
+| iso LSQ | 0.160 | 3.322 | **3.16** |
+| iso CCP | 0.203 | 5.573 | **5.37** |
+| iso MLE | 0.357 | 0.972 | 0.62 |
+| aniso CCP | 0.350 | 0.818 | 0.47 |
+
+- **CCP gets *worse* with more data** (true-kernel metric): iso $0.203 \to 0.337$, aniso $0.350 \to 0.683$ 📈
+  - it minimizes *likelihood*, not shape → it drifts to the asymptotic projection
+- **Each method has its own sweet spot**: LSQ @ $N{=}200$, CCP @ $N{=}50$, MLE @ $N{=}100$ 🎯
+- **Cost**: LSQ ~900 iterations, MLE ~400, **CCP ~5400** (≈6× and ≈13×) 🐢
+- Anisotropy is a *different* problem: LSQ plateaus near $0.4$, CCP swings $2\times$ between neighbouring $N$ 🌐
+
+> "More data is better" is **false** here — the failure is structural, not statistical. 🧱
 
 ---
 

@@ -1,0 +1,715 @@
+<!doctype html>
+<html>
+  <head>
+    <title>⚡ Making digraphx Fast — One Redundant Multiplication, Three Languages</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ Making digraphx Fast
+
+## One redundant multiplication, fixed in three languages
+
+### 🐍 → ⚙️ → 🦀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1 — The Setup** 🧭 (5 min)
+- What digraphx solves
+- Howard's policy iteration 🌀
+- The parametric / MCR loop 📈
+
+**Part 2 — The Bottleneck** 🔍 (7 min)
+- The profile
+- One ratio, computed 20× over 😳
+- The fix + Python results ✅
+
+**Part 3 — What Didn't Work** 🪤 (5 min)
+- SPFA: 337× slower ❌
+- Eager flatten: 2.1× slower ❌
+- The mypyc ceiling 📉
+
+]
+.pull-right[
+
+**Part 4 — Cross-Language Ports** 🌍 (7 min)
+- C++: a lazy weight cache ⚙️
+- Rust: compile-time mode split 🦀
+- Same fix, different physics
+
+**Part 5 — Measurement** 📏 (3 min)
+- Why wall time lies
+
+**Part 6 — Results & Lessons** 🎓 (3 min)
+
+> 🎯 **One theme:** find the per-iteration overhead, then remove it — *without changing the answer*.
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧭 Part 1 — The Setup
+
+---
+
+### 🎯 What digraphx Solves
+
+.pull-left[
+A family of **network-optimization** algorithms on weighted directed graphs:
+
+- **Negative cycle detection** — Howard's policy iteration 🌀
+- **Minimum cycle ratio (MCR)** — the "tightest" cycle ⚖️
+- **Parametric network problems** — one scalar parameter `r` 📈
+- **Min-cost flow** — cycle-canceling descent 💰
+
+> 🧩 The presentation that follows is about **performance** — the algorithms themselves were already correct.
+
+]
+.pull-right[
+Three sibling repositories implement the **same algorithms** and cross-validate each other: ✅
+
+.mermaid[
+
+<pre>
+graph TD
+    A["digraphx 🐍\nPython"] -- "native yield" --> D["Same algorithms\nHoward 1960\nBellman-Ford\nLawler / Dinkelbach"]
+    B["digraphx-cpp ⚙️\nC++20"] -- "py::Generator\ncoroutines" --> D
+    C["digraphx-rs 🦀\nRust"] -- "genawaiter::sync::Gen" --> D
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+</pre>
+
+]
+]
+
+
+---
+
+### 🌀 Howard's Method — The Skeleton
+
+The negative-cycle finder is a **Template Method**: relax to a fixpoint, find cycles in the predecessor graph, yield them.
+
+.mermaid[
+
+<pre>
+graph LR
+    A["1. Relax every edge\n(Bellman-Ford pass)"] --> B{"Any d changed?"}
+    B -- Yes --> C["2. Find cycles in\nthe predecessor graph"]
+    C --> D{"Cycle found?"}
+    D -- Yes --> E["3. Verify negative\nyield cycle 🔴"]
+    D -- No --> A
+    B -- No --> F["✅ No negative cycle"]
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+**Relaxation** is the hot loop — one triangle-inequality check per edge:
+
+$$ {\color{#5e81ac}d[v]} \;>\; {\color{#5e81ac}d[u]} + {\color{#bf616a}w(u,v)} \quad\Longrightarrow\quad {\color{#5e81ac}d[v]} \gets {\color{#5e81ac}d[u]} + {\color{#bf616a}w(u,v)} $$
+
+> ⚠️ The hot loop calls the **weight function** ${\color{#bf616a}w(\cdot)}$ once per edge, on **every pass**.
+
+---
+
+### ⚖️ Minimum Cycle Ratio — and Its Parametric Form
+
+The **MCR** problem looks for the cycle with the smallest cost/time ratio:
+
+$$ r^{*} \;=\; \min_{C \subseteq G} \; \frac{\sum_{e \in C} {\color{#bf616a}c(e)}}{\sum_{e \in C} {\color{#5e81ac}t(e)}} $$
+
+Reformulate as a **parametric** problem with parameter $r$ — each edge gets a *reduced distance*:
+
+$$ {\color{#bf616a}d_r(e)} \;=\; {\color{#bf616a}c(e)} - {\color{#b58900}r}\,{\color{#5e81ac}t(e)} $$
+
+Then the key equivalence holds:
+
+$$ \text{a cycle } C \text{ has ratio} < r \quad\Longleftrightarrow\quad \sum_{e \in C} {\color{#bf616a}d_r(e)} < 0 \quad (\text{negative cycle}) $$
+
+So MCR becomes a **sequence** of negative-cycle queries at changing ratios. 🔁
+
+---
+
+### 🔁 The Dinkelbach / Lawler Outer Loop
+
+.mermaid[
+
+<pre>
+graph LR
+    S["Start r₀"] --> H["howard(dist, r)\nfind negative cycles"]
+    H --> Q{"cycle found\nwith ratio r(C) < r?"}
+    Q -- Yes --> U["r ← r(C)\n(zero_cancel)"]
+    U --> H
+    Q -- No --> D["✅ r = min cycle ratio"]
+    style S fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Q fill:#f9e79f,stroke:#f57f17,stroke-width:3px
+    style U fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+Each ratio update is a Newton step; convergence is finite and fast. ✅
+
+> 🔑 **THE INVARIANT that this whole talk hinges on:**
+>
+> Inside a single `howard()` call, the ratio ${\color{#b58900}r}$ is **constant**. Every edge has **one** fixed ${\color{#bf616a}d_r(e)}$.
+>
+> Yet the naive hot loop recomputes it on **every relaxation pass**. 😱
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Part 2 — The Bottleneck
+
+---
+
+### 📊 The Profile — Fraction Arithmetic Dominates
+
+`cProfile` on `MinCycleRatioSolver` (n = 80, 5-deg, `Fraction`): **349 K calls / 0.46 s**.
+
+<p align="center">
+
+<svg width="640" height="290" viewBox="0 0 640 290" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Where the 0.46 s went — self time</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="250" y="66" text-anchor="end">Fraction.__new__</text>
+    <rect x="260" y="50" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="624" y="66" fill="#bf616a" font-weight="bold" text-anchor="end">0.059 s · 23,114 calls</text>
+
+    <text x="250" y="118" text-anchor="end">fractions.forward</text>
+    <rect x="260" y="102" width="299" height="22" fill="#bf616a" rx="3"/>
+    <text x="563" y="118" fill="#bf616a" font-weight="bold">0.049 s · normalization</text>
+
+    <text x="250" y="170" text-anchor="end">ω.distance(ratio, e)</text>
+    <rect x="260" y="154" width="201" height="22" fill="#5e81ac" rx="3"/>
+    <text x="465" y="170" fill="#5e81ac" font-weight="bold">0.033 s · 7,673 calls</text>
+
+    <text x="250" y="222" text-anchor="end">isinstance / abc checks</text>
+    <rect x="260" y="206" width="189" height="22" fill="#ebcb8b" rx="3"/>
+    <text x="453" y="222" fill="#b58900" font-weight="bold">0.031 s</text>
+  </g>
+  <text x="16" y="262" font-family="sans-serif" font-size="13" fill="#4c566a">Also: <tspan font-family="monospace" fill="#bf616a">math.gcd</tspan> called <tspan font-weight="bold" fill="#bf616a">35,056 times</tspan> — every Fraction add/sub normalizes.</text>
+  <text x="16" y="282" font-family="sans-serif" font-size="13" fill="#4c566a">The bottleneck is <tspan font-weight="bold">not</tspan> the graph algorithm. It is the <tspan font-weight="bold" fill="#bf616a">arithmetic inside the weight function</tspan>. 🐌</text>
+</svg>
+
+</p>
+
+---
+
+### 😳 One Ratio, Computed Twenty Times Over
+
+At a **fixed ratio**, `howard()` performs ~20 relaxation passes over the same 384 edges.
+
+<p align="center">
+
+<svg width="640" height="235" viewBox="0 0 640 235" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">One howard() call — n = 80, E = 384, ratio fixed</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="240" y="78" text-anchor="end">unique edge weights needed</text>
+    <rect x="250" y="62" width="36" height="22" fill="#a3be8c" rx="3"/>
+    <text x="294" y="78" fill="#2e7d32" font-weight="bold">384</text>
+
+    <text x="240" y="140" text-anchor="end">get_weight() evaluations</text>
+    <rect x="250" y="124" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="602" y="140" fill="#bf616a" font-weight="bold" text-anchor="end">7,673 · 20× redundant</text>
+  </g>
+  <text x="16" y="188" font-family="sans-serif" font-size="13" fill="#4c566a">20 passes × 384 edges. The ratio — and therefore every distance — is <tspan font-weight="bold">unchanged</tspan>.</text>
+  <text x="16" y="210" font-family="sans-serif" font-size="13" fill="#4c566a">Each redundant evaluation builds a fresh <tspan font-family="monospace" fill="#bf616a">Fraction</tspan> and runs a <tspan font-family="monospace" fill="#bf616a">gcd</tspan>. 💸</text>
+</svg>
+
+</p>
+
+> 🎯 The fix is not a better algorithm. It is **not doing the same multiplication 20 times**.
+
+---
+
+### ⚡ The Fix — Evaluate Each Weight Once per Call
+
+**Before** — `get_weight` is a closure called inside the per-edge hot loop, every pass:
+
+```python
+def get_weight(e):
+    return DomainType(omega.distance(ratio, e))   # Fraction(cost) - ratio * time
+
+while not found and relax(digraph, dist, get_weight, update_ok, point_to):
+    ...  # relax calls get_weight(e) for every edge, on every pass
+```
+
+**After** — flatten the graph once, evaluate each weight once, reuse across passes:
+
+```python
+edges = [(u, v, e, get_weight(e)) for u, nb in digraph.items()
+                                   for v, e in nb.items()]   # ← once per call
+
+def relax():
+    for u, v, e, w in edges:            # ← pre-weighted, no recompute
+        if dist[v] > dist[u] + w: ...
+```
+
+Bonus: the redundant `DomainType(omega.distance(...))` **double conversion** in the outer loop was dropped. 🧹
+
+$$ \text{evaluations}: \; {\color{#bf616a}P_{\text{passes}} \times E} \;\longrightarrow\; {\color{#2e7d32}1 \times E} $$
+
+---
+
+### ✅ Python Results — 2.35× on the Flagship Solver
+
+<p align="center">
+
+<svg width="640" height="270" viewBox="0 0 640 270" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">MinCycleRatio · controlled min-of-3, identical results</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="250" y="72" text-anchor="end">MCR · n = 80 🐍</text>
+    <rect x="260" y="56" width="230" height="22" fill="#a3be8c" rx="3"/>
+    <text x="500" y="72" fill="#2e7d32" font-weight="bold">2.60× · 124.1 → 47.6 ms</text>
+
+    <text x="250" y="124" text-anchor="end">MCR · n = 500 🐍</text>
+    <rect x="260" y="108" width="208" height="22" fill="#a3be8c" rx="3"/>
+    <text x="478" y="124" fill="#2e7d32" font-weight="bold">2.35× · 745.7 → 317.6 ms</text>
+
+    <text x="250" y="176" text-anchor="end">full pytest suite 🧪</text>
+    <rect x="260" y="160" width="174" height="22" fill="#5e81ac" rx="3"/>
+    <text x="444" y="176" fill="#5e81ac" font-weight="bold">1.97× · 40.3 → 20.5 s</text>
+  </g>
+  <text x="16" y="222" font-family="sans-serif" font-size="13" fill="#4c566a">Bar width ∝ speedup. Same ratio returned, same cycles found — <tspan font-weight="bold">byte-identical output</tspan>. ✅</text>
+  <text x="16" y="244" font-family="sans-serif" font-size="13" fill="#4c566a">The suite runtime halved as a side effect: every MCR test got the same 2× for free. 🎁</text>
+</svg>
+
+</p>
+
+> 🧪 The correctness evidence is not the clock — it is that the returned ratio and cycle are **unchanged**.
+
+---
+
+### 🏗️ A Bonus Bug: TinyDiGraph Built 2.4× Too Slowly
+
+`TinyDiGraph.add_edge` routed through NetworkX's generic `add_edge`, which re-resolved every lazy adjacency slot:
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Build 5,000 nodes / 25,000 edges</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="250" y="70" text-anchor="end">TinyDiGraph — before</text>
+    <rect x="260" y="54" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="612" y="70" fill="#bf616a" font-weight="bold" text-anchor="end">222.1 ms</text>
+
+    <text x="250" y="122" text-anchor="end">TinyDiGraph — after</text>
+    <rect x="260" y="106" width="111" height="22" fill="#a3be8c" rx="3"/>
+    <text x="381" y="122" fill="#2e7d32" font-weight="bold">68.8 ms · 3.2× faster</text>
+
+    <text x="250" y="174" text-anchor="end">DiGraphAdapter (baseline)</text>
+    <rect x="260" y="158" width="130" height="22" fill="#5e81ac" rx="3"/>
+    <text x="400" y="174" fill="#5e81ac" font-weight="bold">80.2 ms</text>
+  </g>
+  <text x="16" y="218" font-family="sans-serif" font-size="13" fill="#4c566a">The fix: bypass the generic path with direct list access — <tspan font-weight="bold" fill="#bf616a">50 K contains + 75 K getitem</tspan> calls removed.</text>
+  <text x="16" y="240" font-family="sans-serif" font-size="13" fill="#4c566a">TinyDiGraph now runs at <tspan font-weight="bold" fill="#2e7d32">0.86×</tspan> the plain adapter — it used to be <tspan font-weight="bold" fill="#bf616a">2.41×</tspan> slower. 🔁</text>
+</svg>
+
+</p>
+
+---
+
+class: nord-light, middle, center
+
+## 🪤 Part 3 — What Didn't Work
+
+---
+
+### ❌ Rejected: Queue-Based Relaxation (SPFA)
+
+The theory said a queue should beat full sweeps — each pass only touches *affected* nodes. Reality disagreed, **hard**. 😵
+
+<p align="center">
+
+<svg width="640" height="275" viewBox="0 0 640 275" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Standalone howard · long negative cycle · log-scaled bars</text>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440">
+    <text x="150" y="66" text-anchor="end">N = 300</text>
+    <rect x="160" y="52" width="12" height="16" fill="#a3be8c" rx="2"/>
+    <rect x="176" y="52" width="360" height="16" fill="#bf616a" rx="2"/>
+    <text x="530" y="66" fill="#bf616a" font-weight="bold">2.8 ms → 80.8 ms · 29× ⛔</text>
+
+    <text x="150" y="122" text-anchor="end">N = 1000</text>
+    <rect x="160" y="108" width="3" height="16" fill="#a3be8c" rx="1"/>
+    <rect x="176" y="108" width="360" height="16" fill="#bf616a" rx="2"/>
+    <text x="530" y="122" fill="#bf616a" font-weight="bold">9.2 ms → 1006 ms · 109× ⛔</text>
+
+    <text x="150" y="178" text-anchor="end">N = 3000</text>
+    <rect x="160" y="164" width="1" height="16" fill="#a3be8c" rx="1"/>
+    <rect x="176" y="164" width="360" height="16" fill="#bf616a" rx="2"/>
+    <text x="530" y="178" fill="#bf616a" font-weight="bold">28.1 ms → 9470 ms · 337× ⛔</text>
+  </g>
+  <text x="160" y="212" font-family="sans-serif" font-size="12" fill="#2e7d32">🟩 full sweeps</text>
+  <text x="300" y="212" font-family="sans-serif" font-size="12" fill="#bf616a">🟥 queue-based (SPFA)</text>
+  <text x="16" y="244" font-family="sans-serif" font-size="13" fill="#4c566a">Python's per-node deque overhead plus count-based detection loses badly to <tspan font-weight="bold">sweep + find_cycle</tspan>.</text>
+  <text x="16" y="266" font-family="sans-serif" font-size="13" fill="#4c566a">The full sweep already finds cycles quickly. The "smarter" schedule was <tspan font-weight="bold" fill="#bf616a">337× slower</tspan>. 🙅</text>
+</svg>
+
+</p>
+
+> A theoretically-better algorithm measured is worth more than a theoretically-better algorithm assumed. 📏
+
+---
+
+### ❌ Rejected: Eager Flatten in C++
+
+The Python fix **flattens the graph**. Porting it literally to C++ regressed badly — it copies every edge (≈ 96 MB for 3 M edges):
+
+<p align="center">
+
+<svg width="640" height="250" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">C++ NegCycleFinder · n = 1,000,000 · interleaved A/B</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="250" y="70" text-anchor="end">baseline</text>
+    <rect x="260" y="54" width="360" height="22" fill="#a3be8c" rx="3"/>
+    <text x="612" y="70" fill="#2e7d32" font-weight="bold" text-anchor="end">150 ms</text>
+
+    <text x="250" y="122" text-anchor="end">eager flatten ❌</text>
+    <rect x="260" y="106" width="754" height="22" fill="#bf616a" rx="3"/>
+    <text x="612" y="122" fill="#bf616a" font-weight="bold" text-anchor="end">314 ms · 2.1× slower</text>
+
+    <text x="250" y="174" text-anchor="end">lazy cache ✅</text>
+    <rect x="260" y="158" width="362" height="22" fill="#a3be8c" rx="3"/>
+    <text x="622" y="174" fill="#2e7d32" font-weight="bold" text-anchor="end">151 ms · neutral</text>
+  </g>
+  <text x="16" y="218" font-family="sans-serif" font-size="13" fill="#4c566a">A single-pass search pays for the whole copy and gets nothing back. 🗑️</text>
+  <text x="16" y="240" font-family="sans-serif" font-size="13" fill="#4c566a">The port must respect the <tspan font-weight="bold">host language's cost model</tspan> — not transcribe the source. 🌍</text>
+</svg>
+
+</p>
+
+> 🪤 This is the trap: a fix that is right in one language can be wrong in another.
+
+---
+
+### 📉 Rejected: Native Compilation (mypyc)
+
+Measured on a typed hot loop, mypyc gave a **2.28×** (368.8 → 162.0 ms). But it does not fit here:
+
+- ❌ The real package **fails mypyc's type check** — 15+ errors, several design-level (`int|float` vs `Domain`, `_run_loop` type-var mismatches) 🧱
+- ❌ `fractions.Fraction` is **pure-Python stdlib** — mypyc compiles *your* code, not the library that dominates the profile 🐌
+- ❌ It changes packaging and CI for a win that lands mostly on the *non-Fraction* path 📦
+
+.font-sm[
+| option | ceiling | fit for this code |
+|:-------|--------:|:------------------|
+| 🐍 Cython | high | best — can express C rationals |
+| ⚙️ mypyc | 2.28× measured | blocked by types + stdlib Fraction |
+| 🦀 Rust / PyO3 | highest | heavy integration, loses genericity |
+| 🔢 numba | high (float) | cannot represent `Fraction` |
+]
+
+> 🎯 Native tooling is a **last** resort, after the algorithmic win is banked.
+
+---
+
+class: nord-light, middle, center
+
+## 🌍 Part 4 — Cross-Language Ports
+
+---
+
+### ⚙️ C++ — a Lazy Weight Cache
+
+The Python fix could not be transcribed literally (see the eager-flatten trap). Instead: **`RelaxCached`**, a strategy that caches weights **only when they will be reused**.
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    P0["pass 0\nplain loop\nno cache"] --> P1["pass 1\nrelax + build\nweights[]"]
+    P1 --> P2["pass ≥ 2\nrelax using\ncached weights"]
+    style P0 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style P1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style P2 fill:#a3be8c,stroke:#2e7d32,stroke-width:4px
+</pre>
+
+]
+
+- **Single-pass search** → nothing is computed, nothing is allocated 🆓
+- **Multi-pass search** → weights built once, reused thereafter ♻️
+- Also: `find_cycle` now does **one hash probe** per node (`try_emplace` + `find`) instead of `contains` + `at` 🔍
+]
+.pull-right[
+| benchmark | before | after |
+|:----------|-------:|------:|
+| single-pass, n = 20 K–200 K | — | **~1.05×** ✅ |
+| single-pass, n = 500 K–1 M | — | **neutral** ✅ |
+| multi-pass cache, n = 2,000 | 514 ms | **405 ms · 1.27×** ✅ |
+
+Verified with `xmake` (`/W4 /WX`) — **78 tests / 127 assertions**. ⚙️
+]
+
+---
+
+### 🦀 Rust — Compile-Time Mode Split
+
+Rust's monomorphization inlines the weight closure, so a per-edge cache check *cost* ~5% on single-pass. The fix: make the mode a **`const` generic** so pass 0 compiles back to the original loop.
+
+```rust
+fn relax_pred_pass<const MODE: u8, ...>(...) -> bool {
+    let weight = if MODE == RELAX_USE {
+        cache.weights[idx]              // read cached weight
+    } else {
+        let value = get_weight(&w);     // compute once
+        if MODE == RELAX_BUILD { cache.weights.push(value); }
+        value
+    };
+    ...
+}
+
+match cache.pass {
+    0 => relax_pred_pass::<RELAX_PLAIN, _, _, _>(...),  // byte-identical to before
+    1 => relax_pred_pass::<RELAX_BUILD, _, _, _>(...),  // build while relaxing
+    _ => relax_pred_pass::<RELAX_USE,   _, _, _>(...),  // reuse
+}
+```
+
+- `find_cycles_in` also switched to the **`entry` API** — one probe instead of two 🔍
+- Verification: `cargo test --all-features` → **57 + 6 + 20 tests**, clippy clean, fmt clean 🦀
+
+---
+
+### 🔁 Same Fix, Three Cost Models
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    R["The redundancy:\nweight recomputed\nper pass"] --> PY["🐍 Python\nbottleneck = interpreter\n+ Fraction gcd"]
+    R --> CPP["⚙️ C++\nbottleneck = copying\n& allocation"]
+    R --> RS["🦀 Rust\nbottleneck = nothing\n(monomorphized)"]
+    PY --> FIX["Fix:\ncompute once,\nreuse per call"]
+    CPP --> FIX
+    RS --> FIX
+    style R fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style PY fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CPP fill:#d1c4e9,stroke:#6a1b9a,stroke-width:3px
+    style RS fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style FIX fill:#e8f5e9,stroke:#2e7d32,stroke-width:4px
+</pre>
+
+]
+]
+.pull-right[
+.font-sm[
+| language | what the "interpreter" is | fix shape |
+|:---------|:--------------------------|:----------|
+| 🐍 Python | bytecode + `Fraction` normalization | flatten + precompute |
+| ⚙️ C++ | copies & allocations | lazy `RelaxCached` |
+| 🦀 Rust | *(already fast)* | `const`-generic modes |
+]
+
+> 🎯 The **invariant** is language-independent. The **mechanism** is not.
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📏 Part 5 — Measurement
+
+---
+
+### 📏 Why Wall Time Lies
+
+First attempt: run the benchmark, read the number. Then run it **again** — and get a different number. 😵
+
+<p align="center">
+
+<svg width="640" height="265" viewBox="0 0 640 265" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Identical binaries, measured minutes apart</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="280" y="72" text-anchor="end">C++ n = 100 K · run A</text>
+    <rect x="290" y="56" width="206" height="22" fill="#a3be8c" rx="3"/>
+    <text x="504" y="72" fill="#2e7d32" font-weight="bold">10.5 ms</text>
+
+    <text x="280" y="124" text-anchor="end">C++ n = 100 K · run B</text>
+    <rect x="290" y="108" width="360" height="22" fill="#bf616a" rx="3"/>
+    <text x="612" y="124" fill="#bf616a" font-weight="bold" text-anchor="end" dx="-4">5.0 ms · 2.1× drift</text>
+
+    <text x="280" y="176" text-anchor="end">Rust howard_ratio · spread</text>
+    <rect x="290" y="160" width="252" height="22" fill="#ebcb8b" rx="3"/>
+    <text x="290" y="176" fill="#b58900" font-weight="bold" dx="258">24.5 – 31.9 µs 😬</text>
+  </g>
+  <text x="16" y="220" font-family="sans-serif" font-size="14" fill="#4c566a">Nothing changed. Only the machine state.</text>
+  <text x="16" y="244" font-family="sans-serif" font-size="14" fill="#4c566a">Absolute timings are <tspan font-weight="bold" fill="#bf616a">not</tspan> comparable across runs.</text>
+</svg>
+
+</p>
+
+**The protocol that works:** 🧪
+- Build **both** variants as separate binaries; run them **interleaved** in one session 🔁
+- Take the **min of N**; report the spread, not a single number 📊
+- Trust the **answer** — identical ratio / cycle / iteration count — most of all ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part 6 — Results & Lessons
+
+---
+
+### 🏁 Cross-Language Scoreboard
+
+<p align="center">
+
+<svg width="640" height="290" viewBox="0 0 640 290" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:6px">
+  <text x="16" y="26" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">Speedup — bar width ∝ speedup</text>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="270" y="70" text-anchor="end">MCR · Python 🐍</text>
+    <rect x="280" y="54" width="235" height="22" fill="#5e81ac" rx="3"/>
+    <text x="525" y="70" fill="#1565c0" font-weight="bold">2.60× · 124.1 → 47.6 ms</text>
+
+    <text x="270" y="122" text-anchor="end">param solver · Rust 🦀</text>
+    <rect x="280" y="106" width="199" height="22" fill="#bf616a" rx="3"/>
+    <text x="489" y="122" fill="#8b2c3a" font-weight="bold">2.20× · 13.1 → 5.9 µs</text>
+
+    <text x="270" y="174" text-anchor="end">multi-pass cache · Rust 🦀</text>
+    <rect x="280" y="158" width="122" height="22" fill="#bf616a" rx="3"/>
+    <text x="412" y="174" fill="#8b2c3a" font-weight="bold">1.35×</text>
+
+    <text x="270" y="226" text-anchor="end">multi-pass cache · C++ ⚙️</text>
+    <rect x="280" y="210" width="113" height="22" fill="#d1c4e9" rx="3"/>
+    <text x="403" y="226" fill="#6a1b9a" font-weight="bold">1.25×</text>
+  </g>
+  <text x="16" y="272" font-family="sans-serif" font-size="13" fill="#4c566a">The win lands wherever the weight function is <tspan font-weight="bold">non-trivial and reused</tspan> — exactly the parametric path. ✅</text>
+</svg>
+
+</p>
+
+---
+
+### 📜 Artifacts From This Session
+
+.font-sm[
+
+| Repo | Change |
+|:-----|:-------|
+| `py/digraphx` | Precompute edge weights once per `howard()` call; drop double conversion 🐍 |
+| `py/digraphx` | `TinyDiGraph.add_edge` bypasses NetworkX generic path (**222 → 69 ms**) 🏗️ |
+| `py/digraphx` | New `benchmarks/` suite (pytest-benchmark) + NetworkX baseline 📊 |
+| `cpp/digraphx-cpp` | `RelaxCached` lazy weight cache + single-probe `find_cycle` ⚙️ |
+| `cpp/digraphx-cpp` | New `BM_neg_cycle_cache` + multi-pass correctness test 🧪 |
+| `rs/digraphx-rs` | `WeightCache` + `const`-generic `RELAX_PLAIN/BUILD/USE` split 🦀 |
+| `rs/digraphx-rs` | Single-probe `find_cycles_in`; criterion multi-pass benchmark 📊 |
+| `docs` | This presentation 📽️ |
+
+]
+
+> 🧾 **No public API changed** in any of the three ports — the signatures are identical.
+
+---
+
+### 🧠 Key Takeaways
+
+**Performance** ⚡
+- **Profile first** — the bottleneck was arithmetic, not the graph algorithm 🔍
+- Find the **invariant**: the ratio is fixed for a whole `howard()` call ⇒ compute weights **once** 🎯
+- Match the fix to the **host language**: Python → flatten; C++ → lazy cache; Rust → const generics 🌍
+- A **lazy** cache wins: zero cost for single-pass, real gains for multi-pass ♻️
+
+**Process** 🔁
+- A theoretically-better algorithm is **not** better until measured — SPFA lost by **337×** 📏
+- A fix that must be applied **twice**, or that **copies the code it measures**, is a red flag 🚩
+- Machine state drifts **2×**; alternate A/B and report the spread 📊
+
+**Correctness** 🐛
+- The evidence is the **unchanged answer** — same ratio, same cycle, same iteration count ✅
+- *"Faster"* that changes the result is a bug with a nice benchmark 🚨
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Making digraphx Fast — One Redundant Multiplication, Three Languages**
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+## Profile. Find the invariant. Compute once. 🎯
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

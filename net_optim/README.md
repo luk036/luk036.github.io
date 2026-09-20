@@ -104,6 +104,7 @@ graph LR
 | ---------------------------------------- | ------------------------------------------ |
 | [digraphx Package](digraphx-remark.html) | Python package for directed graph analysis |
 | [digraphx: Py→Rust→C++](digraphx-py-rs-cpp-remark.html) | Cross-language network optimization |
+| [Making digraphx Fast](dgraphx-perf-remark.html) | One cached weight per `howard()` call — 2.6× across Py/C++/Rust |
 
 **Package Features:**
 
@@ -238,6 +239,7 @@ net_optim/
 │
 ├── ### Remark.js HTML Slides
 ├── dec-remark.html                        # Discrete Exterior Calculus
+├── dgraphx-perf-remark.html               # Making digraphx Fast (Py/C++/Rust performance)
 ├── digraphx-remark.html                   # digraphx Package (ext. source → digraphx.md)
 ├── digraphx-py-rs-cpp-remark.html         # digraphx: Py→Rust→C++
 ├── generic-vs-csr-remark.html             # Generic vs CSR

@@ -201,7 +201,7 @@ class: nord-light, middle, center
 
 ### 📊 What More Data Does — and Doesn't — Fix
 
-| $N$ | LSQ rel-err | MLE rel-err | CCP rel-err | MLE `2Y` margin |
+| $N$ | LSQ rel-err | MLE rel-err | CCP rel-err | MLE 2Y margin |
 |--:|--:|--:|--:|--:|
 | 5 | 0.49 | **infeasible** 💀 | 0.41 | — |
 | 20 | 0.44 | 0.97 | 0.25 | 0.00 |
@@ -210,8 +210,8 @@ class: nord-light, middle, center
 
 - **$N < n = 20$**: `Y` rank-deficient → $2Y \succeq \Omega \succ 0$ is **unsatisfiable** → the MLE returns *nothing* 💀
 - **$N \geq n$**: the MLE improves ($0.97 \to 0.65$) but stays **2–5× worse** than LSQ — the boundary pin dominates 🧲
-- **The gap never closes**: as $N \to \infty$, $Y \to \Sigma_{\text{true}}$, yet the family projection stays **outside** $\Delta_{2\Sigma_{\text{true}}}$ by $\approx 1.0$ → a **misspecification floor**, not a sample-size artifact 🧱
-- CCP's $N$-dependence is the *healthy* one: it converges to the true likelihood projection ($\approx 0.29$) ✅
+- **The gap never closes**: as $N \to \infty$, $Y \to \Sigma_{\text{true}}$, yet the family projection stays **outside** $\Delta_{2\Sigma_{\text{true}}}$ by $\approx 1.0$ → a **misspecification floor**, not a sample-size artifact
+- CCP's $N$-dependence is the *healthy* one: it converges to the true likelihood projection ($\approx 0.29$)
 
 ---
 
@@ -220,6 +220,8 @@ class: nord-light, middle, center
 <p align="center">
 <img src="lsq-vs-mle-remark.files/fig_samples_fine.svg" style="width:97%" />
 </p>
+
+---
 
 | regime | LSQ | MLE(2Y) | CCP |
 |:--|:--|:--|:--|

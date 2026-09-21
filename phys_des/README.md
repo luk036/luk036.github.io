@@ -94,7 +94,7 @@ graph TD
 .font-sm[
 | #   | Topic                | Materials                                                                                   |
 | --- | -------------------- | ------------------------------------------------------------------------------------------- |
-| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html), [Py→Rust→C++](ckpttn-py-rs-cpp-remark.html), [rust-ckpttn](rust-ckpttn-remark.html) |
+| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html), [Py→Rust→C++](ckpttn-py-rs-cpp-remark.html), [rust-ckpttn](rust-ckpttn-remark.html), [FM vs NN](fm-vs-nn-remark.html) |
 | 1a  | Partitioning Deep    | [ckpttn-cpp CLI](ckpttn-parameters-remark.html), [Exhaustive Gray Code](MidLvL-remark.html) |
 | 1b  | K-Way Partitioning   | [Multi-Level K-Way Gray Code](MLMidLvLKWay-remark.html)                                     |
 | 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Rectilinear Polygon](rpolygon-remark.html)                  |
@@ -152,10 +152,11 @@ graph TD
 
 - **Bi-partition vs K-way**: Split netlist into 2 or K balanced parts
 - **FM Algorithm**: Local search with bucket sort and LIFO gain updates
+- **FM vs NN Refiner**: Drop the bucket/lock machinery for pure monotone descent — 10–100× faster flat, but 1.6–2.8× worse cut
 - **Multi-level Extension**: Coarsen → partition → uncoarsen with refinement
 - **Primal-Dual Clustering**: Minimum maximal matching for hypergraph coarsening
 
-> 📖 See: [ckpttn.md](ckpttn.md), [ckpttn-remark.html](ckpttn-remark.html), [ckpttn-parameters-remark.html](ckpttn-parameters-remark.html), [ckpttnpy-remark.html](ckpttnpy-remark.html), [MidLvL-remark.html](MidLvL-remark.html), [MLMidLvLKWay-remark.html](MLMidLvLKWay-remark.html)
+> 📖 See: [ckpttn.md](ckpttn.md), [ckpttn-remark.html](ckpttn-remark.html), [ckpttn-parameters-remark.html](ckpttn-parameters-remark.html), [ckpttnpy-remark.html](ckpttnpy-remark.html), [MidLvL-remark.html](MidLvL-remark.html), [MLMidLvLKWay-remark.html](MLMidLvLKWay-remark.html), [fm-vs-nn-remark.html](fm-vs-nn-remark.html)
 
 ---
 

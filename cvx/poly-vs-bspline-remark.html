@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Poly vs B-Spline — Conditioning, Knots, and a Monotonicity Bug</title>
+    <title>Polynomial vs B-Spline — Conditioning, Knots, and a Monotonicity Bug</title>
     <meta
       name="viewport"
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📉 Poly vs B-Spline
+# 📉 Polynomial vs B-Spline
 
 ## Fitting correlation kernels — conditioning matters, and so do your knots
 
@@ -54,26 +54,33 @@ class: nord-dark, middle, center
 - A basis that *cannot see* its own data
 - An off-by-one that frees the last coefficient
 
+**Part 4 — The Fix** 🪄
+- Clamped knots over $[0, d_{\max}]$
+- The right number of coefficients
+
 ]
 
 .pull-right[
 
-**Part 4 — The Fix** 🪄
-- Clamped knots over $[0, d_{\max}]$
-- The right number of coefficients to constrain
-
 **Part 5 — CCP with B-splines** 🔁
-- The convex-concave procedure, basis-agnostic
+- The convex-concave procedure
 - Monotone fits, positive-definite $\Omega$ ✅
 
 **Part 6 — Scaling N = 1..50** 📊
 - Rank-deficient $Y$ for $N < 20$
 - Small $N$: B-spline $m{=}4$ wins; large $N$: capacity wins
 
-**Part 7 — Tests** 🧪
-- 22 passed, 99% coverage
+**Part 7 — Reimplemented in C++** 🔧
+- B-spline, mono oracle and Halton ported
+- Conditioning reproduced 🔍
 
-**Part 8 — Takeaways** 🧠
+**Part 8 — Reimplemented in Rust** 🦀
+- CCP written from scratch 🔁
+- Parity on conditioning; same story 📊
+
+**Part 9 — Tests** 🧪
+
+**Part 10 — Takeaways** 🧠
 
 ]
 
@@ -110,16 +117,33 @@ $$ \min_p \; \bigl\|{\color{#bf616a}Y} - {\color{#5e81ac}\Omega(p)}\bigr\|_F \qu
 
 $$ \min_p \; \log\det {\color{#5e81ac}\Omega(p)} + \operatorname{Tr}\!\bigl({\color{#5e81ac}\Omega(p)}^{-1}{\color{#bf616a}Y}\bigr) $$
 
-$$ \text{s.t.} \quad 2{\color{#bf616a}Y} \succeq {\color{#5e81ac}\Omega(p)} \succeq 0 $$
-
-- Upper bound $2Y$ is a *trust region*, not a constraint 🤔
-- Solved by the same cutting-plane machinery ✅
+- The objective is **DC** — a difference of convex functions — not an LMI 🔁
+- Solved exactly by **CCP**: linearize the concave term, solve the convex surrogate each round 🪄
+- CCP is the only correct implementation ✅
 
 ]
 
 ---
 
 ### 🧱 The Two Families
+
+.mermaid[
+
+<pre>
+graph LR
+    S["site distances  D"] --> P["polynomial basis: D^0, D^1, D^2, ..."]
+    S --> B["B-spline basis\n{B_i(d)} on knots t"]
+    P --> A["design matrices  Sigma_1..m"]
+    B --> A
+    A --> O["cutting-plane solver"]
+    style S fill:#eceff4,stroke:#4c566a,stroke-width:3px
+    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style O fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+</pre>
+
+]
 
 .pull-left[
 
@@ -143,23 +167,6 @@ $$ K(d) \;=\; \sum_{i=1}^{m} c_i\, B_i(d), \qquad B_i \text{ local, } \sum_i B_i
 
 ]
 
-.mermaid[
-
-<pre>
-graph LR
-    S["site distances  D"] --> P["polynomial basis: D^0, D^1, D^2, ..."]
-    S --> B["B-spline basis\n{B_i(d)} on knots t"]
-    P --> A["design matrices  Sigma_1..m"]
-    B --> A
-    A --> O["cutting-plane solver"]
-    style S fill:#eceff4,stroke:#4c566a,stroke-width:3px
-    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
-    style B fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
-    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style O fill:#fadbd8,stroke:#c0392b,stroke-width:3px
-</pre>
-
-]
 
 ---
 
@@ -168,7 +175,7 @@ graph LR
 $$ \operatorname{cond}(A) \;=\; \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \qquad A = \bigl[\operatorname{vec}(\Sigma_1) \;\cdots\; \operatorname{vec}(\Sigma_m)\bigr] $$
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_cond.svg" style="width:97%" />
+<img src="poly-vs-bspline-remark.files/fig_cond.svg" style="width:60%" />
 </p>
 
 - **Polynomial**: $1.2\times10^{1} \to 3.5\times10^{10}$ as $m: 2 \to 10$ — nine orders of magnitude 💥
@@ -186,6 +193,27 @@ class: nord-light, middle, center
 ---
 
 ### 🧪 Experimental Setup
+
+.mermaid[
+
+<pre>
+graph LR
+    S["Halton sites\n5 x 4 grid"] --> D["distances D\n20 x 20, dmax = 10.1"]
+    D --> SP["basis  Sigma_1..m\npoly or B-spline"]
+    D --> TK["true kernel\n4 exp(-0.12 d^2)"]
+    TK --> Y["biased Y\nN = 3000 samples"]
+    SP --> SOL["cutting-plane\nsolver"]
+    Y --> SOL
+    SOL --> FIT["fitted kernel  K_hat(d)"]
+    style S fill:#eceff4,stroke:#4c566a,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style SP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Y fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+    style SOL fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FIT fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
 
 .pull-left[
 
@@ -212,33 +240,13 @@ class: nord-light, middle, center
 
 ]
 
-.mermaid[
-
-<pre>
-graph LR
-    S["Halton sites\n5 x 4 grid"] --> D["distances D\n20 x 20, dmax = 10.1"]
-    D --> SP["basis  Sigma_1..m\npoly or B-spline"]
-    D --> TK["true kernel\n4 exp(-0.12 d^2)"]
-    TK --> Y["biased Y\nN = 3000 samples"]
-    SP --> SOL["cutting-plane\nsolver"]
-    Y --> SOL
-    SOL --> FIT["fitted kernel  K_hat(d)"]
-    style S fill:#eceff4,stroke:#4c566a,stroke-width:3px
-    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style SP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
-    style Y fill:#fadbd8,stroke:#c0392b,stroke-width:3px
-    style SOL fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style FIT fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
-</pre>
-
-]
 
 ---
 
 ### 📈 Who Tracks the True Kernel?
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_fit.svg" style="width:97%" />
+<img src="poly-vs-bspline-remark.files/fig_fit.svg" style="width:60%" />
 </p>
 
 - Both families can model the kernel — accuracy is **comparable** 🤝
@@ -274,7 +282,7 @@ class: nord-light, middle, center
 ### 🗺️ The Basis Cannot See Its Own Data
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_knots.svg" style="width:97%" />
+<img src="poly-vs-bspline-remark.files/fig_knots.svg" style="width:70%" />
 </p>
 
 - Uniform knots were spread over $[0,\;1.2\,\lVert \texttt{site[-1]} - \texttt{site[0]}\rVert] = [0,\;5.68]$
@@ -334,15 +342,30 @@ if cut := mono_oracle(x[:-1]):        # drop the last entry ...
 - Candidate `x = [c_1..c_m]` has length $m$
 - `x[:-1]` **frees the last coefficient** $c_m$!
 
-]
-
 > The index arithmetic silently assumed a trailing variable that only one core has. One line, two code paths. 🚩
+
+]
 
 ---
 
 class: nord-light, middle, center
 
 ## 🪄 Part 4 — The Fix
+
+---
+
+### 🪄 Fix 1: Clamped Knots Over the Real Domain
+
+$$ t \;=\; \underbrace{[0, \dots, 0]}_{k+1} \;\cup\; \bigl\{ \text{interior of } \operatorname{linspace}(0, d_{\max},\, m{-}k{+}1) \bigr\} \;\cup\; \underbrace{[d_{\max}, \dots, d_{\max}]}_{k+1} $$
+
+```python
+interior = np.linspace(0.0, dmax, m - k - 1 + 2)[1:-1]
+t = np.concatenate((np.zeros(k + 1), interior, np.full(k + 1, dmax)))
+```
+
+- Knots now **span the whole data domain** $[0, d_{\max}]$ ✅
+- End knots repeated $k+1 = 3$ times → every basis element lives inside the data ✅
+- Guard: quadratic B-spline needs $m \ge k+1 = 3$ control points 🛡️
 
 ---
 
@@ -387,13 +410,11 @@ class mono_decreasing_oracle2:
 
 ### 🔁 Part 5 — CCP with B-splines
 
-`cccp_mle` is **basis-agnostic** — feed it polynomial or clamped B-spline $\Sigma_k$, wrap with the monotone oracle:
+`cccp_mle` is **basis-agnostic** — feed it polynomial or B-spline $\Sigma_k$, wrap with the monotone oracle:
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_cccp.svg" style="width:95%" />
+<img src="poly-vs-bspline-remark.files/fig_cccp.svg" style="width:60%" />
 </p>
-
----
 
 - Polynomial: 19 rounds, $f: 32.77 \to 29.78$ = scipy reference ✅
 - B-spline + monotone: 16 rounds, $f: 33.3 \to 30.31$, $\min\operatorname{eig}(\Omega) = 0.56 \succ 0$ ✅
@@ -412,8 +433,9 @@ class: nord-light, middle, center
 ### 📈 Accuracy vs Sample Size
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_nsweep_relerr.svg" style="width:97%" />
+<img src="poly-vs-bspline-remark.files/fig_nsweep_relerr.svg" style="width:70%" />
 </p>
+
 
 - Shaded region: rank-deficient $Y$ ($N < n = 20$) 🥶
 - B-spline $m{=}4$ clamped: **best at every $N$** — local support resists noise 🟩
@@ -425,12 +447,12 @@ class: nord-light, middle, center
 ### ⏱️ Cost & Constraints
 
 <p align="center">
-<img src="poly-vs-bspline-remark.files/fig_nsweep_iters.svg" style="width:95%" />
+<img src="poly-vs-bspline-remark.files/fig_nsweep_iters.svg" style="width:68%" />
 </p>
 
 - Cheapest: B-spline $m{=}4$ ($802$–$970$ iters) ⏱️
 - B-spline $m{=}6$ hits the $2000$-iteration cap at $N \in \{1,2\}$ — too much capacity 🚫
-- Monotonicity ($1200$-point grid): clamped BS **0 of 50** $N$ violations; poly wiggles at $32$ ($m{=}4$) / $40$ ($m{=}6$) of $50$ $N$ 📈
+- Monotonicity ($1200$-point grid): clamped BS **0 of 50** $N$ violations 📈
 - Old knots: $7$ of $50$ $N$ still non-monotone (incl. $N = 41$) 🐛
 - $\min\operatorname{eig}(\Omega) > 0$ for **every** fit — the LMI holds across the board ✅
 
@@ -457,7 +479,201 @@ class: nord-light, middle, center
 
 ---
 
-### 🧪 Part 7 — Tests
+class: nord-light, middle, center
+
+## 🔧 Part 7 — Reimplemented in C++
+
+---
+
+### 🔧 Porting the Study to C++
+
+.mermaid[
+
+<pre>
+graph LR
+    P["Python reference\ncorr_bspline_oracle.py"] --> B["bspline.hpp\nclamped knots + de Boor"]
+    P --> M["mono oracle\ncoefficients decreasing"]
+    B --> C["design_cond\nGram + Jacobi in double-double"]
+    M --> C
+    C --> E["experiments/main.cpp\n5 experiment groups"]
+    E --> O["stdout tables + CSV"]
+    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+    style M fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+    style O fill:#eceff4,stroke:#4c566a,stroke-width:3px
+</pre>
+
+]
+
+The C++ solver (`corr-solver-cpp`) already had LSQ / MLE / CCP and the cutting-plane engine — but three pieces were **missing**:
+
+.pull-left[
+
+**Ported from Python** 🐍
+
+- Quadratic **B-spline basis** 🎯
+- **Monotone coefficient oracle** (`mono_oracle` + wrapper) 📉
+- scipy-compatible **extrapolation** for the old knots 🐛
+- **Halton** site generator 🎲
+
+]
+
+.pull-right[
+
+**Added to measure** 📏
+
+- Symmetric **Jacobi eigensolver** 🔢
+- Design-matrix conditioning in **double-double** arithmetic 🧮
+- Experiment driver + CSV export 📊
+- **14 new doctest cases** (19 total, 90 assertions) 🧪
+
+]
+
+---
+
+### 🎯 Cross-Language Parity
+
+.pull-left[
+
+| $m$ | poly | clamped | legacy |
+|:--:|--:|--:|--:|
+| 4 | $1.21\times10^{3}$ | $5.052$ | $40.26$ |
+| 6 | $1.87\times10^{5}$ | $6.478$ | $99.40$ |
+| 8 | $6.72\times10^{7}$ | $6.508$ | $203.57$ |
+| 10 | $3.45\times10^{10}$ | $6.751$ | $409.47$ |
+
+$\operatorname{cond}$ values agree with Python to $10^{-9}$ ✅
+
+]
+
+.pull-right[
+
+**Adjudicated at 60 digits** 🧪
+
+- mpmath: $\operatorname{cond}_{m=10} = 34\,546\,585\,438.8765$
+- C++ (double-double): `34546585438.876` ✅
+- numpy: `34546585337.190` — off by $3\times10^{-9}$ ⚠️
+- Squaring the condition number ($\sim10^{21}$) exhausts float64 — double-double survives 💪
+
+> The port reproduces the Python numbers exactly — and is *more* accurate where numpy runs out of digits. 🎯
+
+]
+
+---
+
+### 📊 C++ Results at $N = 3000$
+
+| metric | Python 🐍 | C++ 🔧 |
+|:--|--:|--:|
+| LSQ rel. err, poly $m{=}6$ | $0.042$ | $0.027$ |
+| LSQ rel. err, BS $m{=}4$ | $0.143$ | $0.139$ |
+| LSQ rel. err, BS $m{=}6$ | $0.037$ | $0.031$ |
+| monotone violations (BS) | $0$ | $0$ |
+| CCP rounds poly / BS | $19$ / $16$ | $18$ / $16$ |
+| CCP $f_1$ poly / BS | $29.78$ / $30.31$ | $29.94$ / $30.45$ |
+| distances outside legacy valid domain | $61\%$ | $61\%$ |
+
+---
+
+- Same ordering, same conclusions — fit numbers differ only because the **RNG** differs 🎲
+- **New insight**: for rank-deficient $Y$ ($N < n$) the *unconstrained* poly MLE is **unbounded below** — CCP drifts to $f = -8.08$ 🕳️
+- The monotone B-spline stays bounded ($f = 13.77$, $\min\operatorname{eig}\Omega = 0.22$) 🛡️
+
+> The monotone constraint does not just shape the fit — it keeps the MLE **well-posed** when the data is rank-deficient. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🦀 Part 8 — Reimplemented in Rust
+
+---
+
+### 🦀 Porting the Study to Rust
+
+The Rust crate had less to reuse: no B-spline, **no CCP at all** (its `MleOracle` is the 2Y-bounded variant), no conditioning, no Halton.
+
+.pull-left[
+
+**Written from scratch** 🦀
+
+- B-spline basis + **clamped knots** 🎯
+- Monotone coefficient oracle 📉
+- **CCP driver** — the crate had none 🔁
+- Jacobi eigen + **double-double** `design_cond` 🧮
+- Self-contained **Halton** (no MSRV bump) 🎲
+
+]
+
+.pull-right[
+
+**Reused** ♻️
+
+- `ellalgo-rs` cutting-plane + `Ell` 🔄
+- `lmi-solver-rs` `LDLTMgr` / `LMIOracle` 🧱
+- `corr_helper` distance / poly matrices 📐
+- `linalg` Cholesky, inverse, seeded RNG 🔢
+
+]
+
+.mermaid[
+
+<pre>
+graph LR
+    P["Python reference\ncorr_bspline_oracle.py"] --> S["bspline.rs\nclamped knots + de Boor"]
+    P --> C["fitting.rs\nCCP surrogate + 50-round loop"]
+    S --> E["eigen.rs\ndesign_cond in double-double"]
+    C --> E
+    E --> X["bin/experiments.rs\n5 experiment groups"]
+    X --> O["stdout tables + CSV"]
+    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style S fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+    style C fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style X fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+    style O fill:#eceff4,stroke:#4c566a,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### 🦀 Rust Parity & Results
+
+.pull-left[
+
+**Identical to Python / C++** ✅
+
+- $\operatorname{cond}$ table — incl. poly $m{=}10 = 3.4546585439\times10^{10}$ (the 60-digit truth) 🔢
+- $d_{\max}$, $d_{\text{span}}$, knot vectors, valid domain 📐
+- extrapolation share $244/400 = 61\%$ ($122/190$ upper) 🐛
+
+]
+
+.pull-right[
+
+**Fits at $N = 3000$** 📊
+
+| variant | rel. err | nInc |
+|:--|--:|--:|
+| poly $m{=}6$ | $0.034$ | $206$ |
+| BS $m{=}4$ | $0.142$ | $\mathbf{0}$ |
+| BS $m{=}6$ | $0.037$ | $\mathbf{0}$ |
+| BS old knots | $0.125$ | $332$ |
+
+]
+
+- CCP at $N = 3000$: poly $19$ rounds $32.93 \to 29.98$; BS + monotone **$16$** rounds $33.64 \to 30.50$ — same round counts as Python 🔁
+- $N = 1..50$: clamped B-splines hold $\text{nInc} = 0$ in **all $100$** rows; poly violates in $98/100$ 📈
+- At $N = 1$ the unconstrained poly CCP again drove $\Omega$ nearly singular ($\lambda_{\min} \approx 10^{-8}$) — the rank-deficiency degeneracy is real, not a C++ artefact 🕳️
+
+> Three languages, one story: clamped + monotone B-splines stay well-conditioned and well-posed. 🎯
+
+---
+
+### 🧪 Part 9 — Tests
 
 .font-sm[
 
@@ -474,31 +690,36 @@ class: nord-light, middle, center
 ]
 
 - Full suite: **22 passed**, 99% coverage 🧪
+- Cross-language ports: C++ **19 cases / 90 assertions**, Rust **12 tests** — same reference numbers 🔧🦀
 - `cccp_mle_oracle.py` promoted from `experiments/` to the package 🚀
 - `experiments/cccp_mle.py` de-duplicated — imports the package solver no more, no less 🧹
 
 ---
 
-### 🧠 Part 8 — Key Takeaways
+### 🧠 Part 10 — Key Takeaways
 
+.pull-left[
 **Conditioning** 📐
 - Polynomial bases explode: $10^{10}$ at $m = 10$ — keep $m$ small or orthogonalize 🔢
 - Clamped B-splines stay at $\operatorname{cond} \approx 6$ and keep the benefit of local support 🟩
 
 **Knots** 🪄
-- The knot vector must **span the data domain** — scipy extrapolates otherwise 🐛
+- The knot vector must **span the data domain** — scipy extrapolates otherwise
 - Uniform knots $\ne$ clamps: repeat the end knots $k+1$ times 🎯
 
-**Constraints** 🔍
-- Index arithmetic must match the core's variable layout — one line, two code paths 🚩
-- Monotone $\ne$ non-negative: check $\min\operatorname{eig}$ separately ⚠️
-
+**One fit for all** 🔁
+- Same cutting-plane / CCP machinery serves **both bases** — the basis is a plug-in
+]
+.pull-right[
 **Sample size** 📊
 - Small $N$ favors the small local model (BS $m{=}4$); large $N$ rewards capacity ($m{=}6$) 📈
 - The monotone constraint holds at **every** $N$ — and it is *needed*: free poly fits wiggle at $32$–$40$ of $50$ $N$ 🎯
 
-**One fit for all** 🔁
-- Same cutting-plane / CCP machinery serves **both bases** — the basis is a plug-in 🤝
+**Constraints** 🔍
+- Index arithmetic must match the core's variable layout — one line, two code paths
+- Monotone $\ne$ non-negative: check $\min\operatorname{eig}$ separately ⚠️
+
+]
 
 ---
 

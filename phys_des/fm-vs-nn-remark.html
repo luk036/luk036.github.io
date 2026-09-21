@@ -55,7 +55,7 @@ class: nord-dark, middle, center
 .pull-right[
 
 **Part 3 — The Refactor** 🔧
-- Python & C++ changes
+- Python · C++ · Rust changes
 - Cross-port parity 🌍
 
 **Part 4 — The Benchmark** 📊
@@ -339,18 +339,40 @@ this->gain_mgr.update_move(part, move_info_v);            // ✅ no lock
 
 ---
 
-### 🌍 Cross-Port Parity — Python ↔ C++
+### 🇷 Rust: the Gain-Manager Re-Port
 
-| aspect | Python | C++ |
-|:--|:--|:--|
-| Structure | `PartMgrBase` subclass | `PartMgrBase` subclass |
-| Override point | `_optimize_1pass` | `_optimize_1pass` |
-| Gain management | FM gain buckets 🪣 | FM gain buckets 🪣 |
-| Snapshot / rollback | none 🚫 | none 🚫 |
-| Per-move locking | none 🚫 | none 🚫 |
-| Threshold | `gainmax <= 0` | `gainmax <= 0` |
+The Rust `PartMgr` trait was already collapsed — but the **bucket queue** was a
+lazy rewrite with the FM semantics wrong. The multilevel harness exposed five
+real defects:
 
-> Two ports, **one** behaviour: a pure, monotone local search. 🎯
+- **Stale max**: a single `current_max`, no live-entry bookkeeping → popped keys
+  popped again, and ibm03 **looped forever** 🔁
+- **`modify_key`** wrote an absolute key from a delta and hit the wrong bucket
+  🪣
+- **`set_key`** had insert side effects (write-only in FM) ✍️
+- **ML collapse to cut 0**: `update_move` used a stale `weight_cache`, so
+  **balance was ignored** during refinement ⚖️
+- k-way 3-pin nets lost the `weight = -weight` sign flip (C++ has it) ↩️
+
+The fix — one commit (`#23`): `present`/`node_key` bookkeeping, additive
+`modify_key`, locks cleared on init, mode-aware updates.
+
+> Verified: **245 tests green**, clippy clean, harness completes 80 records. ✅
+
+---
+
+### 🌍 Cross-Port Parity — Python · C++ · Rust
+
+| aspect | Python | C++ | Rust |
+|:--|:--|:--|:--|
+| Structure | `PartMgrBase` subclass | `PartMgrBase` subclass | `PartMgr` trait |
+| Override point | `_optimize_1pass` | `_optimize_1pass` | `optimize_1pass` |
+| Gain management | FM gain buckets 🪣 | FM gain buckets 🪣 | FM gain buckets 🪣 |
+| Snapshot / rollback | none 🚫 | none 🚫 | none 🚫 |
+| Per-move locking | none 🚫 | none 🚫 | none 🚫 |
+| Threshold | `gainmax <= 0` | `gainmax <= 0` | `gainmax <= 0` |
+
+> Three ports, **one** behaviour: a pure, monotone local search. 🎯
 
 ---
 
@@ -413,8 +435,9 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 **Harnesses** ⚙️
 - Python: `benchmarks/compare_fm_nn.py`
 - C++: `bench/BenchFMNN.cpp` (`xmake`)
+- Rust: `examples/fmnn_compare.rs` (`cargo`)
 
-> Same PRNG in both ports ⇒ a seed means the **same** start. 🎲
+> Same PRNG in all three ports ⇒ a seed means the **same** start. 🎲
 
 ]
 
@@ -424,16 +447,16 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 ### 📊 Results — `p1` (833 modules)
 
 .font-sm[
-| k | algo | ML | py best | py mean | cpp best | cpp mean |
-|:--|:--|:--|--:|--:|--:|--:|
-| 2 | FM | no  | 72  | 79.0  | 73  | 96.4  |
-| 2 | FM | yes | **56**  | 69.2  | **61**  | 68.2  |
-| 2 | NN | no  | 211 | 220.2 | 211 | 227.4 |
-| 2 | NN | yes | 95  | 108.0 | 65  | 86.2  |
-| 3 | FM | no  | 144 | 175.4 | 147 | 173.8 |
-| 3 | FM | yes | 111 | 118.8 | 118 | 122.2 |
-| 3 | NN | no  | 330 | 346.8 | 330 | 346.8 |
-| 3 | NN | yes | 135 | 191.8 | 134 | 170.2 |
+| k | algo | ML | py best | py mean | cpp best | cpp mean | rs best | rs mean |
+|:--|:--|:--|--:|--:|--:|--:|--:|--:|
+| 2 | FM | no  | 72  | 79.0  | 73  | 96.4  | 84  | 99.4  |
+| 2 | FM | yes | **56**  | 69.2  | **61**  | 68.2  | 72  | 81.6  |
+| 2 | NN | no  | 211 | 220.2 | 211 | 227.4 | 211 | 224.8 |
+| 2 | NN | yes | 95  | 108.0 | 65  | 86.2  | 146 | 156.6 |
+| 3 | FM | no  | 144 | 175.4 | 147 | 173.8 | 144 | 160.4 |
+| 3 | FM | yes | 111 | 118.8 | 118 | 122.2 | 115 | 138.6 |
+| 3 | NN | no  | 330 | 346.8 | 330 | 346.8 | 333 | 352.2 |
+| 3 | NN | yes | 135 | 191.8 | 134 | 170.2 | 199 | 248.2 |
 ]
 
 > Mean cut over 5 seeds. 🎲
@@ -443,22 +466,22 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 ### 📊 Results — `ibm03` (23,136 modules)
 
 .font-sm[
-| k | algo | ML | py best | py mean | cpp best | cpp mean |
-|:--|:--|:--|--:|--:|--:|--:|
-| 2 | FM | no  | 2438  | 3162.8 | 1598 | 2710.4 |
-| 2 | FM | yes | **1240**  | 1519.6 | 1556 | 1705.0 |
-| 2 | NN | no  | 6865  | 7270.8 | 6866 | 7271.0 |
-| 2 | NN | yes | 3265  | 4012.8 | 3393 | 3921.6 |
-| 3 | FM | no  | 5733  | 6469.8 | 6154 | 6403.8 |
-| 3 | FM | yes | **2833**  | 3627.0 | **2808** | 3508.2 |
-| 3 | NN | no  | 10508 | 11109.0 | 10485 | 11128.2 |
-| 3 | NN | yes | 6465  | 7229.8 | 6462 | 6897.8 |
+| k | algo | ML | py best | py mean | cpp best | cpp mean | rs best | rs mean |
+|:--|:--|:--|--:|--:|--:|--:|--:|--:|
+| 2 | FM | no  | 2438  | 3162.8 | 1598 | 2710.4 | 2007 | 2878.8 |
+| 2 | FM | yes | **1240**  | 1519.6 | 1556 | 1705.0 | 1253 | 1707.0 |
+| 2 | NN | no  | 6865  | 7270.8 | 6866 | 7271.0 | 6866 | 7268.2 |
+| 2 | NN | yes | 3265  | 4012.8 | 3393 | 3921.6 | 5572 | 5915.0 |
+| 3 | FM | no  | 5733  | 6469.8 | 6154 | 6403.8 | 6295 | 7053.0 |
+| 3 | FM | yes | **2833**  | 3627.0 | **2808** | 3508.2 | 1524 | 2866.2 |
+| 3 | NN | no  | 10508 | 11109.0 | 10485 | 11128.2 | 10447 | 11055.8 |
+| 3 | NN | yes | 6465  | 7229.8 | 6462 | 6897.8 | 6942 | 7765.6 |
 ]
 > FM+ML wins on **both** size scales. 🏆
 
 ---
 
-### ✂️ Cut Quality — FM 🟦 vs NN 🟥
+### ✂️ Cut Quality — FM vs NN (three ports)
 
 <p align="center">
 <img src="fm-vs-nn-remark.files/fig_cut.svg" style="width:96%" />
@@ -467,6 +490,7 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 - **FM < NN** everywhere (lower is better) 📉
 - **ML** shrinks both bars (note the log axis) 🔁
 - NN's gap to FM is largest **flat**, smaller **with ML** 🎯
+- All ports agree on the ranking; Rust NN+ML trails py/cpp 🦀
 
 ---
 
@@ -477,7 +501,8 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 </p>
 
 - Coarsening cuts the cost by **12–62 %** 🔁
-- **NN gains the most** (e.g. Bi: 51 % 🐍 / 62 % 🔩) ⚡
+- **NN gains the most** (e.g. Bi: 51 % 🐍 / 62 % 🔩)
+- Rust NN gains are smaller (30 %) — greedy path, not bookkeeping (see #23) 🦀
 - ML *rescues* NN from being a weak standalone heuristic 🆘
 
 ---
@@ -488,21 +513,22 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 <img src="fm-vs-nn-remark.files/fig_ratio.svg" style="width:74%" />
 </p>
 
-- Flat bi: NN is **2.8×** worse 😬
-- ML bi: only **1.6×** — ML **closes** the gap 🤝
-- k-way: ~**1.6–2.0×** in both settings 🔢
+- Flat bi: NN is **2.3–2.8×** worse 😬
+- ML bi: py **1.6×** / C++ **1.3×** / Rust **1.9×** — ML **closes** the gap 🤝
+- k-way: ~**1.6–2.2×** in both settings 🔢
 
 > NN is not a replacement for FM — it is a **cheap companion**. 🪙
 
 ---
 
-### ⏱️ Runtime — Python 🐍 vs C++ 🔩
+### ⏱️ Runtime — Python 🐍 vs C++ 🔩 vs Rust 🦀
 
 <p align="center">
 <img src="fm-vs-nn-remark.files/fig_runtime.svg" style="width:96%" />
 </p>
 
 - C++ is ~**5–50× faster** than Python 🚀
+- Rust (release) is **fastest** — e.g. ibm03 Bi NN-ML: 0.5 s vs 5.1 s C++ 🦀
 - ML ≫ flat in cost (coarsening + recursion) 🐢
 - k = 3 ≫ k = 2 🔢
 
@@ -533,8 +559,9 @@ $$ \{\text{FM}, \text{NN}\} \times \{\text{flat}, \text{ML}\} \times \{k{=}2, k{
 - No lock, no snapshot — **simpler** 🧹
 
 **Ports** 🌍
-- Python & C++ now **identical** ✅
+- Python · C++ · Rust now **identical** ✅
 - Same thresholds, same results 📐
+- Rust needed a one-commit gain re-port (#23) 🔧
 
 ]
 
@@ -570,6 +597,8 @@ graph TD
 - Cause: the unattended background process was **starved/suspended** 😴
 - ➜ a **wall-clock artifact**, not a code defect 🐛❌
 - ➜ the p1 data was re-collected; medians used throughout 🛡️
+- The Rust harness initially **looped forever** on ibm03 (stale bucket max) 🔁
+- ➜ fixed by the gain-manager re-port `#23`; 80 records now complete ✅
 
 > Trust medians and re-measure before believing an outlier. 🔬
 

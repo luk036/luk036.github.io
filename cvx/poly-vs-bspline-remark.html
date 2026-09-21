@@ -346,37 +346,6 @@ class: nord-light, middle, center
 
 ---
 
-### 🪄 Fix 1: Clamped Knots Over the Real Domain
-
-$$ t \;=\; \underbrace{[0, \dots, 0]}_{k+1} \;\cup\; \bigl\{ \text{interior of } \operatorname{linspace}(0, d_{\max},\, m{-}k{+}1) \bigr\} \;\cup\; \underbrace{[d_{\max}, \dots, d_{\max}]}_{k+1} $$
-
-```python
-interior = np.linspace(0.0, dmax, m - k - 1 + 2)[1:-1]
-t = np.concatenate((np.zeros(k + 1), interior, np.full(k + 1, dmax)))
-```
-
-- Knots now **span the whole data domain** $[0, d_{\max}]$ ✅
-- End knots repeated $k+1 = 3$ times → every basis element ``lives'' inside the data ✅
-- Guard: quadratic B-spline needs $m \ge k+1 = 3$ control points 🛡️
-
-.mermaid[
-
-<pre>
-graph LR
-    A["uniform knots\nlinspace(0, 1.2 d_span, m+3)"] --> B["valid domain: t_k .. t_m"]
-    B --> C["extrapolation beyond t_m"]
-    C --> D["wiggly / non-monotone fit"]
-    D -.->|"clamped knots over [0, dmax]"| E["monotone fit, nInc = 0"]
-    style A fill:#fadbd8,stroke:#c0392b,stroke-width:3px
-    style C fill:#fadbd8,stroke:#c0392b,stroke-width:3px
-    style D fill:#fadbd8,stroke:#c0392b,stroke-width:3px
-    style E fill:#d5f5e3,stroke:#2e7d32,stroke-width:3px
-</pre>
-
-]
-
----
-
 ### 🪄 Fix 2: Constrain Exactly the Coefficients
 
 ```python
@@ -423,6 +392,8 @@ class mono_decreasing_oracle2:
 <p align="center">
 <img src="poly-vs-bspline-remark.files/fig_cccp.svg" style="width:95%" />
 </p>
+
+---
 
 - Polynomial: 19 rounds, $f: 32.77 \to 29.78$ = scipy reference ✅
 - B-spline + monotone: 16 rounds, $f: 33.3 \to 30.31$, $\min\operatorname{eig}(\Omega) = 0.56 \succ 0$ ✅

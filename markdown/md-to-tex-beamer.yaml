@@ -1,0 +1,16 @@
+---
+# Pandoc metadata for md-to-tex-slides.md -> Beamer.
+# Kept separate from markdown/beamer.yaml, which is shared by intro.pandoc.
+# Build with LuaLaTeX (the slides contain literal emoji):
+#   pandoc -F pandoc-crossref --citeproc -t beamer --pdf-engine=lualatex \
+#          --include-in-header=md-to-tex-preamble.tex \
+#          md-to-tex-beamer.yaml md-to-tex-slides.md -o md-to-tex-slides.pdf
+fontsize: 10pt
+classoption:
+  - serif
+  - aspectratio=169
+institute: Fudan University
+date: \today
+link-citations: true
+colorlinks: true
+...

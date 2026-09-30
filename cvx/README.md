@@ -85,7 +85,7 @@ graph TD
 | ---------------------------------------------------------- | ------------------------------------------------------------ |
 | [Introduction to Convex Optimization](cvxprog-remark.html) | Basic concepts, convex functions/sets, KKT conditions, CVXPY |
 | [Introduction to Mathematical Programming](intro-cvx-remark.html) | Mathematical programming fundamentals        |
-| [Convexify the Non-convex's](convexify-remark.html)        | Techniques to convert non-convex problems to convex          |
+| [Convexify the Non-convex](convexify-remark.html)        | Techniques to convert non-convex problems to convex          |
 | [Quasi-convex Programming](quasicvx-remark.html)           | Problems where objective is quasi-convex                     |
 | [Alternating Minimization](alternating-remark.html)        | Optimization technique for certain classes of problems       |
 

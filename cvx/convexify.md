@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Convexify the Non-convex's
+# Convexify the Non-convex
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -27,7 +27,7 @@ $$f(x) = x^4 - 4x^2 + 4$$
 Let $y = x^2$. The problem becomes:
 $$f(y) = y^2 - 4y + 4$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$x\_\text{opt} = \pm\sqrt{y\_\text{opt} }$$
 
 ---
@@ -41,7 +41,7 @@ $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
 Let $x' = x^2$, $y' = y^2$. The problem becomes:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$x\_\text{opt} = \pm\sqrt{x'\_\text{opt} }, \quad y\_\text{opt} = \pm\sqrt{y'\_\text{opt} }.$$
 
 ---
@@ -54,14 +54,14 @@ $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
 **Transformation:**
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$x\_\text{opt} = \sin^{-1}(y\_\text{opt}).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
+👉 Note that $\sin(\cdot)$ is a monotonically increasing concave function on $(0, \pi/2)$.
 
 ---
 
-### Change of curvature: square
+### Change of curvature: square root
 
 **Original Problem:**
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -69,7 +69,7 @@ $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 **Transformation:**
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+👉 Note that $\sqrt{\cdot}$ is a **monotonic** **concave** function on $(0, +\infty)$.
 
 **Generalization:**
 
@@ -85,13 +85,13 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 $$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
 
 **Transformation:**
-Let $z' = \log(z)$. The problem becomes:
+Let $x' = \log(x)$, $y' = \log(y)$. The problem becomes:
 
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
 
-**Post-proccessing:**
+**Post-processing:**
 
-$$z\_\text{opt} = \exp(z'\_\text{opt}).$$
+$$x\_\text{opt} = \exp(x'\_\text{opt}), \quad y\_\text{opt} = \exp(y'\_\text{opt}).$$
 
 **Generalization:**
 
@@ -108,7 +108,7 @@ $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
 Let $y = 1 / x$. The problem becomes:
 $${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$x\_\text{opt} = y^{-1}\_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
@@ -125,7 +125,7 @@ $${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
 Let $Y = X^{-1}$. The problem becomes:
 $${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$X\_\text{opt} = Y^{-1}\_\text{opt}.$$
 
 ---
@@ -190,7 +190,7 @@ $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 Let $z = y \cdot x$. The problem becomes:
 $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$y\_\text{opt} = z\_\text{opt} x^{-1}\_\text{opt}$$
 
 ---
@@ -204,7 +204,7 @@ $$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T \prec 0, \
 Let $Z = Y \cdot X$. The problem becomes:
 $$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 ---

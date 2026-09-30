@@ -717,7 +717,7 @@ The problem has been extensively studied and has numerous applications.
 
 #### Some Common Descent Directions
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: $p = -\nabla f(x)$
 -   Steepest descent:
   -   $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
   -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)

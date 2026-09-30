@@ -1,0 +1,31 @@
+# The decks in this repo are pre-built HTML; the LaTeX / Pandoc sources kept
+# beside them use `date: \today`, which is not a valid Jekyll date and broke
+# the Pages build (Liquid "Invalid Date"). Exclude those document sources.
+
+theme: jekyll-theme-primer
+
+exclude:
+  # `exclude` overrides Jekyll's built-in list, so repeat its defaults here.
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - "*.pandoc"
+  - "*.tex"
+  - "*.yaml"
+  - "*.bib"
+  - markdown/md-to-tex-slides.md
+  - algo4dfm/beamer.yaml
+  - algo4dfm/latex.yaml
+  - markdown/beamer.pandoc
+  - markdown/beamer.yaml
+  - markdown/intro.pandoc
+  - markdown/latex.yaml
+  - markdown/md-to-tex-beamer.yaml
+  - n_sphere/beamer.yaml
+  - n_sphere/latex.yaml
+  - projgeom/beamer.yaml
+  - projgeom/latex.yaml

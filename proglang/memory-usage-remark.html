@@ -213,7 +213,7 @@ Arr R = dot(A, r);  // O(100 · n²)
 
 ### ⚡ multiplierless-cpp: FFT Fix
 
-**Key insight:** $R(\omega_i) = r_0 + 2\sum_k^{n-1} r_k \cos(k \omega_i)$ is the **real part of the DFT** of zero-padded $r$. 🧠
+**Key insight:** $R(\omega_i) = r_0 + 2\sum_{k=1}^{n-1} r_k \cos(k \omega_i)$ is the **real part of the DFT** of zero-padded $r$. 🧠
 
 Zero-pad $r$ to length $m = 100n$ → `rfft` → $R[i] = 2 \cdot \operatorname{Re}(S[i]) - r_0$
 

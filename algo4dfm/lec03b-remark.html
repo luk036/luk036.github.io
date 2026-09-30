@@ -120,7 +120,7 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A(("Measured Data")) --> B{Estimation Type}
     B -->|Parametric| C[Exponential / Gaussian / Matérn]
     B -->|Non-Parametric| D[B-Spline / Polynomial]
@@ -277,12 +277,12 @@ def mle_corr_mtx(Y):
 ### 📊 Correlation Function (II)
 
 -   Choice of ${\color{purple}\Psi_i}({\color{brown}h})$:
-  -   Polynomial ${\color{purple}P_i}({\color{brown}h})$:
-    -   Easy to understand 👍
-    -   No guarantee of monotonicity; unstable for higher-order polynomials.
-  -   B-spline function ${\color{purple}B_i}({\color{brown}h})$
-    -   Shapes are easier to control 👍
-    -   No guarantee of positive definite 👎
+    -   Polynomial ${\color{purple}P_i}({\color{brown}h})$:
+        -   Easy to understand 👍
+        -   No guarantee of monotonicity; unstable for higher-order polynomials.
+    -   B-spline function ${\color{purple}B_i}({\color{brown}h})$
+        -   Shapes are easier to control 👍
+        -   No guarantee of positive definite 👎
 
 ---
 

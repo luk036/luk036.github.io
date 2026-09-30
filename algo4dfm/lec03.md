@@ -86,7 +86,7 @@ $$
 
 ### Convexity
 
--   A function $f$: ${\color{salmon} K} \subseteq \mathbb{R}^{\color{royalblue} n} \mapsto R$ is convex
+-   A function $f$: ${\color{salmon} K} \subseteq \mathbb{R}^{\color{royalblue} n} \mapsto \mathbb{R}$ is convex
   if ${\color{salmon} K}$ is a convex set and
   $f({\color{green} y}) \ge f({\color{green} x}) + \nabla f({\color{green} x})^\mathsf{T} ({\color{green} y} - {\color{green} x}), \; {\color{green} y},{\color{green} x} \in {\color{salmon} K}$.
 
@@ -389,12 +389,12 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
   $$
   \begin{array}{ll}
-      \text{minimize}   & \| {\color{green} \Sigma} - {\color{royalblue} Y} \|_F \\
-      \text{subject to} & {\color{green} \Sigma} \succeq 0
+      \text{minimize}   & \| {\color{green} \Sigma} - {\color{royalblue} Y} \|_\mathrm{F} \\
+      \text{subject to} & {\color{green} \Sigma} \succ 0
     \end{array}
   $$
 
-    where $\| {\color{green} \Sigma} - {\color{royalblue} Y} \|_\mathrm{F}$ denotes the Frobenius norm, ${\color{royalblue} A} \succeq 0$ denotes that ${\color{royalblue} A}$ is positive semidefinite.
+    where $\| {\color{green} \Sigma} - {\color{royalblue} Y} \|_\mathrm{F}$ denotes the Frobenius norm, ${\color{royalblue} A} \succ 0$ denotes that ${\color{royalblue} A}$ is positive definite.
 
 -   👉 Note:
   1. the problem is convex 😃
@@ -406,7 +406,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
   $$
   \begin{array}{ll}
         \text{maximize} & \log \det {\color{green} \Sigma}^{-1} - \mathrm{Tr}({\color{green} \Sigma}^{-1}{\color{royalblue} Y}) \\
-        \text{subject to} & {\color{green} \Sigma} \succeq 0
+        \text{subject to} & {\color{green} \Sigma} \succ 0
   \end{array}
   $$
   where $\mathrm{Tr}({\color{royalblue} A})$ denotes the trace of ${\color{royalblue} A}$.
@@ -418,7 +418,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
   $$
   \begin{array}{ll}
       \text{minimize} & -\log \det {\color{green} S} + \mathrm{Tr}({\color{green} S} {\color{royalblue} Y}) \\
-      \text{subject to} & {\color{green} S} \succeq 0
+      \text{subject to} & {\color{green} S} \succ 0
     \end{array}
   $$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
@@ -457,7 +457,7 @@ def mle_corr_mtx(Y):
 
 #### Correlation Function (I)
 
--   Let $\rho({\color{royalblue} h}) = \sum_i^{\color{royalblue} m} {\color{green}p}_i \Psi_i({\color{royalblue} h})$, where
+-   Let $\rho({\color{royalblue} h}) = \sum_{i=1}^{\color{royalblue} m} {\color{green}p}_i \Psi_i({\color{royalblue} h})$, where
   -   ${\color{green}p}_i$'s are the unknown coefficients to be fitted
   -   $\Psi_i$'s are a family of basis functions.
 -   Let $\{ {\color{royalblue}F_k}\}_{i,j} =\Psi_k( \| {\color{royalblue} s_i} - {\color{royalblue} s_j} \|_2)$.
@@ -494,7 +494,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
   $$
   \begin{array}{ll}
     \min_{ {\color{green}\kappa}, {\color{green}p} }   & \| \Omega({\color{green}p}) + {\color{green}\kappa} I - {\color{royalblue} Y} \|_\mathrm{F} \\
-    \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
+    \text{s.t.} & \Omega({\color{green}p}) \succ 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$
 
@@ -504,13 +504,13 @@ Bochner's theorem states that a continuous function is a valid covariance functi
   $$
   \begin{array}{ll}
     \min_{ {\color{green}\kappa}, {\color{green}p} } & \log \det (\Omega({\color{green}p}) + {\color{green}\kappa} I) + \mathrm{Tr}((\Omega({\color{green}p}) + {\color{green}\kappa} I)^{-1}{\color{royalblue} Y}) \\
-    \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
+    \text{s.t.} & \Omega({\color{green}p}) \succ 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$
   👉 Note:
   -   The 1st term is concave 😭, the 2nd term is convex
   -   However, the problem is **geodesically convex**.
-  -   If enough samples are available, then ${\color{royalblue} Y} \succeq 0$. Furthermore, the
+  -   If enough samples are available, then ${\color{royalblue} Y} \succ 0$. Furthermore, the
     MLE is a convex problem in
     ${\color{royalblue} Y} \preceq \Omega({\color{green}p}) + {\color{green}\kappa} I \preceq 2{\color{royalblue} Y}$
 
@@ -564,7 +564,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
      I_n & {\color{green} S}
       \end{array}
     \right)
-          \succeq 0, {\color{green}\kappa} \geq 0
+          \succ 0, {\color{green}\kappa} \geq 0
     \end{array}
   $$
   👉 Note: Convergence to an optimal solution is not guaranteed, but works well in practice.
@@ -583,7 +583,7 @@ for i=1:n-1,
    for j=i+1:n,
      dt = s(j,:)' - s(i,:)';
      d = T*dt;  % become isotropic after the location transformation
-     Sig(i,j) = exp(-0.5*(d'*d)/(sdkern*sdkern)/2);
+     Sig(i,j) = exp(-0.5*(d'*d)/(sdkern*sdkern));
      Sig(j,i) = Sig(i,j);
    end
 end

@@ -259,7 +259,7 @@ def mle_corr_mtx(Y):
 
 ### 📊 Correlation Function (I)
 
--   Let ${\color{purple}\rho}({\color{brown}h}) = \sum_i^{m} {\color{darkblack}p}_i {\color{purple}\Psi_i}({\color{brown}h})$, where
+-   Let ${\color{purple}\rho}({\color{brown}h}) = \sum_{i=1}^{m} {\color{darkblack}p}_i {\color{purple}\Psi_i}({\color{brown}h})$, where
   -   ${\color{darkblack}p}_i$'s are the unknown coefficients to be fitted
   -   ${\color{purple}\Psi_i}$'s are a family of basis functions.
 -   Let $\{{\color{red}F_k}\}_{i,j} ={\color{purple}\Psi_k}( \| s_i - s_j \|_2)$.
@@ -392,7 +392,7 @@ for i=1:n-1,
    for j=i+1:n,
      dt = s(j,:)' - s(i,:)';
      d = T*dt;  % become isotropic after the location transformation
-     Sig(i,j) = exp(-0.5*(d'*d)/(sdkern*sdkern)/2);
+     Sig(i,j) = exp(-0.5*(d'*d)/(sdkern*sdkern));
      Sig(j,i) = Sig(i,j);
    end
 end

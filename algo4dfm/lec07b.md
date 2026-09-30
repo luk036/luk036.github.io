@@ -622,11 +622,11 @@ ${\color{blue}A}^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & 
 
 -   Setup time constraint
   $${\color{blue}y}_\text{skew}(i,f) \le {\color{royalblue}T}_\text{CP} - {\color{blue}D}_{if} - {\color{royalblue}T}_\text{setup} = {\color{firebrick}u}_{if}$$
-  While this constraint destroyed, cycle time violation (zero
+  If this constraint is violated, cycle time violation (zero
   clocking) occurs.
 -   Hold time constraint
-  $${\color{blue}y}_\text{skew}(i,f) \ge {\color{royalblue}T}_\text{hold} - {\color{blue}d}_{if} = {\color{blue}l}_{if}$$ While
-  this constraint destroyed, race condition (double clocking) occurs.
+  $${\color{blue}y}_\text{skew}(i,f) \ge {\color{royalblue}T}_\text{hold} - {\color{blue}d}_{if} = {\color{blue}l}_{if}$$ If
+  this constraint is violated, race condition (double clocking) occurs.
 
 #### Timing Constraint Graph
 

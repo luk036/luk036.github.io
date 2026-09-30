@@ -154,11 +154,11 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 - Setup time constraint
   $$y_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
-  While this constraint destroyed, cycle time violation (zero
+  If this constraint is violated, cycle time violation (zero
   clocking) occurs.
 - Hold time constraint
-  $$y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
-  this constraint destroyed, race condition (double clocking) occurs.
+  $$y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ If
+  this constraint is violated, race condition (double clocking) occurs.
 
 ---
 

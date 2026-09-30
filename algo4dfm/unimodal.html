@@ -128,7 +128,7 @@ If you do it right,
 - Then, in useful skew design:
     $${\color{royalblue}T_\text{skew}}(i,f) \le  {\color{green}S_{if}} \implies {\color{red}t_i} - {\color{red}t_f} \le {\color{green}S_{if}}$$
     $${\color{royalblue}T_\text{skew}}(i,f) \ge  -{\color{orange}H_{if}} \implies {\color{red}t_f} - {\color{red}t_i} \le {\color{orange}H_{if}} $$
-- In principle, ${\color{orange}H_{if}} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{green}S_{if}}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+- In principle, ${\color{orange}H_{if}} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{green}S_{if}}$ represent the minimum- and maximum-path delay, and should always be greater than zero.
 - Let ${\color{royalblue}D_{if}} = {\color{royalblue}T_\text{CP}} - {\color{green}S_{if}}$
 
 ---
@@ -203,7 +203,7 @@ $$\begin{array}{ll}
     & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu^H_{ij}} - {\color{orange}\sigma^H_{ij}} {\color{royalblue}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{royalblue}\beta'}$. ⚡
+- This bypasses evaluating the error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{royalblue}\beta'}$. ⚡
 
 ---
 

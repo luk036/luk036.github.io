@@ -145,7 +145,7 @@ class: nord-light, middle, center
 
 ]
 
-Unlike conventional optical lithography, which exposes the photoresist once under one mask, masks is exposed twice by splitting them into two, each with half its feature density.
+Unlike conventional optical lithography, which exposes the photoresist once under one mask, the mask is exposed twice by splitting them into two, each with half its feature density.
 
 ---
 
@@ -176,7 +176,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 .pull-left70[
 
 - Rule 1: If the distance between two rectangles is $\geq {\color{red} b}$, then they are *not* in conflict. ✅
-- Rule 2: Two overlapping/contacting rectangles are **NOT** conflict. 🤝
+- Rule 2: Two overlapping/contacting rectangles are **NOT** in conflict. 🤝
 - Rule 3: Two rectangles ${\color{lime} X}$ and ${\color{lime} Y}$ are in conflict if they are $\leq {\color{red} b}$ apart and there is a path from ${\color{lime} X}$ to ${\color{lime} Y}$ that reconstructs a "concave" polygon. ⚠️
 
 Conflicting: $({\color{salmon}A},{\color{salmon}C})$, $({\color{salmon}B},{\color{salmon}D})$, but not $({\color{salmon}A},{\color{salmon}B}), ({\color{salmon}A},{\color{salmon}D})$ and $({\color{salmon}B},{\color{salmon}C})$.

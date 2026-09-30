@@ -217,7 +217,7 @@ Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining ${\color{
 
 ### 🎯 E.g. Yield-driven Optimization (II)
 
--   Let ${\color{olive}F}({\color{green}x})$ is the cdf of $\tilde{\color{blue}d}$.
+-   Let ${\color{olive}F}({\color{green}x})$ be the cdf of $\tilde{\color{blue}d}$.
 
 -   Then: $$\begin{array}{lll}
       & & {\color{royalblue}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}) \\
@@ -348,7 +348,7 @@ $$\begin{array}{ll}
 
 -   Here, there is a better way to choose ${\color{green}p}$! 💡
 -   Let ${\color{green}x} := {\color{green}x} + {\color{royalblue}\alpha} {\color{green}p}$, then we have: $$\begin{array}{lll}
-      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + {\color{royalblue}\alpha} {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} < 0 \\
+      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + {\color{royalblue}\alpha} {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} {\color{green}p} < 0 \\
       \text{s. t.} & -{\color{green}x_0} \leq {\color{royalblue}\alpha} {\color{green}p} \leq {\color{green}c}-{\color{green}x_0} & \Rightarrow \text{residual graph} \\
       & {\color{blue}A^\mathsf{T} } {\color{green}p} = 0 & \Rightarrow {\color{green}p} \text{ is a cycle!}
     \end{array}$$
@@ -579,7 +579,7 @@ $$\begin{array}{ll}
 
 ### 🔄 Recall ...
 
--   Yield drive CSS: $$\begin{array}{ll}
+-   Yield-driven CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{royalblue}\beta} {\color{royalblue}s}, \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},

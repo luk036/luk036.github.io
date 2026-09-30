@@ -133,7 +133,7 @@ class: nord-light, middle, center
 
 -   **Clock skew**: $${\color{darkblack} T_{skew}}(i, j) = {\color{darkblack} t_i} - {\color{darkblack} t_j}$$ (2) — arrival-time difference at FFs $FF_i$, $FF_j$.
 -   **Setup** ⏳: $${\color{darkblack} T_{skew}}(i, j) \le {\color{darkblack} T_\text{CP}} - {\color{blue}D}_{ij} - {\color{blue}T_{setup}}$$ (3)
--   **Hold** ⏲️: $${\color{darkblack} T_{skew}}(i, j) \ge {\color{blue}d}_{ij} - {\color{blue}T_{hold}}$$ (4)
+-   **Hold** ⏲️: $${\color{darkblack} T_{skew}}(i, j) \ge {\color{blue}T_{hold}} - {\color{blue}d}_{ij}$$ (4)
 -   ${\color{blue}D}_{ij}$: **max** path delay; ${\color{blue}d}_{ij}$: **min** path delay; ${\color{darkblack} T_\text{CP}}$: clock period.
 
 ---
@@ -231,7 +231,7 @@ graph LR
 ### Statistical Hold Constraint ⏲️
 
 -   $${\color{darkblack} T_{skew}} \ge {\color{blue}T_{hold}} - {\color{blue}\tilde{d}}$$ (16)
--   Deterministic: $${\color{blue}T_{hold}} - {\color{darkblack} T_{skew}} \ge {\color{purple}Q}_d(1-{\color{green} \beta})$$ (18)
+-   Deterministic: $${\color{blue}T_{hold}} - {\color{darkblack} T_{skew}} \le {\color{purple}Q}_d(1-{\color{green} \beta})$$ (18)
 -   Hold violations occur under **fast** conditions → sensitive to the **lower tail**.
 -   ${\color{purple}Q}_D({\color{green} \beta})$, ${\color{purple}Q}_d(1-{\color{green} \beta})$: quantiles of max/min delay distributions.
 

@@ -153,7 +153,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 #### Key Papers
 
 - Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
-- Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
+- Hadlock, F. "Finding a Maximum Cut of a Planar Graph in Polynomial Time". SIAM Journal on Computing, 4(3):221–225, 1975.
 
 ---
 
@@ -228,7 +228,7 @@ graph TD
         F5("Lec 4: Convex Opt")
     end
     subgraph "Core Algorithms"
-        C1("Lec 5: Ellipsoid")
+        C1("Lec 5: Robust Sizing")
         C2("Lec 6: Cutting-plane")
         C3("Lec 7: Clock Skew")
         C4("Lec 8: Network Flow")

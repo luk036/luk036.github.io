@@ -47,7 +47,7 @@ $$
 \begin{array}{lll}
   \text{minimize} & 0.4 {\color{green} x_1} + 3.4 {\color{green} x_2} - 3.4 {\color{green} x_3} \\
   \text{subject to} & 0.5 {\color{green} x_1} + 0.5 {\color{green} x_2} & = 3.5 \\
-  & 0.3 {\color{green} x_1} - 0.8 {\color{green} x_2} + 8.4 {\color{green} x_2} & = 4.5 \\
+  & 0.3 {\color{green} x_1} - 0.8 {\color{green} x_2} + 8.4 {\color{green} x_3} & = 4.5 \\
   & {\color{green} x_1}, {\color{green} x_2}, {\color{green} x_3} \ge 0
 \end{array}
 $$
@@ -78,7 +78,7 @@ $$
 
 -   The standard form of an NLPP is
   $$\min\{f({\color{green} x}) \mid g({\color{green} x}) \leq 0, h({\color{green} x})=0 \}.$$
--   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
+-   Necessary conditions of optimality, Karush-Kuhn-Tucker (KKT)
   conditions:
   -   $\nabla f({\color{green} x}) + {\color{firebrick} \mu} \nabla g({\color{green} x}) + {\color{firebrick} \lambda} \nabla h({\color{green} x}) = 0$,
   -   ${\color{firebrick} \mu} g({\color{green} x}) = 0$,
@@ -88,7 +88,7 @@ $$
 
 -   A function $f$: ${\color{salmon} K} \subseteq \mathbb{R}^{\color{royalblue} n} \mapsto R$ is convex
   if ${\color{salmon} K}$ is a convex set and
-  $f({\color{green} y}) \ge f({\color{green} x}) + \nabla f({\color{green} x}) ({\color{green} y} - {\color{green} x}), \; {\color{green} y},{\color{green} x} \in {\color{salmon} K}$.
+  $f({\color{green} y}) \ge f({\color{green} x}) + \nabla f({\color{green} x})^\mathsf{T} ({\color{green} y} - {\color{green} x}), \; {\color{green} y},{\color{green} x} \in {\color{salmon} K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
   functions. If the pair $({\color{green} x}, {\color{royalblue} m})$ satisfies the KKT conditions above,
@@ -118,16 +118,16 @@ $$
 
 class: nord-light, middle, center
 
-## Convexify the non-convex's
+## Convexify the Non-convex
 
-### Change of curvature: square
+### Change of curvature: square root
 
 Transform:
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+👉 Note that $\sqrt{\cdot}$ is a **monotonic** **concave** function on $(0, +\infty)$.
 
 Generalization:
 
@@ -152,7 +152,7 @@ $${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$
 Then:
 $${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{ {\color{green} y}_\text{opt} }).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
+👉 Note that $\sin(\cdot)$ is a monotonically increasing concave function on $(0, \pi/2)$.
 
 #### Change of curvature: log
 
@@ -160,10 +160,10 @@ Transform:
 $$\pi \leq {\color{red} x / y} \leq \phi$$
 into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
-where ${\color{green} z'} = \log({\color{red} z})$.
+where ${\color{green} x'} = \log({\color{red} x})$, ${\color{green} y'} = \log({\color{red} y})$.
 
 Then:
-$${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
+$${\color{red} x}_\text{opt} = \exp({\color{green} x'}_\text{opt}), \quad {\color{red} y}_\text{opt} = \exp({\color{green} y'}_\text{opt}).$$
 
 Generalization:
 
@@ -234,7 +234,7 @@ $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green} X}^{-
 -   Relaxation + heuristic
 -   Decomposition
 
-#### Unconstraint Techniques
+#### Unconstrained Techniques
 
 -   Line search methods
 -   Fixed or variable step size
@@ -258,7 +258,7 @@ $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green} X}^{-
 
 #### Some Common Descent Directions
 
--   Gradient descent: ${\color{green} p} = -\nabla f({\color{green} x})^\mathsf{T}$
+-   Gradient descent: ${\color{green} p} = -\nabla f({\color{green} x})$
 -   Steepest descent:
   -   $\triangle {\color{green} x}_{nsd} = \argmin\{\nabla f({\color{green} x})^\mathsf{T} {\color{green} v} \mid \|{\color{green} v}\|=1 \}$
   -   $\triangle {\color{green} x}$ = $\|\nabla f({\color{green} x})\| \triangle {\color{green} x}_{nsd}$
@@ -283,8 +283,8 @@ $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green} X}^{-
 
 -   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)
--   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
--   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Cambridge University Press, March 2004
+-   Mittelmann, H. D. and Spellucci, P. Decision Tree for Optimization
   Software, 2003
 
 ## Non-Parametric Spatial Correlation Estimation

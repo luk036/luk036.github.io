@@ -1,8 +1,8 @@
-# Lecture 2c: Introduction to Convex Programming
+# Lecture 2c: Introduction to Convex Optimization
 
 ## 📝 Abstract
 
-This lecture provides an introduction to the convex programming and
+This lecture provides an introduction to convex programming and
 covers various aspects of optimization. The lecture begins with an
 overview of optimization, including linear and nonlinear programming,
 duality and convexity, and approximation techniques. It then delves into
@@ -60,7 +60,7 @@ $$
 \begin{array}{lll}
   \text{minimize} & 0.4 {\color{green}x_1} + 3.4 {\color{green}x_2} - 3.4 {\color{green}x_3} \\
   \text{subject to} & 0.5 {\color{green}x_1} + 0.5 {\color{green}x_2} & = 3.5 \\
-  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_2} & = 4.5 \\
+  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_3} & = 4.5 \\
   & {\color{green}x_1}, {\color{green}x_2}, {\color{green}x_3} \ge 0
 \end{array}
 $$
@@ -72,26 +72,26 @@ $$
   -   Decompose ${\color{green}x}$ to two new variables
     ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable ${\color{firebrick}y} = {\color{royalblue}b} - {\color{royalblue}A} {\color{green}x} \geq 0$
-  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, 1)$
+  -   By putting slack variable ${\color{firebrick}y} = {\color{royalblue}A} {\color{green}x} - {\color{royalblue}b} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, {\color{royalblue}I})$, and ${\color{royalblue}c'} = ({\color{royalblue}c}, 0)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
 ### Duality of LPP
 
--   If the primal problem of the LPP:
+-   If the primal problem of the LPP is:
   $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} \ge {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
   $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
   $\min\{ {\color{royalblue}c}^\mathsf{T} {\color{green}x} \mid {\color{royalblue}A} {\color{green}x} = {\color{royalblue}b}, {\color{green}x} \ge 0\}$.
--   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}\}$.
+-   Its dual (with ${\color{firebrick}y}$ unrestricted) is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{royalblue}b} \mid {\color{royalblue}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{royalblue}c}\}$.
 
 ### Nonlinear Programming
 
 -   The standard form of an NLPP is
   $$\min\{f({\color{green}x}) \mid g({\color{green}x}) \leq 0, h({\color{green}x})=0 \}.$$
--   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
+-   Necessary conditions of optimality (under a constraint qualification), Karush-Kuhn-Tucker (KKT)
   conditions:
 
   -   Gradient Condition: ∇f(x) + µ∇g(x) + λ∇h(x) = 0, where ∇f(x),
@@ -123,12 +123,12 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{\color{royalblue}n} \mapsto R$ is convex if
+-   A function $f: {\color{salmon}K} \subseteq \mathbb{R}^{\color{royalblue}n} \to \mathbb{R}$ is convex if
   ${\color{salmon}K}$ is a convex set and
-  $f({\color{green}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{salmon}K}$.
+  $f({\color{green}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x})^\mathsf{T} ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{salmon}K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $({\color{green}x}, {\color{royalblue}m})$ satisfies the KKT conditions above,
+  functions and $h$ is affine. If the pair $({\color{green}x}, {\color{royalblue}\mu}, {\color{royalblue}\lambda})$ satisfies the KKT conditions above,
   ${\color{green}x}$ is an optimal solution of the problem. If in addition, $f$ is
   strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
@@ -155,14 +155,14 @@ solving optimization problems.
 
 class: nord-light, middle, center
 
-## Convexify the non-convex's
+## Convexify the Non-convex
 
-### Change of curvature: square
+### Change of curvature: square root
 
 Transform: $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$ into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in
+👉 Note that $\sqrt{\cdot}$ is a **monotonic** **concave** function in
 $(0, +\infty)$.
 
 Generalization:
@@ -186,15 +186,15 @@ $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red} x} \leq \pi/2$$ i
 $${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$ Then:
 $${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{ {\color{green} y}_\text{opt} }).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in
+👉 Note that $\sin(\cdot)$ is a monotonic concave function in
 $(0, \pi/2)$.
 
 #### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where ${\color{green} z'} = \log({\color{red} z})$.
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where ${\color{green} x'} = \log({\color{red} x})$, ${\color{green} y'} = \log({\color{red} y})$.
 
-Then: $${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
+Then: $${\color{red} x}_\text{opt} = \exp({\color{green} x'}_\text{opt}), \quad {\color{red} y}_\text{opt} = \exp({\color{green} y'}_\text{opt}).$$
 
 Generalization: - Geometric programming
 
@@ -262,7 +262,7 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 -   Relaxation + heuristic
 -   Decomposition
 
-#### Unconstraint Techniques
+#### Unconstrained Techniques
 
 -   Line search methods
 -   Fixed or variable step size
@@ -286,7 +286,7 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 #### Some Common Descent Directions
 
--   Gradient descent: ${\color{green}p} = -\nabla f({\color{green}x})^\mathsf{T}$
+-   Gradient descent: ${\color{green}p} = -\nabla f({\color{green}x})$
 -   Steepest descent:
   -   $\triangle {\color{green}x}_{nsd} = \argmin\{\nabla f({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$
   -   $\triangle {\color{green}x}$ = $\|\nabla f({\color{green}x})\| \triangle {\color{green}x}_{nsd}$
@@ -312,8 +312,8 @@ Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}
 
 -   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)
--   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
--   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Cambridge University Press, March 2004
+-   Mittelmann, H. D. and Spellucci, P. Decision Tree for Optimization
   Software, 2003
 
 ## Lecture 2d: Complexity Theory

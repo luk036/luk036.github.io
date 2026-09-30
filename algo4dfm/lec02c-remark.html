@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Introduction to Convex Programming 🎯
+# Introduction to Convex Optimization 🎯
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ## Abstract 📝
 
-This lecture introduces convex programming and covers various optimization aspects. It commences with an optimization overview, including linear and nonlinear programming, duality, convexity, and approximation techniques. The lecture then proceeds with specific topics within continuous optimization, such as linear programming problems and their standard form, standard form transformations, and duality. The lecture covers nonlinear programming, examining the standard format of an NLPP (nonlinear programming problem) and the essential optimality requirements referred to as the Karush-Kuhn-Tucker (KKT) conditions. It also delves into the topic of convexity, defining convex functions and their characteristics. Moreover, the lecture covers the duality of convex optimization problems and their value in computation. Finally, the document discusses several optimization techniques, including unconstrained optimization, descent methods, and approximation methods when working with constraints.
+This lecture introduces convex programming and covers various optimization aspects. It begins with an optimization overview, including linear and nonlinear programming, duality, convexity, and approximation techniques. The lecture then proceeds with specific topics within continuous optimization, such as linear programming problems and their standard form, standard form transformations, and duality. The lecture covers nonlinear programming, examining the standard format of an NLPP (nonlinear programming problem) and the essential optimality requirements referred to as the Karush-Kuhn-Tucker (KKT) conditions. It also covers convexity, defining convex functions and their characteristics. Moreover, the lecture covers the duality of convex optimization problems and their value in computation. Finally, it discusses several optimization techniques, including unconstrained optimization, descent methods, and approximation methods when working with constraints.
 
 ---
 
@@ -48,7 +48,7 @@ This lecture introduces convex programming and covers various optimization aspec
 -   **Nonlinear programming**
 -   **Duality and Convexity**
 -   **Approximation techniques**
--   **Convex Programming**
+-   **Convex Optimization**
 -   **Books and online resources**
 
 ] .pull-right[
@@ -95,7 +95,7 @@ This lecture introduces convex programming and covers various optimization aspec
 $$\begin{array}{lll}
   \text{minimize} & 0.4 {\color{green}x_1} + 3.4 {\color{green}x_2} - 3.4 {\color{green}x_3} \\
   \text{subject to} & 0.5 {\color{green}x_1} + 0.5 {\color{green}x_2} & = 3.5 \\
-  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_2} & = 4.5 \\
+  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_3} & = 4.5 \\
   & {\color{green}x_1}, {\color{green}x_2}, {\color{green}x_3} \ge 0
 \end{array}$$
 
@@ -108,24 +108,16 @@ $$\begin{array}{lll}
   -   Decompose ${\color{green}x}$ to two new variables
         ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable ${\color{green}y} = {\color{royalblue}b} - {\color{royalblue}A} {\color{green}x} \geq 0$
-  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{green}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, 1)$
+-   By putting slack variable ${\color{green}y} = {\color{royalblue}A} {\color{green}x} - {\color{royalblue}b} \geq 0$
+-   Set ${\color{green}x'} = ({\color{green}x}, {\color{green}y}), {\color{royalblue}A'} = ({\color{royalblue}A}, {\color{royalblue}I})$, and ${\color{royalblue}c'} = ({\color{royalblue}c}, 0)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
 ---
 
-### Linearize the non-linear's 🔄
+class: nord-light, middle, center
 
-**Original Problem:**
-$$({\color{royalblue}a} + {\color{royalblue}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
-
-**Transformation:**
-Let ${\color{green}z} = {\color{red}y} \cdot {\color{green}x}$. The problem becomes:
-$${\color{royalblue}a} \cdot {\color{green}x} + {\color{royalblue}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$
-
-**Post-proccessing:**
-$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_\text{opt}$$
+## Linearize the non-linear 🔄
 
 ---
 
@@ -136,13 +128,27 @@ $${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_
 $${\color{royalblue}\pi} \leq {\color{red} x / y} \leq {\color{royalblue}\phi}, \; {\color{red}x} > 0, {\color{red}y} > 0$$
 
 **Transformation:**
-Let ${\color{green}z'} = \log({\color{red}z})$. The problem becomes:
+Let ${\color{green}x'} = \log({\color{red}x})$, ${\color{green}y'} = \log({\color{red}y})$. The problem becomes:
 
 $${\color{royalblue}\pi'} \leq {\color{green} x' - y'} \leq {\color{royalblue}\phi'}$$
 
-**Post-proccessing:**
+**Post-processing:**
 
-$${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
+$${\color{red}x_\text{opt}} = \exp({\color{green}x'_\text{opt}}), \quad {\color{red}y_\text{opt}} = \exp({\color{green}y'_\text{opt}}).$$
+
+---
+
+### 🔀 Change of variables
+
+**Original Problem:**
+$$({\color{royalblue}a} + {\color{royalblue}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
+
+**Transformation:**
+Let ${\color{green}z} = {\color{red}y} \cdot {\color{green}x}$. The problem becomes:
+$${\color{royalblue}a} \cdot {\color{green}x} + {\color{royalblue}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$
+
+**Post-processing:**
+$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_\text{opt}$$
 
 ---
 
@@ -162,7 +168,7 @@ $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 
 -   The standard form of an NLPP is
     $$\min\{{\color{purple}f}({\color{green}x}) \mid {\color{purple}g}({\color{green}x}) \leq 0, {\color{purple}h}({\color{green}x})=0 \}.$$
--   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT) conditions:
+-   Necessary conditions of optimality (under a constraint qualification), Karush-Kuhn-Tucker (KKT) conditions:
   -   **Gradient Condition**: ∇f(x) + µ∇g(x) + λ∇h(x) = 0
   -   **Complementary Slackness Condition**: µg(x) = 0
   -   **Feasibility Condition**: µ ≥ 0, g(x) ≤ 0, h(x) = 0
@@ -176,9 +182,9 @@ graph TD
     B --> C[Stationarity]
     B --> D[Primal Feasibility]
     B --> E[Complementary Slackness]
-    C --> F["∇f + Σλᵢ∇gᵢ + Σμⱼ∇hⱼ = 0"]
+    C --> F["∇f + Σµᵢ∇gᵢ + Σλⱼ∇hⱼ = 0"]
     D --> G["gᵢ(x) ≤ 0, hⱼ(x) = 0"]
-    E --> H["λᵢgᵢ(x) = 0, λᵢ ≥ 0"]
+    E --> H["µᵢgᵢ(x) = 0, µᵢ ≥ 0"]
     style A fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
     style B fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
     style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
@@ -196,11 +202,11 @@ graph TD
 
 -   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
--   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^{\color{royalblue}n} \mapsto R$ is convex if ${\color{steelblue}K}$ is a convex set and ${\color{purple}f}({\color{green}y}) \ge {\color{purple}f}({\color{green}x}) + \nabla {\color{purple}f}({\color{green}x}) ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{steelblue}K}$.
+-   A function ${\color{purple}f}: {\color{steelblue}K} \subseteq \mathbb{R}^{\color{royalblue}n} \to \mathbb{R}$ is convex if ${\color{steelblue}K}$ is a convex set and ${\color{purple}f}({\color{green}y}) \ge {\color{purple}f}({\color{green}x}) + \nabla {\color{purple}f}({\color{green}x})^\mathsf{T} ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{steelblue}K}$.
 
 -   A problem is convex if the objective function ${\color{purple}f}({\color{green}x})$ is convex and the feasible set defined by the constraints is a convex set.
 
--   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable functions. If the pair $({\color{green}x}, {\color{firebrick}m})$ satisfies the KKT conditions above, ${\color{green}x}$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is strictly convex, ${\color{green}x}$ is the only solution of the problem.
+-   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable functions and ${\color{purple}h}$ is affine. If the pair $({\color{green}x}, {\color{firebrick}\mu}, {\color{firebrick}\lambda})$ satisfies the KKT conditions above, ${\color{green}x}$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
 ---
 
@@ -283,7 +289,7 @@ where ${\color{purple}f}({\color{green}x})$ is convex, ${\color{purple}g_i}({\co
 
 -   An extension of convex optimization
 
--   Deals with quasi-convex functions and sets
+-   Deals with quasi-convex functions and convex sets
 
 -   Bridges the gap between convex and non-convex optimization
 
@@ -299,13 +305,13 @@ where ${\color{purple}f}({\color{green}x})$ is convex, ${\color{purple}g_i}({\co
 
 -   Linear-fractional function:
 
-  -   ${\color{purple}f}({\color{green}x})$ = $({\color{royalblue}a}^\mathsf{T} {\color{green}x} + {\color{royalblue}b})/({\color{royalblue}c}^\mathsf{T} {\color{green}x} + {\color{royalblue}d})$
+  -   ${\color{purple}f}({\color{green}x}) = ({\color{royalblue}a}^\mathsf{T} {\color{green}x} + {\color{royalblue}b})/({\color{royalblue}c}^\mathsf{T} {\color{green}x} + {\color{royalblue}d})$
 
   -   dom ${\color{purple}f}$ = $\{{\color{green}x} \,|\, {\color{royalblue}c}^\mathsf{T} {\color{green}x} + {\color{royalblue}d} > 0 \}$
 
 -   Distance ratio function:
 
-  -   ${\color{purple}f}({\color{green}x})$ = $\| {\color{green}x} - {\color{royalblue}a}\|_2 / \| {\color{green}x} - {\color{royalblue}b} \|_2$
+  -   ${\color{purple}f}({\color{green}x}) = \| {\color{green}x} - {\color{royalblue}a}\|_2 / \| {\color{green}x} - {\color{royalblue}b} \|_2$
 
 ---
 
@@ -315,7 +321,7 @@ If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\co
 
 -   ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}x})$ is convex w.r.t. ${\color{darkblack}x}$ for fixed ${\color{royalblue}\gamma}$ 📈
 
--   ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}x})$ is non-increasing w.r.t. ${\color{royalblue}\gamma}$ for fixed ${\color{darkblack}z}$
+-   ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}x})$ is non-increasing w.r.t. ${\color{royalblue}\gamma}$ for fixed ${\color{darkblack}x}$
 
 -   ${\color{royalblue}\gamma}$-sublevel set of ${\color{purple}f}$ is $0$-sublevel set of ${\color{purple}\Phi}_{\color{royalblue}\gamma}$,
 
@@ -323,15 +329,15 @@ If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\co
 
 For example:
 
--   ${\color{purple}f}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x})/{\color{purple}q}({\color{darkblack}x})$ with ${\color{purple}p}$ convex, ${\color{purple}q}$ concave ${\color{purple}p}({\color{darkblack}x}) \ge 0$, ${\color{purple}q}({\color{darkblack}x}) > 0$ on dom ${\color{purple}f}$,
+-   ${\color{purple}f}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x})/{\color{purple}q}({\color{darkblack}x})$ with ${\color{purple}p}$ convex, ${\color{purple}q}$ concave, and ${\color{purple}p}({\color{darkblack}x}) \ge 0$, ${\color{purple}q}({\color{darkblack}x}) > 0$ on dom ${\color{purple}f}$,
 
--   can take ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}x})$ = ${\color{purple}p}({\color{darkblack}x}) - {\color{royalblue}\gamma} \cdot {\color{purple}q}({\color{darkblack}x})$
+-   can take ${\color{purple}\Phi}_{\color{royalblue}\gamma}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x}) - {\color{royalblue}\gamma} \cdot {\color{purple}q}({\color{darkblack}x})$
 
 ---
 
 ### Transform to Feasibility Problem 🔄
 
-Consider a convex feasibility problem:
+Consider a convex feasibility problem (where ${\color{royalblue}p^*}$ is the optimal value of the quasi-convex problem):
 $$
   \begin{array}{ll}
       \text{find} & {\color{darkblack}x}, \\
@@ -342,9 +348,9 @@ $$
 $$
 
 -   If feasible, we conclude that ${\color{royalblue}\gamma} \ge {\color{royalblue}p^*}$; ✅
--   If infeasible, ${\color{royalblue}\gamma} < {\color{royalblue}p^*}$. ❌
+-   If infeasible, ${\color{royalblue}\gamma} \le {\color{royalblue}p^*}$. ❌
 
-Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining ${\color{royalblue}p^*}$. 🔍
+A bisection on ${\color{royalblue}\gamma}$ can be used for obtaining ${\color{royalblue}p^*}$. 🔍
 
 ---
 
@@ -360,7 +366,7 @@ Binary search on ${\color{royalblue}\gamma}$ can be used for obtaining ${\color{
 
 class: nord-light, middle, center
 
-## Convexify the Non-convex's 🔄
+## Convexify the Non-convex 🔄
 
 ---
 
@@ -373,7 +379,7 @@ $${\color{purple}f}({\color{green}x}) = {\color{green}x}^4 - 4{\color{green}x}^2
 Let ${\color{green}y} = {\color{green}x}^2$. The problem becomes:
 $${\color{purple}f}({\color{green}y}) = {\color{green}y}^2 - 4{\color{green}y} + 4, \; {\color{green}y} \geq 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}y_\text{opt}} }$$
 
 ---
@@ -387,12 +393,12 @@ $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
 Let ${\color{green}x'} = {\color{red}x}^2$, ${\color{green}y'} = {\color{red}y}^2$. The problem becomes:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green}x'}, {\color{green}y'} \geq 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\color{red}y_\text{opt}} = \pm\sqrt{{\color{green}y'_\text{opt}} }.$$
 
 **Generalization:**
 
--   Quadratically Constrainted Quadratic Programming (QCQP)
+-   Quadratically Constrained Quadratic Programming (QCQP)
 
 ---
 
@@ -402,16 +408,17 @@ $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\c
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red}x} \leq \pi/2$$
 
 **Transformation:**
+Let ${\color{green}y} = \sin^2({\color{red}x})$. The problem becomes:
 $${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green}y} \leq 1$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}x_\text{opt}} = \sin^{-1}(\sqrt{{\color{green}y_\text{opt}} }).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
+👉 Note that $\sin(\cdot)$ is a monotonically increasing concave function on $(0, \pi/2)$.
 
 ---
 
-### Change of curvature: square 🔄
+### Change of curvature: square root 🔄
 
 **Original Problem:**
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -419,7 +426,7 @@ $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 **Transformation:**
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+👉 Note that $\sqrt{\cdot}$ is a **monotonic** **concave** function on $(0, +\infty)$.
 
 **Generalization:**
 
@@ -435,13 +442,13 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 $${\color{red} 1 / x + 1 / y} \leq 1, \; {\color{red}x} > 0, {\color{red}y} > 0$$
 
 **Transformation:**
-Let ${\color{green}z'} = \log({\color{red}z})$. The problem becomes:
+Let ${\color{green}x'} = \log({\color{red}x})$, ${\color{green}y'} = \log({\color{red}y})$. The problem becomes:
 
 $${\color{green} \log(\exp(-x') + \exp(-y'))} \leq 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 
-$${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
+${\color{red}x_\text{opt}} = \exp({\color{green}x'_\text{opt}}), \quad {\color{red}y_\text{opt}} = \exp({\color{green}y'_\text{opt}}).$
 
 **Generalization:**
 
@@ -458,7 +465,7 @@ $${\color{red} \log(x)} + 0.4 \leq 0, \; {\color{red}x} > 0$$
 Let ${\color{green}y} = 1 / {\color{red}x}$. The problem becomes:
 $${\color{green} -\log(y)} + 0.4 \leq 0, \; {\color{green}y} > 0 \, .$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}x_\text{opt}} = {\color{green}y^{-1}_\text{opt}}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
@@ -475,7 +482,7 @@ $${\color{red} \log(\det X)} + \text{Tr}({\color{red}X}^{-1} {\color{royalblue}C
 Let ${\color{green}Y} = {\color{red}X}^{-1}$. The problem becomes:
 $${\color{green} -\log(\det Y)} + \text{Tr}({\color{green}Y} \cdot {\color{royalblue}C}) \leq 0.3, \; {\color{green}Y} \succ 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}X_\text{opt}} = {\color{green}Y^{-1}_\text{opt}}.$$
 
 ---
@@ -489,7 +496,7 @@ $$({\color{royalblue}a} + {\color{royalblue}b} \cdot {\color{red} y}) {\color{gr
 Let ${\color{green}z} = {\color{red}y} \cdot {\color{green}x}$. The problem becomes:
 $${\color{royalblue}a} \cdot {\color{green}x} + {\color{royalblue}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_\text{opt}$$
 
 ---
@@ -503,12 +510,12 @@ $$({\color{royalblue}A} + {\color{royalblue}B} \cdot {\color{red} Y}) {\color{gr
 Let ${\color{green}Z} = {\color{red}Y} \cdot {\color{green}X}$. The problem becomes:
 $${\color{royalblue}A} \cdot {\color{green}X} + {\color{green}X} \cdot {\color{royalblue}A}^T + {\color{royalblue}B} \cdot {\color{green} Z} + {\color{green} Z}^T \cdot {\color{royalblue}B}^T \prec 0, \; {\color{green}X} \succ 0$$
 
-**Post-proccessing:**
+**Post-processing:**
 $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} {\color{green}X}^{-1}_\text{opt}$$
 
 ---
 
-### 🛠️ Unconstraint Techniques
+### 🛠️ Unconstrained Techniques
 
 -   Line search methods
 -   Fixed or variable step size
@@ -536,7 +543,7 @@ $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} {\color{green}X}^{-1}_
 
 ### Common Descent Directions 🧭
 
--   Gradient descent: ${\color{green}p} = -\nabla {\color{purple}f}({\color{green}x})^\mathsf{T}$
+-   Gradient descent: ${\color{green}p} = -\nabla {\color{purple}f}({\color{green}x})$
 -   Steepest descent:
   -   ${\color{green}\triangle x_{nsd}}$ =
         argmin$\{\nabla {\color{purple}f}({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$ 🏔️
@@ -563,7 +570,7 @@ $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} {\color{green}X}^{-1}_
 -   Backtracking line search (with parameters ${\color{royalblue}\alpha} \in (0,1/2), {\color{royalblue}\beta} \in (0,1)$) ↩️
   -   starting from ${\color{green}t} = 1$, repeat ${\color{green}t} := {\color{royalblue}\beta} \cdot {\color{green}t}$ until
         $${\color{purple}f}({\color{green}x} + {\color{green}t}{\color{green}\triangle x}) \le {\color{purple}f}({\color{green}x}) + {\color{royalblue}\alpha} {\color{green}t} \nabla {\color{purple}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x}$$
-  -   graphical interpretation: backtrack until ${\color{green}t} \leq {\color{green}t_0}$
+  -   graphical interpretation: backtrack until ${\color{purple}f}({\color{green}x} + {\color{green}t}{\color{green}\triangle x})$ lies below the tangent line ${\color{purple}f}({\color{green}x}) + {\color{royalblue}\alpha} {\color{green}t} \nabla {\color{purple}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x}$
 
 ---
 
@@ -609,7 +616,7 @@ $$
     1. Centering step. Compute ${\color{green}x^*}({\color{green}t})$ by minimizing ${\color{green}t}\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
     2. Update ${\color{green}x} := {\color{green}x^*}({\color{green}t})$. 🔄
     3. Increase ${\color{green}t}$. ${\color{green}t} := {\color{royalblue}\mu} {\color{green}t}$ 📈
--   **until** $1/{\color{green}t} < {\color{royalblue}\varepsilon}$. 🛑
+-   **until** $m/{\color{green}t} < {\color{royalblue}\varepsilon}$. 🛑
 
 👉 Note: Centering is usually done by Newton's method in general. 🧮
 
@@ -619,8 +626,8 @@ $$
 
 -   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
     P371)
--   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
--   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Cambridge University Press, March 2004
+-   Mittelmann, H. D. and Spellucci, P. Decision Tree for Optimization
     Software, 2003
 
 ---

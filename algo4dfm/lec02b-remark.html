@@ -105,7 +105,7 @@ Linear Programming Problem 🧮
 $$\begin{array}{lll}
   \text{minimize} & 0.4 {\color{darkblack}x_1} + 3.4 {\color{darkblack}x_2} - 3.4 {\color{darkblack}x_3} \\
   \text{subject to} & 0.5 {\color{darkblack}x_1} + 0.5 {\color{darkblack}x_2}  & = 3.5 \\
-  & 0.3 {\color{darkblack}x_1} - 0.8 {\color{darkblack}x_2} + 8.4 {\color{darkblack}x_2} & = 4.5 \\
+  & 0.3 {\color{darkblack}x_1} - 0.8 {\color{darkblack}x_2} + 8.4 {\color{darkblack}x_3} & = 4.5 \\
   & {\color{darkblack}x_1}, {\color{darkblack}x_2}, {\color{darkblack}x_3} \ge 0
 \end{array}$$
 
@@ -119,8 +119,8 @@ Transformations to Standard Form 🔄
     -   Decompose ${\color{darkblack}x}$ to two new variables
         ${\color{darkblack}x} = {\color{darkblack}x_1} - {\color{darkblack}x_2}, {\color{darkblack}x_1}, {\color{darkblack}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-    -   By putting slack variable ${\color{darkcyan} y} = {\color{darkcyan} b} - {\color{red} A} {\color{darkblack}x} \geq 0$
-    -   Set ${\color{darkblack}x'} = ({\color{darkblack}x}, {\color{darkcyan} y}), {\color{red} A'} = ({\color{red} A}, 1)$
+-   By putting slack variable ${\color{darkcyan} y} = {\color{red} A} {\color{darkblack}x} - {\color{darkcyan} b} \geq 0$
+-   Set ${\color{darkblack}x'} = ({\color{darkblack}x}, {\color{darkcyan} y}), {\color{red} A'} = ({\color{red} A}, {\color{red} I})$, and ${\color{darkcyan} c'} = ({\color{darkcyan} c}, 0)$
 -   Transforming a max into a min
     -   max(expression) = min($-$expression);
 
@@ -129,13 +129,13 @@ Transformations to Standard Form 🔄
 Duality of LPP ⚖️
 --------------
 
--   If the primal problem of the LPP:
+-   If the primal problem of the LPP is:
     $\min\{ {\color{darkcyan} c^\mathsf{T} } {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} \ge {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}$.
 -   Its dual is:
     $\max\{ {\color{darkcyan} y}^\mathsf{T} {\color{darkcyan} b} \mid {\color{red} A}^\mathsf{T} {\color{darkcyan} y} \leq {\color{darkcyan} c}, {\color{darkcyan} y} \ge 0\}$.
 -   If the primal problem is:
     $\min\{ {\color{darkcyan} c}^\mathsf{T} {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} = {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}$.
--   Its dual is: $\max\{ {\color{darkcyan} y}^\mathsf{T} {\color{darkcyan} b} \mid {\color{red} A}^\mathsf{T} {\color{darkcyan} y} \leq {\color{darkcyan} c}\}$.
+-   Its dual (with ${\color{darkcyan} y}$ unrestricted) is: $\max\{ {\color{darkcyan} y}^\mathsf{T} {\color{darkcyan} b} \mid {\color{red} A}^\mathsf{T} {\color{darkcyan} y} \leq {\color{darkcyan} c}\}$.
 
 ---
 
@@ -144,7 +144,7 @@ Nonlinear Programming 📈
 
 -   The standard form of an NLPP is
     $$\min\{{\color{purple}f}({\color{darkblack}x}) \mid {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x})=0 \}.$$
--   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
+-   Necessary conditions of optimality (under a constraint qualification), Karush-Kuhn-Tucker (KKT)
     conditions:
     -   $\nabla {\color{purple}f}({\color{darkblack}x}) + {\color{firebrick} \mu} \nabla {\color{purple}g}({\color{darkblack}x}) + {\color{firebrick} \lambda} \nabla {\color{green}h}({\color{darkblack}x}) = 0$,
     -   ${\color{firebrick} \mu} {\color{purple}g}({\color{darkblack}x}) = 0$,
@@ -155,12 +155,12 @@ Nonlinear Programming 📈
 Convexity 🏔️
 ---------
 
--   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^{\color{royalblue} n} \mapsto R$ is convex
+-   A function ${\color{purple}f}: {\color{steelblue}K} \subseteq \mathbb{R}^{\color{royalblue} n} \to \mathbb{R}$ is convex
     if ${\color{steelblue}K}$ is a convex set and
-    ${\color{purple}f}({\color{darkcyan} y}) \ge {\color{purple}f}({\color{darkblack} x}) + \nabla {\color{purple}f}({\color{darkblack} x}) ({\color{darkcyan} y} - {\color{darkblack} x}), \; {\color{darkcyan} y},{\color{darkblack} x} \in {\color{steelblue}K}$.
+    ${\color{purple}f}({\color{darkcyan} y}) \ge {\color{purple}f}({\color{darkblack} x}) + \nabla {\color{purple}f}({\color{darkblack} x})^\mathsf{T} ({\color{darkcyan} y} - {\color{darkblack} x}), \; {\color{darkcyan} y},{\color{darkblack} x} \in {\color{steelblue}K}$.
 
 -   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable
-    functions. If the pair $({\color{darkblack}x}, {\color{firebrick}m})$ satisfies the KKT conditions above,
+    functions and ${\color{green}h}$ is affine. If the pair $({\color{darkblack}x}, {\color{firebrick}\mu}, {\color{firebrick}\lambda})$ satisfies the KKT conditions above,
     ${\color{darkblack}x}$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is
     strictly convex, ${\color{darkblack}x}$ is the only solution of the problem.
 
@@ -206,12 +206,12 @@ Duality and Convexity ⚖️
 
 class: nord-light, middle, center
 
-Convexify the non-convex's 🔄
+Convexify the Non-convex 🔄
 ==========================
 
 ---
 
-Change of curvature: square 🔄
+Change of curvature: square root 🔄
 ---------------------------
 
 Transform:
@@ -219,7 +219,7 @@ $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+👉 Note that $\sqrt{\cdot}$ is a **monotonic** **concave** function on $(0, +\infty)$.
 
 Generalization:
 - Consider $|H({\color{green}\omega})|^2$ (power) instead of $|H({\color{green}\omega})|$ (magnitude).
@@ -249,7 +249,7 @@ $${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$
 Then:
 $${\color{red} x}_\text{opt} = \sin^{-1}({\color{green} y}_\text{opt}).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
+👉 Note that $\sin(\cdot)$ is a monotonically increasing concave function on $(0, \pi/2)$.
 
 ---
 
@@ -260,10 +260,10 @@ Transform:
 $${\color{darkcyan}\pi} \leq {\color{red} x / y} \leq {\color{darkcyan}\phi}$$
 into:
 $${\color{darkcyan}\pi'} \leq {\color{green} x' - y'} \leq {\color{darkcyan}\phi'}$$
-where ${\color{green} z'} = \log({\color{red} z})$.
+where ${\color{green} x'} = \log({\color{red} x})$, ${\color{green} y'} = \log({\color{red} y})$.
 
 Then:
-$${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
+$${\color{red} x}_\text{opt} = \exp({\color{green} x'}_\text{opt}), \quad {\color{red} y}_\text{opt} = \exp({\color{green} y'}_\text{opt}).$$
 
 Generalization:
 - Geometric programming
@@ -340,7 +340,7 @@ Other thoughts 🧠
 
 ---
 
-Unconstraint Techniques ⚙️
+Unconstrained Techniques ⚙️
 -----------------------
 
 -   Line search methods
@@ -371,7 +371,7 @@ General Descent Method 📉
 Some Common Descent Directions 🧭
 ------------------------------
 
--   Gradient descent: ${\color{darkcyan} p} = -\nabla {\color{purple}f}({\color{darkblack}x})^\mathsf{T}$
+-   Gradient descent: ${\color{darkcyan} p} = -\nabla {\color{purple}f}({\color{darkblack}x})$
 -   Steepest descent:
     -   $\triangle {\color{darkblack}x}_{nsd}$ =
         argmin$\{\nabla {\color{purple}f}({\color{darkblack}x})^\mathsf{T} {\color{darkblack}v} \mid \|{\color{darkblack}v}\|=1 \}$
@@ -403,8 +403,8 @@ Approximation Under Constraints 🛠️
 
 -   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
     P371)
--   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
--   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Cambridge University Press, March 2004
+-   Mittelmann, H. D. and Spellucci, P. Decision Tree for Optimization
     Software, 2003
 
 ---

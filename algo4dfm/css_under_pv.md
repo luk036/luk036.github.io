@@ -391,9 +391,9 @@ A general formulation for clock skew scheduling problems can be expressed as max
 
 | Problem | $g({\color{royalblue}\beta})$ | $f_{ij}({\color{royalblue}\beta})$ (setup)                    | $f_{ij}({\color{royalblue}\beta})$ (hold)             |
 | ------- | ---------- | ------------------------------------------ | ---------------------------------- |
-| Min CP  | $-{\color{royalblue}\beta}$   | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup}}$                    | $-{\color{blue}T_\text{hold}} + {\color{blue}d}_{ij}$                    |
-| EVEN    | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup}} - {\color{royalblue}\beta}$            | $-{\color{blue}T_\text{hold}} + {\color{blue}d}_{ij} - {\color{royalblue}\beta}$            |
-| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup}} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ | $-{\color{blue}T_\text{hold}} + {\color{blue}d}_{ij} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ |
+| Min CP  | $-{\color{royalblue}\beta}$   | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup} }$                    | $-{\color{blue}T_\text{hold} } + {\color{blue}d}_{ij}$                    |
+| EVEN    | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup} } - {\color{royalblue}\beta}$            | $-{\color{blue}T_\text{hold} } + {\color{blue}d}_{ij} - {\color{royalblue}\beta}$            |
+| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{blue}T_{CP} } - {\color{blue}D}_{ij} - {\color{blue}T_\text{setup} } - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ | $-{\color{blue}T_\text{hold} } + {\color{blue}d}_{ij} - {\color{royalblue}\sigma}_{ij}{\color{royalblue}\beta}$ |
 
 ## Table 1: General Formulation Summary
 
@@ -411,10 +411,10 @@ This formulation is not exactly a timing yield objective, but it is reasonable. 
 
 This can be shown to be equivalent to maximizing ${\color{royalblue}\beta}$ subject to the constraints:
 \[ \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{royalblue}\beta} \]
-\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold}} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
+\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold} } - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
 Or, expressed using the inverse cumulative distribution function (CDF) $F_{ij}^{-1}$:
 \[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - F*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{royalblue}\beta}) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold}} - F*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold} } - F*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
 A key advantage is that any CDF must be a monotonic increasing function, simplifying optimization.
 
 #### 5.3.1. Statistical Interpretations of C-PROP and EVEN
@@ -486,10 +486,10 @@ For log-normal distribution, the mode is $\exp({\color{royalblue}\mu} - {\color{
 The yield-driven optimization problem, as introduced in section 5.3.3, can be further formulated for specific delay models. The general formulation is to maximize ${\color{royalblue}\beta}$ subject to the probability constraints of setup and hold times.
 \[ \text{maximize } {\color{royalblue}\beta} \]
 \[ \text{subject to } \text{Pr}\{ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - {\color{blue}\tilde{D} }_{ij}\} \ge {\color{royalblue}\beta} \]
-\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold}} - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
+\[ \text{Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold} } - {\color{blue}\tilde{d} }_{ij}\} \ge {\color{royalblue}\beta} \]
 This can be expressed using the inverse CDFs as:
 \[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \le {\color{blue}T*{CP} } - \Phi*{ {\color{blue}\tilde{D}*{ij} } }^{-1}({\color{royalblue}\beta}) \]
-\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold}} - \Phi*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
+\[ {\color{firebrick}t*j} - {\color{firebrick}t_i} \ge {\color{blue}T_\text{hold} } - \Phi*{ {\color{blue}\tilde{d}\_{ij} } }^{-1}(1-{\color{royalblue}\beta}) \]
 
 In general, Lawler's algorithm (binary search) can be used to solve this problem. The specific method depends on the underlying distribution of the delays.
 

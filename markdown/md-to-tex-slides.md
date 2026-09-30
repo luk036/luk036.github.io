@@ -148,8 +148,8 @@ abstract: |
 ```{=latex}
 \begin{center}
 \begin{tikzpicture}[node distance=12mm and 20mm]
-  \node[nblue] (l) {labelled heading\\\texttt{\{\#sec:cutting\_plane\}}};
-  \node[nblue, below=12mm of l] (r) {reference\\\texttt{see @sec:cutting\_plane}};
+  \node[nblue] (l) {labelled heading\\\texttt{\{\#sec:cutting\_plane\} } };
+  \node[nblue, below=12mm of l] (r) {reference\\\texttt{see @sec:cutting\_plane} };
   \node[nyellow, right=28mm of l] (x) {pandoc-crossref};
   \node[ngreen, right=of x] (out) {see § 2};
   \draw[ar] (l) -- (x);
@@ -248,7 +248,7 @@ $$
 The fix is a *real* operator 🪄
 
 $$
-q_{\max} \;=\; {\color{nordgreen}\operatorname*{arg\,max}_{q \in \mathcal{Q}}}\; f_0(x_0, q)
+q_{\max} \;=\; {\color{nordgreen}\operatorname*{arg\,max}_{q \in \mathcal{Q} } }\; f_0(x_0, q)
 $$
 
 - `\operatorname*{arg\,max}` needs `amsmath` — pandoc already loads it ✅
@@ -280,7 +280,7 @@ A formatter demoted `#` → `##`; pandoc then emitted **no** `\section` at all.
 ```{=latex}
 \begin{center}
 \begin{tikzpicture}[node distance=10mm and 16mm]
-  \node[nblue] (img) {figure link\\to \texttt{*.svg}};
+  \node[nblue] (img) {figure link\\to \texttt{*.svg} };
   \node[nyellow, right=of img] (p) {pandoc → LaTeX};
   \node[ngreen, above right=4mm and 14mm of p] (pdf) {\texttt{svg} → \texttt{pdf}\\\texttt{\textbackslash includegraphics} ✅};
   \node[ngreen, below right=4mm and 14mm of p] (twin) {use the \texttt{*.pdf}\\\texttt{twin} ✅};

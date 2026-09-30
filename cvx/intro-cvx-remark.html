@@ -173,7 +173,7 @@ where ${\color{darkmagenta} f}$ and ${\color{red} g_i}$ are convex.
 
 For a convex problem, the **Lagrangian** combines objective and constraints:
 
-$$ \mathcal{L}({\color{darkmagenta} x}, {\color{blue} \lambda}, {\color{blue} \nu}) = {\color{darkmagenta} f_0(x)} + \sum_i^m {\color{blue} \lambda_i} {\color{red} f_i(x)} + \sum_j^p {\color{blue} \nu_j} {\color{blue} h_j(x)} $$
+$$ \mathcal{L}({\color{darkmagenta} x}, {\color{blue} \lambda}, {\color{blue} \nu}) = {\color{darkmagenta} f_0(x)} + \sum_{i=1}^{m} {\color{blue} \lambda_i} {\color{red} f_i(x)} + \sum_{j=1}^{p} {\color{blue} \nu_j} {\color{blue} h_j(x)} $$
 
 **Dual function**: ${\color{blue} g(\lambda, \nu)} = \inf_x \mathcal{L}(x, \lambda, \nu)$
 
@@ -301,7 +301,7 @@ class: nord-light, middle, center
 
 A **posynomial** is a sum of monomials with positive coefficients:
 
-$$ {\color{darkmagenta} f(x)} = \sum_k^K c_k \, x_1^{a_k(1)} x_2^{a_k(2)} \cdots x_n^{a_k(n)}, \quad c_k > 0 $$
+$$ {\color{darkmagenta} f(x)} = \sum_{k=1}^{K} c_k \, x_1^{a_k(1)} x_2^{a_k(2)} \cdots x_n^{a_k(n)}, \quad c_k > 0 $$
 
 **Standard GP**:
 $$
@@ -674,8 +674,8 @@ graph TD
 
 $$
 \begin{aligned}
-\text{minimize} \quad & \sum_k^K f_k(x_k) \\\\
-\text{subject to} \quad & \sum_k^K A_k x_k \leq b \quad (\text{coupling constraint})
+\text{minimize} \quad & \sum_{k=1}^{K} f_k(x_k) \\\\
+\text{subject to} \quad & \sum_{k=1}^{K} A_k x_k \leq b \quad (\text{coupling constraint})
 \end{aligned}
 $$
 

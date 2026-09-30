@@ -526,7 +526,7 @@ $$
  \end{array}
 $$
 
--   Let $\rho(h) = \sum_i^n {\color{blue}p}_i \Psi_i(h)$, where
+-   Let $\rho(h) = \sum_{i=1}^{n} {\color{blue}p}_i \Psi_i(h)$, where
   -   $p_i$'s are the unknown coefficients to be fitted
   -   $\Psi_i$'s are a family of basis functions.
 -   The covariance matrix $\Sigma({\color{blue}p})$ can be recast as:
@@ -546,7 +546,7 @@ $$
 
 ![image](ellipsoid.files/result050.svg)
 
-: Least Square Result
+: Least-Squares Result
 
 ]
 
@@ -562,7 +562,7 @@ $$
 
 ![image](ellipsoid.files/result100.svg)
 
-: Least Square Result
+: Least-Squares Result
 
 ]
 
@@ -578,7 +578,7 @@ $$
 
 ![image](ellipsoid.files/result200.svg)
 
-: Least Square Result
+: Least-Squares Result
 
 ]
 

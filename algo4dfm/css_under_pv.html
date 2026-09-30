@@ -44,7 +44,7 @@ The lecture presents various approaches to clock skew scheduling, such as tradit
 
 ### Abstract (II) 📝
 
-The lecture goes on to discuss primitive solutions and their shortcomings, such as pre-allocating timing margins and using the Least Center Error Square (LCES) problem formulation. The lecture also introduces more advanced techniques such as slack maximization (EVEN) and prop-based methods that distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions. ⚡
+The lecture goes on to discuss primitive solutions and their shortcomings, such as pre-allocating timing margins and using the Least Center Error Square (LCES) problem formulation. The lecture also introduces more advanced techniques such as slack maximization (EVEN) and Prop-based methods that distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions. ⚡
 
 Finally, statistical static timing analysis (SSTA) and the use of statistical methods to account for process variations are discussed. The concept of the most critical cycle is introduced, and the lecture provides experimental results to demonstrate the effectiveness of various clock skew scheduling techniques. 📈
 
@@ -107,12 +107,12 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 -   Setup time constraint ⏱️
     $${\color{royalblue}T_\text{skew}}(i,f) \le {\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{if} - {\color{royalblue}T_\text{setup}} = {\color{blue}u}_{if}$$
-    While this constraint destroyed, cycle time violation (zero
+    If this constraint is violated, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint ⏳
-    $${\color{royalblue}T_\text{skew}}(i,f) \ge {\color{royalblue}T_\text{hold}} - {\color{royalblue}d}_{if} = {\color{blue}l}_{if}$$ While
-    this constraint destroyed, race condition (double clocking) occurs.
+    $${\color{royalblue}T_\text{skew}}(i,f) \ge {\color{royalblue}T_\text{hold}} - {\color{royalblue}d}_{if} = {\color{blue}l}_{if}$$ If
+    this constraint is violated, race condition (double clocking) occurs.
 
 ---
 
@@ -120,13 +120,13 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 -   Zero skew (${\color{firebrick}t_i} = {\color{firebrick}t_f}$) : Relatively easy to implement. ⚖️
 
--   Useful skew. Improve: 🎯
+-   Useful skew improves: 🎯
   -   The performance of the circuit by permitting a higher maximum
         clock frequency, or
   -   The safety margins of the clock skew within the permissible
         ranges.
 
--   Max./min. path delays are got from static timing analysis
+-   Max./min. path delays are obtained from static timing analysis
     (STA).
 
 ---
@@ -143,9 +143,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
         ${\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{setup}}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition: 🔗
-  -   The sum of skews for paths having the same starting and ending
-        flip-flop to be the same;
-  -   The sum of clock skews of all cycles to be zero
+  -   The skews of paths having the same starting and ending
+        flip-flop must be the same;
+  -   The sum of clock skews of all cycles must be zero
 
 ]
 .pull-right[
@@ -213,9 +213,9 @@ graph LR
       \text{minimize} & {\color{royalblue}T_\text{CP} } \\
       \text{subject to} & {\color{blue}l}_{ij} \leq {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq {\color{blue}u}_{ij}
   \end{array}$$
-  where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
+  where $\text{FF}_i$ and $\text{FF}_j$ are sequentially adjacent
 
--   The above constraint condition is so-called **system of difference
+-   The above constraint condition is a so-called **system of difference
   constraints** (see Introduction to Algorithms, MIT): 🔍
 
 -   👉 Note: easy to check if a feasible solution exists by detecting
@@ -251,7 +251,7 @@ return u[], predecessor[]
 
 ### ⚠️ Problems with Bellman-Ford Algorithm
 
--   The algorithm is originally used for finding the shortest paths. 🔍
+-   The algorithm was originally used for finding the shortest paths. 🔍
 -   Detecting negative cycle is just a side product of the algorithm. ⚠️
 -   The algorithm is simple, but... 🔧
   -   detects negative cycle at the end only.
@@ -286,9 +286,9 @@ digraph = {
            "v2": {"type": "h", "delay": 3.0} },
 }
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
-assert has_negative_cycle(4.0, dist) is False
-assert has_negative_cycle(2.0, dist) is True
-assert has_negative_cycle(3.0, dist) is False
+    assert has_negative_cycle(digraph, 4.0, dist) is False
+    assert has_negative_cycle(digraph, 2.0, dist) is True
+    assert has_negative_cycle(digraph, 3.0, dist) is False
 assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
 ```
 
@@ -301,8 +301,8 @@ assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
   -   In each iteration, Bellman-Ford algorithm is called to detect if
         the timing constraint graph contains negative weighted edge
         cycle.
--   👉 Note: Originally Bellman-Ford algorithm is used to find a
-    shortest-path of a graph.
+-   👉 Note: Originally the Bellman-Ford algorithm is used to find a
+    shortest path in a graph.
 
 ---
 
@@ -343,7 +343,7 @@ assert TCP == approx(3.0)
 
 -   However, many skew values are on the bounds of feasible range. ⚠️
 
-    ![Timing uncertainty emerges under processvariations](lec05.files/fig07.png)
+    ![Timing uncertainty emerges under process variations](lec05.files/fig07.png)
 
 ---
 
@@ -365,7 +365,7 @@ assert TCP == approx(3.0)
     hold-time constraints are satisfied under a group of determinate
     process parameters. ✅
 
--   Timing Yield = (functional correct times) / sample number \* 100% 📈
+-   Timing Yield = (functional correct times) / sample number $\times$ 100% 📈
 
 ---
 
@@ -395,7 +395,7 @@ assert TCP == approx(3.0)
 -   "A graph-theoretic approach to clock skew optimization", ISCAS'94
 -   "Cycle time and slack optimization for VLSI-chips", ICCAD'99 ⏳
 -   "Clock scheduling and clocktree construction for high performance
-    Asics", ICCAD'03 ⚙️
+    ASICs", ICCAD'03 ⚙️
 -   "ExtensiveSlackBalance: an Approach to Make Front-end Tools Aware of
     Clock Skew Scheduling", DAC'06 🔄
 
@@ -425,7 +425,7 @@ assert TCP == approx(3.0)
         Tolerant to Process Variations", DAC'96)
 
 -   Quadratic Programming method
-  -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99)
+  -   (I. S. Kourtev and E. G. Friedman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99)
 
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
 This is not optimal for yield. ⚠️
@@ -435,11 +435,11 @@ This is not optimal for yield. ⚠️
 ### 🧩 Primitive solution (3)
 
 -   Incremental Slack Distribution 🔄
-  -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
+  -   (Xinjie Wei, Yici Cai and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
 
--   Advantage: check all skew constraints ✅
+-   Advantage: checks all skew constraints ✅
 
--   Disadvantage: didn't take the path delay difference intoconsideration ⚠️
+-   Disadvantage: didn't take the path delay difference into consideration ⚠️
 
 ---
 
@@ -613,7 +613,7 @@ To determine the optimal slacks and skews for the rest of the graph, we replace 
 -   $\implies -2 \leq (0.5 + {\color{firebrick}t_s}) - {\color{firebrick}t_2} \leq 2.5$
 -   $\implies -2.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$ (1)
 -   On the other hand, $-3 \leq {\color{firebrick}t_2} - {\color{firebrick}t_3} \leq 1.5$
--   $\implies -1.5 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 3$ (2)
+-   $\implies -1.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 3$ (2)
 -   From (1) and (2), we have $-1.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$
 
 ---
@@ -710,7 +710,7 @@ where $\text{Slack}_{ij} = {\color{royalblue}T_\text{CP}} - {\color{royalblue}D}
 -   Assuming there are ${\color{royalblue}n}$ gates with delay $N({\color{blue}\mu},{\color{blue}\sigma}^2)$ in a path,
     then this path delay is $N({\color{royalblue}n}{\color{blue}\mu},{\color{royalblue}n}{\color{blue}\sigma}^2)$
 -   Distribute slack along the most timing-critical cycle, according to
-    the square root of each edge's path delays (???). 📏
+    the square root of each edge's path delays. 📏
 -   To achieve this, update the weights of s-edges and h-edges: ⚙️
     $$\begin{array}{ll}
     {\color{royalblue}T_\text{CP}} - ({\color{royalblue}D}_{ij} + {\color{royalblue}\alpha} \sqrt{{\color{royalblue}D}_{ij} } {\color{blue}\sigma}) - {\color{royalblue}T_\text{setup}} \\
@@ -737,8 +737,8 @@ where $\text{Slack}_{ij} = {\color{royalblue}T_\text{CP}} - {\color{royalblue}D}
 
 ### ⚠️ Problems with Prop
 
--   Assume all gate delay has the same distribution. ⚠️
--   Not justify using the square root of path delay for timing margin. ⚠️
+-   Assume all gate delays have the same distribution. ⚠️
+-   It does not justify using the square root of path delay for timing margin. ⚠️
 
 ---
 
@@ -751,7 +751,7 @@ False path
 
 ### 🔍 FP-Prop (II)
 
--   If we do not consider false path, some non timing-critical cycles
+-   If we do not consider false paths, some non-timing-critical cycles
     become timing-critical. Then, more slacks are distributed to these
     cycles, but the slacks in actually timing-critical cycles are not
     sufficient. As a result, the overall timing yield decreases. ⚠️
@@ -781,7 +781,7 @@ False path
     $${\color{royalblue}T_\text{skew}}(i,f) \ge {\color{royalblue}T_\text{hold}} - {\color{royalblue}\tilde{d}}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
-    are random variable under process variations.
+    are random variables under process variations.
 
 ---
 
@@ -805,7 +805,7 @@ graph LR
 </pre>
 ]
 
-After SSTA, edge weight is represented as a pair of value (mean, variance).
+After SSTA, edge weight is represented as a pair of values (mean, variance).
 
 ---
 
@@ -833,7 +833,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
     \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}
   \end{array}$$
 
--   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
+-   Equivalent to the *minimum cost-to-time ratio cycle* problem (MCR), where:
   -   ${\color{royalblue}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
   -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
@@ -876,7 +876,7 @@ assert opt == approx(0.3448275862069039)
     ${\color{blue}\mu}(u, v) - {\color{firebrick}T_v}$. 🔗
 -   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
     weight mean ${\color{blue}\mu}(v, u) + {\color{firebrick}T_v}$. However, the variance of the edge
-    weight is not changed. And parallel edges can be remained. 🔗
+    weight is not changed. And parallel edges can remain. 🔗
 -   Repeat the process iteratively until the graph is reduced to a
     single super vertex, or the edges number is zero. 🔄
 
@@ -910,7 +910,7 @@ graph TD
 </pre>
 ]
 
-Final ${\color{firebrick}T_1} = {\color{firebrick}T_1} + {\color{firebrick}T_7} +{\color{firebrick}T_9}$
+Final ${\color{firebrick}T_1^{\text{final}}} = {\color{firebrick}T_1} + {\color{firebrick}T_7} +{\color{firebrick}T_9}$
 
 ---
 
@@ -926,13 +926,13 @@ Final ${\color{firebrick}T_1} = {\color{firebrick}T_1} + {\color{firebrick}T_7} 
 
 ### 📊 Results
 
-![image](lec05.files/fig21.png)\
+![image](lec05.files/fig21.png)
 
 ---
 
 ### Main Reference 📑
 
--   Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal
+-   Jeng-Liang Tsai, Dong Hyun Baik, Charlie Chung-Ping Chen, and Kewal
     K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
     IEEE Design & Test of Computers, May-June 2005 📚
 
@@ -945,13 +945,13 @@ $$\begin{array}{ll}
       \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}({\color{royalblue}\beta}), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
-where $f_{ij}({\color{royalblue}\beta})$ a linear function that represents various problems defined above.
+where $f_{ij}({\color{royalblue}\beta})$ is a linear function that represents various problems defined above.
 
 | Problem | $g({\color{royalblue}\beta})$ | $f_{ij}({\color{royalblue}\beta})$ (setup)                                 | $f_{ji}({\color{royalblue}\beta})$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min CP | $-{\color{royalblue}\beta}$   | ${\color{royalblue}\beta} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{s}}$                       | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij}$                 |
-| EVEN    | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{s}} - {\color{royalblue}\beta}$         | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij} - {\color{royalblue}\beta}$             |
-| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}}-{\color{royalblue}D}_{ij}-{\color{royalblue}T_\text{s}} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ | $-{\color{royalblue}T_\text{h}} + {\color{royalblue}d}_{ij} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ |
+| Min CP | $-{\color{royalblue}\beta}$   | ${\color{royalblue}\beta} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{setup}}$                       | $-{\color{royalblue}T_\text{hold}} + {\color{royalblue}d}_{ij}$                 |
+| EVEN    | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}} - {\color{royalblue}D}_{ij} - {\color{royalblue}T_\text{setup}} - {\color{royalblue}\beta}$         | $-{\color{royalblue}T_\text{hold}} + {\color{royalblue}d}_{ij} - {\color{royalblue}\beta}$             |
+| C-PROP  | ${\color{royalblue}\beta}$    | ${\color{royalblue}T_\text{CP}}-{\color{royalblue}D}_{ij}-{\color{royalblue}T_\text{setup}} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ | $-{\color{royalblue}T_\text{hold}} + {\color{royalblue}d}_{ij} - {\color{blue}\sigma}_{ij} {\color{royalblue}\beta}$ |
 
 ---
 
@@ -960,7 +960,7 @@ where $f_{ij}({\color{royalblue}\beta})$ a linear function that represents vario
 -   In fact, $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are not necessarily linear functions.
     Any monotonic decreasing function will do. 🔍
 -   Theorem: if $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are *monotonic decreasing*
-    functions for all $i$ and $j$, then there is a unique solution to the problem. prove later). 📐
+    functions for all $i$ and $j$, then there is a unique solution to the problem (proof later). 📐
 -   Question 1: Does this generalization have any application? ❓
 -   Question 2: What if $g({\color{royalblue}\beta})$ and $f_{ij}({\color{royalblue}\beta})$ are convex but not monotone? ❓
 
@@ -970,7 +970,7 @@ where $f_{ij}({\color{royalblue}\beta})$ a linear function that represents vario
 
 .pull-left[
 
--   ~~65nm and below,~~ the path delay is likely to have a non-Gaussian distribution 🔕:
+-   At 65nm and below, the path delay is likely to have a non-Gaussian distribution 🔕:
 
     👉 Note: central limit theorem does not apply here. Why?
 ]
@@ -1036,7 +1036,7 @@ class: nord-light, middle, center
   -   Local convergence is slow.
 -   Cycle based 🔄
   -   Idea: if a solution is infeasible, there exists a negative cycle
-        which can always be "zero-out" with minimum effort (proof of
+        which can always be "zeroed out" with minimum effort (proof of
         optimality)
 -   Path based 🛤️
   -   Idea: if a solution is feasible, there exists a (shortest) path
@@ -1084,7 +1084,7 @@ def find_beta(digraph, beta, dist, weight_fn,
     num_iter = 0
     while num_iter < max_iter:
         num_iter += 1
-        weight_fn = make_weight_fn(beta)
+        weight_fn = weight_fn(beta)
         cycle_found = False
         for neg_cycle in finder.howard(dist, weight_fn):
             beta = zero_cancel_fn(neg_cycle)
@@ -1102,9 +1102,9 @@ def find_beta(digraph, beta, dist, weight_fn,
 .mermaid[
 <pre>
 graph LR
-    A -- "Tcp - 7" --> E(("v2"))
+    A(("v0")) -- "Tcp - 7" --> E(("v2"))
     A -. "6" .-> E
-    A(("v0")) -- "Tcp - 6" --> B(("v3"))
+    A -- "Tcp - 6" --> B(("v3"))
     A -. "6" .-> B
     D(("v1")) -- "Tcp - 9" --> E
     D -. "6" .-> E
@@ -1156,9 +1156,9 @@ assert beta == approx(1.0)
 .mermaid[
 <pre>
 graph LR
-    A -- "(Tcp - 7, 1.5) " --> E(("v2"))
+    A(("v0")) -- "(Tcp - 7, 1.5) " --> E(("v2"))
     A -. "(6, 3.1) " .-> E
-    A(("v0")) -- "(Tcp - 6, 3.1) " --> B(("v3"))
+    A -- "(Tcp - 6, 3.1) " --> B(("v3"))
     A -. "(6, 2.5) " .-> B
     D(("v1")) -- "(Tcp - 9, 4.1) " --> E
     D -. "(6, 2.5) " .-> E
@@ -1226,7 +1226,7 @@ assert beta == approx(0.32258064516129037)
 -   Manually assign clock arrival times to registers (all zeros by default) ⚙️
 -   Grouping: Non-critical parts can be grouped as a single unit. 🧩
   In other words, there is no need for full-chip optimization.
--   Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+-   Takes care of multi-cycle paths, slew rate, clock-gating, false paths, etc. All we need are the reported **slacks**.
 -   Provide 3-sigma statistics for slacks/path delays (POCV). 📈
 -   However, the full probability density function and correlation information are not available. ⚠️
 
@@ -1263,13 +1263,13 @@ assert beta == approx(0.32258064516129037)
 -   Let ${\color{royalblue}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
   -   ${\color{firebrick}t_f}$: clock signal delay at the final register
-  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
+  -   Assume a zero-skew design, i.e., $T_\text{skew}(i,f) = 0$,
     -   the reported setup-time slack is ${\color{blue}S}_{if}$
     -   the reported hold-time slack is ${\color{blue}H}_{if}$
 -   Then, in useful skew design:
     $${\color{royalblue}T_\text{skew}}(i,f) \le {\color{blue}S}_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le {\color{blue}S}_{if}$$
     $${\color{royalblue}T_\text{skew}}(i,f) \ge -{\color{blue}H}_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le {\color{blue}H}_{if} $$
--   In principle, ${\color{blue}H}_{if} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{blue}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   In principle, ${\color{blue}H}_{if} \text{ and } {\color{royalblue}T_\text{CP}} - {\color{blue}S}_{if}$ represent the minimum- and maximum-path delay, and should always be greater than zero.
 -   Let ${\color{royalblue}D}_{if} = {\color{royalblue}T_\text{CP}} - {\color{blue}S}_{if}$
 
 ---
@@ -1344,7 +1344,7 @@ $$\begin{array}{ll}
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'})
 \end{array}$$
 
--   Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{forestgreen}\beta'}$.
+-   This bypasses evaluating the error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{forestgreen}\beta'}$.
 
 ---
 

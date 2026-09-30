@@ -191,7 +191,7 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{ {\color{royalblue}n} } \mapsto R$ is convex if
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{ {\color{royalblue}n} } \mapsto \mathbb{R}$ is convex if
   ${\color{salmon}K}$ is a convex set and
   $f({\color{firebrick}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x})^\mathsf{T} ({\color{firebrick}y} - {\color{green}x}), \; {\color{firebrick}y},{\color{green}x} \in {\color{salmon}K}$.
 

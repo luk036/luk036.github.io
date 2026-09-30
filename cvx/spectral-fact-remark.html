@@ -70,7 +70,7 @@ minimum-phase impulse response $h[0], \ldots, h[N-1]$ such that:
 
 $$ {\color{orange} r}[k] = \sum_{i=0}^{N-1-k} {\color{green} h}[i+k] \cdot {\color{green} h}[i], \quad k = 0, \ldots, N-1 $$
 
-This is the **Wiener-Khinchin theorem** in discrete time:
+This is the **autocorrelation** in discrete time:
 the autocorrelation of $h$ must equal the given $r$.
 
 > The solution $h$ is **unique** — the minimum-phase spectral factor. 🎯
@@ -172,7 +172,7 @@ graph LR
 </pre>
 ]
 
-$$ \hat{S}(e^{j\omega}) = \sum_{k=0}^{N-1} {\color{orange} r_k} \cdot (2\cos(k\omega)) \quad (\text{for } k>0)$$
+$$ \hat{S}(e^{j\omega}) = {\color{orange} r_0} + 2\sum_{k=1}^{N-1} {\color{orange} r_k}\cos(k\omega) $$
 
 $$ {\color{darkcyan} \alpha}(\omega) = \frac{1}{2} \log |\hat{S}(e^{j\omega})| $$
 
@@ -463,9 +463,8 @@ better-conditioned $h$ that helps the optimizer converge faster. 🎯
 | First 5 coeffs | Perfect | **Perfect** ✅ |
 | Last 2 coeffs | Perfect | ~12% error ⚠️ |
 
-The FFT method gives exact round-trip values. The root method has ~0.6% error
-in the **smallest** coefficients — acceptable for CSD quantization where
-these are later truncated to nnz=4 anyway.
+The FFT method gives exact round-trip values. The root method has ~0.6% overall round-trip error
+— acceptable for CSD quantization where the coefficients are later truncated to nnz=4 anyway.
 
 ---
 

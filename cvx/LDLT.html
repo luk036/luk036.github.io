@@ -119,7 +119,7 @@ $$\begin{array}{l}
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
 - Then ${\color{red} v} = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
-- Start with ${\color{red} v} = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
+- Start with ${\color{red} v} = [0, \cdots, 0, l^{-1}_{pp}]^T$, the basic algorithm is:
 
 $$\begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
@@ -197,7 +197,7 @@ $$\begin{array}{l}
  3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
  4~       \qquad l_{ij} = s / d_{jj} \\
  5~     \quad \text{end} \\
- 6~     \quad d_{ii} = a_{ii} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
+ 6~     \quad d_{ii} = a_{ii} - \sum_{k=1}^{i-1} d_{kk} l_{ik}^2 \\
  7~ \text{end}
 \end{array} $$
 
@@ -213,7 +213,7 @@ First, we pack the solution and the intermediate storage on a single matrix ${\c
 $${\color{blue} t_{ij}} = \begin{cases}
   {\color{orange} d_{ii}}        & \mathrm{if}\ i = j, \\
   {\color{green} l_{ij}}        & \mathrm{if}\ i > j, \\
-  {\color{orange} d_{ii}} {\color{green} l_{ji}} & \mathrm{if}\ j < i.
+  {\color{orange} d_{ii}} {\color{green} l_{ji}} & \mathrm{if}\ i < j.
 \end{cases}
 $$
 

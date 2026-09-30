@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 -   Max-monomial fitting to circuit models (for geometric programming
     based optimization) (Kim et al. ICCAD 2004) 🏭
 -   Previous work which uses max-affine function may fail to converge
-    (Magnani and Boyd 2009) ⚠️ (need update)
+    (Magnani and Boyd 2009) ⚠️
 
 ---
 
@@ -81,10 +81,10 @@ graph TD
 -   Recall a simple univariate problem (i.e. $n=1$) without convexity
     requirements. Piecewise linear (PWL) interpolation (table lookup) is
     widely used in engineering community: 🔍
-    -   Construction: organize the data in a lienar order
+    -   Construction: organize the data in a linear order
         (i.e. sorting), which takes $O(m \log m)$ time. ⏱️
-    -   Evaulation at $v_q$:
-        -   Locate the interval $[v_1, v_{i+1}]$ such that
+    -   Evaluation at $v_q$:
+        -   Locate the interval $[v_i, v_{i+1}]$ such that
             $v_i \leq v_q < v_{i+1}$
         -   Find the barycentric coordinate $(\lambda, \mu)$ of $v_q$ by
             solving
@@ -132,7 +132,7 @@ graph TD
     -   For each non-boundary vertex $v_i$
         -   impose $(1 - {\color{orange} \lambda}) {\color{royalblue} p_{i-1}} + {\color{orange} \lambda} {\color{royalblue} p_{i+1}} \geq {\color{royalblue} p_i}$
         -   where ${\color{orange} \lambda}$ can be found by solving
-            -   $(1 - {\color{orange} \lambda}) v_{i-1} + {\color{orange} \lambda} v_{i+1} \geq v_i$
+            -   $(1 - {\color{orange} \lambda}) v_{i-1} + {\color{orange} \lambda} v_{i+1} = v_i$
     -   👉 Note: linear constraint
 
 ]
@@ -150,7 +150,7 @@ graph TD
     extension of PWL interpolation: 🔺
     -   Construction: organize the data in Delaunay Triangulation, which
         takes $O(m \log m)$ time. ⏱️
-    -   Evaulation at $v_q$:
+    -   Evaluation at $v_q$:
         -   Locate the simplex $[v_1, v_2, v_3, \ldots, v_{i+1}]$ that
             contains $v_q$
         -   Find the barycentric coordinate of $v_q$ by solving
@@ -167,13 +167,13 @@ graph TD
 -   The Delaunay triangulation of a set of points in d-dimensional
     spaces is in fact the projection of the points of convex hull onto a
     (d+1)-dimensional paraboloid. Therefore, it can be constructed by
-    constructiong a convex hull. 🌐
+    constructing a convex hull. 🌐
 -   Python provides basic functions of DT (check
     `scipy.spatial.Delaunay`) 🐍
 
 .pull-left70[
 
--   For bivariate can ($n=2$), to enforce convexity:
+-   For the bivariate case ($n=2$), to enforce convexity:
     -   For each non-boundary edge $(v_1, v_2)$,
         -   impose
             $(1 - \lambda) p_3 + \lambda p_4 \geq (1 - \mu) p_1 + \mu p_2$

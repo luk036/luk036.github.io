@@ -49,7 +49,7 @@ class: nord-light, middle, center
 
 ## Abstract 📝
 
-The ellipsoid method is a powerful optimization technique 💪 that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice 🏆 for convex problems with numerous or even infinite constraints ∞. The method employs an ellipsoid as a search space 🪐 and replies on a separation oracle 🔮 to provide cutting planes ✂️ for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization 🛡️, semidefinite programming 📊, and parametric network optimization 🌐. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts ⚡ for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time ⏱️, as evidenced in the context of FIR filter design 🎛️. The article also considers discrete optimization 🧩, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
+The ellipsoid method is a powerful optimization technique 💪 that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice 🏆 for convex problems with numerous or even infinite constraints ∞. The method employs an ellipsoid as a search space 🪐 and relies on a separation oracle 🔮 to provide cutting planes ✂️ for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization 🛡️, semidefinite programming 📊, and parametric network optimization 🌐. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts ⚡ for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time ⏱️, as evidenced in the context of FIR filter design 🎛️. The article also considers discrete optimization 🧩, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
 
 ---
 
@@ -77,7 +77,7 @@ The ellipsoid method is a powerful optimization technique 💪 that offers disti
 
 -   It only requires a *separation oracle* that provides a cutting plane.
 
--   Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
+-   Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of taking advantage of certain structural types.
 
 ---
 
@@ -266,7 +266,7 @@ def cutting_plane_feas(omega, space, options=Options()):
         cut = omega.assess_feas(space.xc())  # query the oracle
         if cut is None:  # feasible sol'n obtained
             return space.xc(), niter
-        status = space.update_deep_cut(cut)  # update space
+        status = space.update_bias_cut(cut)  # update space
         if status != CutStatus.Success or space.tsq() < options.tol:
             return None, niter
     return None, options.max_iters
@@ -323,9 +323,9 @@ $$
   by solving the equation:
   $$\Phi({\color{darkmagenta}x}', {\color{royalblue}\gamma}_\text{new}) = 0 \, .$$
 
--   If the equation is difficuit to solve
+-   If the equation is difficult to solve
   but ${\color{royalblue}\gamma}$ is also convex w.r.t. $\Phi$,
-  then we may create a new varaible, say $z$
+  then we may create a new variable, say $z$
   and let $z \le {\color{royalblue}\gamma}$.
 
 ---
@@ -349,7 +349,7 @@ $$
 ### 🐍 Corresponding Python code
 
 ```python
-def cutting_plane_optim(omega, S, gamma, options=Options()):
+def cutting_plane_optim(omega, space, gamma, options=Options()):
     x_best = None
     for niter in range(options.max_iters):
         cut, gamma1 = omega.assess_optim(space.xc(), gamma)
@@ -358,9 +358,9 @@ def cutting_plane_optim(omega, S, gamma, options=Options()):
             x_best = copy.copy(space.xc())
             status = space.update_central_cut(cut)
         else:
-            status = space.update_deep_cut(cut)
+            status = space.update_bias_cut(cut)
         if status != CutStatus.Success or space.tsq() < options.tol:
-            return x_best, target, niter
+            return x_best, gamma, niter
     return x_best, gamma, options.max_iters
 ```
 
@@ -382,7 +382,7 @@ $$
 -   $A$: the scale of production
 -   $\alpha, \beta$: the output elasticities
 -   $y$: input quantity
--   $v$: output price
+-   $v$: input price
 -   $k$: a given constant that restricts the quantity of $y_1$
 
 ---
@@ -593,22 +593,22 @@ Consider the following problem:
 $$
 \begin{array}{ll}
     \text{find}    & {\color{darkmagenta}x}, \\
-    \text{subject to} & F({\color{darkmagenta}x}) \succ 0,
+    \text{subject to} & F({\color{darkmagenta}x}) \succeq 0,
 \end{array}
 $$
 
 -   $F({\color{darkmagenta}x})$: a matrix-valued function
--   $A \succ 0$ denotes $A$ is positive semidefinite.
+-   $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 ---
 
 ### ⚖️ Problems With Matrix Inequalities
 
 -   Recall that a matrix $A$ is positive semidefinite if and only if
-  $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
+  $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N - 0^N$.
 -   The problem can be transformed into: $$\begin{array}{ll}
               \text{find} & {\color{darkmagenta}x}, \\
-              \text{subject to}    & v^\mathsf{T} F({\color{darkmagenta}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
+              \text{subject to}    & v^\mathsf{T} F({\color{darkmagenta}x}) v \ge 0, \; \forall v \in \mathbb{R}^N - 0^N
       \end{array}$$
 -   Consider $v^\mathsf{T} F({\color{darkmagenta}x}) v$ is
   concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{darkmagenta}x}$,
@@ -680,7 +680,7 @@ $$
 t_{ij} = \begin{cases}
   d_{ii}        & \mathrm{if}\ i = j, \\
   l_{ij}        & \mathrm{if}\ i > j, \\
-  d_{ii} l_{ji} & \mathrm{if}\ j < i.
+  d_{ii} l_{ji} & \mathrm{if}\ i < j.
 \end{cases}
 $$
 
@@ -742,7 +742,7 @@ The oracle only needs to:
 
 -   Perform a _row-based_ LDLT factorization such that
   $F(x_0) = L D L^\mathsf{T}$.
--   Let $A_{p,p}$ denotes a submatrix
+-   Let $A_{p,p}$ denote a submatrix
   $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
 -   If the process fails at row $p$,
   -   there exists a vector

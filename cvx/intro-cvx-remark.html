@@ -682,7 +682,7 @@ $$
 **Lagrangian**: $\mathcal{L}(x, \lambda) = \sum_k f_k(x_k) + \lambda^\mathsf{T} (\sum_k A_k x_k - b)$
 
 **Dual function** separates across $k$:
-$$ g(\lambda) = - \lambda^\mathsf{T} b + \sum_k \underbrace{\inf_k \left[ f_k(x_k) + \lambda^\mathsf{T} A_k x_k \right]}_k $$
+$$ g(\lambda) = - \lambda^\mathsf{T} b + \sum_k \underbrace{\inf_{x_k} \left[ f_k(x_k) + \lambda^\mathsf{T} A_k x_k \right]}_k $$
 
 ---
 
@@ -747,7 +747,7 @@ graph TD
 ---
 
 **ADMM** (Extension):
-$$ x_k^{t+1} = \arg\min_k \left[ f_k(x_k) + \frac{\rho}{2}\|A_k x_k - z^t + u^t\|^2 \right] $$
+$$ x_k^{t+1} = \arg\min_{x_k} \left[ f_k(x_k) + \frac{\rho}{2}\|A_k x_k - z^t + u^t\|^2 \right] $$
 
 Adds quadratic penalty for robustness:
 - Converges under milder conditions

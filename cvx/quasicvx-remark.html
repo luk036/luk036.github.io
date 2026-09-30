@@ -89,14 +89,14 @@ Key property: Every local minimum is a global minimum
 
 ---
 
-### ⚖️ Quasiconvex Function Properties
+### ⚖️ Quasi-convex Function Properties
 
 .mermaid[
 <pre>
 graph TD
     A["Function f"] --> B{"Sublevel Sets\nConvex?"}
-    B -->|Yes| C["f is\nQuasiconvex"]
-    B -->|No| D["f is Not\nQuasiconvex"]
+    B -->|Yes| C["f is\nQuasi-convex"]
+    B -->|No| D["f is Not\nQuasi-convex"]
     C --> E["Every Local Min\nis Global Min"]
     C --> F["Bisection\nMethod Works"]
 
@@ -130,8 +130,8 @@ Where ${\color{blue} f_0}$ is quasi-convex, ${\color{green} f_i}$ are convex, an
 graph LR
     A["Domain"] --> B["Sublevel Set\nSα = {x | f(x) ≤ α}"]
     B --> C{"Sα is\nConvex for\nall α?"}
-    C -->|Yes| D["f is\nQuasiconvex"]
-    C -->|No| E["f is Not\nQuasiconvex"]
+    C -->|Yes| D["f is\nQuasi-convex"]
+    C -->|No| E["f is Not\nQuasi-convex"]
 
     style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
     style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
@@ -186,7 +186,7 @@ The bisection method solves a quasiconvex problem by repeatedly solving convex f
 ### 🏭 Quasi-convex Functions in EDA
 
 Common quasi-convex functions in circuit design:
-1. 📐 Ratios of convex functions (e.g., gain, efficiency)
+1. 📐 Ratios of a convex function to a positive concave function (e.g., gain, efficiency)
 2. ⛰️ Maximum of convex functions
 3. 🧮 Certain posynomial functions
 
@@ -284,7 +284,7 @@ Where ${\color{green} W}$ and ${\color{orange} H}$ are the width and height of t
 .mermaid[
 <pre>
 graph TD
-    A["Quasiconvex\nProblem"] --> B["Pick t\n(objective value)"]
+    A["Quasi-convex\nProblem"] --> B["Pick t\n(objective value)"]
     B --> C["Construct\nFeasibility Problem"]
     C --> D{"Convex\nFeasibility?"}
     D -->|Yes| E["t is\nAchievable"]

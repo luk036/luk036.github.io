@@ -262,7 +262,7 @@ for j in 0..=i {
 .font-sm[
 | Implementation | $\omega = 0$ | Denormal $\omega$ |
 |---------------|-------------|-------------------|
-| 🐍 Python | `NoEffect` (`== 0.0`) | `NoEffect` (`> tiny`) |
+| 🐍 Python | `NoEffect` (`== 0.0`) | `NoEffect` (`<= tiny`) |
 | ⚡ C++ (original) | `Success` **bug** ❌ | ❌ **No guard** |
 | ⚡ C++ (patched) | `NoEffect` | `NoEffect` (`<= min()`) |
 | 🦀 Rust (original) | ❌ **No guard** (NaN/Inf) | ❌ **No guard** |

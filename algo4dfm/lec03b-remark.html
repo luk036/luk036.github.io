@@ -48,7 +48,7 @@ This lecture explores non-parametric spatial correlation estimation and its sign
   -   Why anisotropic models? 🧐
   -   Why do non-parametric approaches make sense? 💡
 -   📝 Problem Formulation
--   📊 Non-parametric estimation
+-   📊 Non-Parametric estimation
   -   Least squares estimation 📏
   -   Maximum Likelihood estimation 🔍
 -   🔢 Numerical experiment
@@ -87,8 +87,8 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 ### 📐 Why Anisotropic Model?
 
--   🔄 Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
--   ↔️ Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
+-   🔄 The isotropic assumption states that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
+-   ↔️ Certain variations, such as variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
 
 ---
 
@@ -103,14 +103,14 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 ---
 
-### 🔬 Related research 🔬🧪
+### 🔬 Related research 🧪
 
 -   📉 Piecewise linearization method (imprecise, not positive definite)
 -   📊 Parametric method (non-convex, too smooth, isotropic)
   -   Exponential function 📈
   -   Gaussian function 🔔
   -   Matérn function 🌀
--   🛠️ Non-parametric method
+-   🛠️ Non-Parametric method
   -   Polynomial fitting
   -   B-spline 🎚️
 
@@ -141,8 +141,8 @@ graph LR
 
 ### 🎲 Random Field
 
--   🌀 Random field is an indexed family of random variables denote as
-    $\{{\color{darkblack}\tilde{z}}(s): s \in D\}$, where ${\color{salmon}D} \subseteq \mathrm{R}^d$
+-   🌀 Random field is an indexed family of random variables denoted as
+    $\{{\color{darkblack}\tilde{z}}(s): s \in D\}$, where ${\color{salmon}D} \subseteq \mathbb{R}^d$
 -   📊 Covariance ${\color{purple}C}(s_i, s_j)$ = $\text{cov}({\color{darkblack}\tilde{z}}(s_i),{\color{darkblack}\tilde{z}}(s_j))$ =
     $\mathrm{E}[({\color{darkblack}\tilde{z}}(s_i) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_i)]) ({\color{darkblack}\tilde{z}}(s_j) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_j)])]$
 -   🔗 Correlation
@@ -161,7 +161,7 @@ graph LR
 
 -   ↔️ Even function, i.e. ${\color{purple}\rho}({\color{brown}\vec{h}}) = {\color{purple}\rho}(-{\color{brown}\vec{h}}) \implies$ its Fourier transform
     is real.
--   ✔️ Positive definiteness (PD) $\implies$ its Fourier transform is positive
+-   ✔️ Positive definiteness (PD) $\implies$ its Fourier transform is non-negative
     (Bochner's theorem).
 -   📉 Monotonicity: correlations are decreasing against ${\color{brown}h}$ 🤔
 -   ➕ Nonnegativeness: no negative correlation 🤔
@@ -182,18 +182,18 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 -   📏 Measured covariance matrix ${\color{red}Y}$:
   -   ${\color{red}Y} = (1/{\color{royalblue}M}) \sum_{i=1}^{{\color{royalblue}M}} {\color{darkblack}z}_i {\color{darkblack}z}_i^\mathsf{T}$ (unlikely PD)
 -   💻 In MATLAB, simply call `cov(Zs',1)` to obtain ${\color{red}Y}$.
--   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain ${\color{red}Y}$.
+-   🐍 In Python, simply call `np.cov(Zs, bias=True)` to obtain ${\color{red}Y}$.
 
 ---
 
 ### 🎯 Nearest PD Matrix Problem
 
--   🔵 Given ${\color{red} Y}$. Find a nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
+-   🔵 Given ${\color{red} Y}$. Find the nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
-        \text{minimize}   & \| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_F \\
+        \text{minimize}   & \| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_\mathrm{F} \\
         \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
-      \end{array}$$ where $\| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_F$ denotes the Frobenius
-    norm, ${\color{darkmagenta}A} \succ 0$ denotes ${\color{darkmagenta}A}$ is positive definite.
+      \end{array}$$ where $\| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_\mathrm{F}$ denotes the Frobenius
+    norm, ${\color{darkmagenta}A} \succ 0$ denotes that ${\color{darkmagenta}A}$ is positive definite.
 -   👉 Note:
     1.  the problem is convex 😃
     2.  the problem can be solved easily using CVX 😃
@@ -206,7 +206,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
         \text{maximize} & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{red} Y}) \\
         \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}({\color{darkmagenta}A})$ denotes the trace of ${\color{darkmagenta}A}$.
--   👉 Note: 1st term is concave 😭, 2nd term is convex
+-   👉 Note: the 1st term is convex 😭, the 2nd term is concave
 
 ---
 
@@ -225,7 +225,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ### 💻 Matlab Code of CVX
 
 ```matlab
-function Sig = log_mle_solver(Y);
+function Sig = log_mle_solver(Y)
 ndim = size(Y,1);
 cvx_quiet(false);
 cvx_begin sdp
@@ -259,7 +259,7 @@ def mle_corr_mtx(Y):
 
 ### 📊 Correlation Function (I)
 
--   Let ${\color{purple}\rho}({\color{brown}h}) = \sum_i^m {\color{darkblack}p}_i {\color{purple}\Psi_i}({\color{brown}h})$, where
+-   Let ${\color{purple}\rho}({\color{brown}h}) = \sum_i^{m} {\color{darkblack}p}_i {\color{purple}\Psi_i}({\color{brown}h})$, where
   -   ${\color{darkblack}p}_i$'s are the unknown coefficients to be fitted
   -   ${\color{purple}\Psi_i}$'s are a family of basis functions.
 -   Let $\{{\color{red}F_k}\}_{i,j} ={\color{purple}\Psi_k}( \| s_i - s_j \|_2)$.
@@ -267,7 +267,7 @@ def mle_corr_mtx(Y):
 -   The covariance matrix ${\color{red}\Omega}({\color{darkblack}p})$ can be recast as:
     $${\color{red}\Omega}({\color{darkblack}p}) = {\color{darkblack}p}_1 {\color{red}F_1} + \cdots + {\color{darkblack}p}_m {\color{red}F_m}$$
 
--   Note 1: affine transformation preserved convexity
+-   Note 1: affine transformations preserve convexity
 
 -   Note 2: inverse of matrix unfortunately **cannot** be expressed in
     convex form.
@@ -291,7 +291,7 @@ def mle_corr_mtx(Y):
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
   -   real(FFT($\{{\color{purple}\Psi_i}({\color{brown}h_k})\}$)) $\geq 0$
 
-Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
+Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is non-negative. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
 ---
 
@@ -318,7 +318,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-### 📊 Isotopic Case I
+### 📊 Isotropic Case I
 
 .pull-left[
 
@@ -330,13 +330,13 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ![img](lec03b.files/corr_nonpar01.svg)
 
-: Least Square Result
+: Least-Squares Result
 
 ]
 
 ---
 
-### 📊 Isotopic Case II
+### 📊 Isotropic Case II
 
 .pull-left[
 
@@ -348,7 +348,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ![img](lec03b.files/corr_nonpar.svg)
 
-: Least Square Result
+: Least-Squares Result
 
 ]
 
@@ -359,7 +359,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 -   Let ${\color{darkmagenta}\Sigma} = {\color{red}\Omega} + {\color{darkmagenta}\kappa} I$. Log-likelihood function is:
   -   $\log \det {\color{darkmagenta}\Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
 -   Convexify the first term using the fact:
-  -   $\log \det {\color{darkmagenta}\Sigma}^{-1} \geq \log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0))$
+  -   $\log \det {\color{darkmagenta}\Sigma}^{-1} \geq \log \det {\color{darkmagenta}\Sigma}_0^{-1} - \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0))$
   -   minimize:
         $-\log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0)) + \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
 -   At each iteration ${\color{royalblue}k}$, the following convex problem is solved:
@@ -374,7 +374,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
             \succ 0, {\color{darkmagenta}\kappa} \geq 0
       \end{array}
       $$
-    👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.
+    👉 Note: Convergence to an optimal solution is not guaranteed, but works well in practice.
 
 ---
 
@@ -400,7 +400,7 @@ end
 
 ---
 
-### 📊 Anisotopic Data
+### 📊 Anisotropic Data
 
 ![img](lec03b.files/aniso_data.svg)
 

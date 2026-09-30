@@ -39,6 +39,7 @@ class: nord-dark, middle, center
 
 ### 📋 Agenda
 
+.font-sm[
 .pull-left[
 
 **Part 1 — The Contest** 🥊
@@ -83,6 +84,7 @@ class: nord-dark, middle, center
 **Part 10 — Takeaways** 🧠
 
 ]
+]
 
 ---
 
@@ -118,8 +120,6 @@ $$ \min_p \; \bigl\|{\color{#bf616a}Y} - {\color{#5e81ac}\Omega(p)}\bigr\|_F \qu
 $$ \min_p \; \log\det {\color{#5e81ac}\Omega(p)} + \operatorname{Tr}\!\bigl({\color{#5e81ac}\Omega(p)}^{-1}{\color{#bf616a}Y}\bigr) $$
 
 - The objective is **DC** — a difference of convex functions — not an LMI 🔁
-- Solved exactly by **CCP**: linearize the concave term, solve the convex surrogate each round 🪄
-- CCP is the only correct implementation ✅
 
 ]
 
@@ -160,10 +160,9 @@ $$ \varphi_k(d) = d^{\,k}, \qquad k = 0, \dots, m-1 $$
 
 **B-spline** 🟩 — quadratic ($k=2$) on knots $t$
 
-$$ K(d) \;=\; \sum_{i=1}^{m} c_i\, B_i(d), \qquad B_i \text{ local, } \sum_i B_i = 1 $$
+$$ K(d) \;=\; \sum_{i=1}^{m} c_i\, B_i(d), \\ B_i \text{ local, } \sum_i B_i = 1 $$
 
 - Local support: each $B_i$ is nonzero on $\approx 3$ knot spans 🧩
-- Partition of unity, shape constraints "for free"
 
 ]
 
@@ -178,8 +177,8 @@ $$ \operatorname{cond}(A) \;=\; \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \qquad
 <img src="poly-vs-bspline-remark.files/fig_cond.svg" style="width:60%" />
 </p>
 
-- **Polynomial**: $1.2\times10^{1} \to 3.5\times10^{10}$ as $m: 2 \to 10$ — nine orders of magnitude 💥
-- **B-spline, old knots**: grows mildly ($40 \to 409$) — but wrong for another reason 🐛
+- **Poly**: $1.2\times10^{1} \to 3.5\times10^{10}$ as $m: 2 \to 10$ — 9 orders of magnitude 💥
+- **B-spline, old knots**: grows mildly ($40 \to 409$) 🐛
 - **B-spline, clamped**: flat at $\approx 5\text{–}7$ ✅
 
 > Sane conditioning is *free* — it just needs the right knots. 🎯
@@ -524,9 +523,9 @@ The C++ solver (`corr-solver-cpp`) already had LSQ / MLE / CCP and the cutting-p
 
 **Added to measure** 📏
 
-- Symmetric **Jacobi eigensolver** 🔢
+- Symmetric **Jacobi eigensolver**
 - Design-matrix conditioning in **double-double** arithmetic 🧮
-- Experiment driver + CSV export 📊
+- Experiment driver + CSV export
 - **14 new doctest cases** (19 total, 90 assertions) 🧪
 
 ]
@@ -537,12 +536,14 @@ The C++ solver (`corr-solver-cpp`) already had LSQ / MLE / CCP and the cutting-p
 
 .pull-left[
 
+.font-sm[
 | $m$ | poly | clamped | legacy |
 |:--:|--:|--:|--:|
 | 4 | $1.21\times10^{3}$ | $5.052$ | $40.26$ |
 | 6 | $1.87\times10^{5}$ | $6.478$ | $99.40$ |
 | 8 | $6.72\times10^{7}$ | $6.508$ | $203.57$ |
 | 10 | $3.45\times10^{10}$ | $6.751$ | $409.47$ |
+]
 
 $\operatorname{cond}$ values agree with Python to $10^{-9}$ ✅
 
@@ -595,29 +596,6 @@ class: nord-light, middle, center
 
 The Rust crate had less to reuse: no B-spline, **no CCP at all** (its `MleOracle` is the 2Y-bounded variant), no conditioning, no Halton.
 
-.pull-left[
-
-**Written from scratch** 🦀
-
-- B-spline basis + **clamped knots** 🎯
-- Monotone coefficient oracle 📉
-- **CCP driver** — the crate had none 🔁
-- Jacobi eigen + **double-double** `design_cond` 🧮
-- Self-contained **Halton** (no MSRV bump) 🎲
-
-]
-
-.pull-right[
-
-**Reused** ♻️
-
-- `ellalgo-rs` cutting-plane + `Ell` 🔄
-- `lmi-solver-rs` `LDLTMgr` / `LMIOracle` 🧱
-- `corr_helper` distance / poly matrices 📐
-- `linalg` Cholesky, inverse, seeded RNG 🔢
-
-]
-
 .mermaid[
 
 <pre>
@@ -635,8 +613,31 @@ graph LR
     style X fill:#fadbd8,stroke:#c0392b,stroke-width:3px
     style O fill:#eceff4,stroke:#4c566a,stroke-width:3px
 </pre>
+]
+
+.pull-left[
+
+**Written from scratch** 🦀
+
+- B-spline basis + **clamped knots**
+- Monotone coefficient oracle 📉
+- **CCP driver** — the crate had none
+- Jacobi eigen + **double-double** `design_cond` 🧮
+- Self-contained **Halton** (no MSRV bump) 🎲
 
 ]
+
+.pull-right[
+
+**Reused** ♻️
+
+- `ellalgo-rs` cutting-plane + `Ell` 🔄
+- `lmi-solver-rs` `LDLTMgr` / `LMIOracle` 🧱
+- `corr_helper` distance / poly matrices 📐
+- `linalg` Cholesky, inverse, seeded RNG 🔢
+
+]
+
 
 ---
 
@@ -647,7 +648,7 @@ graph LR
 **Identical to Python / C++** ✅
 
 - $\operatorname{cond}$ table — incl. poly $m{=}10 = 3.4546585439\times10^{10}$ (the 60-digit truth) 🔢
-- $d_{\max}$, $d_{\text{span}}$, knot vectors, valid domain 📐
+- $d_{\max}$, knot vectors, valid domain 📐
 - extrapolation share $244/400 = 61\%$ ($122/190$ upper) 🐛
 
 ]
@@ -664,6 +665,8 @@ graph LR
 | BS old knots | $0.125$ | $332$ |
 
 ]
+
+---
 
 - CCP at $N = 3000$: poly $19$ rounds $32.93 \to 29.98$; BS + monotone **$16$** rounds $33.64 \to 30.50$ — same round counts as Python 🔁
 - $N = 1..50$: clamped B-splines hold $\text{nInc} = 0$ in **all $100$** rows; poly violates in $98/100$ 📈
@@ -759,7 +762,7 @@ Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
         ],
       });
       var slideshow = remark.create({
-        ratio: "16:10",
+        ratio: "4:3",
         highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,

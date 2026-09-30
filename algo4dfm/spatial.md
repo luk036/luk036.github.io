@@ -26,8 +26,8 @@ Simulation - Cholesky factorization
 
 ### Gaussian Process
 
-- Isotopic
-- Anisotopic
+- Isotropic
+- Anisotropic
 
 ### Sampling methods:
 

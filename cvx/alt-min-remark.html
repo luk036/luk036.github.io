@@ -1,0 +1,645 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🔄 Alternating Minimization</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 Alternating Minimization
+
+### From EM to Kalman Filters to Matrix Completion
+
+**A 30-minute journey through a universal optimization pattern** 🎯
+
+📅 Today's agenda:
+
+- 🧠 Core Concept
+- 📊 EM Algorithm
+- 🎛️ Kalman Filter
+- 🧩 Low-Rank Matrix Completion
+- 🔗 Nearest Correlation Matrix
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 🗺️ The Big Picture
+
+> **"When you can't solve a hard joint problem, solve easy conditional problems — one variable at a time."** 💡
+
+$$ \min_{x,\,y}\; f(x,y) \;\;\longrightarrow\;\; \begin{cases} {\color{royalblue}x^{(t+1)}} = \arg\min_{x}\; f\big({\color{royalblue}x},\, {\color{salmon}y^{(t)}}\big) \\ {\color{salmon}y^{(t+1)}} = \arg\min_{y}\; f\big({\color{royalblue}x^{(t+1)}},\, {\color{salmon}y}\big) \end{cases} $$
+
+.mermaid[
+<pre>
+graph LR
+    J["🎯 Hard joint problem\nmin f(x, y)"] --> A["Fix y\nmin_x f(x, y)"]
+    J --> B["Fix x\nmin_y f(x, y)"]
+    A --> C["Update x"]
+    B --> D["Update y"]
+    C --> L["🔁 Repeat until convergence"]
+    D --> L
+    style J fill:#f44336,color:#fff
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#4caf50,color:#fff
+    style L fill:#9c27b0,color:#fff
+</pre>
+]
+
+✅ **Extremely common** across ML, signal processing, and statistics.
+
+⚠️ **Simple, but can be slow** — convergence is often sublinear. 🐢
+
+---
+
+### 🤔 Why Does It Work?
+
+At each step we **never increase** the objective: 📉
+
+$$ f\big({\color{royalblue}x^{(t+1)}}, {\color{salmon}y^{(t+1)}}\big) \;\leq\; f\big({\color{royalblue}x^{(t+1)}}, {\color{salmon}y^{(t)}}\big) \;\leq\; f\big({\color{royalblue}x^{(t)}}, {\color{salmon}y^{(t)}}\big) $$
+
+🔑 **Key properties**
+
+- 🎯 Each subproblem is often **convex** and even **closed-form**
+- 📉 Monotonic decrease of the objective
+- 🧱 A special case of **block coordinate descent**
+- 🛑 Converges to stationary points under mild conditions
+
+⚠️ **Caveats**
+
+- 🎲 Can get stuck in **local minima** (non-convex case)
+- 🐢 **Slow convergence** near the optimum
+- 🔧 Sensitive to **initialization**
+
+---
+
+### 🏗️ The General Framework
+
+```text
+Initialize: x⁽⁰⁾, y⁽⁰⁾
+for t = 0, 1, 2, ... do
+    x⁽ᵗ⁺¹⁾ ← argmin_x  f(x, y⁽ᵗ⁾)     # Fix y, optimize x
+    y⁽ᵗ⁺¹⁾ ← argmin_y  f(x⁽ᵗ⁺¹⁾, y)   # Fix x, optimize y
+end for
+```
+
+.mermaid[
+<pre>
+graph LR
+    I["Initialise x0, y0"] --> X["x ← argmin f(x, y)"]
+    X --> Y["y ← argmin f(x, y)"]
+    Y --> K{"Converged?"}
+    K -- "No" --> X
+    K -- "Yes" --> Z["Return x, y"]
+    style I fill:#607d8b,color:#fff
+    style X fill:#2196f3,color:#fff
+    style Y fill:#4caf50,color:#fff
+    style K fill:#ff9800
+    style Z fill:#9c27b0,color:#fff
+</pre>
+]
+
+🎨 **Variants:** 🧮 exact minimization · 📏 proximal · 🎲 stochastic · ⚡ accelerated
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Part II · The EM Algorithm
+
+---
+
+### 📈 Expectation–Maximization — Overview
+
+**Problem:** maximum likelihood with **latent variables** $z$ 🧠
+
+$$ \theta^\star = \arg\max_\theta \; \log p(x \mid \theta) = \arg\max_\theta \; \log \sum_z p(x, z \mid \theta) $$
+
+😱 The log of a **sum** is hard to optimize directly!
+
+💡 **EM's trick:** alternate between two easy steps
+
+- **E-step:** compute the posterior over ${\color{royalblue}z}$ given the current ${\color{salmon}\theta}$
+- **M-step:** maximize the expected complete-data log-likelihood
+
+---
+
+### 🔁 EM — The Two Steps
+
+.mermaid[
+<pre>
+graph LR
+    E["E-step\nq(z) = p(z | x, θ⁽ᵗ⁾)"] --> M["M-step\nθ⁽ᵗ⁺¹⁾ ← argmax Q(θ)"]
+    M --> E
+    style E fill:#2196f3,color:#fff
+    style M fill:#4caf50,color:#fff
+</pre>
+]
+
+**E-step** 🧮 — compute the **Q-function**
+
+$$ {\color{royalblue}Q(\theta \mid \theta^{(t)})} = \mathbb{E}_{z \sim p(z \mid x,\, \theta^{(t)})}\big[\, \log p(x, z \mid \theta) \,\big] $$
+
+**M-step** 🎯 — update the parameters
+
+$$ \theta^{(t+1)} = \arg\max_\theta \; {\color{royalblue}Q(\theta \mid \theta^{(t)})} $$
+
+Often this has a **closed-form solution** (e.g. Gaussian mixtures). ✅
+
+---
+
+### ✅ EM — Why It Works
+
+.mermaid[
+<pre>
+graph TD
+    LOG["log p(x | θ)"] --> ELBO["ELBO  L(q, θ)"]
+    LOG --> KL["KL(q || p) ≥ 0"]
+    E["E-step:\nq = p(z | x, θ)  ⇒  KL = 0"] --> ELBO
+    M["M-step:\nmaximize L over θ"] --> ELBO
+    style LOG fill:#f44336,color:#fff
+    style ELBO fill:#4caf50,color:#fff
+    style KL fill:#ff9800
+    style E fill:#2196f3,color:#fff
+    style M fill:#9c27b0,color:#fff
+</pre>
+]
+
+.pull-left[
+**Guaranteed monotonic improvement** 📈
+
+$$ \log p(x \mid \theta^{(t+1)}) \;\geq\; \log p(x \mid \theta^{(t)}) $$
+
+**Proof sketch via the ELBO** (Evidence Lower Bound):
+
+$$ \log p(x \mid \theta) = \underbrace{\mathcal{L}(q, \theta)}_{\text{ELBO}} + \underbrace{\mathrm{KL}\big(q(z) \,\|\, p(z \mid x, \theta)\big)}_{\geq\, 0} $$
+]
+.pull-right[
+- **E-step:** set $q(z) = p(z \mid x, \theta^{(t)})$ → KL $= 0$, ELBO becomes tight
+- **M-step:** maximize the ELBO over $\theta$ → improves the likelihood
+
+📊 **Convergence:** to local maxima (or saddle points).
+]
+
+---
+
+### 🎨 EM — Classic Example: Gaussian Mixture Model
+
+**Model:** $p(x) = \sum_{k=1}^K \pi_k \, \mathcal{N}(x \mid \mu_k, \Sigma_k)$
+
+**E-step** — responsibilities $\gamma_{ik}$ 🔵
+
+$$ \gamma_{ik} = \frac{\pi_k \, \mathcal{N}(x_i \mid \mu_k, \Sigma_k)}{\sum_{j=1}^K \pi_j \, \mathcal{N}(x_i \mid \mu_j, \Sigma_j)} $$
+
+**M-step** — weighted updates 🟢
+
+$$ \mu_k = \frac{\sum_i \gamma_{ik} x_i}{\sum_i \gamma_{ik}}, \qquad \Sigma_k = \frac{\sum_i \gamma_{ik} (x_i - \mu_k)(x_i - \mu_k)^\top}{\sum_i \gamma_{ik}} $$
+
+$$ \pi_k = \frac{1}{N} \sum_i \gamma_{ik} $$
+
+🔁 Soft assignment → re-estimate → repeat.
+
+---
+
+class: nord-light, middle, center
+
+## 🎛️ Part III · The Kalman Filter
+
+---
+
+### 📡 Kalman Filter — Overview
+
+**Linear Gaussian state-space model:**
+
+$$ \begin{aligned} {\color{royalblue}x_t} &= F_t {\color{royalblue}x_{t-1}} + B_t u_t + w_t, & w_t &\sim \mathcal{N}(0, Q_t) \\ {\color{salmon}z_t} &= H_t {\color{royalblue}x_t} + v_t, & v_t &\sim \mathcal{N}(0, R_t) \end{aligned} $$
+
+🎯 **Goal:** estimate the hidden state ${\color{royalblue}x_t}$ from noisy observations ${\color{salmon}z_t}$
+
+💡 **Alternating structure:**
+
+- **Prediction phase** ⏩ — propagate the belief forward through the dynamics
+- **Update phase** 🔄 — correct it with the new observation
+
+---
+
+### 🔁 Kalman Filter — The Two Phases
+
+.mermaid[
+<pre>
+graph LR
+    P["Prediction (time update)\nx̂ ← F x̂ + B u\nP ← F P Fᵀ + Q"] --> U["Update (measurement)\nK ← P Hᵀ(HPHᵀ+R)⁻¹\nx̂ ← x̂ + K(z − Hx̂)"]
+    U --> P
+    style P fill:#2196f3,color:#fff
+    style U fill:#4caf50,color:#fff
+</pre>
+]
+
+**Prediction (time update)** ⏩
+
+$$ \begin{aligned} \hat{x}_{t \mid t-1} &= F_t \hat{x}_{t-1 \mid t-1} + B_t u_t \\ P_{t \mid t-1} &= F_t P_{t-1 \mid t-1} F_t^\top + Q_t \end{aligned} $$
+
+**Update (measurement update)** 🔄
+
+$$ \begin{aligned} K_t &= P_{t \mid t-1} H_t^\top \big( H_t P_{t \mid t-1} H_t^\top + R_t \big)^{-1} \\ \hat{x}_{t \mid t} &= \hat{x}_{t \mid t-1} + K_t \big( {\color{salmon}z_t} - H_t \hat{x}_{t \mid t-1} \big) \\ P_{t \mid t} &= (I - K_t H_t) P_{t \mid t-1} \end{aligned} $$
+
+🔁 Predict → Update → Predict → Update → …
+
+---
+
+### 🧠 Kalman Filter — Why It Is Alternating Minimization
+
+🎯 **MAP interpretation:** at each step solve
+
+$$ \hat{x}_t = \arg\min_x \; \underbrace{\|x - F_t \hat{x}_{t-1}\|^2_{Q_t^{-1}}}_{\text{prediction prior}} + \underbrace{\|{\color{salmon}z_t} - H_t x\|^2_{R_t^{-1}}}_{\text{measurement likelihood}} $$
+
+.mermaid[
+<pre>
+graph LR
+    PR["🔵 Prior from dynamics\nN(F x̂, Q)"] --> POST["🟣 Posterior\nN(x̂, P)"]
+    ME["🟢 Measurement\nN(H x, R)"] --> POST
+    style PR fill:#2196f3,color:#fff
+    style ME fill:#4caf50,color:#fff
+    style POST fill:#9c27b0,color:#fff
+</pre>
+]
+
+📐 **Geometric view:** prediction projects the belief forward; update projects it onto the measurement constraint.
+
+🔗 **Connections:** 🧩 Gaussian message passing on factor graphs · 🎓 recursive least squares · 🚀 Extended/Unscented KF for nonlinearities.
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Part IV · Low-Rank Matrix Completion
+
+---
+
+### 🎬 The Netflix Problem
+
+**Given:** partial observations $M_{ij}$ for $(i,j) \in \Omega$
+
+**Goal:** recover the full matrix $M \in \mathbb{R}^{m \times n}$
+
+**Assumption:** $M$ is **low-rank** — $M = U V^\top$ with $U \in \mathbb{R}^{m \times r}$, $V \in \mathbb{R}^{n \times r}$, and $r \ll \min(m,n)$
+
+$$ \min_{U, V} \; \sum_{(i,j) \in \Omega} \big( M_{ij} - ({\color{royalblue}U} {\color{salmon}V}^\top)_{ij} \big)^2 + \lambda \big( \|{\color{royalblue}U}\|_F^2 + \|{\color{salmon}V}\|_F^2 \big) $$
+
+😱 **Bilinear** in $(U, V)$ → non-convex, but **bi-convex**! ✅
+
+.mermaid[
+<pre>
+graph LR
+    M["🎬 Sparse ratings M\n(only Ω observed)"] --> F["Low-rank factors\nM ≈ U Vᵀ"]
+    F --> U["🔵 User factors U"]
+    F --> V["🟢 Item factors V"]
+    U --> P["Predict missing entries"]
+    V --> P
+    style M fill:#f44336,color:#fff
+    style F fill:#9c27b0,color:#fff
+    style U fill:#2196f3,color:#fff
+    style V fill:#4caf50,color:#fff
+    style P fill:#ff9800
+</pre>
+]
+
+---
+
+### 🔁 Matrix Completion — Alternating Least Squares
+
+.mermaid[
+<pre>
+graph LR
+    U["Fix V → solve for U\n(per-row ridge regressions)"] --> V["Fix U → solve for V\n(per-column ridge regressions)"]
+    V --> U
+    style U fill:#2196f3,color:#fff
+    style V fill:#4caf50,color:#fff
+</pre>
+]
+
+**Fix ${\color{salmon}V}$, solve for ${\color{royalblue}U}$** — for each row $i$:
+
+$$ {\color{royalblue}u_i} = \Big( \sum_{j \in \Omega_i} {\color{salmon}v_j} {\color{salmon}v_j}^\top + \lambda I \Big)^{-1} \sum_{j \in \Omega_i} M_{ij} \, {\color{salmon}v_j} $$
+
+**Fix ${\color{royalblue}U}$, solve for ${\color{salmon}V}$** — for each column $j$:
+
+$$ {\color{salmon}v_j} = \Big( \sum_{i \in \Omega^j} {\color{royalblue}u_i} {\color{royalblue}u_i}^\top + \lambda I \Big)^{-1} \sum_{i \in \Omega^j} M_{ij} \, {\color{royalblue}u_i} $$
+
+✅ Each subproblem is a **small ridge regression** — closed form!
+🔁 Alternate until convergence.
+
+---
+
+### ⚙️ Matrix Completion — Practical Notes
+
+🎯 **Why ALS works well**
+
+- 🧩 **Per-row/column parallelism** — embarrassingly parallel
+- 📦 **Memory efficient** — store only observed entries
+- 🚀 **Scales** to millions of users and items (Netflix, Amazon)
+
+⚠️ **Challenges**
+
+- 🎲 **Non-convex** — local minima depend on initialization
+- 🐢 **Slow convergence** near the optimum (ill-conditioning)
+- 🔧 **Regularization is crucial** — $\lambda$ controls the effective rank
+
+💡 **Tips**
+
+- Initialize with the SVD of a filled matrix
+- Use **weighted ALS** for implicit feedback
+- Consider **stochastic gradient** alternatives (Funk-SVD)
+
+---
+
+class: nord-light, middle, center
+
+## 🔗 Part V · Nearest Correlation Matrix
+
+---
+
+### 🎯 The Nearest Correlation Matrix Problem
+
+**Given:** a symmetric matrix $A \in \mathbb{R}^{n \times n}$ (possibly noisy, non-PSD)
+
+**Goal:** find the closest **correlation matrix** $C$:
+
+$$ \min_{C} \; \|{\color{royalblue}A} - {\color{salmon}C}\|_F^2 \quad \text{s.t.} \quad \begin{cases} {\color{salmon}C}_{ii} = 1 & \forall i \\ {\color{salmon}C} \succeq 0 & \text{(PSD)} \end{cases} $$
+
+🎯 **Applications**
+
+- 💹 Finance — covariance matrix repair
+- 🧪 Chemometrics — spectroscopic data
+- 🧠 Psychometrics — factor analysis
+- 📊 Risk management — stress testing
+
+---
+
+### 🔁 Nearest Correlation Matrix — Alternating Projection
+
+**Two constraint sets** 🎨
+
+- $\mathcal{C}_1 = \{ C : \mathrm{diag}(C) = \mathbf{1} \}$ — unit diagonal 🔵
+- $\mathcal{C}_2 = \{ C : C \succeq 0 \}$ — PSD cone 🟢
+
+.mermaid[
+<pre>
+graph LR
+    C1["C₁ : diag(C) = 1\n(set diagonal to 1)"] --> C2["C₂ : C ⪰ 0\n(clip negative eigenvalues)"]
+    C2 --> C1
+    style C1 fill:#2196f3,color:#fff
+    style C2 fill:#4caf50,color:#fff
+</pre>
+]
+
+**Alternating projection**
+
+$$ {\color{salmon}C^{(t+1/2)}} = \Pi_{\mathcal{C}_1}\big( {\color{royalblue}C^{(t)}} \big), \qquad {\color{royalblue}C^{(t+1)}} = \Pi_{\mathcal{C}_2}\big( {\color{salmon}C^{(t+1/2)}} \big) $$
+
+**Projections**
+
+- Onto $\mathcal{C}_1$: set the diagonal to $1$ ✂️
+- Onto $\mathcal{C}_2$: eigendecompose and clip negative eigenvalues to $0$ 🎛️
+
+---
+
+### 🛠️ Higham's Algorithm (with Dykstra Correction)
+
+```text
+Initialize: Y⁽⁰⁾ = A,  S⁽⁰⁾ = 0
+for t = 0, 1, 2, ... do
+    R⁽ᵗ⁾   = Y⁽ᵗ⁾ - S⁽ᵗ⁾
+    X⁽ᵗ⁾   = Π_{C₁}(R⁽ᵗ⁾)      # Set diagonal to 1
+    S⁽ᵗ⁺¹⁾ = X⁽ᵗ⁾ - R⁽ᵗ⁾       # Update correction
+    Y⁽ᵗ⁺¹⁾ = Π_{C₂}(X⁽ᵗ⁾)      # Project onto PSD cone
+end for
+```
+
+.mermaid[
+<pre>
+graph LR
+    R["R = Y − S"] --> X["X = Π_C₁(R)\ndiagonal ← 1"]
+    X --> S["S ← X − R\nDykstra correction"]
+    X --> Y["Y = Π_C₂(X)\nPSD projection"]
+    Y --> R
+    style R fill:#607d8b,color:#fff
+    style X fill:#2196f3,color:#fff
+    style S fill:#9c27b0,color:#fff
+    style Y fill:#4caf50,color:#fff
+</pre>
+]
+
+🔑 **Dykstra's correction** guarantees convergence to the **true projection** onto $\mathcal{C}_1 \cap \mathcal{C}_2$.
+
+⚡ **Complexity:** $O(n^3)$ per iteration (eigendecomposition).
+
+---
+
+### 📊 Comparing the Four Methods
+
+| Method | Variables | Subproblem | Convergence |
+|--------|-----------|------------|-------------|
+| 🧠 **EM** | $\theta,\; q(z)$ | Closed-form (often) | Monotonic, local |
+| 🎛️ **Kalman** | $x_t,\; P_t$ | Linear Gaussian | Optimal (LQG) |
+| 🧩 **ALS** | $U,\; V$ | Ridge regression | Linear, local |
+| 🔗 **APM** | $\mathcal{C}_1,\; \mathcal{C}_2$ | Projections | Global (convex) ✅ |
+
+🎯 **Common theme:** fix one block, optimize the other, repeat. 🔁
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part VI · Wrap-up
+
+---
+
+### ✅ Pros & Cons
+
+.pull-left[
+**✅ Advantages**
+
+- 🧩 **Simple to implement** — often just a few lines
+- 🎯 **Closed-form subproblems** — no gradient tuning
+- 📦 **Memory efficient** — one block at a time
+- 🔀 **Parallelizable** — across rows, columns, samples
+- 📉 **Monotonic** objective decrease
+]
+.pull-right[
+**⚠️ Disadvantages**
+
+- 🐢 **Slow convergence** — especially near the optimum
+- 🎲 **Local minima** — initialization matters
+- 🔧 **Hyperparameter sensitivity** — regularization, rank
+- 🧊 **Can stall** — saddle points and plateaus
+]
+
+🎯 **Trade-off:** simplicity ✅ versus convergence speed 🐢.
+
+---
+
+### 🚀 Acceleration & Modern Variants
+
+⚡ **Momentum / acceleration** (proximal term):
+
+$$ x^{(t+1)} = \arg\min_x \; f(x, y^{(t)}) + \frac{\beta}{2} \|x - x^{(t)}\|^2 $$
+
+- 🎲 **Stochastic block updates** — sample minibatches
+- 🧮 **Proximal variants** — handle non-smooth terms
+- 🔄 **Block coordinate descent** — the general framework
+- 🧠 **Learned initialization** — neural warm starts
+
+📚 **Theory:** Beck & Tetruashvili (2013), Wright (2015).
+
+---
+
+### 🎓 Key Takeaways
+
+1. 🔄 **Alternating minimization** = fix one block, optimize the other
+2. 🧠 **EM** — latent variables via E-step / M-step
+3. 🎛️ **Kalman** — prediction / update for state estimation
+4. 🧩 **ALS** — matrix completion via ridge regressions
+5. 🔗 **APM** — correlation matrix via alternating projections
+
+💡 **Universal pattern:** decompose hard joint problems into easy conditional ones.
+
+.mermaid[
+<pre>
+graph LR
+    H["😱 Hard joint problem"] --> E["🎯 Easy conditional problems"]
+    E --> S["✅ Simple, closed-form steps"]
+    S --> W["🔁 Repeat to convergence"]
+    style H fill:#f44336,color:#fff
+    style E fill:#ff9800
+    style S fill:#4caf50,color:#fff
+    style W fill:#9c27b0,color:#fff
+</pre>
+]
+
+⚠️ **Trade-off:** simplicity vs. convergence speed.
+
+---
+
+### 📚 Further Reading
+
+🧠 **EM**
+
+- Dempster, Laird, Rubin (1977) — *Maximum Likelihood from Incomplete Data*
+- Bishop, *Pattern Recognition and Machine Learning*, Ch. 9
+
+🎛️ **Kalman**
+
+- Kalman (1960) — *A New Approach to Linear Filtering*
+- Thrun et al., *Probabilistic Robotics*, Ch. 3
+
+🧩 **Matrix Completion**
+
+- Koren, Bell, Volinsky (2009) — *Matrix Factorization Techniques*
+- Candès & Recht (2009) — *Exact Matrix Completion*
+
+🔗 **Nearest Correlation**
+
+- Higham (2002) — *Computing the Nearest Correlation Matrix*
+
+---
+
+### 📐 Appendix — Convergence Rates
+
+**EM** (Wu 1983; McLachlan & Krishnan 2008) — monotonic likelihood increase, linear convergence near the MLE.
+
+**ALS** (Uschmajew 2012) — linear convergence under a **restricted isometry** property; rate depends on conditioning.
+
+**Alternating Projections** (von Neumann 1933; Bauschke & Borwein 1996) — **convex** case: global convergence ✅; **non-convex** case: local convergence only.
+
+$$ \|{\color{salmon}C^{(t)}} - C^\star\|_F \;\leq\; \rho^{\,t} \, \|{\color{royalblue}C^{(0)}} - C^\star\|_F, \qquad \rho < 1 $$
+
+---
+
+### 💻 Appendix — ALS in 10 Lines (PyTorch)
+
+```python
+def als(M, mask, r=10, lam=0.1, iters=50):
+    m, n = M.shape
+    U = torch.randn(m, r, requires_grad=False)
+    V = torch.randn(n, r, requires_grad=False)
+    for t in range(iters):
+        # Fix V, solve for U
+        for i in range(m):
+            idx = mask[i].nonzero()
+            A = V[idx] @ V[idx].T + lam * torch.eye(r)
+            b = M[i, idx] @ V[idx]
+            U[i] = torch.linalg.solve(A, b)
+        # Fix U, solve for V
+        for j in range(n):
+            idx = mask[:, j].nonzero()
+            A = U[idx] @ U[idx].T + lam * torch.eye(r)
+            b = M[idx, j] @ U[idx]
+            V[j] = torch.linalg.solve(A, b)
+    return U, V
+```
+
+🧩 Two ridge regressions per sweep — the whole idea in one function. ✅
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Questions?
+
+### Thank You! 🎉
+
+**Slides:** `cvx/alt-min-remark.html`
+
+📧 **Contact:** @luk036 👨‍💻
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

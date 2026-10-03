@@ -51,7 +51,7 @@ matrix:
 
 ---
 
-### `CMakeList.txt`
+### `CMakeLists.txt`
 
 ```cmake
 cmake_minimum_required (VERSION 3.3)
@@ -131,7 +131,7 @@ concept Projective_plane =
 
 ### Concept IV
 
-- Templates will be instaniated only when their parameters satisfy all
+- Templates will be instantiated only when their parameters satisfy all
   concepts.
 
 ```cpp

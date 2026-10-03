@@ -78,7 +78,7 @@ This section covers latch-based timing design and its relationship to max-plus a
 
 ### Books
 
--   Gaubert, S. & McErlain, S. (2015). _Max Plus at Work: Modeling and Analysis of Synchronized Systems_. Princeton University Press.
+-   Heidergott, B., Olsder, G. J., & van der Woude, J. (2006). _Max Plus at Work: Modeling and Analysis of Synchronized Systems_. Princeton University Press.
 -   Baccelli, F., Cohen, G., Olsder, G. J., & Quadrat, J.-P. (1992). _Synchronization and Linearity_. Wiley.
 
 ### Papers

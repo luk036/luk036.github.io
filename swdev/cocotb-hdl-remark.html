@@ -205,11 +205,11 @@ $$ \text{atan}[i] = \frac{\arctan(2^{-i})}{2\pi} \times 2^{32} $$
 
 **Problem:** For 32-bit VdCorput&lt;3&gt;, we need $21$ base-3 digits ($3^{20} \approx 3.48 \times 10^9$)
 
-But the 21st factor $3^{20} = 3,486,784,401 > 2^{32}$ → **overflows the accumulator!**
+But a 21-factor chain's maximum weighted sum is $3^{21}-1 = 10{,}460{,}353{,}202 > 2^{32}$ → **overflows the accumulator!**
 
 ```python
-# ❌ 21 factors — factor[0] exceeds 32-bit
-factor[0] = 32'd3486784401   # 3^20, too large!
+# ❌ 21 factors — max sum = 3^21 - 1 exceeds 32-bit
+factor[0] = 32'd3486784401   # 3^20 (largest weight)
 
 # ✅ 20 factors — max sum = 3^20 - 1 < 2^32
 factor[0] = 32'd1162261467   # 3^19, fits!

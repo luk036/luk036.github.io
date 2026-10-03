@@ -24,7 +24,7 @@ Original:
 
 ```cpp
 auto createBigData(size_t n) ->
-        std::tuple<int, std::vector<int> {
+        std::tuple<int, std::vector<int>> {
   auto BigData = std::vector<int>(n);
   // ...
   if (beta > tau) {
@@ -43,7 +43,7 @@ Better ⚡:
 
 ```cpp
 auto createBigData(size_t n) ->
-        std::tuple<int, std::vector<int> {
+        std::tuple<int, std::vector<int>> {
   auto BigData = std::vector<int>(n);
   // ...
   if (beta > tau) {
@@ -227,7 +227,7 @@ for (auto &v : vertexlist) {
 bucket.detach(u);
 u.locked = true;
 // ...
-for (auto &w : G.neigbours(u)) {
+for (auto &w : G.neighbors(u)) {
     if (w.locked) continue;
     assert(w.next != nullptr);
     bucket.modify_key(w);
@@ -250,7 +250,7 @@ for (auto &v : vertexlist) {
 bucket.detach(u);
 u.next = nullptr;
 // ...
-for (auto &w : G.neigbours(u)) {
+for (auto &w : G.neighbors(u)) {
     if (w.next == nullptr) continue;
     bucket.modify_key(w);
 }

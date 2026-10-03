@@ -495,7 +495,7 @@ graph TB
 
 **Key insight**: For a planar graph, the maximum cut corresponds to the **minimum-weight set of edges whose removal makes the graph bipartite**.
 
-$$\text{Max-Cut weight} = \sum_{e \in {\color{lime}E}} {\color{royalblue}w_e} - \sum_{e \in {\color{lime}X}} {\color{royalblue}w_e}$$
+$$\text{MAX-CUT weight} = \sum_{e \in {\color{lime}E}} {\color{royalblue}w_e} - \sum_{e \in {\color{lime}X}} {\color{royalblue}w_e}$$
 
 Where ${\color{lime}X}$ is the minimum-weight set of edges breaking all **odd cycles**.
 
@@ -820,7 +820,7 @@ graph LR
 
 ### 🏛️ Key Design Differences
 
-| Aspect | Python 🐍 | C++ Port (io.rs) | **Python Port (new)** ✅ |
+| Aspect | Python 🐍 | C++ Port | **Rust Port (new)** ✅ |
 |--------|-----------|-------------------|--------------------------|
 | Cell names | `cell_name` | `cell_{name}` | **`cell_name`** (matches Python) |
 | Port names | `PORT_{name}` | `port_{name}` | **`PORT_{name}`** (matches Python) |
@@ -874,7 +874,7 @@ class: nord-light, middle, center
 | `yosys_testcases/` | 3 tests | ✅ |
 | GPU acceleration | 6 tests | ✅ |
 
-**Total: 194 tests, 0 failures** 🏆
+**Full suite: 194 tests, 0 failures** 🏆
 
 ---
 
@@ -905,7 +905,7 @@ class: nord-light, middle, center
 - Same API conventions preserved
 
 #### 🧪 Comprehensive Testing
-- **185 tests** all passing
+- **194 tests** all passing
 - Matches Python test suite structure
 - Integration tests with real data files
 ]
@@ -944,7 +944,7 @@ graph TB
         direction TB
         R1["14 source files"]
         R2["~5,200 lines"]
-        R3["4 test files\n(185 tests)"]
+        R3["4 test files\n(194 tests)"]
         R4["petgraph + indexmap\n(lightweight)"]
     end
     
@@ -972,7 +972,7 @@ class: nord-light, middle, center
 graph LR
     subgraph Done["✅ Done"]
         D1["All algorithms ported"]
-        D2["185 tests passing"]
+        D2["194 tests passing"]
         D3["Yosys JSON reader"]
         D4["Factory functions"]
         D5["Test data files"]
@@ -1067,7 +1067,7 @@ class: nord-dark, middle, center
 <pre>
 graph LR
     P["Python 🐍\nnetlistx"] -->|"port"| R["Rust 🦀\nnetlistx-rs"]
-    R -->|"185 tests ✅"| D["Done! 🏆"]
+    R -->|"194 tests ✅"| D["Done! 🏆"]
     
     style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
     style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440

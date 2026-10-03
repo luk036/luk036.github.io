@@ -154,7 +154,7 @@ flowchart LR
 
 ### Bayesian Optimization
 
-- **Textbook**: Boyd & Vandenberghe, _Convex Optimization_
+- **Textbook**: Rasmussen & Williams, _Gaussian Processes for Machine Learning_ (2006)
 - **Papers**:
   - Mockus (1978), "Bayesian approach to global optimization"
   - Frazier (2018), "A Tutorial on Bayesian Optimization"

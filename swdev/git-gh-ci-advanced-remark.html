@@ -610,7 +610,7 @@ class: nord-light, middle, center
 .center[.mermaid[
 <pre>
 graph LR
-    A["Codecov badge"] --> B{"Coverage &gte; 80%?"}
+    A["Codecov badge"] --> B{"Coverage &gt;= 80%?"}
     B -->|"Yes ✅"| C["Ship it"]
     B -->|"No ❌"| D["Add targeted tests"]
     D --> E["Run pytest --cov"]
@@ -713,9 +713,9 @@ class: nord-dark, middle, center
 
 ### Advanced Git + gh + CI
 
-**Slides**: [`luk036.github.io/idea/git-gh-ci-advanced-remark`](https://luk036.github.io/idea/git-gh-ci-advanced-remark.html)
+**Slides**: [`luk036.github.io/swdev/git-gh-ci-advanced-remark.html`](https://luk036.github.io/swdev/git-gh-ci-advanced-remark.html)
 
-**Predecessor**: [`git-gh-ci-remark`](https://luk036.github.io/idea/git-gh-ci-remark.html) — The Basics
+**Predecessor**: [`git-gh-ci-remark`](https://luk036.github.io/swdev/git-gh-ci-remark.html) — The Basics
 
 **Key takeaway**: *CI is not a gate — it's your debugging partner.*
 

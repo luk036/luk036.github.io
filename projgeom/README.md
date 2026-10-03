@@ -115,7 +115,7 @@ graph LR
 
 **Advantage**: All calculations use rational numbers, avoiding floating-point errors.
 
-> 📖 See: [rat_trig.md](rat_trig.md), [03RT.md](03RT.md)
+> 📖 See: [rat_trig.md](rat_trig.md)
 
 ---
 
@@ -176,7 +176,7 @@ projgeom/
 ├── 02conic-remark.html      # Polarity and Conic
 ├── 02ck_geom-remark.html   # Cayley-Klein slides
 ├── 03RT-remark.html        # Hyperbolic/Elliptic Geometry
-├── 03RT.md                 # Rational Trig notes
+├── 03RT.md                 # Hyperbolic/Elliptic Geometry notes
 ├── 04RT_2-remark.html      # Euclidean Geometry
 ├── rat_trig-remark.html    # Rational Trig slides
 ├── 05proj_line-remark.html # Projective Line

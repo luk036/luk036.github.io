@@ -86,7 +86,7 @@ This section covers software development workflows and tooling: version control 
 | [Video Processing](video-processing-remark.html)   | FFmpeg-based video processing   |
 | [Video Processing (中文)](video-processing-zh-remark.html) | 视频处理技术             |
 | [Cocotb HDL Verification](cocotb-hdl-remark.html)  | Python-based HDL verification   |
-| [Hyperframes](hyerframes-remark.html)             | Hyperframe data structure       |
+| [HyperFrames](hyperframes-remark.html)             | Hyperframe data structure       |
 | [xTensor Library](xtensor-remark.html)             | Multi-dimensional arrays in C++ |
 
 ---
@@ -105,7 +105,7 @@ swdev/
 ├── ec-gen-remark.html                     # EC Generator
 ├── git-gh-ci-remark.html                  # Git & GitHub CI
 ├── git-gh-ci-advanced-remark.html         # Advanced Git & CI
-├── hyerframes-remark.html                 # Hyperframe Data Structure
+├── hyperframes-remark.html                # Hyperframe Data Structure
 ├── mistakes-remark.html                   # Common Coding Mistakes
 ├── pldl.html                              # Primal-Dual Algorithms
 ├── refactor-remark.html                   # Refactoring Part 1 (physdes & LDS)

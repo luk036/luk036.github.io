@@ -69,7 +69,7 @@ graph LR
 | [Cyclic Quorum Systems](cqs-remark.html) | CQS fundamentals, rotation closure, quorum construction     |
 | [Optimal Cyclic Quorums](cyclic_quorum-remark.html) | Finding optimal cyclic quorum systems        |
 | [Interconnection Networks](interconnection-remark.html) | Highly routable networks via cyclic quorums  |
-| [CQS-Pair for WSN](coding-remark.html)   | Energy-efficient scheduling with heterogeneous requirements |
+| [CQS-Pair for WSN](slides.html)          | Energy-efficient scheduling with heterogeneous requirements |
 
 > **Key Applications**: Distributed mutual exclusion, wireless sensor networks, data replication
 
@@ -79,7 +79,7 @@ graph LR
 
 | Topic                                          | Description                                  |
 | ---------------------------------------------- | -------------------------------------------- |
-| [Finding Difference Covers](fixed-remark.html) | Exhaustive search and reinforcement learning |
+| [Finding Difference Covers](coding-remark.html) | Exhaustive search and reinforcement learning |
 
 > **Applications**: Suffix array construction, coding theory, cryptography
 
@@ -107,7 +107,7 @@ graph LR
 
 ### Books
 
-- Golin, M. J. (2005). "A First Course in Combinatorial Mathematics."
+- Anderson, I. (1989). _A First Course in Combinatorial Mathematics_. Oxford University Press.
 - Bertsimas, D., & Tsitsiklis, J. (1997). "Introduction to Linear Optimization."
 
 ---
@@ -138,8 +138,6 @@ cqs/
 ## 📦 Related Packages
 
 > 📖 GitHub: [luk036/cyclic_quorum](https://github.com/luk036/cyclic_quorum)
-
----
 
 ---
 

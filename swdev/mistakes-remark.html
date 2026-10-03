@@ -29,7 +29,7 @@ class: nord-dark, middle, center
 
 # 💥 Mistakes Made in This Session
 
-## 7 Sins of an AI Agent Refactoring C++
+## 5 Sins of an AI Agent Refactoring C++
 
 @sisyphus 🤖 · 2026 📅
 
@@ -52,8 +52,6 @@ class: nord-light, middle, center
 Let's walk through **what went wrong** and **what to do instead**. 🧠
 
 ---
-
-## Mistake #1 🏆
 
 class: nord-light, middle, center
 
@@ -123,12 +121,12 @@ flowchart LR
     subgraph Bad["❌ Bad: Reconstruct"]
         A1["this->_tsq"] --> B1["sqrt → τ"]
         B1 --> C1["τ × τ = tsq'"]
-        C1 --> D1["tsq' ≠ tsq （1 ULP error）"]
+        C1 --> D1["tsq' ≠ tsq (1 ULP error)"]
         D1 --> E1["💥 Branch flips"]
     end
     subgraph Good["✅ Good: Keep original"]
-        A2["this->_tsq"] --> B2["sqrt → τ"（for formulas）]
-        A2 --> C2["this->_tsq"（for comparisons）]
+        A2["this->_tsq"] --> B2["sqrt → τ (for formulas)"]
+        A2 --> C2["this->_tsq (for comparisons)"]
         C2 --> D2["✅ Exact match"]
     end
     style Bad fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
@@ -137,8 +135,6 @@ flowchart LR
 ]
 
 ---
-
-## Mistake #2 🏆
 
 class: nord-light, middle, center
 
@@ -210,8 +206,6 @@ graph LR
 
 ---
 
-## Mistake #3 🏆
-
 class: nord-light, middle, center
 
 ## 🏆 Mistake #3: Careless Bulk replaceAll
@@ -273,8 +267,6 @@ flowchart LR
 ]
 
 ---
-
-## Mistake #4 🏆
 
 class: nord-light, middle, center
 
@@ -341,8 +333,6 @@ Or, if changing to $\tau$ is essential, **audit EVERY call site** and convert $t
 | 0.10 | 0.316227... | **Values change!** ⚠️ |
 
 ---
-
-## Mistake #5 🏆
 
 class: nord-light, middle, center
 

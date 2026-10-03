@@ -456,7 +456,7 @@ class: nord-light, middle, center
 - [视频处理流水线](swdev/video-processing-zh-remark.html)
 - [Cocotb HDL Verification](swdev/cocotb-hdl-remark.html)
 - [Custom Arr Class](swdev/xtensor-remark.html)
-- [HyperFrames](swdev/hyerframes-remark.html)
+- [HyperFrames](swdev/hyperframes-remark.html)
 ]
 
 ---

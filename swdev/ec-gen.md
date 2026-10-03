@@ -121,7 +121,7 @@ class: nord-dark, middle, center
 - A Gray code is a sequence of binary numbers where each successive number differs from the previous one by only one bit. 1️⃣
 - The code uses a clever recursive algorithm to generate the sequence. It starts with `n-1` bits, then generates the `n-1` sequence again. This mirrored pattern ensures each successive number differs by only one bit. 🌀
 - The main logic involves finding the next element to swap by iterating through a list and updating it, similar to how Gray code works. 🔄
-- It includes doctrings showing how to represent Gray codes using black and white squares 🔳⬜.
+- It includes docstrings showing how to represent Gray codes using black and white squares 🔳⬜.
 
 ---
 

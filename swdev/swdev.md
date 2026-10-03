@@ -26,13 +26,13 @@ class: impact
 
   - support git, python, markdown, C++, cmake...
 
-- Alternatvie: Qt Creator
+- Alternative: Qt Creator
 
 ---
 
 ### Version Control
 
-- Past: cvs, sccs, clearcase, svn (subversion control)
+- Past: cvs, sccs, clearcase, svn (Subversion)
 
 - Recommended: git
   - git status
@@ -179,14 +179,14 @@ class: impact
 - Recommended: GitHub
 
 - Alternatives:
-  - GitLab，Bitbucket, china???
+  - GitLab, Bitbucket, China???
 
 ---
 
-### Continous Integration
+### Continuous Integration
 
 - Recommended: Travis CI
-- Alterative: Circle CI, Docker🐋 ???
+- Alternative: CircleCI, Docker🐋 ???
 
 ---
 

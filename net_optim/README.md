@@ -160,7 +160,7 @@ graph LR
 
 ---
 
-### 5. Graph Algorithms II
+### 4. Graph Algorithms II
 
 | Topic                                                       | Description                                        |
 | ----------------------------------------------------------- | -------------------------------------------------- |
@@ -174,7 +174,7 @@ graph LR
 
 ---
 
-### 6. Advanced Topics
+### 5. Advanced Topics
 
 | Topic                                     | Description                             |
 | ----------------------------------------- | --------------------------------------- |
@@ -282,7 +282,7 @@ net_optim/
 
 | Reference           | Description                          |
 | ------------------- | ------------------------------------ |
-| Karp (1967)         | Minimum mean cycle algorithm         |
+| Karp (1978)         | Minimum mean cycle algorithm         |
 | Howard (1960)       | Policy iteration for negative cycles |
 | Bellman-Ford (1958) | Shortest path with negatives         |
 

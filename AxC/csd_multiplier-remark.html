@@ -103,9 +103,9 @@ Verilog: assign result = x_shift7 - x_shift4 + x_shift1;
 **Example: $114 \cdot {\color{green}x}$**
 
 ```
-Binary coefficient:    1110010  →  5 additions
-CSD coefficient:      +00-00+0  →  2 additions (shift + subtract + add)
-Save:                             60% fewer adders!
+Binary coefficient:    1110010  →  3 adders
+CSD coefficient:      +00-00+0  →  2 adders (shift + subtract + add)
+Save:                             33% fewer adders!
 ```
 
 > CSD's key property — **no consecutive non-zero digits** — guarantees the minimal number of adder terms. 🏆

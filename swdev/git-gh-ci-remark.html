@@ -338,7 +338,7 @@ gmake: *** [Makefile:166: all] Error 2
 | `--log` | Full log output (pipe to `tail`) |
 | `--log-failed` | Only failed steps |
 | `--job <id>` | Specific job within workflow |
-| `--exit` | Exit code reflects CI status |
+| `--exit-status` | Exit code reflects CI status |
 
 ]
 
@@ -651,7 +651,7 @@ auto solve_quadratic(double a, double b, double c) {
 
 **CI catches it:**
 ```text
-FAILED test_quadratic.py::test_roots
+FAILED test_quadratic.cpp::test_roots
   Expected: (1.0, -2.0)
   Got:      (2.0, -2.0)
 ```
@@ -834,7 +834,7 @@ COMPLETED  failure  push dev  docs: enable graphviz    Windows  ❌
 COMPLETED  failure  push dev  docs: enable graphviz    MacOS    ❌
 ```
 
-**All 4 runners failed** — 🚨 something is wrong!
+**All 3 runners failed** — 🚨 something is wrong!
 
 ---
 
@@ -994,7 +994,7 @@ class: nord-dark, middle, center
 
 ### Open-source Dev Flow: Git + gh + CI
 
-**Slides**: `luk036.github.io/idea/git-gh-ci-remark.html`
+**Slides**: `luk036.github.io/swdev/git-gh-ci-remark.html`
 
 **Tools**: `git` · `gh` · GitHub Actions
 

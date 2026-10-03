@@ -38,7 +38,7 @@ class: impact
 - Spaceship operator
 - Modules
 - Python-like enumerate()
-- Python-like formating: {fmt}
+- Python-like formatting: {fmt}
 - Library: numpy vs. xtensor
 - Library: pytest vs. Catch2
 
@@ -142,7 +142,7 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py26/lib
 sudo apt install \
   lcov \
   gdb kcachegrind \
-  clang-format clange-tidy \
+  clang-format clang-tidy \
   libfmt-dev libspdlog-dev
 ```
 
@@ -231,7 +231,7 @@ auto gainbucket = std::vector<std::unique_ptr<bpqueue>>(
 
 ---
 
-### Data Trasfer
+### Data Transfer
 
 Except basic data types (int, float, etc.), a Python's variable copies
 only its reference to another object. Use `std::move` to avoid object
@@ -357,7 +357,7 @@ In Python:
 
 ```python
 class Interval:
-    def __init(self, lower, upper):
+    def __init__(self, lower, upper):
         self.lower = lower
         self.upper = upper
     # ...
@@ -381,9 +381,9 @@ struct Interval {
   // ...
 };
 
-*// could be automatically deduced.
-*template <typename T>
-*Interval(T, T)-> Interval<T>;
+// could be automatically deduced.
+template <typename T>
+Interval(T, T) -> Interval<T>;
 
 int main() {
   auto a = Interval{0, 10}; // int
@@ -486,10 +486,11 @@ In C++17, we may use `std::optional` to simulate this:
 
 ```cpp
 auto my_oracle(const Arr& x) -> std::optional<Cut> {
-  fj = -x[0] + x[1] + 1.;
+  auto fj = -x[0] + x[1] + 1.;
   if (fj > 0.) {
     auto g = Arr{-1., 1.};
-    return {std::move(g), fj} };
+    return {std::move(g), fj};
+  }
   }
   return {}; // null object
 }
@@ -987,7 +988,7 @@ int main() {
     for (int i : myrange(0, 10)) {
         printf("%d\n", i);
     }
-    printf("Done.\n")
+    printf("Done.\n");
 }
 ```
 
@@ -1032,7 +1033,7 @@ for i, thing in enumerate(listOfThings):
 
 ]
 
-In C++17, we can implement a [similiar functionality](http://reedbeta.com/blog/python-like-enumerate-in-cpp17/)
+In C++17, we can implement a [similar functionality](http://reedbeta.com/blog/python-like-enumerate-in-cpp17/)
 
 .font-sm.mb-xs[
 
@@ -1049,7 +1050,7 @@ for (auto [i, thing] : enumerate(things))
 
 ---
 
-### Python-like formating: {fmt}
+### Python-like formatting: {fmt}
 
 Python:
 

@@ -193,7 +193,7 @@ graph LR
 ### Key Papers
 
 - Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
-- Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
+- Wu, S.-P., Boyd, S., & Vandenberghe, L. (1998). "FIR Filter Design via Spectral Factorization and Convex Optimization."
 
 ---
 

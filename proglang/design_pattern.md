@@ -29,7 +29,7 @@ class: nord-dark, center, middle
 
 - Defines a family of algorithms, encapsulates each one, and makes
   them interchangeable.
-- Strategy lets the algorithm vary indepedently from clients that use
+- Strategy lets the algorithm vary independently from clients that use
   it.
 - Principle: Favor composition over inheritance.
 

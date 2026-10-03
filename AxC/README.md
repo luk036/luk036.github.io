@@ -165,7 +165,7 @@ graph TD
 from csdigit import to_csd, from_csd
 
 # Convert to CSD
-csd = to_csd(28.5, places=4)
+csd = to_csd(28.5, places=2)
 print(csd)  # "+00-00.+0"
 
 # Convert back

@@ -84,7 +84,7 @@ This section covers combinatorial optimization problems and their approximation 
 
 | Topic                                          | Description                                     |
 | ---------------------------------------------- | ----------------------------------------------- |
-| [Hadlock's Algorithm](hadlock-remark.html)     | Hamiltonian cycles in grid graphs               |
+| [Hadlock's Algorithm](hadlock-remark.html)     | Polynomial-time planar MAX-CUT                  |
 
 ---
 

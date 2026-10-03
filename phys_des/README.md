@@ -165,7 +165,7 @@ graph TD
 - **Manhattan Metric**: $L_1$ distance for VLSI layouts
 - **Rectilinear Polygons**: Representation via origin + vectors
 - **Operations**: Area, orientation, convex hull, point inclusion, decomposition
-- **Rectilinear Voronoi Diagram**: $L_\infty$ metric, plane sweep
+- **Rectilinear Voronoi Diagram**: $L_1$ metric, plane sweep
 
 > 📖 See: [recti.md](recti.md), [rpolygon-remark.html](rpolygon-remark.html), [l1-voronoi-remark.html](l1-voronoi-remark.html), [l1-voronoi-day2-remark.html](l1-voronoi-day2-remark.html)
 

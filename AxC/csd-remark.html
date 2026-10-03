@@ -83,7 +83,7 @@ class: nord-light, middle, center
 A **signed-digit** representation where each digit is ${\color{olive}-1}$, ${\color{olive}0}$, or ${\color{olive}+1}$ — with **no consecutive non-zero digits**.
 
 $$
-\text{Decimal } 28.5 = \underbrace{{\color{olive}+00-00.+}}_{\text{CSD}} = {\color{darkgreen}2^5} - {\color{darkgreen}2^2} + {\color{darkgreen}2^0} + {\color{darkgreen}2^{-1}} = 32 - 4 + 1 + 0.5
+\text{Decimal } 28.5 = \underbrace{{\color{olive}+00-00.+}}_{\text{CSD}} = {\color{darkgreen}2^5} - {\color{darkgreen}2^2} + {\color{darkgreen}2^{-1}} = 32 - 4 + 0.5
 $$
 
 | Property | Value |
@@ -102,7 +102,7 @@ $$
 ```
 Decimal 28.5:
 
-Binary:    11100.1          (5 non-zero bits)
+Binary:    11100.1          (4 non-zero bits)
 CSD:       +00-00.+         (3 non-zero digits!)
 ```
 
@@ -110,26 +110,24 @@ CSD:       +00-00.+         (3 non-zero digits!)
 
 <pre>
 graph LR
-    subgraph "Binary: 11100.1 (5 adders)"
+    subgraph "Binary: 11100.1 (4 non-zero bits)"
         B0["2⁴=16"] --> BSUM["+"]
         B1["2³=8"] --> BSUM
         B2["2²=4"] --> BSUM
         B3["2⁻¹=0.5"] --> BSUM
-        B4["Wait... that's 5 terms!"]
     end
-    subgraph "CSD: +00-00.+ (3 adders!)"
+    subgraph "CSD: +00-00.+ (3 non-zero digits!)"
         C0["2⁵=32"] --> CSUM["+"]
         C1["-2²=-4"] --> CSUM
-        C2["2⁰=1"] --> CSUM
         C3["2⁻¹=0.5"] --> CSUM
     end
-    style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style BSUM fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style CSUM fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
 
-**Result:** 3 adders instead of 5 — **40% hardware reduction!** 🎯
+**Result:** 2 adders instead of 3 — **33% hardware reduction!** 🎯
 
 ---
 

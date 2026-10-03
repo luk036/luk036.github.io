@@ -26,7 +26,7 @@ markdown + css "rendering" => html
 
 ---
 
-## myHDL
+## MyHDL
 
 - pure Python program
 - decorator
@@ -44,7 +44,7 @@ Xilinx
 
 ## define
 
-[C] --> clang --[llvm]--> HLS Schedular --> Verilog
+[C] --> clang --[llvm]--> HLS Scheduler --> Verilog
 /
 Hardware description -----+
 

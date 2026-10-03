@@ -344,7 +344,7 @@ AI can **orchestrate complex workflows** using simple shell pipelines.
 - **AI agent CLIs**: iflow/Qoder, opencode, gemini
 - **Platforms**: Linux, Termux (Android), Windows (Scoop/WSL)
 
-**Slide deck available**: [github.com/yourname/cli-for-ai](https://example.com)
+**Slides:** [luk036.github.io/idea](https://luk036.github.io/idea/)
 
 ---
 

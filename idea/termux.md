@@ -5,7 +5,7 @@
 
 Neovim plugin
 
-- rust-analyser
+- rust-analyzer
 - clangd
 
 Rust

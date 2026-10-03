@@ -7,7 +7,7 @@
 - Natural language processing (English, Chinese, Japanese, ...)
 - Markdown, HTML, JSON, Python, Rust, C++, Verilog, ...
 - Prompt Engineering
-- Probabilitic: Hallucination
+- Probabilistic: Hallucination
 - context
 
 ## AI-agent (created by programmers) + LLM

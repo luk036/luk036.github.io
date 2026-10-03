@@ -9,7 +9,7 @@
   - Limitations
   - Requirements
 - Predictable
-- Less tunable parameters (a.k.a. magic numbers)
+- Fewer tunable parameters (a.k.a. magic numbers)
 
 ---
 
@@ -52,6 +52,6 @@
 ## Reinforcement learning
 
 - Policy gradient
-- Rewarding function
+- Reward function
 - Sparse rewarding
 - ...

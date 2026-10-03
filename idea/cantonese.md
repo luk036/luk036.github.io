@@ -4,7 +4,7 @@
 塑料粤语
 
 - 不该用情
-  jazz, rock'n roll, R&B，
+  jazz, rock'n roll, R&B,
 
 粤曲
 《旧欢如梦》 （谭炳文，李香琴）

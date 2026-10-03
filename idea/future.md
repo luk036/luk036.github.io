@@ -18,7 +18,7 @@ Clock tree Synthesis?
 
 ---
 
-### Computational Lithographic (Inverse Lithographic)
+### Computational Lithography (Inverse Lithography)
 
 OPC
 

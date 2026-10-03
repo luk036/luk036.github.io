@@ -12,7 +12,7 @@ Instead of:
 
 Write:
 
-> Fixe the type annotation issues produced by "mypy --disallow-untyped-defs src/"
+> Fix the type annotation issues produced by "mypy --disallow-untyped-defs src/"
 
 Instead of:
 

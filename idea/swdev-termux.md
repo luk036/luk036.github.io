@@ -30,11 +30,11 @@ pip install cvxpy # warnings
 pip install jupyter
 jupyter notebook --ip=10.217.73.15 --port=8888
 
-pip install spinxcontrib-svgbob # failed
+pip install sphinxcontrib-svgbob # failed
 
 ## C++
 
-pkg innstall clang
+pkg install clang
 
 ### xmake
 

@@ -1019,9 +1019,8 @@ stages:
 
 **Contact:**
 
-- Email: [your-email]
-- GitHub: [your-github]
-- Blog: [your-blog]
+- GitHub: [github.com/luk036](https://github.com/luk036)
+- Site: [luk036.github.io](https://luk036.github.io)
 
 **References:**
 

@@ -24,7 +24,7 @@
 
 ---
 
-### Key AI Techniques in EDA at Past
+### Key AI Techniques in EDA in the Past
 
 | Technique | Application in EDA | Analogy |
 | :--- | :--- | :--- |
@@ -46,7 +46,7 @@
     - Uses GNNs to understand the connectivity and topology of circuits (nets & cells).
     - Failed
 
-- Why they don't work on Logic Synthesis?
+- Why don't they work on logic synthesis?
 
 ---
 

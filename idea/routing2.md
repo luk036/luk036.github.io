@@ -13,7 +13,7 @@ Braess's paradox
 - Wire-length driven
   - Rectilinear Steiner tree
 - Timing-driven
-  - Sort the nets according criticality
+  - Sort the nets according to criticality
 
 ## Detailed routing
 

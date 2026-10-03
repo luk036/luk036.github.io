@@ -9,7 +9,7 @@ Videos
   -0.0 == -2
   dllink rust
   bpqueue
-  type anontation, trait
+  type annotation, trait
   circ
 
 TCAD

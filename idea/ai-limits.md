@@ -7,7 +7,7 @@ doubao, qwen, deepseek
 
 ## mywheel:
    robin:
-      cycle linked list -> (i + 1) % n
+      circular linked list -> (i + 1) % n
    
 ## fractions
    gcd_recur()
@@ -39,7 +39,7 @@ Why flat_hash_map?
 - Natural language processing (English, Chinese, Japanese, ...)
 - Markdown, HTML, JSON, Python, Rust, C++, Verilog, ...
 - Prompt Engineering
-- Probabilitic: Hallucination
+- Probabilistic: Hallucination
 - context
 
 ## AI-agent (created by programmers) + LLM
@@ -78,5 +78,5 @@ Performance optimization
 
 - Perl -> Python
 - System Verilog
-  - Hardware Description Language + Test Bench Description Language)
+  - Hardware Description Language + Test Bench Description Language
   - e.g. sphere.v + sphere_tb.v

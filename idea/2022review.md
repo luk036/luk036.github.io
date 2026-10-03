@@ -3,7 +3,7 @@
 - Rust 🦀
 - cargo 📦
 - Python 🐍 ➔ Rust 🦀
-- `XMake` (vs `CMake`)
+- `xmake` (vs `CMake`)
 - API
 
 ```python

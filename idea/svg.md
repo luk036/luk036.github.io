@@ -6,10 +6,10 @@
 
 ## Why not GUI?
 
-- Hard to configuration.
-- More computing resource.
-- Codespaces does not have GUI interface
-- Android's termux
+- Hard to configure.
+- More computing resources.
+- Codespaces does not have a GUI interface.
+- Android's Termux
 
 ## Why SVG?
 

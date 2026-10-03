@@ -91,7 +91,7 @@ This is dangerous: AI “rewards” the more permissive (and reckless) approach 
 
 ### 2.4 Sentinel Node in Linked Lists
 
-You noted: _“AI seems not understand the sentinel technique.”_
+You noted: _“AI doesn’t seem to understand the sentinel technique.”_
 This is telling. The sentinel node is an **elegant optimization** that eliminates edge-case checks, but it’s subtle.
 
 - Common textbook implementations and beginner tutorials often omit it for simplicity.

@@ -6,8 +6,7 @@
 
 ## ✨ Writing Cleaner, Safer Code
 
-_Presented by: [Your Name]_
-_Date: [Date]_
+_Presented by: @luk036 · 2026_
 
 ---
 

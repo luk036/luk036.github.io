@@ -12,8 +12,10 @@ Playing game == Testing
 Not consistent. nanobench
 
 ```rust
-let even = n.is_multiple_of(2); 
+// Option 1
+let even = n.is_multiple_of(2);
 
+// Option 2
 let even = n % 2 == 0;
 ```
 
@@ -23,7 +25,7 @@ LDS rev_list
 e.g. Polygon's signed area (shoelace formula)
 e.g. Recursive gcd is slower than iterative gcd?
 
-Fix the warningss - Suppress warning messages.
+Fix the warnings - Suppress warning messages.
 Fix the unit tests - Change or even remove a unit test
 Issue was pre-exist
 
@@ -75,7 +77,7 @@ If AP changed, then "Don't modify the numerical values of the unit tests".
 
 ### Round-trip tests
 
-- docode(encode(x)) == x
+- decode(encode(x)) == x
 - inv_spectral_fact(spectral_fact(r)) == r
 - poly(roots(p)) == p
 - to_decimal(to_csd(n)) == n

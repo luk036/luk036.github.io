@@ -72,18 +72,18 @@ graph LR
 
 - **Uniformity**: More evenly distributed than random sampling
 - **Determinism**: Reproducible sequence of points
-- **Incrementality**: Can efficiently add new points to existing sequence
+- **Incrementality**: Can efficiently add new points to an existing sequence
 
 ---
 
 ### 2. Algorithms
 
-| Method                 | Description                       |
-| ---------------------- | --------------------------------- |
-| van der Corput         | 1D LDS using digit reversal       |
-| Halton Sequence        | nD extension using multiple bases |
-| Hopf Coordinate        | Spherical coordinate-based        |
-| Cylindrical Coordinate | Cylindrical projection method     |
+| Method                 | Description                                  |
+| ---------------------- | -------------------------------------------- |
+| van der Corput         | 1D LDS using digit reversal                  |
+| Halton sequence        | n-dimensional extension using multiple bases |
+| Hopf coordinate        | Spherical coordinate-based                   |
+| Cylindrical coordinate | Cylindrical mapping method                   |
 
 ---
 
@@ -157,7 +157,7 @@ vgen.reseed(0)
 print(vgen.pop())  # 0.5
 
 # Halton (nD)
-hgen = Halton(bases=[2, 3])
+hgen = Halton(base=[2, 3])
 print(hgen.pop())  # [0.5, 0.333...]
 ```
 
@@ -199,8 +199,8 @@ graph LR
 ### Papers
 
 - Yershova et al. (2010), "Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration"
-- Utkovski et al. (2006), "Construction of Spherical Coding for MIMO Systems"
-- Mandic et al. (2011), "Filter Bank Design for Multivariate Empirical Mode Decomposition"
+- Utkovski and Lindner (2006), "On the Construction of Non-Coherent Space-Time Codes from High-Dimensional Spherical Codes"
+- Mandic et al. (2011), "Filter Bank Property of Multivariate Empirical Mode Decomposition"
 
 ---
 

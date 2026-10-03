@@ -1,4 +1,4 @@
-# Low Discrepancy Sampling Method on Hyperspheres ⚽
+# Low Discrepancy Sampling on Hyperspheres ⚽
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -87,7 +87,7 @@ class: nord-light, middle, center
 
 ### van der Corput sequence 🔢
 
--   The van der Corput sequence is a low-discrepancy sequence used to generate uniformly distributed points in the interval [0,1].
+-   The van der Corput sequence is a low-discrepancy sequence used to generate uniformly distributed points in the interval $[0,1]$.
 
 -   The sequence is constructed by reversing the base-b (usually prime) representation of the sequence of natural numbers.
 
@@ -372,7 +372,7 @@ class: nord-light, middle, center
   -   ${\color{blue}y} = {\color{olive}r} \cdot \sin{\color{steelblue}\theta}$
 
 -   Surface element:
-  $$dA = {\color{olive}r} \cdot d {\color{olive}r} \cdot d{\color{steelblue}\theta} $$
+  $$dA = {\color{olive}r} \cdot d {\color{olive}r} \cdot d{\color{steelblue}\theta} = \frac{1}{2} d {\color{olive}r}^2 \cdot d{\color{steelblue}\theta} $$
 
 ---
 
@@ -454,7 +454,7 @@ class Disk:
     \end{cases}
     $$
   -   Note 2: $f_j({\color{steelblue}\theta})$ is a monotonic increasing function in
-    $(0,\pi)$
+    $(0,\pi)$.
   -   Map ${\color{darkgreen}\mathrm{vdc} }(k,b_j)$ to $f_j({\color{steelblue}\theta})$: $t_j = f_j(0) + (f_j(\pi) - f_j(0)) {\color{darkgreen}\mathrm{vdc} }(k,b_j)$
   -   Let ${\color{steelblue}\theta_j} = f_j^{-1}(t_j)$
   -   $p_n = [\sin{\color{steelblue}\theta_n} \cdot p_{n-1}, \cos{\color{steelblue}\theta_n}]$
@@ -503,7 +503,7 @@ class: nord-light, middle, center
   \max_{a \in \mathcal{N}(b)} \{D(a,b)\} -
               \min_{a \in \mathcal{N}(b)} \{ D(a, b) \}
   $$
-  where $D(a,b) = \sin^{-1} \sqrt{1 - a^\mathsf{T} b}$
+  Where $D(a,b) = \sin^{-1} \sqrt{1 - a^\mathsf{T} b}$.
 
 ---
 

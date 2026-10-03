@@ -81,7 +81,7 @@ graph TD
 
 - The **van der Corput sequence** is a 1-dimensional LDS 📏.
 - It's based on reversing the digits of the natural number sequence in a given base 🔄.
-- _Example:_ In base 2, 1 is 1 (binary 1), reverse is 1. 2 is 10, reverse is 01 (decimal 0.5). 3 is 11, reverse is 11 (decimal 0.75). 4 is 100, reverse is 001 (decimal 0.125).
+- _Example:_ In base 2, 1 is 1 (binary 1), reverse is 1. 2 is 10, reverse is 01 (decimal 0.25). 3 is 11, reverse is 11 (decimal 0.75). 4 is 100, reverse is 001 (decimal 0.125).
 
 .mermaid[
 
@@ -99,9 +99,9 @@ flowchart LR
 
 ]
 
-- The package provides the **`VdCorput` class** and the core **`vdc_i` function** ⚙️.
-- `vdc_i` takes a number `k` and a `base` (default 2) and converts `k` from base 10 to a decimal number using the specified base 🔢.
-- The `VdCorput` class wraps `vdc_i` and keeps track of the current count 🧮.
+- The package provides the **`VdCorput` class** and the core **`vdc` function** ⚙️.
+- `vdc` takes an integer `k` and a `base` (default 2) and returns the radical inverse of `k` in that base 🔢.
+- The `VdCorput` class wraps `vdc` and keeps track of the current count 🧮.
 
 ---
 
@@ -144,7 +144,7 @@ flowchart LR
 0.3125
 ```
 
-_Example output from source_ 📋
+_Example output from source._ 📋
 
 ---
 
@@ -173,10 +173,10 @@ _Example output from source_ 📋
 ### `sphere_n`: Example (3-Sphere) 💡
 
 ```python
->>> sgen = Sphere3(base=) # Initialize 3-Sphere generator with bases
+>>> sgen = Sphere3(base=[2, 3, 5]) # Initialize 3-Sphere generator with bases
 >>> sgen.reseed(0) # Reset with seed 0
 >>> print(sgen.pop())
-[0.4809684718998214, 0.6031153874276115, -0.5785681518302232, 0.2649326520763179, 6.1232...]
+[0.2913440162992141, 0.8966646826186098, -0.33333333333333337, 6.123233995736766e-17]
 ```
 
 _Example output from source. Note: Output is a list of coordinates on the 3-sphere._

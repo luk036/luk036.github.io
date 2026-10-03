@@ -18,7 +18,7 @@ golang / \ RISC-V
   - provided by hardware vendors
 - RTOS (real-time operating system)
   - RadonOS
-  - TockOS
+  - Tock OS
 
 ## Testing/Debugging
 

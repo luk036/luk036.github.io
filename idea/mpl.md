@@ -17,7 +17,7 @@
 
 ### Slide 1: Title Slide 🛠️
 
-## **Changes and Challenges Abound in Multi-Patterning Lithography**
+**Changes and Challenges Abound in Multi-Patterning Lithography**
 
 ### Enabling Sub-10nm Scaling in Semiconductor Manufacturing
 
@@ -34,7 +34,7 @@ _Based on contributions from:_
 
 ### Slide 2: Why Multi-Patterning is Necessary 🤔
 
-- **Resolution Limits:** Traditional single-exposure lithography (like 193nm immersion) reached a fundamental optical resolution limit, typically around 80 nm minimum pitch. Below this limit, single exposures struggle to resolve features with sufficient accuracy.
+- **Resolution Limits:** Traditional single-exposure lithography (like 193nm immersion) reached a fundamental optical resolution limit, typically around 76 nm minimum pitch. Below this limit, single exposures struggle to resolve features with sufficient accuracy.
 - **Moore's Law Extension:** MPL is required to continue device scaling and exploit design area and performance scaling. Without multi-patterning or EUV (Extreme Ultraviolet Lithography), Moore’s Law would slow to a crawl.
 - **EUV Delay:** MPL using immersion lithography is essential until EUV comes into full production, which was expected for mid-node insertion at 10nm and production at 7nm (2015-2017 timeframe).
 - **The Goal:** MPL is a class of technologies developed to **enhance feature density**. It enables the creation of smaller features by effectively doubling, tripling, or quadrupling the density achievable in a single exposure.
@@ -198,7 +198,7 @@ Overlay is the alignment accuracy between subsequent patterned layers or exposur
   - Moving from 28 nm (single exposure) to 14 nm (double patterning) and 10 nm (triple patterning) requires ever tighter overlay specifications.
 - **Advanced Corrections:** To deliver required overlay control, scanner matching and process control must include **high order corrections**.
   - ASML's latest immersion scanners are capable of **sub-3 nm matched-machine overlay**.
-- **Ensemble Overlay:** The overall overlay of all exposures within a layer must be equal to or better than a single exposure.
+- **Overall Overlay:** The overall overlay of all exposures within a layer must be equal to or better than a single exposure.
 
 ⏱ 2 minutes
 
@@ -251,7 +251,7 @@ Layout decomposition, or coloring, is the fundamental problem of dividing the or
 
 ---
 
-### Slide 11: Complexity of Advanced Coloring (KaTeX) 🤯
+### Slide 11: Complexity of Advanced Coloring 🤯
 
 While double patterning (DP) checks are complex, the generalized solution for **triple patterning (TP)** and **quadruple patterning (QP)** has exponentially increasing run time (an **NP-complete problem** in graph theory).
 
@@ -262,9 +262,9 @@ While double patterning (DP) checks are complex, the generalized solution for **
 
 The generalized SDP (Semidefinite Programming) formulation for $k$-patterning ($k \geq 4$) relaxes the discrete vector coloring problem into a continuous SDP problem.
 
-$$ \min \sum*{e*{ij} \in CE} \left(\vec{y}_i \cdot \vec{y}\_j + \frac{1}{k - 1} \right) + \alpha \sum_{e*{ij} \in SE} \left(1 - \vec{y}\_i \cdot \vec{y}\_j \right) \quad (1a) $$
-$$ s.t. \quad \vec{y}\_i \cdot \vec{y}\_i = 1, \quad \forall i \in V \quad (1b) $$
-$$ \vec{y}\_i \cdot \vec{y}\_j \geq - \frac{1}{k - 1}, \quad \forall e*{ij} \in CE \quad (1c) $$
+$$ \min \sum_{e_{ij} \in CE} \left(\vec{y}_i \cdot \vec{y}_j + \frac{1}{k - 1} \right) + \alpha \sum_{e_{ij} \in SE} \left(1 - \vec{y}_i \cdot \vec{y}_j \right) \quad (1a) $$
+$$ s.t. \quad \vec{y}_i \cdot \vec{y}_i = 1, \quad \forall i \in V \quad (1b) $$
+$$ \vec{y}_i \cdot \vec{y}_j \geq - \frac{1}{k - 1}, \quad \forall e_{ij} \in CE \quad (1c) $$
 
 Where:
 

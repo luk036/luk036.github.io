@@ -1,12 +1,12 @@
 # **🎯 Research Topics for Physical Design 🚀**
 
-## Global Placement 🗺️\*\*
+## Global Placement 🗺️
 
 **Don't use HPWL!**
 
 ---
 
-### Design Flow Showdown: Zero vs. Useful Skew 🔄\*\*
+### Design Flow Showdown: Zero vs. Useful Skew 🔄
 
 | Zero Skew Design Flow 🔄        | Useful Skew Design Flow 🔄      |
 | :------------------------------ | :------------------------------ |

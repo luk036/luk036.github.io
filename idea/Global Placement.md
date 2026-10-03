@@ -1,6 +1,6 @@
 # Why HPWL is The Root of All Evil? 😈
 
-**Presenter: [Your Name]**
+**Presenter: @luk036**
 **Date: November 06, 2025**
 **Duration: 20 Minutes**
 
@@ -15,7 +15,7 @@
 - Challenges: Congestion & Timing (2 min)
 - Advanced Prediction Techniques (3 min)
 - Our Solution: Fairness Centric Approach (3 min)
-- Max-Min Fairness Explained (2 min)
+- Min-Max Fairness Explained (2 min)
 - Conclusion & Benefits (1 min)
 
 🔍 Total: 20 Minutes
@@ -28,8 +28,6 @@ Global Placement is a key step in VLSI design where cells are positioned on the 
 
 - **Goal**: Minimize wirelength while respecting constraints.
 - **Why it matters**: Affects power, performance, and area (PPA).
-
-Emoji: 🔌
 
 ```mermaid
 graph TD
@@ -116,8 +114,6 @@ Congestion arises from poor wire distribution.
 - **Congestion Problem** → **Timing Problem** (Unpredictable delays). ⏳
 - Impacts: Signal integrity, increased power, manufacturing issues.
 
-Emoji: 🚧
-
 ```mermaid
 sequenceDiagram
     participant Placement
@@ -166,8 +162,6 @@ Shift focus from average to equity.
 - **Core Idea**: Prioritize fairness in wirelength distribution.
 - **Why?** Reduces the impact of outliers (long wires causing bottlenecks).
 
-Emoji: ⚖️
-
 ```mermaid
 graph TD
     Traditional[Traditional: Minimize Average WL] -->|Inefficient| Problems[Congestion/Timing]
@@ -177,23 +171,20 @@ graph TD
 
 ---
 
-## Max-Min Fairness Explained 📊
+## Min-Max Fairness Explained 📊
 
-Max-min fairness aims to maximize the minimum resource allocation.
+Min-max fairness aims to minimize the worst-case allocation.
 
 - **In Placement**: Minimize the **worst** (longest) wirelength.
 - **Benefits**: Improves overall timing predictability and reduces congestion.
 - **Implementation**: Adjust optimization to target max HPWL.
 
 ```mermaid
-barChart
-    title Wirelength Fairness Comparison
-    x-axis Methods
-    y-axis Wirelength (um)
-    bar Traditional, 500
-    bar Fairness, 300
-    bar Traditional Worst, 1000
-    bar Fairness Worst, 400
+xychart-beta
+    title "Wirelength Fairness Comparison"
+    x-axis ["Traditional", "Fairness", "Traditional Worst", "Fairness Worst"]
+    y-axis "Wirelength (µm)" 0 --> 1100
+    bar [500, 300, 1000, 400]
 ```
 
 ---

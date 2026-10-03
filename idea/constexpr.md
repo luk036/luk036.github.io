@@ -55,10 +55,10 @@ template <size_t N, size_t K> constexpr auto Combination() {
 ## Standard Library
 
 - math library: `sqrt()`, `log()`, `pow()`, `sin()`, `cos()` etc.
-- `std::array`, but not `std::vector`
-- `std::string_view`, but not `std::string`
-- not `std::map` and `std::set`
-- not `std::unordered_map` and `std::unordered_set`
+- `std::array`; `std::vector` is constexpr since C++20
+- `std::string_view`; `std::string` is constexpr since C++20
+- `std::map` / `std::set` — limited constexpr support added later, not available in C++20
+- `std::unordered_map` / `std::unordered_set` — not constexpr
 
 ---
 

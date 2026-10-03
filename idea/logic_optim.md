@@ -71,7 +71,7 @@ graph TD
     A[Pre-collected Sequences & QoR Labels] --> B{"Embeddings g(s)"};
     B --> C("Train Surrogate Model F̂(·)");
     B --> D("Train Diffusion Model ϵθ(·, t)");
-    C & D --> E("Initial Latent Variables xT ∼ N(0, I)");
+    C & D -->     E("Initial Latent Variables x_T ~ N(0, I)");
     E --> F["Iterative Optimization (Eq. 13)"];
     F --> G(Optimized Latent Variables x*);
     G --> H[Retrieve Discrete Sequence];
@@ -106,7 +106,7 @@ The core advantage of continuous optimization is leveraging the explicit gradien
 
 #### ⚖️ Intractable Discrepancy Gradient ($\nabla_x H(x)$)
 
-The unified objective $F̂(x) + H(x)$ is conceptually elegant, but mathematically problematic.
+The unified objective $\hat{F}(x) + H(x)$ is conceptually elegant, but mathematically problematic.
 
 > Minimizing $H(x)$ (Negative Log-Likelihood, NLL) through gradient descent leads to **tractability issues for computing $\nabla_x H(x)$**.
 
@@ -151,8 +151,6 @@ pie
     "Area without Diffusion (Diverged)" : 22654.15
 ```
 
-## (Based on data from)
-
 This shows that the continuous optimization process itself, guided by the QoR gradient, is fundamentally **unstable** and requires constant, complex intervention from the Diffusion Model to remain relevant to the discrete problem space.
 
 | Scenario                    | Optimized Latent Variables                                | QoR Result (Area)   |
@@ -193,7 +191,7 @@ The proposed Continuous Logic Optimization framework is efficient _on paper_ but
 1. **High Pre-Optimization Cost:** Requires circuit-specific training of two complex deep learning models (Surrogate & Diffusion) on massive pre-collected datasets (e.g., 20,000 samples), a time investment often ignored in speedup comparisons.
 2. **Unreliable Gradient:** The core efficiency mechanism—the explicit gradient—is inherently unreliable on noisy latent variables, requiring complex reparameterization tricks ($\hat{x}_t$).
 3. **Tractability Debt:** The optimization objective ($H(x)$) is fundamentally intractable via gradient descent, necessitating the use of the complex variational bound approach implemented by the Diffusion Model.
-4. **Extreme Fragility:** The entire process is critically dependent on the Diffusion Model. Without it, the optimization yields results nearly 2X worse, making the continuous optimization component useless on its own.
+4. **Extreme Fragility:** The entire process is critically dependent on the Diffusion Model. Without it, the optimization yields results about 1.9× worse, making the continuous optimization component useless on its own.
 
 | 💡 **Verdict:** | While fast during execution, the method replaces traditional overhead with a massive, fragile, and mandatory upfront investment in sophisticated deep learning infrastructure for every new optimization task. |
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

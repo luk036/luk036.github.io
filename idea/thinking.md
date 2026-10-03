@@ -15,12 +15,9 @@ Traditional "And-Or" Logic:
 
 f(x, y, z) = (¬x ∧ y ∧ z) ∨ (x ∧ y ∧ ¬z) ∨ (x ∧ ¬y ∧ z)
 
-Polynomial Representation (over GF(2)):
+Polynomial Representation (over GF(2)), where juxtaposition is AND and `+` is XOR:
 
-f(x, y, z) = 1 + x + z + x _y + y_ z + (1 + x) _y_ (1 + z)
-where
-\*: AND
-+: XOR
+$$ f(x, y, z) = x y + x z + y z + x y z $$
 
 Clock skew scheduling
 

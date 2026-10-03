@@ -157,8 +157,10 @@ cargo test --doc
 # Add type hints
 def calculate_total(items: List[Item]) -> float:
     return sum(item.price for item in items)
+```
 
-# Use const where appropriate
+```cpp
+// Use const where appropriate
 const int MAX_CONNECTIONS = 100;
 ```
 

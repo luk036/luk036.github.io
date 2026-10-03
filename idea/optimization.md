@@ -9,8 +9,8 @@ Beyond PPA (performance, power, area):
 
 c.f. Algorithms
 Beyond run-time performance, memory storage:
-- energy effectiency
-- simiplicity
+- energy efficiency
+- simplicity
 
 Example: Global Placement
 
@@ -23,10 +23,10 @@ Objectives
 
 1. Weighted sum
 
-   minimize alpha_1 obj_1 + alpha_2 obj_2 + ...
-    
+   minimize $\alpha_1 \text{obj}_1 + \alpha_2 \text{obj}_2 + \dots$
+
 2. Ratio
 
-   minimize obj1 / obj2 (Quasi-convex)
-   
+   minimize $\text{obj}_1 / \text{obj}_2$ (quasi-convex)
+
 ## Pareto Front

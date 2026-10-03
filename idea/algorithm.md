@@ -253,15 +253,16 @@ Shortest paths decompose along this tree structure. 🌲
 Given a graph $G$ with articulation points:
 
 ```
-       A
-      / \
-     B   C
-     |   |
-     D---E
+      B
+     / \
+    A---C
+    |\
+    | \
+    D---E
 ```
 
 - Articulation point: $A$
-- Biconnected components: $\{A,B,D,E,C\}$ split into blocks
+- Biconnected components: $\{A,B,C\}$ and $\{A,D,E\}$ (they share only $A$)
 - Shortest path queries can be **localized** to blocks
 
 🎯 **Preprocessing = exploiting structure.**

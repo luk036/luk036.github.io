@@ -183,11 +183,14 @@ fn process_data(data: &mut Vec<i32>) -> &i32 {
 ### 🔍 **Not Always Smart Enough**
 
 ```rust
-fn get_or_create(map: &mut HashMap<String, String>, key: String) -> &String {
-    if !map.contains_key(&key) {
-        map.insert(key.clone(), String::new()); // ❌ Can't do this easily
+fn get_or_create<'a>(map: &'a mut HashMap<String, String>, key: String) -> &'a mut String {
+    match map.get_mut(&key) {
+        Some(v) => v,
+        None => {
+            map.insert(key.clone(), String::new()); // ❌ Borrow conflict (needs Polonius)
+            map.get_mut(&key).unwrap()
+        }
     }
-    &map[&key]
 }
 ```
 
@@ -227,13 +230,13 @@ graph LR
 
 ```rust
 // AI might suggest this:
-fn bad_idea(data: &Vec<i32>) -> &i32 {
-    &data[0] // ❌ Lifetime issues await
+fn pick(data: &Vec<i32>, fallback: &i32) -> &i32 {
+    if data.is_empty() { fallback } else { &data[0] } // ❌ Ambiguous lifetime
 }
 
-// When you actually need:
-fn better<'a>(data: &'a Vec<i32>) -> &'a i32 {
-    &data[0]
+// When you actually need an explicit annotation:
+fn pick<'a>(data: &'a Vec<i32>, fallback: &'a i32) -> &'a i32 {
+    if data.is_empty() { fallback } else { &data[0] }
 }
 ```
 

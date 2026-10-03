@@ -156,7 +156,7 @@ template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
 
 ### 🌐 Halton: 2D van der Corput
 
-$$ {\color{darkgreen}H_b}(n) = ({\color{darkgreen}\phi_{b_1}}(n), {\color{darkgreen}\phi_{b_2}}(n)) $$
+$$ {\color{darkgreen}H_{b_1,b_2}}(n) = ({\color{darkgreen}\phi_{b_1}}(n), {\color{darkgreen}\phi_{b_2}}(n)) $$
 
 **Two VdC generators, different bases — combined into a 2D point.**
 
@@ -227,7 +227,7 @@ Generates points on **3-sphere** $S^3$ (4D hypersphere) using Hopf coordinates:
 
 $$ (\cos{\color{royalblue}\eta} \cdot e^{i{\color{purple}\psi}}, \; \sin{\color{royalblue}\eta} \cdot e^{i({\color{teal}\phi}+{\color{purple}\psi})}) $$
 
-$$ {\color{royalblue}\eta} = \sqrt{v},\quad {\color{purple}\psi} = 2\pi v_\psi,\quad {\color{teal}\phi} = 2\pi v_\phi $$
+$$ \cos{\color{royalblue}\eta} = \sqrt{v},\quad {\color{purple}\psi} = 2\pi v_\psi,\quad {\color{teal}\phi} = 2\pi v_\phi $$
 
 ```python
 # 🐍 Python: 3 VdCorput generators
@@ -246,7 +246,7 @@ sin_eta = sqrt(1.0 - eta)
 
 ### 🔮 N-Dimensional Spheres: Missing Piece
 
-**Sphere3** ($S^3$) and **SphereN** ($S^{n-1}$) exist in:
+**Sphere3** ($S^3$) and **SphereN** ($S^n$) exist in:
 - ✅ Rust (`sphere_n.rs` — recursive `SphereN` with table interpolation)
 - ✅ Python (`sphere_n.py` — same recursive approach)
 - ✅ C++ lds-gen-cpp (`sphere_n.hpp` — `SphereGen` trait, cached tables)
@@ -330,8 +330,8 @@ graph TD
 **Regression: Locks vs Atomics**
 ```
 Operation           C++ locks     Rust atomics
-Sphere3 (4D)       1 lock         1 atomic      → C++  1.60× faster
-SphereN (5D)       2 locks        2 atomics     → Rust 1.04× faster  
+Sphere3 (4D)       1 lock         1 atomic      → C++  1.57× faster
+SphereN (5D)       2 locks        2 atomics     → Rust 1.04× faster
 SphereN (6D)       3 locks        3 atomics     → Rust 1.14× faster
 ```
 
@@ -399,7 +399,7 @@ graph LR
 
 ### ✅ Output Verification
 
-All four projects produce **identical sequences** (verified for small n):
+The projects produce **identical sequences** for the shared generators (verified for small n):
 
 .font-sm[
 | Generator | First value (base 2, seed 0) |
@@ -467,7 +467,7 @@ class: nord-dark, middle, center
 - https://github.com/luk036/lds-gen-cpp ⚡
 - https://github.com/luk036/lds-gen 🐍
 
-**Slides:** https://luk036.github.io/cqs/py-rs-cpp-lds-remark.html
+**Slides:** https://luk036.github.io/n_sphere/py-rs-cpp-lds-remark.html
 
 > 💡 **"Make it work, make it right, make it fast — in your language of choice."**
     </textarea>

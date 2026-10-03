@@ -185,7 +185,7 @@ Has been applied for computer graphic applications [@wong1997sampling]
 
   - $x_4 = \sin(\theta/2) \sin(\varphi + \psi/2)$
 
-- $S^3$ is a principal circle bundle over the $S^2$
+- $S^3$ is a principal circle bundle over $S^2$.
 
 \col{0.4\textwidth}
 ![image](Hopfkeyrings.jpg){width="80%"}
@@ -265,7 +265,7 @@ def sphere3_hopf(k, b):
 
 - Spherical surface element:
 
-  $$d^nA  = \sin^{n-2}(\theta_{n-1})\sin^{n-1}(\theta_{n-2})\cdots \sin(\theta_{2})\,d\theta_1 \, d\theta_2\cdots d\theta_{n-1}$$
+  $$d^nA  = \sin^{n-1}(\theta_n)\sin^{n-2}(\theta_{n-1})\cdots \sin(\theta_{2})\,d\theta_1 \, d\theta_2\cdots d\theta_n$$
 
 ## How to Generate the Point Set
 
@@ -282,7 +282,7 @@ def sphere3_hopf(k, b):
     \begin{cases}
       \theta          & \text{if } j = 0 , \\
       -\cos\theta     & \text{if } j = 1 , \\
-      (1/n)( -\cos\theta \sin^{j-1}\theta + (n-1)\int\sin^{j-2}\theta \mathrm{d}\theta) & \text{otherwise}.
+      (1/j)( -\cos\theta \sin^{j-1}\theta + (j-1)\int\sin^{j-2}\theta \mathrm{d}\theta) & \text{otherwise}.
     \end{cases}
     $$
 
@@ -318,7 +318,7 @@ def sphere3_hopf(k, b):
   multidimensional Gaussian density function can be exploited.
 
 - Then the normalized vector ($x_i/\|x_i\|$) is uniformly distributed
-  over the hypersphere $S^n$. (Fishman, G. F. (1996))
+  over the hypersphere $S^n$ [@fishman1996monte].
 
 ## Convex Hull with $600$ points
 

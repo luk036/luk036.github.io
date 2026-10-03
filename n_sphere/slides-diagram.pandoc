@@ -8,7 +8,7 @@ title: Low Discrepency Sampling Method on higher dimensional Spheres
 
 ## Abstract
 
-This paper presents a discussion of the generation of low discrepancy sampling methods for n-dimensional spheres. Low discrepancy sequences are important and have been used in a variety of applications, including numerical integration, optimization, and simulation. This paper addresses the desirable properties of samples over an n-sphere, including uniformity, determinism, and incrementality. Subsequently, the proposed method for generating low discrepancy sequences over higher dimensional sphere is presented, which is based on the van der Corput sequence. We provide a comprehensive account of the algorithm and its implementation. Furthermore, the paper presents the results of numerical experiments conducted to evaluate the performance of the proposed method, including a comparison with randomly generated sequences and other proposed methods such as the Hopf coordinate method and the cylindrical coordinate method.
+This paper presents a discussion of the generation of low discrepancy sampling methods for n-dimensional spheres. Low discrepancy sequences are important and have been used in a variety of applications, including numerical integration, optimization, and simulation. This paper addresses the desirable properties of samples over an n-sphere, including uniformity, determinism, and incrementality. Subsequently, the proposed method for generating low discrepancy sequences over higher-dimensional spheres is presented, which is based on the van der Corput sequence. We provide a comprehensive account of the algorithm and its implementation. Furthermore, the paper presents the results of numerical experiments conducted to evaluate the performance of the proposed method, including a comparison with randomly generated sequences and other proposed methods such as the Hopf coordinate method and the cylindrical coordinate method.
 
 # Motivation
 
@@ -134,7 +134,7 @@ graph TD
     B & D --> E[2D Halton Point]
 ```
 
-The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. The Halton sequence is constructed by combining two or more the van der Corput sequences, which are generated using different prime numbers as the base.
+The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematician John H. Halton, who introduced it in 1960. The Halton sequence is constructed by combining two or more van der Corput sequences, which are generated using different prime numbers as the base.
 
 ```python
 from typing import List, Sequence
@@ -302,14 +302,14 @@ flowchart TD
     G --> H[x1,x2,x3,x4]
 ```
 
-Furthermore, the concept may be extended to generate points on a four-dimensional sphere (also known as a three-sphere) through the application of a mathematical technique known as the Hopf fibration [@mitchell2008sampling; @yershova2010generating]. The objective of the original paper is to generate optimal deterministic grid point sets for $S^3$, SO(3). The objective of this course is to present a method for generating a sequence of evenly distributed points on a higher-dimensional sphere. It should be noted that the cylindrical mapping method is not applicable in higher dimensions.
+Furthermore, the concept may be extended to generate points on a four-dimensional sphere (also known as a three-sphere) through the application of a mathematical technique known as the Hopf fibration [@mitchell2008sampling; @yershova2010generating]. The objective of the original paper is to generate optimal deterministic grid point sets for $S^3$ and SO(3). The objective of this course is to present a method for generating a sequence of evenly distributed points on a higher-dimensional sphere. It should be noted that the cylindrical mapping method is not applicable in higher dimensions.
 
 - Hopf coordinates (cf. [@yershova2010generating])
   - $x_1 = \cos(\theta/2) \cos(\psi/2)$
   - $x_2 = \cos(\theta/2) \sin(\psi/2)$
   - $x_3 = \sin(\theta/2) \cos(\varphi + \psi/2)$
   - $x_4 = \sin(\theta/2) \sin(\varphi + \psi/2)$
-- $S^3$ is a principal circle bundle over the $S^2$
+- $S^3$ is a principal circle bundle over $S^2$.
 
 In order to achieve its intended purpose, the class employs the use of three van der Corput sequences (implemented by the VdCorput class, which is not shown in this algorithm snippet) to generate values between 0 and 1. These values are then transformed through the application of trigonometric functions and square roots, with the objective of mapping them onto the surface of the 3-sphere.
 
@@ -472,7 +472,7 @@ An important aspect of this algorithm is its recursive nature. For dimensions hi
 
 - Spherical surface element:
 
-  $$d^nA  = \sin^{n-2}(\theta_{n-1})\sin^{n-1}(\theta_{n-2})\cdots \sin(\theta_{2})\,d\theta_1 \, d\theta_2\cdots d\theta_{n-1}$$
+  $$d^nA  = \sin^{n-1}(\theta_n)\sin^{n-2}(\theta_{n-1})\cdots \sin(\theta_{2})\,d\theta_1 \, d\theta_2\cdots d\theta_n$$
 
 ## How to Generate the Point Set
 
@@ -497,7 +497,7 @@ flowchart LR
     \begin{cases}
       \theta          & \text{if } j = 0 , \\
       -\cos\theta     & \text{if } j = 1 , \\
-      (1/n)( -\cos\theta \sin^{j-1}\theta + (n-1)\int\sin^{j-2}\theta \mathrm{d}\theta) & \text{otherwise}.
+      (1/j)( -\cos\theta \sin^{j-1}\theta + (j-1)\int\sin^{j-2}\theta \mathrm{d}\theta) & \text{otherwise}.
     \end{cases}
 
           (1/3)( -\cos\theta \sin^2\theta - 2 \cos\theta)
@@ -585,7 +585,7 @@ The experiment is designed to achieve its stated objective through a series of s
 
 2. The program includes a function, random_point_on_sphere, which generates a random point on the surface of a sphere in any number of dimensions.
 
-3. The run_random function generates 600 random points on a 5D sphere, constructs a convex hull, and computes the dispersion measure. To generate random points on $S^n$, the spherical symmetry of the multidimensional Gaussian density function can be exploited. This results in a normalized vector ($x_i/\|x_i\|$) that is uniformly distributed over the hypersphere $S^n$. (Fishman, G. F. (1996))
+3. The run_random function generates 600 random points on a 5D sphere, constructs a convex hull, and computes the dispersion measure. To generate random points on $S^n$, the spherical symmetry of the multidimensional Gaussian density function can be exploited. This results in a normalized vector ($x_i/\|x_i\|$) that is uniformly distributed over the hypersphere $S^n$ [@fishman1996monte].
 
 4. The run_lds function performs the same operations, but utilizes a provided generator (either SphereN or CylindN) to create the points in the aforementioned manner.
 

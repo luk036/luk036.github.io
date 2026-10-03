@@ -7,7 +7,7 @@ Simultaneous Packing and Placement
 
 Max-Cut problem on planar graph
 Within Hadlock's algorithm,
-simultenously consider Conflict (positive weight) and Stitching (negative weight)
+simultaneously consider Conflict (positive weight) and Stitching (negative weight)
 
 ---
 

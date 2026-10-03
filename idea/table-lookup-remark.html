@@ -132,7 +132,7 @@ xychart-beta
     title "Runtime Comparison: Computation vs LUT"
     x-axis ["sin(x)", "CRC32", "Popcount", "AES S-Box"]
     y-axis "Speedup (log scale)" 1 --> 100
-    bar [15, 8, 12, 100]
+    bar [20, 10, 12, 100]
 </pre>
 
 ]
@@ -231,7 +231,7 @@ public:
     constexpr CCordicRotateConstexpr() : rom() {
         for (int i = 0; i < N_ITERATIONS; ++i) {
             // Angles computed at compile-time!
-            rom[i] = atan_constexpr(2.0 ^ -i);
+            rom[i] = atan_constexpr(1.0 / (1u << i));
         }
     }
 
@@ -387,7 +387,7 @@ graph LR
 ]
 
 **Standard Cell .lib Format:**
-```yaml
+```text
 cell (INV_X1) {
   pin (Y) {
     timing () {
@@ -1088,9 +1088,8 @@ class: nord-dark, middle, center
 
 **Questions &amp; Discussion** 🙏
 
-📧 Email: [your.email@example.com]  
-🔗 LinkedIn: [Your Profile]  
-📂 GitHub: [Your Repository]
+🔗 GitHub: [github.com/luk036](https://github.com/luk036)  
+🌐 Site: [luk036.github.io](https://luk036.github.io)
 
     </textarea>
     <script src="../js/remark.min.js"></script>

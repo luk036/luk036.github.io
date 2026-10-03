@@ -1,7 +1,7 @@
 # 🚫 Don’t Use LLMs to Do Stupid Things 🤖💸
 
 **A Guide to Responsible & Efficient AI Use**
-_Presented by [Your Name]_
+_Presented by @luk036_
 
 ---
 
@@ -19,7 +19,7 @@ _Presented by [Your Name]_
 
 ### 1. 🔢 Basic Calculations
 
-**Example**: _"What’s 9.9 – 9.10?"_ ➔ **LLM Output**: _"0.80"_ (Often wrong!)
+**Example**: _"Which is larger: 9.9 or 9.11?"_ ➔ **LLM Output**: _"9.11"_ (Often wrong — 9.9 > 9.11!)
 
 ✅ **Better**:
 

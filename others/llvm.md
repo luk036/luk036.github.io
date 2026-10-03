@@ -3,7 +3,7 @@
 ## LLVM
 
 clang \ / arm
-Rust ----- llvm ir ----- x86-64
+Rust ----- LLVM IR ----- x86-64
 golang / \ RISC-V
 \ CGRA ???
 
@@ -16,12 +16,12 @@ golang / \ RISC-V
 - Finite state machine (zero-abstraction cost)
 - Hardware Abstraction Layer (HAL)
   - provided by hardware vendors
-- RTOS (run-time operating system)
+- RTOS (real-time operating system)
   - RadonOS
   - TockOS
 
 ## Testing/Debugging
 
 - semi-hosting
-- SWD (single wired debugging)
+- SWD (Serial Wire Debug)
 - JTAG

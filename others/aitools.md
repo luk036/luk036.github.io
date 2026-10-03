@@ -6,12 +6,9 @@
 
 一些常见的AI辅助编程工具包括：
 
-- **GitHub Copilot**：由OpenAI开发的AI编程助手，可以根据用户输入的文本自动生成代码。
-  [Image of GitHub Copilot AI编程助手]
-- **Tabnine**：由JetBrains开发的AI编程助手，可以根据用户输入的代码自动补全代码。
-  [Image of Tabnine AI编程助手]
-- **CodeGeeX**：由腾讯开发的AI编程助手，可以根据用户输入的代码自动生成代码注释。
-  [Image of CodeGeeX AI编程助手]
+- **GitHub Copilot**：由 GitHub 与 OpenAI 合作开发的AI编程助手，可以根据用户输入的文本自动生成代码。
+- **Tabnine**：一款基于AI的代码补全工具（原 Codota），可根据上下文自动补全代码。
+- **CodeGeeX**：由清华大学（THUDM）等开发的AI编程助手，可生成代码与注释。
 - **学习AI编程技术**
 
 普通人也可以通过学习AI编程技术来利用AI写代码。AI编程技术包括机器学习、深度学习、自然语言处理等，普通人可以通过参加培训班、阅读书籍、参加开源项目等方式来学习这些技术。

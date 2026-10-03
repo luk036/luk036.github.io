@@ -10,4 +10,4 @@
     - Min-cost flow problem -1, networkx
 - Placement
   - Network parametric problem + additional constraints
-  - mininum mean cycle, minimum cost-to-time ratio problem
+  - minimum mean cycle, minimum cost-to-time ratio problem

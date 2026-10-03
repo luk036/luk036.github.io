@@ -20,9 +20,9 @@
 ## How?
 
 - Floating point arithmetic -> integer/fraction arithmetic
-  (gmp, mpq, luk036/fraction ( header only )
+  (gmp, mpq, luk036/fraction (header only))
 
-- Canonical signed numbers
+- Canonical signed digits
   (luk036/pycsd, luk036/csd-cpp)
 
 - Euclidean geometry -> projective geometry ( non-oriented )

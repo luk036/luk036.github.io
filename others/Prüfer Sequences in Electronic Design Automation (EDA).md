@@ -6,28 +6,24 @@ This essay explores the transformation of discrete mathematical theory—specifi
 
 ---
 
-## 📑 Detailed Table of Contents (The 20,000-Word Roadmap)
+## 📑 Table of Contents
 
-1. **Introduction:** From Cayley’s Formula to the Modern Chip.
-2. **Mathematical Foundations:** The Mechanics of Prüfer Codes.
-3. **The Netlist Challenge:** Hypergraph to Tree Transformation.
-4. **Applications in Physical Design:** Clock Tree Synthesis & Routing.
-5. **Structural Encoding for AI:** Graph Neural Networks (GNNs) and Sequential Learning.
-6. **Fault Analysis & Reliability:** Degree Correlation in Prüfer Sequences.
-7. **Algorithmic Implementations:** Computational Complexity and Efficiency.
-8. **Future Horizons:** Quantum Computing and Beyond.
+1. **The Mathematical Genesis:** From Cayley’s Formula to the Modern Chip.
+2. **The Hypergraph Problem in EDA:** Hypergraph to Tree Transformation.
+3. **Physical Design & Evolutionary Algorithms:** Clock Tree Synthesis & Routing.
+4. **Structural Encoding for Machine Learning:** Graph Neural Networks (GNNs) and Sequential Learning.
 
 ---
 
 ## Chapter 1: The Mathematical Genesis 🔢
 
-At the heart of Prüfer sequences lies **Cayley’s Formula**, which states that for  labeled nodes, there are exactly  spanning trees.
+At the heart of Prüfer sequences lies **Cayley’s Formula**, which states that for $n$ labeled nodes, there are exactly $n^{n-2}$ spanning trees.
 
-The Prüfer sequence is the constructive proof of this formula. It provides a unique, one-to-one mapping (a bijection) between a labeled tree and a sequence of length .
+The Prüfer sequence is the constructive proof of this formula. It provides a unique, one-to-one mapping (a bijection) between a labeled tree and a sequence of length $n-2$.
 
 ### The Algorithm
 
-To generate a sequence from a tree :
+To generate a sequence from a tree $T$:
 
 1. Locate the leaf with the smallest label.
 2. Record the label of its only neighbor.
@@ -36,10 +32,11 @@ To generate a sequence from a tree :
 
 ### Formal Mathematical Representation
 
-Let  be a labeled tree with . The Prüfer sequence  is defined such that:
+Let $T$ be a labeled tree with $n$ vertices. The Prüfer sequence $P$ is defined such that:
 
+$$ P = (a_1, a_2, \dots, a_{n-2}), \quad a_i \in \{1, \dots, n\} $$
 
-The beauty of this for EDA is **data compression**. A graph typically requires an adjacency matrix of size , whereas the Prüfer code requires only .
+The beauty of this for EDA is **data compression**. A graph typically requires an adjacency matrix of size $O(n^2)$, whereas the Prüfer code requires only $O(n)$.
 
 ---
 
@@ -73,7 +70,7 @@ graph TD
 
 ```
 
-In this model, every Net becomes a node. If a circuit has  gates and  nets, we create a tree with  labels. This allows us to represent a complex multi-terminal netlist as a linear sequence of integers. 🛠️
+In this model, every Net becomes a node. If a circuit has $G$ gates and $N$ nets, we create a tree with $G + N$ labels. This allows us to represent a complex multi-terminal netlist as a linear sequence of integers. 🛠️
 
 ---
 
@@ -89,15 +86,15 @@ When using Genetic Algorithms (GA) to find the best layout, standard graph repre
 
 1. **Validity:** Every possible sequence is a valid tree. No "illegal" offspring are created.
 2. **Locality:** Small changes in the sequence lead to manageable changes in the tree topology.
-3. **Search Space:** It limits the search space strictly to  valid solutions.
+3. **Search Space:** It limits the search space strictly to $n^{n-2}$ valid solutions.
 
 ### Wirelength Minimization Formula
 
-The goal is often to minimize the total wirelength :
+The goal is often to minimize the total wirelength $W$:
 
+$$ W = \sum_{e \in T} w_e $$
 
-
-By encoding  as a Prüfer sequence, the optimization engine can iterate through potential designs much faster than using traditional edge-list manipulations.
+By encoding $T$ as a Prüfer sequence, the optimization engine can iterate through potential designs much faster than using traditional edge-list manipulations.
 
 ---
 
@@ -112,8 +109,8 @@ As cited in recent research (e.g., *Pradhan & Bhattacharya*), feeding a graph in
 * **Tokenization:** Each integer in the Prüfer sequence acts like a "word."
 * **Context:** The position in the sequence tells the AI about the depth and connectivity of the gate within the logic cone.
 
-> **Note:** The degree of a node  in the tree is exactly its frequency in the Prüfer sequence plus one:
+> **Note:** The degree of a node $v$ in the tree is exactly its frequency in the Prüfer sequence plus one:
 >
->
+> $$ \deg(v) = \mathrm{freq}(v) + 1 $$
 >
 > This property allows a Neural Network to instantly identify **High Fan-out Nets** simply by counting the occurrence of a specific label in the input string! 🚀

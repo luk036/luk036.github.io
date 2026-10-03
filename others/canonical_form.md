@@ -16,7 +16,7 @@ Linear Programming
 
 Boolean Expression
 
-- Sum-of-product: (!X)YZ + X(!Y)Z + XY(!Z)
+- Sum-of-products: (!X)YZ + X(!Y)Z + XY(!Z)
 
 Fraction
 
@@ -27,7 +27,7 @@ Rectilinear polygon
 
 - x first, then y
 - remove half of the points
-- even make some algorithms simpler
+- can even make some algorithms simpler
 
 ## Requirements
 

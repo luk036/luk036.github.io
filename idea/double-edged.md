@@ -63,6 +63,7 @@ graph TD
 - **Meaningful commit messages** 📝
 - **Branch protection rules** 🌿
 - **Code reviews** 👀
+- **Revert safely** with `git revert <commit>` when a change goes wrong ↩️
 
 ### **Unit Testing**
 
@@ -85,6 +86,7 @@ xmake test
 # Python Projects
 ruff check
 mypy src
+mypy --disallow-untyped-defs tests/
 tox -e docs
 
 # Rust Projects
@@ -164,11 +166,17 @@ def calculate_total(items: List[Item]) -> float:
 const int MAX_CONNECTIONS = 100;
 ```
 
+**Also add:**
+
+- `constexpr` wherever appropriate → verify with `cmake --build build --config Debug`
+- `this->` to member variables/functions wherever appropriate → verify with `cmake --build build`
+
 **Verification Commands:**
 
 ```bash
 mypy src              # Type checking
-cmake --build build --config Debug  # Const verification
+cmake --build build --config Debug  # Const/constexpr verification
+cmake --build build   # this-> member access verification
 ```
 
 ---

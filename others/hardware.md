@@ -10,11 +10,11 @@ Logic circuit:
 - Verilog, VHDL, HTML
 - technology file, CSS
 
-System Verilog, markdown
+SystemVerilog, markdown
 System C (C-based)
 
 MyHDL (Python-based)
-HLS (C-like language + llvm)
+HLS (C-like language + LLVM)
 (Chisel, Scala-based, domain specific)
 
 ## FPGA

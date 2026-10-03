@@ -3,8 +3,13 @@
 <head>
   <meta charset="utf-8">
   <title>🚫 U.S. Ban on EDA Tools to China: Impacts & Implications</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/remark/0.14.0/remark.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.4.0/mermaid.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+  <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
   <style>
     .mermaid {
       text-align: center;
@@ -112,12 +117,21 @@ class: nord-dark, middle, center
 # Q&A 🎤
   </textarea>
 
+  <script src="../js/remark.min.js"></script>
+  <script src="../js/mermaid.min.js"></script>
   <script>
-    // Initialize Remark.js
-    var slideshow = remark.create();
-
-    // Initialize Mermaid.js
-    mermaid.initialize({ startOnLoad: true });
+    var slideshow = remark.create({
+      ratio: "16:10",
+      highlightStyle: "tomorrow-night-blue",
+      highlightLines: true,
+      countIncrementalSlides: false,
+      navigation: {
+        scroll: false,
+        touch: true,
+        click: false,
+      },
+    });
   </script>
+  <script src="../js/mermaid-init.js"></script>
 </body>
 </html>

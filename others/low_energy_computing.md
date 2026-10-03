@@ -1,7 +1,7 @@
 # Low Energy Computing: The Future of Efficient Systems 🔋
 
-**Presented by:** [Your Name]
-**Date:** [Presentation Date]
+**Presented by:** @luk036
+**Date:** 2026
 
 ---
 
@@ -142,5 +142,5 @@ pie
 
 ## ❓ Questions & Discussion 🗣️
 
-[Your Contact Information]
-[Optional QR Code to Resources]
+- 🌐 Site: [luk036.github.io](https://luk036.github.io)
+- 🐙 GitHub: [github.com/luk036](https://github.com/luk036)

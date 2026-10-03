@@ -1,4 +1,4 @@
-# Privacy
+# FOSS: Free and Open-Source Alternatives
 
 Price of Freedom
 

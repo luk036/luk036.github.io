@@ -44,6 +44,7 @@ class: nord-dark, middle, center
     -   Experiment 3: FIR Lowpass Design 🎚️
 -   **The Big Picture** 🖼️
     -   Python vs C++ vs CVXPY
+    -   The Oracle in the AI Era 🤖
     -   **Takeaways** 💡
 
 ---
@@ -396,6 +397,21 @@ class: nord-light, middle, center
 -   For $n \gg 80$ the $\mathcal{O}(n^2)$ iteration count will eventually
     catch up with CVXPY's near-linear scaling
 -   The crossover point simply moved **far beyond** the tested range
+
+---
+
+### The Oracle in the AI Era 🤖
+
+-   The **separation oracle** is the method's entry barrier
+-   An LLM can now *draft* it from a problem statement:
+    the oracle callback, its subgradient, and the cut $(g, \beta)$
+-   **But verification is not delegated** ⚠️
+    -   a wrong subgradient or invalid cut gives a **silently wrong answer**
+    -   there is **no signal** in the iteration count 🔇
+-   The user's job shifts from **writing** to **testing** ✅
+    -   cut validity on known points, independent feasibility check,
+        subgradient vs. analytic gradient
+-   AI lowers the entry cost — **domain knowledge still decides correctness**
 
 ---
 

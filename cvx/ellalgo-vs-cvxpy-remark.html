@@ -40,11 +40,11 @@ class: nord-dark, middle, center
     -   Why compare a 1979 method with a modern solver?
 -   **Three Experiments** 🧪
     -   Experiment 1: Chebyshev Center 📐
-    -   Experiment 2: Min-Eigenvalue LMI (EVP) 🎛️
+    -   Experiment 2: Min-Max Eigenvalue LMI (EVP) 🎛️
     -   Experiment 3: FIR Lowpass Design 🎚️
 -   **The Big Picture** 🖼️
     -   Python vs C++ vs CVXPY
--   **Take-aways** 💡
+    -   **Takeaways** 💡
 
 ---
 
@@ -91,7 +91,7 @@ class: nord-light, middle, center
 
 > Solve a convex problem with both tools and measure.
 
--   Spoiler: the answer depends on **which language** you ask in 🐍 vs ⚙️
+-   Spoiler: the answer depends on **which language** you use 🐍 vs ⚙️
 
 ---
 
@@ -103,7 +103,7 @@ graph LR
     A["Chebyshev Center 📐"] --> D["Same oracle recipe"]
     B["Min-eigenvalue LMI 🎛️"] --> D
     C["FIR Lowpass Design 🎚️"] --> D
-    D --> E["Compare: CVXPY vs Python vs C++"]
+    D --> E["Compare: Python vs C++ vs CVXPY"]
     style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
     style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
@@ -128,8 +128,8 @@ class: nord-light, middle, center
 Given a polyhedron defined by linear inequalities,
 
 $$
-{\color{steelblue}\mathcal{P}} = \left\{ \, {\color{darkblack}u} \in \mathbb{R}^{n}
-\; : \; {\color{darkcyan}A}\, {\color{darkblack}u} \le {\color{green}b} \, \right\},
+{\color{steelblue}\mathcal{P}} = \left\{ \, {\color{darkblack}x} \in \mathbb{R}^{n}
+\; : \; {\color{darkcyan}A}\, {\color{darkblack}x} \le {\color{green}b} \, \right\},
 $$
 
 find the **largest ball** that fits inside:
@@ -151,10 +151,10 @@ here $n = 10$, so **11 design variables**, $m = 50$ random halfspaces + 20 box c
 -   Every constraint is **affine** in $({\color{darkblack}x}, r)$:
   $$
   f_i({\color{darkblack}x}, r) \;=\;
-  {\color{darkcyan}a}(i)^{\mathsf{T}} {\color{darkblack}x}
-  + \lVert {\color{darkcyan}a}(i) \rVert_2 \, r - {\color{green}b}(i)
+  {\color{darkcyan}a}_i^{\mathsf{T}} {\color{darkblack}x}
+  + \lVert {\color{darkcyan}a}_i \rVert_2 \, r - {\color{green}b}_i
   $$
--   Gradient is **constant**: $\nabla f_i = \big( {\color{darkcyan}a}(i),\, \lVert {\color{darkcyan}a}(i) \rVert_2 \big)$
+-   Gradient is **constant**: $\nabla f_i = \big( {\color{darkcyan}a}_i,\, \lVert {\color{darkcyan}a}_i \rVert_2 \big)$
 -   Every violated constraint gives a *perfect* cutting plane
 -   Linear objective → trivial optimality cut
 -   Classic example — Boyd & Vandenberghe §8.5.1 📚
@@ -184,7 +184,7 @@ All three find the same Chebyshev center — **to five significant digits** 🎯
 | 20 | 0.1571 | 1.2116 | **0.015754** | **10×** | 77× |
 | 30 | 0.2543 | 2.3567 | **0.060679** | **4×** | 39× |
 
-C++ ellipsoid **beats CVXPY at every size** — the crossover never happens ⚙️
+C++ ellipsoid **beats CVXPY at every tested size** — no crossover in this range ⚙️
 
 ---
 
@@ -201,7 +201,7 @@ C++ ellipsoid **beats CVXPY at every size** — the crossover never happens ⚙�
 
 class: nord-light, middle, center
 
-## 🎛️ Experiment 2: Min-Eigenvalue LMI
+## 🎛️ Experiment 2: Min-Max Eigenvalue LMI
 
 ---
 
@@ -223,7 +223,7 @@ Design variables: $({\color{darkblack}x}, t) \in \mathbb{R}^{m+1}$ — here $m =
 
 ### The LMI Oracle: LDL$^T$ Witness 🥚
 
-The constraint ${\color{darkcyan}B} - \sum_k {\color{darkcyan}F}_k {\color{darkblack}x}_k \succeq 0$ is checked via lazy LDL$^T$ factorization:
+With ${\color{darkcyan}B} = t\,{\color{darkcyan}I} - {\color{darkcyan}A}_0$ and ${\color{darkcyan}F}_k = {\color{darkcyan}A}_k$, the constraint ${\color{darkcyan}B} - \sum_k {\color{darkcyan}F}_k {\color{darkblack}x}_k \succeq 0$ is checked via lazy LDL$^T$ factorization:
 
 $$
 {\color{darkcyan}B} - \sum_k {\color{darkcyan}F}_k {\color{darkblack}x}_k \;=\;
@@ -249,7 +249,7 @@ $$
 | 8 | 0.0182 | 0.2664 | **0.001433** | **13×** | 186× |
 | 12 | 0.0201 | 0.5480 | **0.004078** | **5×** | 134× |
 | 16 | 0.0208 | 1.1686 | **0.008815** | **2×** | 133× |
-| 20 | 0.0258 | 0.5061 | **0.029870** | **1×** | 17× |
+| 20 | 0.0258 | 0.5061 | **0.029870** | **<1×** | 17× |
 
 In **Python**, the ellipsoid method loses to CVXPY (interpreter overhead) 🐍
 
@@ -262,7 +262,7 @@ In **Python**, the ellipsoid method loses to CVXPY (interpreter overhead) 🐍
 </div>
 
 -   C++ ellipsoid **beats CVXPY at $m \le 16$** (54× → 2×) ⚙️
--   The gap narrows as $\mathcal{O}(m^2)$ iterations grow — CVXPY catches up at $m = 20$
+-   The gap narrows as the $\mathcal{O}(m^2)$ iteration count grows — CVXPY catches up at $m = 20$
 -   Iteration counts match Python within ~6% — a faithful port ✅
 
 ---
@@ -315,7 +315,7 @@ prob.solve()
 
 -   Python: `LowpassOracle` + parallel cuts
 -   C++: identical `LowpassOracle` (1:1 port)
--   Parallel cuts: passband $\pm$ stopband box
+-   Parallel cuts: one cut from the passband and one from the stopband
   ⟶ two hyperplanes at once ⚡
 
 | language | iters (n=48) |
@@ -375,8 +375,8 @@ class: nord-light, middle, center
 
 | Experiment | Python verdict | C++ verdict |
 |---|---|---|
-| Chebyshev Center 📐 | CVXPY wins $n > 4$ | **C++ ellipsoid wins all** |
-| Min-Eigenvalue LMI 🎛️ | CVXPY wins | **C++ ellipsoid wins $m \le 16$** |
+| Chebyshev Center 📐 | CVXPY wins for all tested $n \ge 5$ | **C++ ellipsoid wins all** |
+| Min-Max Eigenvalue LMI 🎛️ | CVXPY wins | **C++ ellipsoid wins $m \le 16$** |
 | FIR Lowpass 🎚️ | CVXPY wins | **C++ ellipsoid wins all** |
 
 -   In **Python**, interpreter overhead favors CVXPY
@@ -401,7 +401,7 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-## 💡 Take-aways
+## 💡 Takeaways
 
 ---
 
@@ -432,7 +432,7 @@ graph LR
     but $\mathcal{O}(n^2)$ iterations and needs a containing ellipsoid
 -   🚀 **CVXPY**: expressive, robust, millisecond solves
 -   🐍 **Language matters**: Python's overhead made CVXPY look superior
--   ⚙️ **C++ port flips the result** — in all three experiments
+-   ⚙️ **C++ port flips the result** — in two of three experiments (partially for the LMI case)
 -   📏 **One oracle recipe, three problems**: affine constraints →
     constant gradients → perfect cuts
 -   🧪 Reproducible: `demo/chebyshev_center.py`, `benches/bench_lmi_evp.py`,

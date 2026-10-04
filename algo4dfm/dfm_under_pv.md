@@ -1,8 +1,8 @@
-### Slide 1: Title Slide
+## Slide 1: Title Slide
 
 # **Timing Performance of Nanometer Digital Circuits Under Process Variations** ⏱️
 
-**Authors:** Victor Champac & Jose Garcia Gervacio
+**Authors:** Victor Champac & José García Gervacio
 **Series:** Frontiers in Electronic Testing, Volume 39
 **Year:** 2018
 
@@ -20,21 +20,19 @@
 
 ---
 
-### Slide 3: Traditional vs. Modern Design 🛠️
+## Slide 3: Traditional vs. Modern Design 🛠️
 
 -   **Traditional Approach (Corner Design):**
-
-  -   Verifies circuit performance at extreme Process-Voltage-Temperature (PVT) conditions (e.g., SS, FF, LV, HT).
-  -   Becomes **less efficient** and incurs **high-cost penalties** with technology scaling, primarily due to increased intra-die variations.
-  -   Leads to **overdesign** (larger area and power consumption) to ensure timing closure at pessimistic, often unrealistic, corners.
-
+    -   Verifies circuit performance at extreme Process-Voltage-Temperature (PVT) conditions (e.g., SS, FF, LV, HT).
+    -   Becomes **less efficient** and incurs **high-cost penalties** with technology scaling, primarily due to increased intra-die variations.
+    -   Leads to **overdesign** (larger area and power consumption) to ensure timing closure at pessimistic, often unrealistic, corners.
 -   **Modern Requirement (Statistical Design):**
-  -   Requires considering the **statistical nature** of process variations and their impact on circuit performance.
-  -   Allows chips to meet frequency specifications **more efficiently** by reducing the cost incurred by pessimistic worst-case analysis.
+    -   Requires considering the **statistical nature** of process variations and their impact on circuit performance.
+    -   Allows chips to meet frequency specifications **more efficiently** by reducing the cost incurred by pessimistic worst-case analysis.
 
 ---
 
-### Slide 4: Understanding Process Variations (PV)
+## Slide 4: Understanding Process Variations (PV)
 
 ### Classification and Behavior
 
@@ -42,8 +40,8 @@ PV leads to fluctuations in physical parameters (e.g., ${\color{royalblue}L}$, $
 
 Process variations are classified by behavior:
 
-1. **Systematic (Deterministic):** Predictable and often correctable (e.g., due to Optical Proximity Effects, OPC).
-2. **Nonsystematic (Random):** Statistically modeled; the primary concern for modern digital design.
+1. **Systematic (Deterministic):** Predictable and often correctable (e.g., optical proximity effects, corrected via Optical Proximity Correction, OPC).
+2. **Non-systematic (Random):** Statistically modeled; the primary concern for modern digital design.
    -   **Inter-die (D2D/Global):** Affects all devices on a chip equally (e.g., wafer-to-wafer variations).
    -   **Intra-die (WID/Local):** Affects each device on a chip differently.
 
@@ -51,8 +49,8 @@ Process variations are classified by behavior:
 **Mermaid Diagram: Process Variation Hierarchy**
 ```mermaid
 graph TD
-    A[Process Variations] --> B{Systematic};
-    A --> C{Nonsystematic (Random)};
+    A[Process Variations] --> B[Systematic];
+    A --> C[Non-systematic (Random)];
     C --> D[Inter-die (D2D/Global)];
     C --> E[Intra-die (WID/Local)];
     E --> F[Pure Random];
@@ -61,36 +59,34 @@ graph TD
 
 ---
 
-### Slide 5: Sources of Variation (CMOS & FinFET)
+## Slide 5: Sources of Variation (CMOS & FinFET)
 
 | Parameter Affected | CMOS Sources (Planar)                     | FinFET Sources (3D)            | Behavior Type           |
 | :----------------- | :---------------------------------------- | :----------------------------- | :---------------------- |
 | **${\color{royalblue}V_{th} }$**       | Random Dopant Fluctuation (RDF)           | Work Function Variation (WFV)  | Pure Random / Intra-Die |
-| **${\color{royalblue}L}, {\color{royalblue}W}$**         | Photolithography & Etching non-idealities | Gate Line Edge Roughness (GER) | Random / Correlated     |
-| **${\color{royalblue}T_{ox} }$**       | Dielectric deposition quality             | Fin Line Edge Roughness (FER)  | Random / Correlated     |
+| **${\color{royalblue}L}, {\color{royalblue}W}$**         | Photolithography & Etching non-idealities | Gate & Fin Edge Roughness (GER/FER)  | Random / Correlated     |
+| **${\color{royalblue}T_{ox} }$**       | Dielectric deposition quality             | High-k dielectric deposition quality | Random / Correlated     |
 
 -   **Key Concept: RDF**
-
-  -   Fluctuations in the amount and location of dopant atoms implanted in the channel are completely random.
-   -   Threshold voltage deviation (${\color{royalblue}\sigma_{V_{th} } }$) increases when shrinking feature size.
-
+    -   Fluctuations in the amount and location of dopant atoms implanted in the channel are completely random.
+    -   Threshold voltage deviation (${\color{royalblue}\sigma_{V_{th} } }$) increases as the feature size shrinks.
 -   **Key Concept: LER**
-  -   Random variation of polysilicon/gate edges.
-  -   Major source of channel length variation.
+    -   Line Edge Roughness: random variation of polysilicon/gate edges.
+    -   Major source of channel length variation.
 
 ---
 
-### Slide 6: Modeling Variation: The Statistical Foundation 📊
+## Slide 6: Modeling Variation: The Statistical Foundation 📊
 
-Process parameters (${\color{green}X}$) are often modeled as Normal Random Variables ($\sim N({\color{royalblue}\mu}, {\color{royalblue}\sigma^2})$).
+Process parameters (${\color{green}X}$) are often modeled as normal random variables ($\sim N({\color{royalblue}\mu}, {\color{royalblue}\sigma^2})$).
 
 A statistical parameter ${\color{green}X}$ considering inter-die (D2D), correlated intra-die (${\color{royalblue}WID}, {\color{royalblue}c}$), and pure random (${\color{royalblue}WID}, {\color{royalblue}r}$) variations is modeled as a linear sum:
 
 $$
-{\color{green}X} = {\color{royalblue}X_0} + {\color{green}X_{D2D} } + {\color{green}X_{WID, c} } + {\color{green}X_{WID, r} }
+{\color{green}X} = {\color{royalblue}\mu_X} + {\color{green}X_{D2D} } + {\color{green}X_{WID, c} } + {\color{green}X_{WID, r} }
 $$
 
-Where ${\color{royalblue}X_0}$ is the nominal value.
+Where ${\color{royalblue}\mu_X}$ is the nominal (mean) value.
 
 The total variance (${\color{royalblue}\sigma^2_X}$) is the sum of the variances of the independent components:
 
@@ -110,7 +106,7 @@ $${\color{royalblue}\rho}({\color{green}X_i}, {\color{green}X_j}) = {\color{roya
 
 ---
 
-### Slide 7: Statistical Timing: Gate Delay Formulation
+## Slide 7: Statistical Timing: Gate Delay Formulation
 
 The gate delay ${\color{salmon}D}$ is a function of ${\color{royalblue}k}$ random variables ${\color{green}X_P}$ (process parameters):
 
@@ -118,7 +114,7 @@ $$
 {\color{salmon}D} = f({\color{green}X_{P1} }, \dots, {\color{green}X_{Pk} })
 $$
 
-We approximate this complex function using a **first-order Taylor series expansion** around the nominal parameter values (${\color{royalblue}\mu_{XP} }$).
+We approximate this complex function using a **first-order Taylor series expansion** around the nominal (mean) parameter values (${\color{royalblue}\mu_{XP} }$).
 
 ### Mean Delay (${\color{firebrick}\mu_D}$)
 
@@ -140,7 +136,7 @@ Where ${\color{royalblue}S_{D, P_m} }$ is the **delay sensitivity** to parameter
 
 ---
 
-### Slide 8: Case Study: Inverter Delay Variance
+## Slide 8: Case Study: Inverter Delay Variance
 
 We focus on the inverter, the simplest gate, assuming ${\color{royalblue}W}, {\color{royalblue}L}, {\color{royalblue}T_{ox} }$ capture correlated variations and ${\color{royalblue}V_{th} }$ captures pure random variations.
 
@@ -148,10 +144,10 @@ $${\color{firebrick}\sigma^2_D} = {\color{royalblue}S^2_{D,W} } {\color{royalblu
 
 ### Delay Sensitivity Calculation (SPICE Approach)
 
-Sensitivities (${\color{royalblue}S_{D, P_m} }$) are derived by observing the change in delay (${\color{firebrick}\Delta t_D}$) resulting from a small change in parameter (${\color{royalblue}\Delta X}$) around its nominal value (${\color{royalblue}X_0}$):
+Sensitivities (${\color{royalblue}S_{D, P_m} }$) are derived by observing the change in delay (${\color{firebrick}\Delta t_D}$) resulting from a small change in parameter (${\color{royalblue}\Delta X}$) around its nominal (mean) value (${\color{royalblue}\mu_X}$):
 
 $$
-{\color{royalblue}S_{D, P_m} } \approx \frac{ {\color{firebrick}t_D}({\color{royalblue}X_0}+{\color{royalblue}\Delta X}) - {\color{firebrick}t_D}({\color{royalblue}X_0}-{\color{royalblue}\Delta X})}{({\color{royalblue}X_0} + {\color{royalblue}\Delta X}) - ({\color{royalblue}X_0} - {\color{royalblue}\Delta X})}
+{\color{royalblue}S_{D, P_m} } \approx \frac{ {\color{firebrick}t_D}({\color{royalblue}\mu_X}+{\color{royalblue}\Delta X}) - {\color{firebrick}t_D}({\color{royalblue}\mu_X}-{\color{royalblue}\Delta X})}{({\color{royalblue}\mu_X} + {\color{royalblue}\Delta X}) - ({\color{royalblue}\mu_X} - {\color{royalblue}\Delta X})}
 $$
 
 -   This approach, using SPICE electrical simulation, accurately captures non-linear effects, unlike simple analytical models.
@@ -159,11 +155,11 @@ $$
 
 ---
 
-### Slide 9: Design Impact: Controlling Gate Variation
+## Slide 9: Design Impact: Controlling Gate Variation
 
 The standard deviation of gate delay (${\color{firebrick}\sigma_D}$) is directly affected by design choices:
 
-1. **Sizing the Logic Gate (W):**
+1. **Sizing the Logic Gate (${\color{royalblue}W}$):**
 
    -   Delay sensitivities generally reduce as the transistor channel width (${\color{royalblue}W}$) increases.
    -   **Hint:** Sizing up the gate is an efficient way to reduce ${\color{firebrick}\sigma_D}$.
@@ -182,7 +178,7 @@ The standard deviation of gate delay (${\color{firebrick}\sigma_D}$) is directly
 
 ---
 
-### Slide 10: Statistical Path Delay (General Formulation)
+## Slide 10: Statistical Path Delay (General Formulation)
 
 A logic path is composed of ${\color{royalblue}N}$ gates (${\color{salmon}D_1}, {\color{salmon}D_2}, \dots, {\color{salmon}D_N}$). The total path delay variance (${\color{lime}\sigma^2_{DP} }$) is given by the sum of individual gate variances plus the covariance terms between all pairs of gates:
 
@@ -203,7 +199,7 @@ $$
 
 ---
 
-### Slide 11: Impact of Spatial Correlation in Path Delay
+## Slide 11: Impact of Spatial Correlation in Path Delay
 
 -   **Scenario:** Two adjacent gates with high delay sensitivities.
 -   **Observation:** The contribution of the spatial correlation ($2 \cdot \text{Cov}({\color{salmon}D_1}, {\color{salmon}D_2})$) to the total path delay variance is significantly larger for gates located very close (${\color{royalblue}\rho} = 0.9$) than for gates located farther apart (${\color{royalblue}\rho} = 0.1$).
@@ -217,13 +213,13 @@ Logic depth dramatically changes how variations impact the path.
 | Variation Type                  | Path Delay Variability (${\color{lime}\sigma_{DP} } / {\color{lime}\mu_{DP} }$) | Impact with N                              |
 | :------------------------------ | :------------------------------------------------ | :----------------------------------------- |
 | **Fully Correlated** (${\color{royalblue}\rho}=1$) | $({\color{firebrick}\sigma/\mu})_{inv}$ (Constant)                   | **Does not decrease** as ${\color{royalblue}N}$ increases.    |
-| **Non-Correlated** (${\color{royalblue}\rho}=0$)   | $({\color{firebrick}\sigma/\mu})_{inv} \cdot \frac{1}{\sqrt{ {\color{royalblue}N} } }$    | **Decreases** with the square root of ${\color{royalblue}N}$. |
+| **Uncorrelated** (${\color{royalblue}\rho}=0$)   | $({\color{firebrick}\sigma/\mu})_{inv} \cdot \frac{1}{\sqrt{ {\color{royalblue}N} } }$    | **Decreases** with the square root of ${\color{royalblue}N}$. |
 
 **Key Takeaway:** Correlated variations impact the overall path delay more significantly than pure random variations as the path length increases.
 
 ---
 
-### Slide 12: Corner Design vs. Statistical Design Cost 💸
+## Slide 12: Corner Design vs. Statistical Design Cost 💸
 
 Corner-based design assumes an unrealistic scenario where all critical parameters simultaneously hit their worst-case extreme (e.g., SS corner).
 
@@ -236,7 +232,7 @@ A comparative analysis (using a 10-inverter chain example) showed the financial 
 | Design Metric         | Statistical Design (${\color{royalblue}\mu} + 3{\color{royalblue}\sigma}$) | Corner Design (SS) | Overhead (Corner vs. Statistical) |
 | :-------------------- | :----------------------------------- | :----------------- | :-------------------------------- |
 | **Required Size**     | 1.3X                                 | 2.0X               | -                                 |
-| **Area Increase**     | -                                    | -                  | **62.5% larger**                  |
+| **Area Increase**     | -                                    | -                  | **≈54% larger**                   |
 | **Power Consumption** | -                                    | -                  | **44% larger**                    |
 
 -   **Statistical analysis** provides a maximum delay prediction (e.g., ${\color{royalblue}\mu} + 3{\color{royalblue}\sigma}$) that is much smaller than the pessimistic SS Corner delay.
@@ -244,7 +240,7 @@ A comparative analysis (using a 10-inverter chain example) showed the financial 
 
 ---
 
-### Slide 13: Advanced Topic: FinFET Technology 🔬
+## Slide 13: Advanced Topic: FinFET Technology 🔬
 
 FinFETs (Fin Field-Effect Transistors) were adopted starting at the 22 nm node to overcome scaling limits of planar transistors.
 
@@ -263,42 +259,42 @@ FinFETs (Fin Field-Effect Transistors) were adopted starting at the 22 nm node t
 
 ---
 
-### Slide 14: FinFET Statistical Variability
+## Slide 14: FinFET Statistical Variability
 
 Two major sources of variation are critical in FinFET timing performance:
 
 1. **Work Function Variation (WFV):**
 
    -   Caused by random grain orientations in the metal gate.
-   -   Introduced due to the use of high-k dielectrics and metal gates.
-   -   Leads to random variations in the transistor threshold voltage (${\color{royalblue}\Phi_M}$).
+   -   Introduced by the use of high-k dielectrics and metal gates.
+   -   Leads to random variations in the metal gate work function (${\color{royalblue}\Phi_M}$), which in turn shift the transistor threshold voltage (${\color{royalblue}V_{th} }$).
 
 2. **Line Edge Roughness (LER):**
-   -   Leads to random fluctuations in fin thickness (${\color{royalblue}T_{fin} }$) (Fin LER/FER) and gate length (${\color{royalblue}L_g}$) (Gate LER/GER).
-   -   **SADP Mitigation:** In SADP, variations on opposite edges of a feature are correlated, partially cancelling out the LER impact on line width.
+   -   Leads to fluctuations in fin thickness (${\color{royalblue}T_{fin} }$) (Fin Edge Roughness, FER) and gate length (${\color{royalblue}L_g}$) (Gate Edge Roughness, GER).
+   -   **SADP Mitigation:** In SADP, variations on opposite edges of a feature are correlated, partially cancelling out the LER impact on line width; these correlated variations are modeled as a global component shared across the fins of a cell.
 
 ### Statistical Delay in Multi-Fin Cells
 
-For a multi-fin inverter with ${\color{royalblue}N_{FIN} }$ parallel fins, considering **Pure Random** (WFV) and **Inter-Die/Global** (${\color{royalblue}T_{fin} }, {\color{royalblue}L_g}$) variations:
+For a multi-fin inverter with ${\color{royalblue}N_{FIN} }$ parallel fins, considering **Pure Random** (WFV) and **Correlated/Global** (${\color{royalblue}T_{fin} }, {\color{royalblue}L_g}$) variations:
 
 $${\color{firebrick}\sigma^2_D} = {\color{royalblue}N_{FIN} } \cdot \left[ ({\color{royalblue}S_{D,\Phi_M} } {\color{royalblue}\sigma_{\Phi_M} })^2 \right] + {\color{royalblue}N^2_{FIN} } \left[ ({\color{royalblue}S_{D,T_{fin} } } {\color{royalblue}\sigma_{T_{fin} } })^2 + ({\color{royalblue}S_{D,L_g} } {\color{royalblue}\sigma_{L_g} })^2 \right]$$
 
--   **Pure Random ${\color{royalblue}\sigma^2}$** scales linearly with ${\color{royalblue}N_{FIN} }$ (Law of Large Numbers).
--   **Inter-Die ${\color{royalblue}\sigma^2}$** scales quadratically with ${\color{royalblue}N_{FIN} }$ (All fins shift together).
+-   **Pure Random ${\color{royalblue}\sigma^2}$** scales linearly with ${\color{royalblue}N_{FIN} }$ (independent contributions add).
+-   **Correlated ${\color{royalblue}\sigma^2}$** scales quadratically with ${\color{royalblue}N_{FIN} }$ (all fins shift together).
 
 ---
 
-### Slide 15: Circuit Example: Ripple Carry Adder (RCA)
+## Slide 15: Circuit Example: Ripple Carry Adder (RCA)
 
 -   **Circuit:** 4-Bit RCA built from mirror adder cells.
 -   **Critical Path:** The longest paths involve the ripple of the carry signal (${\color{lime}T_{carry} }$) across the stages.
--   **Path 2 Delay:** ${\color{lime}T_{Path-2} } = {\color{royalblue}N} \cdot {\color{lime}T_{carry} }$ (linearly proportional to number of bits ${\color{royalblue}N}$).
+-   **Longest-Path (Carry) Delay:** ${\color{lime}T_{Path-2} } = {\color{royalblue}N} \cdot {\color{lime}T_{carry} }$ (linearly proportional to the number of bits ${\color{royalblue}N}$).
 
 ### Optimization Hint 💡
 
 To improve adder performance, focus optimization (e.g., resizing transistors) on the logic gates driving the carry signal in each full adder cell, specifically the left carry generator block.
 
-## Mermaid Diagram: Logic Path Example
+### Mermaid Diagram: Logic Path Example
 
 ```mermaid
 graph LR
@@ -318,7 +314,7 @@ graph LR
 
 ---
 
-### Slide 16: Circuit Example: SRAM Cell Stability
+## Slide 16: Circuit Example: SRAM Cell Stability
 
 -   **6T-SRAM Cell:** Core component of memory, replicated in large arrays.
 -   **Reliability Metrics:** Must maintain reliable Read, Write, and Hold operations under PV.
@@ -333,7 +329,7 @@ graph LR
 
 ---
 
-### Slide 17: Summary and Key Concepts
+## Slide 17: Summary and Key Concepts
 
 1. **PV Impact:** Process variations, especially WID/Local variations (RDF, LER, WFV), are dominant timing challenges in nanometer circuits.
 2. **Modeling:** Statistical timing relies on approximating delay using a **first-order Taylor expansion** and focusing on **delay sensitivities** and parameter variances.
@@ -344,11 +340,11 @@ graph LR
 
 ---
 
-### Slide 18: Further Reading & Q&A
+## Slide 18: Further Reading & Q&A
 
 **Key Design Hints:**
 
--   Identify physically close gates with high delay sensitivities to mitigate maximum $\text{Covariance}$ contributions.
+-   Identify physically close gates with high delay sensitivities to limit the largest covariance contributions.
 -   Size up gates with low driving strength and high load capacitance to reduce path ${\color{firebrick}\sigma_D}$.
 -   For critical cells (like SRAM), perform High-Sigma analysis (beyond $3{\color{royalblue}\sigma}$).
 

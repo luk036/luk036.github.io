@@ -1,0 +1,416 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🧩 CCP Initializer: Positive-Definite Warm Starts</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 CCP Initializer
+
+## Positive-Definite Warm Starts for the Correlation Solver
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📝 Abstract
+
+The **correlation solver** fits a non-parametric covariance $\Omega(p) = \sum_k p_k F_k$ to a biased sample covariance $Y$ by **maximum likelihood**.
+
+That MLE is a *difference of convex* problem, so it is solved with the **Convex-Concave Procedure (CCP)** — a sequence of convex cutting-plane subproblems.
+
+This deck is about one small but critical detail: **how to initialise the CCP**. The original warm start used the least-squares fit, whose covariance is only *positive semi-definite* — so the very first matrix inverse could blow up 💥.
+
+We replace it with a **free-MLE / nearest-PD** initialiser that is guaranteed positive definite. 🛡️
+
+---
+
+### 🗺️ Agenda
+
+- 🎯 The family-constrained MLE
+- 🔄 The Convex-Concave Procedure (CCP)
+- 🧮 The majorization matrix $\Omega_k^{-1}$
+- ⚠️ Why the least-squares warm start can fail
+- 💡 Free MLE and the nearest-PD repair
+- 💻 Implementation, results and verification
+- 🚀 Ports and next steps
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 The Problem
+
+---
+
+### 🔍 Family-Constrained MLE
+
+Fit the covariance model to the measured data:
+
+$$\begin{array}{ll}
+  \min_{p} & \log\det {\color{steelblue}\Omega(p)} \;+\; \mathrm{Tr}\!\big({\color{steelblue}\Omega(p)}^{-1}{\color{crimson}Y}\big) \\[6pt]
+  \text{s.t.} & {\color{steelblue}\Omega(p)} = \sum_{k} p_k {\color{seagreen}F_k} \;\succeq\; 0
+\end{array}$$
+
+- 🟦 $\Omega(p)$ — the covariance we are fitting
+- 🟩 $F_k$ — basis matrices (polynomial powers of $D$, quadratic B-splines)
+- 🟥 $Y$ — biased sample covariance, $\;Y = \tfrac{1}{M}\sum_{i=1}^{M} z_i z_i^\mathsf{T}$ *(unlikely PD)*
+- $p$ — the coefficients we optimise
+
+---
+
+### 🌀 Why It Is Hard
+
+$$f(\Omega) \;=\; \underbrace{\mathrm{Tr}(\Omega^{-1} Y)}_{\color{seagreen}\text{convex}} \;+\; \underbrace{\log\det \Omega}_{\color{crimson}\text{concave}}$$
+
+- 😭 A **difference of convex** functions (DC) — not convex as written
+- 🔁 The matrix inverse "cannot be expressed in convex form" (lec03b)
+- ⛔ The hard bound $\Omega \preceq 2Y$ of the plain `mle_oracle` is **non-convex** — it merely papers over the difficulty
+
+> 💡 Idea: keep the convex part, and linearise away the concave part.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 The Convex-Concave Procedure
+
+---
+
+### 🧮 Majorising the Concave Term
+
+Linearise $\log\det\Omega$ — a concave function — at the current iterate $\Omega_k$:
+
+$$\log\det \Omega \;\le\; \log\det \Omega_k \;+\; \mathrm{Tr}\!\big({\color{crimson}\Omega_k^{-1}}\,(\Omega-\Omega_k)\big)$$
+
+Drop the constants and keep the convex terms:
+
+$$\min_{\Omega \succeq 0}\;\; \mathrm{Tr}(\Omega^{-1} Y) \;+\; \mathrm{Tr}\!\big({\color{crimson}\Omega_k^{-1}}\,\Omega\big)$$
+
+- ✅ The surrogate is **convex** and has *no* $\Omega \preceq 2Y$ bound
+- 🎯 The only matrix the subproblem needs is the **majorization matrix** ${\color{crimson}M_k = \Omega_k^{-1}}$
+
+---
+
+### 🔁 The CCP Loop
+
+.mermaid[
+<pre>
+graph TD
+    S["Start: initial majorization M0"] --> L["Linearize at current iterate"]
+    L --> P["Solve convex subproblem over the family"]
+    P --> U["Update the iterate"]
+    U --> C{"Objective stalled?"}
+    C -->|no| L
+    C -->|yes| E["Return coefficients"]
+    style S fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style L fill:#d4e6f1,stroke:#2874a6,stroke-width:3px
+    style P fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+</pre>
+]
+
+Each round solves a *cutting-plane* subproblem — the same ellipsoid machinery as LSQ and MLE. 🥚
+
+---
+
+### ❓ The Crux: How to Start?
+
+The loop needs a **first** majorization matrix:
+
+$$M_0 = \Omega_0^{-1}$$
+
+- 🔴 Every round computes $M_k = \Omega_k^{-1}$ with `np.linalg.inv`
+- 🔴 But the **first** $\Omega_0$ has to come from somewhere
+- 🔴 If $\Omega_0$ is **singular**, `inv` raises `LinAlgError` and the whole solver dies
+
+So the entire CCP hinges on: **how do we pick $\Omega_0$?** 🤔
+
+---
+
+class: nord-light, middle, center
+
+## ⚠️ The Naive Warm Start
+
+---
+
+### 🟦 Least-Squares Warm Start
+
+The original code warmed up from the **least-squares** fit:
+
+```python
+x0, _, _ = lsq_corr_core2(Y, m, lsq_oracle(Sigma, Y))   # LSQ coefficients
+...
+M = np.linalg.inv(omega_of(x0, Sigma))                  # M0 = Omega(x0)^-1
+```
+
+- ✅ LSQ gives a good *centre* for the first ellipsoid
+- ✅ Its objective (Frobenius residual) is easy and convex
+- ✅ It lands close to the MLE basin in practice
+
+But there is a subtle trap… 🪤
+
+---
+
+### 🪤 PSD Is Not PD
+
+The LSQ oracle only enforces **positive semi-definite**:
+
+$$\Omega(x_0) \succeq 0 \quad\text{(the *closed* cone — the boundary is allowed)}$$
+
+The CCP majorization needs **positive definite**:
+
+$$\Omega_0 \succ 0 \quad\text{(so that } \Omega_0^{-1}\text{ exists and } \log\det\Omega_0 \text{ is finite)}$$
+
+.mermaid[
+<pre>
+graph LR
+    A["LSQ solution Omega(x0)"] --> B{"strictly inside the cone?"}
+    B -->|yes| C["PD: inv works"]
+    B -->|no| D["PSD boundary: singular -> inv fails"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+</pre>
+]
+
+---
+
+### 💥 A Concrete Failure
+
+On the polynomial basis $F_0 = \mathbf{1}$ (all ones), take a start with only the constant term:
+
+$$x_0 = [\,4,\,0,\,0,\,0\,] \quad\Longrightarrow\quad \Omega(x_0) = 4\cdot\mathbf{1} \quad\text{(rank-1!)}$$
+
+- The all-ones matrix has eigenvalues $\{n,\,0,\dots,0\}$ — **not invertible** 😱
+- `np.linalg.inv` raises `LinAlgError: Singular matrix`
+- Even a *near*-singular $\Omega(x_0)$ gives a garbage majorization matrix
+
+> ✅ The critique is valid: *we cannot guarantee $\Omega(x_0)$ is positive definite.*
+
+---
+
+class: nord-light, middle, center
+
+## 💡 The Fix
+
+---
+
+### 🎯 The Free (Unconstrained) MLE
+
+Ignore the family constraint for a moment and minimise over **all** PD matrices:
+
+$$\min_{\Omega \succ 0}\;\; \log\det\Omega + \mathrm{Tr}(\Omega^{-1} Y)$$
+
+Setting the gradient to zero:
+
+$$\nabla = \Omega^{-1} - Y = 0 \quad\Longrightarrow\quad {\color{seagreen}\Omega^\star = Y}$$
+
+> 🎁 The **unconstrained MLE covariance is simply $Y$ itself** — and it is obtained from a *semidefinite program*, so it is positive definite by construction.
+
+---
+
+### 🩹 What If $Y$ Is Not PD?
+
+The free-MLE problem is **unbounded** when $Y \not\succ 0$ (grow $S$ along $\mathrm{null}(Y)$ and $\log\det S \to \infty$). So repair $Y$ first:
+
+$$Y = {\color{steelblue}V}\,\mathrm{diag}({\color{crimson}\lambda})\,{\color{steelblue}V}^\top
+\qquad\Longrightarrow\qquad
+\Omega_0 = {\color{steelblue}V}\,\mathrm{diag}\big(\max({\color{crimson}\lambda},\,{\color{seagreen}\varepsilon})\big)\,{\color{steelblue}V}^\top$$
+
+- 📐 This is the **nearest positive-definite matrix** in Frobenius norm (clip eigenvalues)
+- 🟩 $\varepsilon$ = a small positive floor (relative to $\lambda_{\max}$)
+- 🧮 No SDP solver needed — just an **eigendecomposition**
+- ✅ The result is always positive definite, hence always invertible
+
+---
+
+### ⚡ Return $\Omega_0^{-1}$ Directly
+
+We never even need $\Omega_0$ — the CCP only wants its **inverse**. Reciprocate the (clipped) eigenvalues:
+
+$$\Omega_0^{-1} = {\color{steelblue}V}\,\mathrm{diag}\!\Big(\tfrac{1}{\max({\color{crimson}\lambda},\,{\color{seagreen}\varepsilon})}\Big)\,{\color{steelblue}V}^\top$$
+
+```python
+def mle_corr_mtx(Y, eps=1e-8):
+    sym = (Y + Y.T) / 2.0
+    w, V = np.linalg.eigh(sym)
+    floor = eps * max(float(w[-1]), 1.0)
+    w = np.maximum(w, floor)          # nearest-PD spectrum
+    return (V * (1.0 / w)) @ V.T      # Omega0^-1, one step, no inv
+```
+
+✅ One eigendecomposition · ✅ no new dependency · ✅ never inverts a singular matrix
+
+---
+
+### 🧭 The Initializer Decision
+
+.mermaid[
+<pre>
+graph TD
+    A["Sample covariance Y"] --> B{"Y positive definite?"}
+    B -->|yes| C["Free MLE: Omega0 = Y"]
+    B -->|no| D["Nearest PD: clip eigenvalues"]
+    C --> E["Return Omega0^-1"]
+    D --> E
+    E --> F["CCP round 0 majorization"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fadbd8,stroke:#c0392b,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#d4e6f1,stroke:#2874a6,stroke-width:3px
+</pre>
+]
+
+For a PD $Y$ the floor is inactive, so this is *exactly* the free-MLE precision $Y^{-1}$. 🎯
+
+---
+
+### 🧷 Wiring It Into `cccp_mle`
+
+```python
+x   = np.array(x0, dtype=float)
+m0  = mle_corr_mtx(Y)                 # Omega0^-1  (always PD)
+f_old = np.inf
+for k in range(n_outer):
+    M = m0 if k == 0 else np.linalg.inv(omega_of(x, Sigma))
+    oracle = cccp_mle_oracle(Sigma, Y, M)
+    x_new, _, _ = cutting_plane_optim(oracle, Ell(mle_r0, x), inf, options)
+    ...
+```
+
+- 🥇 **Round 0** — majorize at the free-MLE precision (guaranteed PD)
+- 🔁 **Rounds ≥ 1** — linearize at the current family iterate $\Omega(x_k)^{-1}$
+- 🧩 The `x0` argument only sets the *ellipsoid centre* now — its PD-ness no longer matters
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Results & Verification
+
+---
+
+### 📈 Before / After (20-site, m = 4 problem)
+
+| | LSQ warm start (old) | Free-MLE init (new) |
+|---|---|---|
+| CCP objective $f$ | 29.775870 | **29.775870** |
+| coefficient rel. diff | — | $1.9\times10^{-4}$ |
+| linearization rounds | 16 | 18 |
+| singular $\Omega(x_0)$ | 💥 `LinAlgError` | ✅ **works** |
+
+- 🎯 **Identical optimum** — the initialiser changes the path, not the answer
+- 🛡️ Singular starts now converge to the *same* objective
+- ⚖️ Two extra rounds is a small price for robustness
+
+*(Tables may render as plain text depending on the Markdown engine — the numbers are what matter.)*
+
+---
+
+### ✅ Verification
+
+- 🧪 `pytest` → **32 passed** (3 new tests for the initialiser)
+  - `mle_corr_mtx(Y) == inv(Y)` when $Y$ is PD
+  - indefinite $Y$ → PD precision (and PD inverse)
+  - `cccp_mle` accepts a **singular** start
+- 🎨 `black`, `isort`, `flake8`, `mypy` → all clean
+- 📦 **No new dependency** (NumPy only) — the slide's `cvxpy` SDP is not required
+- 🔬 `experiments/` inherit the fix automatically (they call `cccp_mle`)
+
+---
+
+### 🧯 Caveats & Extensions
+
+- ⚠️ **Round 0 only.** Later rounds still compute $\Omega(x_k)^{-1}$; a CCP iterate could in principle land on the PSD boundary
+- ➕ The lecture's **nugget** $\Sigma = \Omega(p) + \kappa I$ with $\kappa \ge 0$ guarantees PD at *every* round — a natural follow-up
+- 🧮 Cost: one $O(n^3)$ eigendecomposition, negligible vs. the cutting-plane loop
+- 🎚️ ${\color{seagreen}\varepsilon}$ controls the conditioning of the repaired $\Omega_0$ (default $10^{-8}\cdot\lambda_{\max}$)
+
+---
+
+### 🚀 Ports & Next Steps
+
+- 🐍 **Python** — done (dependency-free)
+- ➕ **C++** (`corr-solver-cpp`) — reuse `include/corrsolver/eigen.hpp` (Jacobi eigensolver)
+- 🦀 **Rust** (`corr-solver-rs`) — reuse `src/eigen.rs`
+- 🔗 Same contract everywhere: `mle_corr_mtx(Y) -> Omega0^-1`
+- 🧱 Shared design: a `SolverConfig` knob to choose `lsq` vs `mle` initialisation
+- 🪄 Optional: add the nugget $\kappa I$ so *every* round is unconditionally PD
+
+---
+
+### 🧠 Summary
+
+- 🎯 The family-constrained MLE is solved by **CCP**, which needs $\Omega_k^{-1}$
+- 💥 The least-squares warm start only guarantees $\Omega \succeq 0$ → `inv` can fail
+- 💡 The **free MLE** is $\Omega^\star = Y$; repair non-PD $Y$ by **clipping eigenvalues**
+- ⚡ `mle_corr_mtx` reciprocates the spectrum to return $\Omega_0^{-1}$ **directly**
+- ✅ Same optimum, robust to singular starts, no new dependency
+- 📚 See also [lec03a](lec03a-remark.html) and [lec03b](lec03b-remark.html)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+🤔 Questions? 💬 Discuss! ✨
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

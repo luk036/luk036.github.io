@@ -43,7 +43,7 @@ class: nord-dark, middle, center
 5. 🔋 **Case study**: switching power analysis
 6. 📊 **Results**: estimates vs. ground truth
 7. 🤖 Big data for **AI-era** chip design
-8. 🌀 Bonus: GPU Mandelbrot · 🚀 Lessons & next steps
+8. 🚀 Lessons & next steps
 
 ---
 
@@ -522,26 +522,6 @@ All errors stay within HyperLogLog's $\sigma \approx 1.04/\sqrt{m}$ bound. 🎯
 - 📐 **EDA suite**: 12 metrics, all ≤ 3.4% error, most < 1% ✅
 
 Zero stored elements — every number is computed on the fly. 🪄
-
----
-
-class: nord-light, middle, center
-
-## 🌀 Bonus — GPU Mandelbrot
-
----
-
-### GPU Mandelbrot 🌀
-
-One thread per pixel; iterate the escape-time map:
-
-$$ z_0 = 0,\qquad \color{#9c27b0}{z_{n+1} = z_n^{2} + c},\qquad \text{escape when } |z_n|^{2} > 4 $$
-
-- Image **1200 × 800** = 960,000 pixels × 256 iterations 🖼️
-- Grid $(75, 50)$ blocks × $(16,16)$ threads = **960k threads** 🧵
-- Interactive scroll-zoom + drag-rectangle zoom 🔍
-
-Same parallel recipe: independent work per thread → perfect for the GPU. ⚡
 
 ---
 

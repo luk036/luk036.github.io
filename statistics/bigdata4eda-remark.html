@@ -401,6 +401,14 @@ Hot nodes = the clock tree ($\alpha = 0.5$, $2.5\ \text{µW}$ each) 🌡️
 
 ---
 
+### Generated: switching power analysis 📊
+
+![Switching power analysis](bigdata4eda.files/switching_power_analysis.png)
+
+Power by category and the top power-hungry nodes — from a 53.1 KB sketch. 🌡️
+
+---
+
 ### Temporal activity ⏳
 
 Windows of 100 cycles, per-window sketches ($w=500,\ d=4$). Two signatures:
@@ -436,6 +444,14 @@ Sanity-check IR-drop / current-density risks early. 🛡️
 
 ---
 
+### Generated: temporal & current profile 📊
+
+![Temporal and current analysis](bigdata4eda.files/temporal_current_analysis.png)
+
+Per-node activity over time and the estimated current envelope. ⚡
+
+---
+
 ### Pattern-dependent analysis 🎼
 
 Different workloads stress different nodes. **Sensitivity index:**
@@ -466,18 +482,34 @@ $$ \color{#f44336}{\text{power variation} = 86.6\%},\qquad \text{worst corner} =
 
 ---
 
+### Generated: pattern & corner analysis 📊
+
+![Pattern and corner analysis](bigdata4eda.files/pattern_corner_analysis.png)
+
+Pattern sensitivity, multi-corner power and co-activity correlation. 🎭
+
+---
+
 ### Memory ↔ accuracy trade-off ⚖️
 
 10,000-node power-law workload, **119,266 events**:
 
 | Config | Counters | Memory | Avg error | Hot-node error |
 |---|---:|---:|---:|---:|
-| Tiny | 300 | 1.2 KB | 23,182% | 363% |
-| Small | 2,000 | 7.8 KB | 3,805% | 41% |
-| Medium | 10,000 | 39 KB | 358% | **4.1%** |
-| Large | 60,000 | 234 KB | 0.04% | **0.01%** |
+| Tiny | 300 | 1.2 KB | 26,538% | 323% |
+| Small | 2,000 | 7.8 KB | 3,380% | 41% |
+| Medium | 10,000 | 39 KB | 349% | **5.8%** |
+| Large | 60,000 | 234 KB | 0.16% | **0.01%** |
 
 **Punch-line:** hot-spot *ranking* is robust even at medium size ✅ — but over-shrinking destroys the tails. 🚨
+
+---
+
+### Generated: memory ↔ accuracy 📊
+
+![Memory vs accuracy trade-off](bigdata4eda.files/memory_accuracy_tradeoff.png)
+
+Sketch size versus estimation error — the trade-off made precise. ⚖️
 
 ---
 

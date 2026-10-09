@@ -41,9 +41,9 @@ class: nord-dark, middle, center
 3. 🎯 **HyperLogLog** — cardinality estimation
 4. ⚡ **GPU acceleration** with Numba CUDA
 5. 🔋 **Case study**: switching power analysis
-6. ⚖️ Memory ↔ accuracy trade-offs
-7. 🌀 Bonus: GPU Mandelbrot
-8. 🚀 Lessons & next steps
+6. 📊 **Results**: estimates vs. ground truth
+7. 🤖 Big data for **AI-era** chip design
+8. 🌀 Bonus: GPU Mandelbrot · 🚀 Lessons & next steps
 
 ---
 
@@ -483,6 +483,50 @@ $$ \color{#f44336}{\text{power variation} = 86.6\%},\qquad \text{worst corner} =
 
 class: nord-light, middle, center
 
+## 📊 Part 6 — Results
+
+---
+
+### EDA application suite: estimates vs. ground truth 📐
+
+Twelve metrics, each from a single-pass HyperLogLog sketch (v0.2.0 run):
+
+| Metric | Estimate | Actual | Error |
+|---|---:|---:|---:|
+| 🔎 DRC patterns | 300,877 | 290,919 | 3.4% |
+| 🕸️ Signal paths | 498,998 | 500,000 | 0.2% |
+| 🔀 Fanout degrees | 49 | 49 | 0.0% |
+| 🗺️ Cell types / region | 602 | 600 | 0.3% |
+| ⏱️ Timing paths | 99,503 | 100,000 | 0.5% |
+| ⚠️ Critical paths | 49,856 | 50,584 | 1.4% |
+| 🔋 Activity patterns | 9,888 | 9,964 | 0.8% |
+| 📈 Transition counts | 63 | 63 | 0.0% |
+| ✅ States covered | 256 | 256 | 0.0% |
+| 🔁 Transitions covered | 65,831 | 65,506 | 0.5% |
+| 🏭 Defect patterns | 138 | 140 | 1.4% |
+| 💀 Failing-die buckets | 636 | 637 | 0.2% |
+
+All errors stay within HyperLogLog's $\sigma \approx 1.04/\sqrt{m}$ bound. 🎯
+
+---
+
+### Results at a glance 🏁
+
+- 🪣 **Count-Min Sketch**: recovers 235 toggle events exactly at $w{=}50,\ d{=}3$
+- 🏭 **Full-chip power**: 500 nodes, **64,106 events → 53.1 KB sketch in 0.59 s**; clock tree = 125 µW of 194 µW (64%) 🌡️
+- ⏳ **Temporal**: bursty node $B = 0.35$; periodic clock detected (confidence 1.00)
+- ⚡ **Current envelope**: peak **0.34 mA**, average 0.04 mA
+- 🧊🔥 **PVT corners**: **86.6%** power variation, worst corner `FF_125C`
+- ⚖️ **Memory ↔ accuracy**: 39 KB sketch → **4–6%** hot-node error; 234 KB → **0.01%**
+- 🎯 **HyperLogLog**: 12 KB → **<0.5%** error ($p{=}14$); **1M items → 3 KB**
+- 📐 **EDA suite**: 12 metrics, all ≤ 3.4% error, most < 1% ✅
+
+Zero stored elements — every number is computed on the fly. 🪄
+
+---
+
+class: nord-light, middle, center
+
 ## 🌀 Bonus — GPU Mandelbrot
 
 ---
@@ -498,6 +542,73 @@ $$ z_0 = 0,\qquad \color{#9c27b0}{z_{n+1} = z_n^{2} + c},\qquad \text{escape whe
 - Interactive scroll-zoom + drag-rectangle zoom 🔍
 
 Same parallel recipe: independent work per thread → perfect for the GPU. ⚡
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Part 7 — Big Data for AI-Era Chip Design
+
+---
+
+### Chip design in the AI era 🤖
+
+- AI workloads demand **enormous silicon**: 100B+ transistors, chiplets, 2 nm 🔩
+- **AI-generated RTL** and ML-driven design-space exploration multiply data volume faster than tools scale 📈
+- Verification state spaces are **astronomical** — coverage closure dominates schedules 🕳️
+- Design decisions must now be made **in real time**, inside automated / AI loops ⏱️
+
+.mermaid[
+<pre>
+graph LR
+  AI["AI workloads\nLLMs, training"] --> CHIP["Huge AI chips\n100B+ transistors"]
+  CHIP --> DATA["Design data\nsim · DRC · timing · power"]
+  DATA --> ANALYTICS["Streaming analytics\nsketches + GPU"]
+  ANALYTICS --> DECIDE["Real-time\nDSE & sign-off"]
+  DECIDE --> AI
+  style AI fill:#9c27b0
+  style CHIP fill:#2196f3
+  style DATA fill:#ff9800
+  style ANALYTICS fill:#4caf50
+  style DECIDE fill:#f44336
+</pre>
+]
+
+---
+
+### Why sketches + GPU are the enabling layer 🏗️
+
+- 🌊 **Streaming, single pass** — fit simulation, DRC and toggle-event streams without storage
+- 🪶 **$O(1)$ memory** — analyze billion-gate designs on a workstation, not a cluster
+- 🔗 **Mergeable** — tile across chiplets, cores and cloud for distributed analysis
+- ⚡ **GPU-accelerable** — thousands of parallel hashes/updates for AI-scale data
+- 🎲 **Bounded error** — statistical guarantees ($\sigma \approx 1.04/\sqrt{m}$) for automated decisions
+- 🧱 **Foundation for AI-EDA** — fast, scalable metrics feed ML surrogate models and RL placers/routers
+
+Sketches turn **unbounded EDA data into bounded, decision-ready signals** for AI-driven flows. 🤝
+
+---
+
+### From sketches to AI-driven EDA 🔁
+
+.mermaid[
+<pre>
+graph LR
+  RAW["EDA data streams\nnetlist · sim · DRC"] --> SK["Sketches\nCMS · HLL"]
+  SK --> FEAT["Scalable metrics\nhot spots · coverage · uniqueness"]
+  FEAT --> ML["ML / AI models\nsurrogate · RL · LLM"]
+  ML --> ACT["Design actions\nplace · route · optimize"]
+  ACT --> RAW
+  style RAW fill:#ff9800
+  style SK fill:#9c27b0
+  style FEAT fill:#4caf50
+  style ML fill:#2196f3
+  style ACT fill:#f44336
+</pre>
+]
+
+- Sketches are the **memory-bounded sensing layer** that makes the AI feedback loop affordable 🪄
+- The same math drives **verification closure, congestion, yield and power** — one toolkit, many decisions 🧰
 
 ---
 

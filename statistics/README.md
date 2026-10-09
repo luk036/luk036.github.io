@@ -96,6 +96,22 @@ graph LR
 
 ---
 
+### 3. Big Data for EDA
+
+| Topic | Description |
+| ----- | ----------- |
+| [Big Data for EDA](../statistic/bigdata4eda-remark.html) | Probabilistic sketches (Count-Min, HyperLogLog) and GPU acceleration for chip analysis |
+
+**Experiments:**
+
+- 🪣 Count-Min Sketch — frequency & switching-activity tracking
+- 🎯 HyperLogLog — cardinality estimation (CPU + Numba CUDA)
+- 🔋 Switching-power, temporal, and PVT-corner analysis
+
+> 🔬 Source: [github.com/luk036/big_data](https://github.com/luk036/big_data)
+
+---
+
 ## 🧮 Core Concepts
 
 ### Bayesian Optimization Workflow

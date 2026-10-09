@@ -1,0 +1,551 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Big Data for EDA</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Big Data for EDA 🧮
+
+### Probabilistic Sketches & GPU Acceleration for Chip Analysis ⚡🔋
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### Agenda 🗺️
+
+1. 🔥 Why approximate? The EDA data explosion
+2. 🪣 **Count-Min Sketch** — frequency estimation
+3. 🎯 **HyperLogLog** — cardinality estimation
+4. ⚡ **GPU acceleration** with Numba CUDA
+5. 🔋 **Case study**: switching power analysis
+6. ⚖️ Memory ↔ accuracy trade-offs
+7. 🌀 Bonus: GPU Mandelbrot
+8. 🚀 Lessons & next steps
+
+---
+
+class: nord-light, middle, center
+
+## 🔥 Part 1 — Why Approximate?
+
+---
+
+### The EDA data explosion 📈
+
+- Modern SoCs: **1M+ gates**, **500k nets**, **10 layers** 🔩
+- Logic simulation: **10⁹ cycles** × millions of nets 🔁
+- Every node toggle is a streaming event → exact bookkeeping is **O(n)** 💥
+
+.mermaid[
+<pre>
+graph LR
+  RTL["RTL Netlist\n1M+ gates"] --> SIM["Simulation\n10^9 cycles"]
+  SIM --> EV["Toggle-Event Stream\n100M+ events"]
+  EV --> SK["Probabilistic Sketches\nO(1) memory"]
+  SK --> HOT["Hot-spot Map 🌡"]
+  SK --> PWR["Power Estimate 🔋"]
+  style RTL fill:#4caf50
+  style SIM fill:#2196f3
+  style EV fill:#ff9800
+  style SK fill:#9c27b0
+  style HOT fill:#f44336
+  style PWR fill:#f44336
+</pre>
+]
+
+---
+
+### Exact vs. approximate ⚖️
+
+| | Exact counting 📏 | Sketch 🇸 |
+|---|---|---|
+| Memory | O(n) | O( (1/ε) · log(1/δ) ) |
+| Query | exact | probabilistic bound |
+| One-pass stream | ✗ needs storage | ✓ |
+
+Key idea: **trade a tiny, bounded error for a huge memory saving** 🎯
+
+$$ \Pr\big[\,\hat{c}_x \le c_x + \varepsilon N\,\big] \;\ge\; 1-\delta $$
+
+where $N$ is the total number of events. 🔬
+
+---
+
+class: nord-light, middle, center
+
+## 🪣 Part 2 — Count-Min Sketch
+
+---
+
+### Count-Min Sketch: intuition 🪣
+
+Use a **small 2-D array** of counters and $d$ independent hash functions.
+Increment on every event; query returns the **minimum** across rows.
+
+.mermaid[
+<pre>
+graph LR
+  X["Event x ➕"] --> H["d independent hashes\nh1 ... hd"]
+  H --> C["Increment one counter\nper row"]
+  Y["Query y ❓"] --> H2["same d hashes"]
+  H2 --> M["min over d rows\nnever underestimates ✅"]
+  style X fill:#4caf50
+  style H fill:#2196f3
+  style C fill:#ff9800
+  style M fill:#f44336
+</pre>
+]
+
+Collisions only ever **over-count**, so the minimum is a safe estimate. 🛟
+
+---
+
+### Count-Min Sketch: algorithm 📐
+
+**Universal hash** (Mersenne prime $p = 2^{31}-1$):
+
+$$ h_i(x) = \big((a_i x + b_i) \bmod p\big) \bmod w $$
+
+**Update** (additive, all rows):
+
+$$ \forall i \in [d]:\quad C[i,\, h_i(x)] \mathrel{+}= 1 $$
+
+**Query** (minimum = over-estimate):
+
+$$ \hat{c}_x = \min_{i \in [d]}\ C[i,\, h_i(x)] $$
+
+**Guarantee:** with probability $\ge 1-\delta$, $\ \color{#2196f3}{\hat{c}_x \le c_x + \varepsilon N}$
+
+---
+
+### Sizing the sketch 📏
+
+Choose $w = \lceil e/\varepsilon \rceil$ and $d = \lceil \ln(1/\delta)\rceil$.
+
+For $\varepsilon = 0.001$ and $\delta = 0.01$:
+
+$$ w = \left\lceil \frac{e}{0.001} \right\rceil = \color{#4caf50}{2719},\qquad d = \big\lceil \ln 100 \big\rceil = \color{#4caf50}{5} $$
+
+$$ \text{memory} = w \cdot d \cdot 4\,\text{B} = 2719 \cdot 5 \cdot 4 = 54{,}380\,\text{B} \;\approx\; \color{#ff9800}{53.1\ \text{KB}} $$
+
+Additive error budget $\varepsilon N$ — e.g. $N=10^8 \Rightarrow \pm 10^5$. 📉
+
+---
+
+### Demo: switching-activity tracking 🔬
+
+CM sketch with only $w=50,\ d=3$ tracks 6 nets over **235 toggle events**:
+
+| Net | Node ID | Toggles | Estimate |
+|---|---|---:|---:|
+| `clk_buffer_1` | 1001 | 150 | ✅ 150.0 |
+| `data_reg_1` | 2001 | 75 | ✅ 75.0 |
+| `memory_cell` | 4001 | 10 | ✅ 10.0 |
+| others | — | 0 | 0.0 |
+
+Recovers exact counts **with no collisions** — hot spots are obvious after one pass. 🌡️
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 3 — HyperLogLog
+
+---
+
+### HyperLogLog: intuition 🎯
+
+Idea: if a uniform hash has $k$ **leading zeros**, you have probably seen about $2^{k}$ distinct items. 👀
+
+Track the **maximum** rank per register; combine registers with a **harmonic mean**.
+
+.mermaid[
+<pre>
+graph LR
+  X["Item"] --> HASH["64-bit hash"]
+  HASH --> IDX["top p bits\nregister j"]
+  HASH --> REM["remaining bits\nrank rho"]
+  IDX --> UPD["M[j] = max(M[j], rho)"]
+  REM --> UPD
+  UPD --> EST["E = alpha_m m^2 / sum 2^-M[j]"]
+  style X fill:#4caf50
+  style HASH fill:#2196f3
+  style UPD fill:#9c27b0
+  style EST fill:#ff9800
+</pre>
+]
+
+Memory is just $m = 2^p$ small registers — **kilobytes** for millions of items. 💾
+
+---
+
+### HyperLogLog: the math 📐
+
+Registers $m = 2^{p}$ (precision $p \in [4,16]$, default $14 \Rightarrow m = 16{,}384$).
+
+$$ j = \text{top } p \text{ bits of } h(x),\qquad \rho(x) = \#\text{leading zeros of remaining bits} $$
+
+$$ M[j] = \max\big(M[j],\, \rho(x)\big) $$
+
+**Estimator** (harmonic mean), with $\alpha_m = \dfrac{0.7213}{1 + 1.079/m}$:
+
+$$ \hat{E} = \color{#2196f3}{\alpha_m \cdot \frac{m^{2}}{\sum_{j=1}^{m} 2^{-M[j]}}} $$
+
+---
+
+### Bias corrections & error 🔧
+
+**Small range** (linear counting), when $\hat{E} \le \tfrac{5}{2} m$:
+
+$$ \color{#4caf50}{\hat{E} = m \ln\!\left(\frac{m}{V}\right)},\qquad V = \#\{\text{zero registers}\} $$
+
+**Large range**, when $\hat{E} > \tfrac{1}{30}2^{64}$:
+
+$$ \color{#f44336}{\hat{E} = -2^{64}\ln\!\left(1 - \hat{E}/2^{64}\right)} $$
+
+Standard error is essentially independent of the cardinality:
+
+$$ \sigma \approx \frac{1.04}{\sqrt{m}} \;\Rightarrow\; 2.6\% \text{ at } p{=}10,\ \ 0.8\% \text{ at } p{=}14 $$
+
+---
+
+### Memory vs. accuracy: theoretical 💾
+
+$$ \sigma \approx \frac{1.04}{\sqrt{m}},\qquad \text{memory} = 4\,m\ \text{bytes (int32 registers)} $$
+
+| $p$ | $m$ | Memory | Std. error |
+|---:|---:|---:|---:|
+| 8 | 256 | 1 KB | 6.50% |
+| 10 | 1,024 | 4 KB | 3.25% |
+| 12 | 4,096 | 16 KB | 1.63% |
+| 14 | 16,384 | 64 KB | 0.81% |
+| 16 | 65,536 | 256 KB | 0.41% |
+
+**256 KB estimates cardinalities of essentially any size.** 🌍
+
+---
+
+### Demo: measured accuracy 📊
+
+Measured on CPU (SHA-256 hashing), distinct-items benchmark:
+
+| $p$ | $m$ | Memory | Measured error |
+|---:|---:|---:|---:|
+| 8 | 256 | 0.2 KB | 0.98% |
+| 10 | 1,024 | 0.8 KB | 2.20% |
+| 12 | 4,096 | 3.0 KB | 2.73% |
+| 14 | 16,384 | 12 KB | 0.46% |
+| 16 | 65,536 | 48 KB | 0.02% |
+
+- Merge of two disjoint 5,000-sets → est. 10,457 vs. true 10,000 (**4.6% error**) 🔗
+- 1M random draws → est. 99,470 distinct in **~3 KB** 🎉
+
+---
+
+### HyperLogLog in EDA: application suite 🏗️
+
+One cardinality primitive, **seven** EDA estimators (map objects → typed signatures, then count unique):
+
+| Application | Estimates |
+|---|---|
+| 🔎 DRC | unique violation patterns |
+| 🕸️ Netlist connectivity | unique signal paths · fanout · critical paths |
+| 🗺️ Placement | unique cell types per region |
+| ⏱️ Timing | unique paths · critical paths |
+| 🔋 Power activity | unique activity patterns · transition counts |
+| ✅ Verification | unique states reached · coverage % |
+| 🏭 Yield | unique defect patterns · failing dies |
+
+All with just $m = 2^{p}$ registers. Coverage, congestion and yield pivot on the same math. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 4 — GPU Acceleration
+
+---
+
+### Why GPU? 🚀
+
+- Hashing + register updates are **embarrassingly parallel** 🧵
+- A CPU handles one element at a time; a GPU runs **millions of threads** at once
+- Numba `@cuda.jit` compiles Python kernels to native CUDA — **no PyTorch needed** 🐍
+
+.mermaid[
+<pre>
+graph TD
+  D["Batch of hashes\nup to 1M"] --> GRID["Grid: ceil(n/256) blocks"]
+  GRID --> T["256 threads / block"]
+  T --> A["atomicMax(registers[j], rho) ⚛"]
+  A --> R["Registers in global memory"]
+  R --> C["copy_to_host()"]
+  C --> E["Harmonic-mean estimate"]
+  style D fill:#4caf50
+  style GRID fill:#2196f3
+  style A fill:#ff9800
+  style E fill:#9c27b0
+</pre>
+]
+
+---
+
+### GPU HyperLogLog: kernel design 🛠️
+
+- One thread per hash; `cuda.grid(1)` gives the thread id 🧮
+- Register index from top $p$ bits, rank from the rest
+
+$$ j = h(x) \gg (64-p),\qquad \rho = \text{leading-zeros of } h(x) \ll p $$
+
+- **Race-free** update via hardware atomics:
+
+$$ \color{#2196f3}{M[j] \leftarrow \texttt{atomicMax}\big(M[j],\, \rho\big)} $$
+
+- Hashes precomputed on CPU with **MurmurHash3 x64**, uploaded via `cuda.to_device` 📤
+
+---
+
+### Hashing on the GPU 🔡
+
+Two hash families in the demos:
+
+- **xorshift** (`simple_gpu_demo`): `x ^= x<<13; x ^= x>>7; x ^= x<<17` — fast, low quality ⚡
+- **MurmurHash3 fmix64** (`better_gpu_demo`, `hyper_loglog_gpu_demo`) — well-mixed 🏆
+
+$$ k \leftarrow k \oplus (k \gg 33);\quad k \leftarrow k \cdot \texttt{0xFF51AFD7ED558CCD};\ \dots $$
+
+| Kernel | Buckets | Target error |
+|---|---:|---:|
+| `b = 14` | 16,384 | ≈ 1% |
+| `b = 16` | 65,536 | ≈ 0.4% |
+
+---
+
+### GPU demos ⚡
+
+- `simple_gpu_demo`: **10M** items, $b=14$ (16,384 buckets) 🧮
+- `better_gpu_demo`: **10M** items, with linear-counting correction 🎯
+- `hyper_loglog_gpu_demo` benchmark: **5M** items, 500k unique, batch sizes 1k → 1M 📦
+- Memory always $m \times 4$ bytes — 64 KB holds 16,384 registers 💾
+
+> Throughput / speed-up depend on the GPU; the demo reports `cpu_time / gpu_time` at runtime. ⏱️
+
+---
+
+class: nord-light, middle, center
+
+## 🔋 Part 5 — Switching Power Case Study
+
+---
+
+### From toggles to power 🔋
+
+Activity factor from the sketch, then the classic dynamic-power formula:
+
+$$ \alpha = \frac{n_{\text{toggles}}}{N_{\text{cycles}}},\qquad \color{#f44336}{P = \alpha\, C\, V^{2}\, f} $$
+
+.mermaid[
+<pre>
+graph LR
+  N["Netlist + node caps"] --> T["Toggle stream"]
+  T --> CMS["Count-Min Sketch"]
+  CMS --> A["alpha = count / cycles"]
+  A --> P["P = alpha C V^2 f"]
+  P --> R["Hot-spot + power report 📊"]
+  style N fill:#4caf50
+  style CMS fill:#9c27b0
+  style A fill:#2196f3
+  style P fill:#f44336
+  style R fill:#ff9800
+</pre>
+]
+
+---
+
+### Demo: full-chip power analysis 🏭
+
+- **500 nodes**, 1,000 cycles, **64,106 toggle events** in **0.69 s** ⏱️
+- CMS auto-sized to $w=2719,\ d=5$ (**53.1 KB**) from $\varepsilon=0.001,\ \delta=0.01$
+
+| Category | Nodes | $C$ | Total power |
+|---|---:|---:|---:|
+| 🕐 clock | 50 | 5 fF | **125.0 µW** |
+| 🧠 logic | 150 | 2 fF | 60.5 µW |
+| 🎛️ control | 100 | 1 fF | 2.9 µW |
+| 💾 memory | 200 | 1 fF | 5.9 µW |
+
+Hot nodes = the clock tree ($\alpha = 0.5$, $2.5\ \text{µW}$ each) 🌡️
+
+---
+
+### Temporal activity ⏳
+
+Windows of 100 cycles, per-window sketches ($w=500,\ d=4$). Two signatures:
+
+**Burstiness** — spikes vs. steady traffic:
+
+$$ \color{#ff9800}{B = \frac{\sigma - \mu}{\sigma + \mu}} $$
+
+**Periodicity** — coefficient of variation of inter-event intervals:
+
+$$ c_v = \frac{\sigma_{\text{interval}}}{\mu_{\text{interval}}},\qquad \text{periodic if } c_v < 0.3 $$
+
+| Node | Burstiness | Mean $\alpha$ |
+|---|---:|---:|
+| periodic_clock | 0.00 | 0.50 |
+| bursty_node | 0.35 | 0.16 |
+| random_node | 0.30 | 0.17 |
+| quiet_node | 0.50 | 0.02 |
+
+---
+
+### Current envelope ⚡
+
+Peak switching current from charge/discharge:
+
+$$ \color{#f44336}{I_{\text{peak}} = \frac{C\,V}{\Delta t}},\qquad \Delta t = \text{transition time} = 50\ \text{ps} $$
+
+- Envelope = sum of triangular pulses over hot nodes 🔺
+- Hot-node filter: activity $\alpha > 0.1$, top-20 nodes 🔝
+- Demo: **peak 0.34 mA**, average 0.04 mA 📈
+
+Sanity-check IR-drop / current-density risks early. 🛡️
+
+---
+
+### Pattern-dependent analysis 🎼
+
+Different workloads stress different nodes. **Sensitivity index:**
+
+$$ \color{#4caf50}{\text{SI} = \frac{\max_k a_k - \min_k a_k}{\text{mean}_k a_k}} $$
+
+- Patterns: `Idle`, `Reset`, `Max_Load`, `Worst_Case` 🎭
+- Toggles: Idle 1,286 · Reset 2,250 · Max_Load 3,121 · **Worst_Case 3,997**
+- Most sensitive nodes: $\text{SI} = 4.0$, worst pattern = **Max_Load**
+- Correlation matrix groups co-active nodes 🔗
+
+---
+
+### Multi-corner (PVT) analysis 🧊🔥
+
+Same design across process / voltage / temperature corners:
+
+| Corner | $V$ | $T$ (°C) | Process |
+|---|---:|---:|---|
+| `TT_25C` | 1.0 | 25 | typical |
+| `FF_125C` | 1.1 | 125 | fast |
+| `SS_-40C` | 0.9 | −40 | slow |
+| `Turbo_Mode` | 1.0 | — | boost |
+
+Sample node (data path): TT 53.0 µW · FF **72.6 µW** · SS 28.5 µW · Turbo 49.5 µW
+
+$$ \color{#f44336}{\text{power variation} = 86.6\%},\qquad \text{worst corner} = \texttt{FF\_125C} $$
+
+---
+
+### Memory ↔ accuracy trade-off ⚖️
+
+10,000-node power-law workload, **119,266 events**:
+
+| Config | Counters | Memory | Avg error | Hot-node error |
+|---|---:|---:|---:|---:|
+| Tiny | 300 | 1.2 KB | 23,182% | 363% |
+| Small | 2,000 | 7.8 KB | 3,805% | 41% |
+| Medium | 10,000 | 39 KB | 358% | **4.1%** |
+| Large | 60,000 | 234 KB | 0.04% | **0.01%** |
+
+**Punch-line:** hot-spot *ranking* is robust even at medium size ✅ — but over-shrinking destroys the tails. 🚨
+
+---
+
+class: nord-light, middle, center
+
+## 🌀 Bonus — GPU Mandelbrot
+
+---
+
+### GPU Mandelbrot 🌀
+
+One thread per pixel; iterate the escape-time map:
+
+$$ z_0 = 0,\qquad \color{#9c27b0}{z_{n+1} = z_n^{2} + c},\qquad \text{escape when } |z_n|^{2} > 4 $$
+
+- Image **1200 × 800** = 960,000 pixels × 256 iterations 🖼️
+- Grid $(75, 50)$ blocks × $(16,16)$ threads = **960k threads** 🧵
+- Interactive scroll-zoom + drag-rectangle zoom 🔍
+
+Same parallel recipe: independent work per thread → perfect for the GPU. ⚡
+
+---
+
+### Lessons learned 💡
+
+- ✅ One pass, bounded memory — sketches fit streaming EDA data
+- ✅ Count-Min Sketch → frequencies & hot spots; HyperLogLog → unique counts
+- ✅ GPU atomics make register updates race-free and fast ⚛️
+- ⚠️ Size accuracy to the *query*: hot-spot ranking is robust, tails are not
+- ⚠️ Reproducibility: seed both NumPy **and** the sketch hash RNG 🎲
+- 🚧 Watch for subtle bugs (e.g. merge re-hashing, corner defaults)
+
+> Pick the sketch size from the error you can *tolerate*. 🎯
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+### Thanks for listening! 🙏
+
+@luk036 👨‍💻 · 2026 📅
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

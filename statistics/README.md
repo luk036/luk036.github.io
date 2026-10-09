@@ -100,7 +100,7 @@ graph LR
 
 | Topic | Description |
 | ----- | ----------- |
-| [Big Data for EDA](../statistic/bigdata4eda-remark.html) | Probabilistic sketches (Count-Min, HyperLogLog) and GPU acceleration for chip analysis |
+| [Big Data for EDA](bigdata4eda-remark.html) | Probabilistic sketches (Count-Min, HyperLogLog) and GPU acceleration for chip analysis |
 
 **Experiments:**
 
@@ -194,8 +194,9 @@ statistics/
 ├── index.html           # Slide viewer (loads README.md)
 ├── BO.md                # Bayesian Optimization detailed notes
 ├── RL-diagram.md        # Reinforcement Learning notes
-├── BO-remark.html       # BO slides
-└── RL-remark.html       # RL slides
+├── BO-remark.html           # BO slides
+├── RL-remark.html           # RL slides
+└── bigdata4eda-remark.html  # Big Data for EDA slides
 ```
 
 ---

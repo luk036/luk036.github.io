@@ -493,38 +493,59 @@ Walls 🧱 + gable 🔺 + **sloped roof** + door 🚪 + window 🪟 — non-axis
 
 ### 🎬 Watch It Fold
 
-<p align="center">
-<video src="fold-trick-art.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
-</p>
+.pull-left[
 
 - 📄 flat sheet ➡️ 🪄 fold to 90° ➡️ 🪑 the object **rises out** of the drawing
 - 🪑 chair · 🍽️ table · 🏠 house — one **24 s** loop 🎞️
 - 📱 square, H.264 — folds onto any phone
 
+]
+.pull-right[
+
+<p align="center">
+<video src="fold-trick-art.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
+</p>
+
+]
+
 ---
 
 ### 📱 The Same Content — Flat Screen
 
-<p align="center">
-<video src="fold-phone-flat.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
-</p>
+.pull-left[
 
 - 📄 on a **flat** screen the exact same frames read as a squashed, **warping** drawing 🌀
 - 🔄 it only morphs — the chair never *stands up*
 - 🧱 the 3-D reading needs the **fold** 👉 next slide
 
+]
+.pull-right[
+
+<p align="center">
+<video src="fold-phone-flat.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
+</p>
+
+]
+
 ---
 
 ### 📱 On a 90°-Folded Phone
 
-<p align="center">
-<video src="fold-phone.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
-</p>
+.pull-left[
 
 - 📱 fold a phone's screen to **90°** — the two halves *become* the floor plane and the wall plane 🧱
 - 🪑 the chair is projected onto **both halves**, so it spins as a genuine 3-D chair 🔄
 - 👁️ seen from $V$, the fold **is** the corner of the anamorphosis — no paper needed
 - 📺 on a real device the two panels just display two pre-computed frames 🎞️
+
+]
+.pull-right[
+
+<p align="center">
+<video src="fold-phone.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" width="520"></video>
+</p>
+
+]
 
 ---
 
@@ -533,7 +554,7 @@ Walls 🧱 + gable 🔺 + **sloped roof** + door 🚪 + window 🪟 — non-axis
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     OBJ["📦 object model\nfaces(colour) + edges"] --> SIG["σ classifier\nlinear form"]
     SIG --> CLIP["✂️ Sutherland–Hodgman\nhalf-plane clip"]
     CLIP --> MAP["π projective map\nprojgeom.projective_transform"]

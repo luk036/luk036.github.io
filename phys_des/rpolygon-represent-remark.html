@@ -29,12 +29,12 @@ class: nord-dark, middle, center
 # 📐 RPolygon Representation
 ## &amp; Robust Rectilinear Cutting
 
-### Even-index · x-first · zero-area filtering
+### Even-index · x-first · zero-area filtering · 2-node split
 
 @luk036 · PhysDes C++ / Recti · 2026
 
 ???
-⏱️ 0:00–0:01 — Welcome. This is a 30-minute tour of a representation bug that looked like a cutting bug, and the standalone rewrite plus zero-area output filter that fixed it.
+⏱️ 0:00–0:01 — Welcome. This is a 30-minute tour of a representation bug that looked like a cutting bug, and the standalone rewrite, zero-area output filter, and degenerate 2-node split that fixed it.
 
 ---
 
@@ -58,14 +58,15 @@ class: nord-dark, middle, center
 
 .pull-right[
 
-**Part 3 — Zero-Area Filter &amp; Standalone Cut** 🧹
+**Part 3 — Standalone Cut, Zero-Area Filter &amp; 2-Node Split** 🧹
 - Standalone C++ without Policy
 - Keep the original scan
 - Drop zero-area pieces at output
+- Degenerate 2-node split
 - Python follows C++
 
 **Part 4 — Verification &amp; Lessons** 🧪
-- 7-point fixture: 3 + 8
+- 12-point fixture: 1 + 10 + 9
 - xmake debug/release results
 - Stress test and Python parity
 - What we learned
@@ -73,7 +74,7 @@ class: nord-dark, middle, center
 ]
 
 ???
-⏱️ 0:01–0:02 — Four parts. The key idea: keep the original algorithm, make the convex path standalone, and filter zero-area pieces at the output boundary instead of asserting inside the recursion.
+⏱️ 0:01–0:02 — Four parts. The key idea: keep the original algorithm, make the convex path standalone, filter zero-area pieces at the output boundary, and split the existing 2-node piece when the cut point duplicates the target.
 
 ---
 
@@ -563,24 +564,28 @@ graph LR
     C --> E{"p_new == p_curr\nor p_new == p_min?"}
     D --> E
     E -->|No| F["valid L-cut\n✅"]
-    E -->|Yes| G["degenerate cut\n❌ invalid piece"]
+    E -->|p_new == p_curr| G["zero-width piece\n❌ invalid"]
+    E -->|p_new == p_min\n2-node piece valid| H["2-node split\nno new point ✅"]
+    E -->|p_new == p_min\n2-node piece bad| I["invalid cut\n❌"]
     classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
     classDef check fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
     classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
     classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
     class A,B step;
     class C,D,E check;
-    class F good;
-    class G bad;
+    class F,H good;
+    class G,I bad;
 </pre>
 ]
 
 $$ {\color{#5e81ac} p_{\text{new}}} = \left(x_{\min},\, y_{\text{curr}}\right) \quad \text{or} \quad \left(x_{\text{curr}},\, y_{\min}\right) $$
 
-$$ {\color{#bf616a} p_{\text{new}} = p_{\text{curr}} \;\lor\; p_{\text{new}} = p_{\min}} \;\Longrightarrow\; \text{invalid cut} $$
+$$ {\color{#bf616a} p_{\text{new}} = p_{\text{curr}}} \;\Longrightarrow\; \text{zero-width piece} $$
+
+$$ {\color{#2e7d32} p_{\text{new}} = p_{\min} \;\land\; \text{2-node piece valid}} \;\Longrightarrow\; \text{split existing nodes} $$
 
 ???
-⏱️ 0:15–0:17 — The implementation is trying to make an L-shaped cut. If the corner of the L lands on either endpoint, the L collapses to a straight segment. That is the root cause.
+⏱️ 0:15–0:17 — If the L-corner lands on p_curr, the cut collapses to a zero-width piece. If it lands on p_min and the adjacent 2-node piece is non-degenerate, the correct response is to split that existing piece; no new point is needed.
 
 ---
 
@@ -649,12 +654,12 @@ $$ {\color{#bf616a} \text{same } x} \;\Longrightarrow\; \text{zero width} \;\Lon
 </svg>
 </p>
 
-> A point-level guard is not enough: the whole L-shaped cut path must be valid. 🔬
+> The cut point duplicates `v_min`; Part 3 splits the existing 2-node piece instead of appending a duplicate. 🧷
 
 ]
 
 ???
-⏱️ 0:18–0:19 — The second failure is subtler. The cut point collapses to the target, and the resulting piece touches itself along a boundary. A single-point check catches one case; a full cut-path check is the next step.
+⏱️ 0:18–0:19 — The second failure is subtler. The cut point duplicates the target, and appending it leaves a non-convex leftover. The fix is not a point-level guard; it is a 2-node split that reuses the existing nodes.
 
 ---
 
@@ -667,13 +672,15 @@ graph TD
     C["Attempt 2\nO(1) assertions"] -->|loud failures| D["❌ rejected by user"]
     E["Attempt 3\nreplace the algorithm"] -->|works, but too large| F["❌ rejected"]
     G["Shipped\nstandalone + original scan"] --> H["✅ zero-area\noutput filter"]
+    H --> I["✅ degenerate\n2-node split"]
     classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
     classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
     class B,D,F bad;
-    class H good;
+    class H,I good;
 </pre>
 ]
 
+.font-sm[
 .pull-left[
 #### Why Python-exact was rejected
 
@@ -690,21 +697,23 @@ graph TD
 - Standalone convex path, no Policy
 - Original C++ half-open scan
 - Zero-area pieces removed at output
-- No assertions, no repair pass
+- **Degenerate 2-node split, no new point**
+- No assertions, no general repair pass
 
+]
 ]
 
 ???
-⏱️ 0:19–0:20 — We tried Python-exact selection and dense assertions. Both were rejected. The shipped fix is smaller: keep the original scan, make the path standalone, and drop zero-area pieces at the output boundary.
+⏱️ 0:19–0:20 — We tried Python-exact selection and dense assertions. Both were rejected. The shipped fix is smaller: keep the original scan, make the path standalone, drop zero-area pieces, and split the existing 2-node piece on a duplicate cut.
 
 ---
 
 class: nord-light, middle, center
 
-## Part 3 — Zero-Area Filter &amp; Standalone Cut 🧹
+## Part 3 — Standalone Cut, Zero-Area Filter &amp; 2-Node Split 🧹
 
 ???
-⏱️ 0:20–0:28 — The fix has two parts: make the convex path standalone, and filter zero-area pieces at the output boundary. No Policy, no new scan, no assertions.
+⏱️ 0:20–0:29 — The fix has three parts: make the convex path standalone, filter zero-area pieces at the output boundary, and split the existing 2-node piece when the cut point duplicates the target. No Policy, no new scan, no general repair pass.
 
 ---
 
@@ -737,18 +746,19 @@ rpolygon_cut_convex(...)
   -> rpolygon_cut_convex_recur(...)
      -> find_concave_point_convex(...)
      -> find_min_dist_point_convex(...)
+     -> try_degenerate_two_node_split(...)
      -> insert_cut_convex(...)
 ```
 ]
 
 - Convex path is self-contained
 - Explicit / implicit keep their Policy code
-- Same output, easier to review
+- Same scan, plus a degenerate-split hook
 
 ]
 
 ???
-⏱️ 0:21–0:23 — This is a structural refactor, not an algorithm change. The convex path no longer goes through Policy, while explicit and implicit keep their existing implementation.
+⏱️ 0:21–0:23 — This is a structural refactor plus a degenerate-split hook. The convex path no longer goes through Policy, while explicit and implicit keep their existing implementation.
 
 ---
 
@@ -788,6 +798,103 @@ $$ \text{start} = v_{\text{curr.next}} \;\longrightarrow\; \text{stop} = v_{\tex
 
 ---
 
+### 🧷 Degenerate cut → 2-node split
+
+.pull-left[
+#### The 12-point case
+
+```text
+(-1,1) (0,0) (1,-1) (3,0)
+(4,1) (6,2) (5,5) (4,4)
+(3,2) (2,3) (1,2) (0,3)
+```
+
+- Concave vertex `(3,2)`
+- Target `v_min = (1,2)`
+- `p_new = (1,2) = v_min` → duplicate
+- Old code appended `(1,2)` and left a non-convex piece ❌
+
+]
+
+.pull-right[
+#### Detect and split
+
+.font-sm[
+```cpp
+if (vertical && v_min->prev == vcurr->next
+    && p_min.ycoord() == p_curr.ycoord()) {
+    auto* first = vcurr->next;   // (2,3)
+    auto* rest  = v_min->next;   // (0,3)
+    const auto& first_point = lst[first->data];
+    if (first_point.xcoord() != p_min.xcoord()
+        && first_point.ycoord() != p_min.ycoord()) {
+        first->next = first->prev = v_min;
+        v_min->next = v_min->prev = first;
+        vcurr->next = rest;
+        rest->prev = vcurr;
+    }
+}
+```
+]
+
+- 2-node piece: `[(2,3),(1,2)]`
+- Remainder: `(3,2) → (0,3) → …`
+- No `lst.emplace_back`
+- Horizontal cuts use the symmetric branch
+
+]
+
+$$ p_{\text{new}} = p_{\min} \;\land\; \text{2-node piece valid} \;\Longrightarrow\; \text{split existing nodes} $$
+
+???
+⏱️ 0:25–0:27 — This is the new guard. When the cut point duplicates v_min, the old code appended a second copy of (1,2), leaving the remainder non-canonical. The fix splits the existing 2-node piece [(2,3),(1,2)] and connects (3,2) directly to (0,3). No (2,2) is created, and no point is appended.
+
+---
+
+### ✅ 12-point fixture after the split
+
+<p align="center">
+<svg width="500" height="431" viewBox="0 0 580 500" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <text x="20" y="28" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">12-point even-index fixture: 3 convex pieces</text>
+  <polygon points="355,210 190,210 190,155 135,155 135,265 190,265 190,320 245,320 245,375 355,375 355,320" fill="#d08770" stroke="#2e3440" stroke-width="1.5" opacity="0.8"/>
+  <polygon points="355,320 410,320 410,265 520,265 520,210 465,210 465,45 410,45 410,100 355,100" fill="#a3be8c" stroke="#2e3440" stroke-width="1.5" opacity="0.8"/>
+  <polygon points="245,210 300,210 300,155 245,155" fill="#88c0d0" stroke="#2e3440" stroke-width="1.5" opacity="0.9"/>
+  <polygon points="135,265 190,265 190,320 245,320 245,375 355,375 355,320 410,320 410,265 520,265 520,210 465,210 465,45 410,45 410,100 355,100 355,210 300,210 300,155 245,155 245,210 190,210 190,155 135,155" fill="none" stroke="#2e3440" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <g font-family="sans-serif" font-size="12" fill="#2e3440" text-anchor="middle">
+    <text x="272.5" y="178.5">piece 0</text>
+    <text x="272.5" y="194.5">area 1</text>
+    <text x="228.5" y="272.0">piece 1</text>
+    <text x="228.5" y="288.0">area 10</text>
+    <text x="432.0" y="173.00000000000003">piece 2</text>
+    <text x="432.0" y="189.00000000000003">area 9</text>
+  </g>
+  <g font-family="sans-serif" font-size="12" fill="#bf616a">
+    <text x="150" y="105">split (2,3)-(1,2)</text>
+    <text x="150" y="120">no new point</text>
+  </g>
+  <g font-family="sans-serif" font-size="12" fill="#4c566a">
+    <rect x="40" y="455" width="18" height="12" fill="#d08770" opacity="0.8"/>
+    <text x="66" y="465">piece 1</text>
+    <rect x="140" y="455" width="18" height="12" fill="#a3be8c" opacity="0.8"/>
+    <text x="166" y="465">piece 2</text>
+    <rect x="240" y="455" width="18" height="12" fill="#88c0d0" opacity="0.9"/>
+    <text x="266" y="465">piece 0</text>
+    <line x1="350" y1="461" x2="380" y2="461" stroke="#2e3440" stroke-width="2.5" stroke-dasharray="7 5"/>
+    <text x="388" y="465">original boundary</text>
+  </g>
+  <text x="20" y="488" font-family="sans-serif" font-size="12" fill="#4c566a">(2,2) is implicit in piece 0; neither piece stores (2,2).</text>
+</svg>
+</p>
+
+- `1 + 10 + 9 = 20` ✅
+- No stored `(2,2)` on either piece
+- Same fixture in Python and C++
+
+???
+⏱️ 0:27–0:28 — The corrected decomposition has three convex pieces. The square keeps (2,2) implicit; the remainder never sees it. This 12-point case is the regression test for the 2-node split.
+
+---
+
 ### 🧹 Drop zero-area pieces at output
 
 .font-sm[
@@ -822,18 +929,18 @@ for (k = 2; k < indices.size(); ++k) {
 ]
 
 .pull-right[
-#### Effect on the fixture
+#### Effect on the 7-point fixture
 
 - Raw pieces: `3 + 0 + 8`
 - Zero-area `{(2,0),(2,1)}` dropped
 - Emitted pieces: `3 + 8`
 - Dropped piece never allocates
-- No assertions, no repair pass
+- Complementary to the 2-node split
 
 ]
 
 ???
-⏱️ 0:25–0:27 — The filter runs before the point vector is allocated. It computes the signed area from the index list, so the degenerate piece costs no extra allocation and never reaches the output.
+⏱️ 0:25–0:27 — The filter runs before the point vector is allocated. On the 7-point fixture it drops the zero-width piece. On the 12-point fixture the 2-node split prevents the duplicate cut in the first place, so the two guards are complementary.
 
 ---
 
@@ -859,28 +966,24 @@ if (prev.y < pcurr.y <= curr.y) or (
 ]
 
 .pull-right[
-#### Same output filter
+#### Same 2-node split + filter
 
 ```python
-def _even_index_signed_area(points):
+if vertical and v_min.prev is vcurr.next:
+    first, rest = vcurr.next, v_min.next
     ...
-
-pieces = rpolygon_cut_impl(...)
-return [
-    p for p in pieces
-    if _even_index_signed_area(p) != 0
-]
 ```
 
 - Zero-area pieces dropped
+- 12-point fixture: 3 pieces, `1 + 10 + 9`
 - 7-point fixture: `3 + 8`
-- Cut tests: 7 passed
-- Full suite: 616 passed, 1 unrelated Vector2 failure
+- Cut tests: 8 passed
+- Full suite: 606 passed, 1 unrelated Vector2 failure
 
 ]
 
 ???
-⏱️ 0:27–0:28 — Python now mirrors the C++ version: original scan, same signed-area helper, same zero-area filter. The two implementations return the same 3 + 8 result for the shared fixture.
+⏱️ 0:27–0:28 — Python now mirrors the C++ version: the same scan, the same 2-node split, and the same zero-area filter. The 12-point fixture returns 1 + 10 + 9 in both languages.
 
 ---
 
@@ -992,11 +1095,12 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 .font-sm[
 | Check | Result |
 |---|---|
-| Debug + release | **135 / 135 each** ✅ |
-| Assertions | **733 / 733 passed** ✅ |
+| Debug + release | **137 / 137 each** ✅ |
+| Assertions | **777 / 777 passed** ✅ |
 | 100-point stress | passes ✅ |
+| 12-point fixture | 3 pieces, `1 + 10 + 9` ✅ |
 | 7-point fixture | 2 pieces, `3 + 8` ✅ |
-| Python | cut 7 passed; full 616 passed, 1 unrelated Vector2 ⚠️ |
+| Python | cut 8 passed; full 606 passed, 1 unrelated Vector2 ⚠️ |
 ]
 
 .pull-left[
@@ -1004,6 +1108,7 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 
 - Original scan retained
 - Zero-area pieces filtered
+- 2-node split, no new point
 - Stress test passes
 - Python matches C++
 
@@ -1012,14 +1117,14 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 .pull-right[
 #### What “green” does not mean
 
-- No full L-cut validity guard
+- No general cut-path validity oracle
 - Vector2 failure is unrelated
 - Rust cut is still a stub
 
 ]
 
 ???
-⏱️ 0:29–0:30 — Debug and release are green. The 100-point stress passes, the shared fixture is 3 + 8, and Python matches C++. The only red test is an unrelated Vector2 property failure.
+⏱️ 0:29–0:30 — Debug and release are green. The 100-point stress passes, the 12-point fixture is 1 + 10 + 9, the 7-point fixture is 3 + 8, and Python matches C++. The only red test is an unrelated Vector2 property failure.
 
 ---
 
@@ -1032,13 +1137,14 @@ graph LR
     B --> C["Issue 8\nzero-area piece"]
     C --> D["Filter at output\nno assertions"]
     D --> E["Standalone C++\noriginal scan"]
-    E --> F["Python parity"]
-    F --> G["Next: Rust cut\nimplementation"]
+    E --> F["Degenerate 2-node split\nno new point"]
+    F --> G["Python parity"]
+    G --> H["Next: Rust cut\nimplementation"]
     classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
     classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
     classDef next fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
-    class A,B,C,D,E,F step;
-    class G next;
+    class A,B,C,D,E,F,G step;
+    class H next;
 </pre>
 ]
 
@@ -1047,6 +1153,7 @@ graph LR
 
 - Issue #7: representation / input contract
 - Issue #8: zero-area piece
+- 12-point non-convex leftover
 - 100-point stress passes
 - Python now matches C++
 
@@ -1056,7 +1163,7 @@ graph LR
 #### Next
 
 - Implement Rust convex cut and fixture
-- Keep the zero-area output filter
+- Keep the 2-node split + zero-area filter
 - Add more structured stress fixtures
 - Investigate the unrelated Vector2 test
 
@@ -1065,7 +1172,7 @@ graph LR
 ]
 
 ???
-⏱️ 0:30 — Issue 8 is resolved by the output filter, not by asserting inside the cut. The next engineering step is the Rust implementation and more stress coverage.
+⏱️ 0:30 — Issue 8 is resolved by the output filter plus the 2-node split, not by asserting inside the cut. The next engineering step is the Rust implementation and more stress coverage.
 
 ---
 
@@ -1083,8 +1190,9 @@ graph LR
 
 - Keep the original algorithm
 - Drop zero-area pieces before allocation
+- Split the existing 2-node piece on a duplicate cut
+- No new point for a collinear duplicate
 - No assertions in the recursion
-- No repair pass
 
 ]
 
@@ -1099,8 +1207,9 @@ graph LR
 #### Review checklist
 
 - Is the input canonical even-index?
+- Does the cut duplicate `v_min`?
+- Is the 2-node piece non-degenerate?
 - Does the output contain zero-area pieces?
-- Did the original scan change?
 - Do Python and C++ agree?
 
 > “It works on my polygon” is not a contract. 📝
@@ -1108,7 +1217,7 @@ graph LR
 ]
 
 ???
-⏱️ 0:30 — Close with the lessons: representation first, filter at the boundary, keep the algorithm, and make the tests speak the same contract across languages.
+⏱️ 0:30 — Close with the lessons: representation first, filter at the boundary, split the existing 2-node piece instead of synthesizing a duplicate, and make the tests speak the same contract across languages.
 
 ---
 

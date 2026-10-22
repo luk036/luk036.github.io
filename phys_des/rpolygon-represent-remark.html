@@ -1,0 +1,1161 @@
+<!doctype html>
+<html>
+  <head>
+    <title>RPolygon Representation &amp; Robust Cutting</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 RPolygon Representation
+## &amp; Robust Rectilinear Cutting
+
+### Even-index · x-first · zero-area filtering
+
+@luk036 · PhysDes C++ / Recti · 2026
+
+???
+⏱️ 0:00–0:01 — Welcome. This is a 30-minute tour of a representation bug that looked like a cutting bug, and the standalone rewrite plus zero-area output filter that fixed it.
+
+---
+
+### 🗺️ Agenda
+
+.pull-left[
+
+**Part 1 — The Representation Contract** 📐
+- Full vertex list vs even-index
+- x-first reconstruction
+- 2-point and 3-point pieces
+- Representation checklist
+
+**Part 2 — The Bug Hunt** 🐛
+- Issue #7 and the 8-point list
+- Real canonical failures
+- Vertex-coincident cuts
+- What we tried and rejected
+
+]
+
+.pull-right[
+
+**Part 3 — Zero-Area Filter &amp; Standalone Cut** 🧹
+- Standalone C++ without Policy
+- Keep the original scan
+- Drop zero-area pieces at output
+- Python follows C++
+
+**Part 4 — Verification &amp; Lessons** 🧪
+- 7-point fixture: 3 + 8
+- xmake debug/release results
+- Stress test and Python parity
+- What we learned
+
+]
+
+???
+⏱️ 0:01–0:02 — Four parts. The key idea: keep the original algorithm, make the convex path standalone, and filter zero-area pieces at the output boundary instead of asserting inside the recursion.
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — The Representation Contract 📐
+
+???
+⏱️ 0:02–0:10 — Eight minutes on the contract. If the audience remembers one thing, it should be the x-first rule and the fact that a 2-point piece is a rectangle, not a degenerate polygon.
+
+---
+
+### 🧱 What is a rectilinear polygon?
+
+> A **rectilinear polygon** (orthogonal polygon) has only horizontal and vertical edges.
+
+.pull-left[
+
+.mermaid[
+<pre>
+graph TD
+    A["Polygon types"] --> B["General polygon"]
+    A --> C["Rectilinear polygon"]
+    B --> D["Any-angle edges"]
+    C --> E["Only H/V edges"]
+    C --> F["90 and 270 degree corners"]
+    classDef root fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    classDef good fill:#a3be8c,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    classDef neutral fill:#e5e9f0,stroke:#4c566a,stroke-width:2px,color:#2e3440;
+    class A root;
+    class C,E,F good;
+    class B,D neutral;
+</pre>
+]
+
+]
+
+.pull-right[
+
+#### Where it shows up
+
+- 🧩 VLSI floorplanning
+- 🛣️ Manhattan routing
+- 📦 Module packing
+- 🔬 Physical-design geometry
+
+#### Why it is special
+
+- ✅ Simple area formulas
+- ✅ Grid-friendly predicates
+- ✅ Natural convex decomposition
+
+]
+
+???
+⏱️ 0:02–0:04 — Rectilinear polygons are the native geometry of VLSI. The simplification is real: every edge is axis-aligned, so predicates and cuts can be exact integer operations.
+
+---
+
+### 🧩 Two ways to store the same polygon
+
+.pull-left[
+#### Full vertex list
+
+Every corner is explicit:
+
+```text
+8 vertices
+(0,0) (3,0) (3,3) (2,3)
+(2,1) (1,1) (1,3) (0,3)
+```
+
+- Easy to draw
+- Redundant for rectilinear cuts
+- Consecutive points share an axis
+
+]
+
+.pull-right[
+#### Even-index list
+
+Store every other corner:
+
+```text
+4 stored points
+(0,0) (3,3) (2,1) (1,3)
+```
+
+- Half the storage
+- The omitted corners are implicit
+- **This is what the cut functions consume**
+
+]
+
+---
+
+<p align="center">
+<svg width="760" height="340" viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2e3440">Same U-shape: 8 full vertices → 4 stored points</text>
+  <polygon points="80,280 440,280 440,70 320,70 320,210 200,210 200,70 80,70" fill="#e5e9f0" stroke="#5e81ac" stroke-width="3"/>
+  <g fill="#4c566a">
+    <circle cx="440" cy="280" r="4"/><circle cx="320" cy="70" r="4"/><circle cx="200" cy="210" r="4"/><circle cx="80" cy="70" r="4"/>
+  </g>
+  <g fill="#5e81ac">
+    <circle cx="80" cy="280" r="8"/><circle cx="440" cy="70" r="8"/><circle cx="320" cy="210" r="8"/><circle cx="200" cy="70" r="8"/>
+  </g>
+  <g font-family="sans-serif" font-size="13" fill="#2e3440">
+    <text x="52" y="305">S0 (0,0)</text>
+    <text x="450" y="62">S1 (3,3)</text>
+    <text x="330" y="205">S2 (2,1)</text>
+    <text x="120" y="62">S3 (1,3)</text>
+    <text x="450" y="300" fill="#4c566a">I0 (3,0)</text>
+    <text x="300" y="55" fill="#4c566a">I1 (2,3)</text>
+    <text x="210" y="230" fill="#4c566a">I2 (1,1)</text>
+    <text x="50" y="60" fill="#4c566a">I3 (0,3)</text>
+  </g>
+  <g font-family="sans-serif" font-size="14" fill="#2e3440">
+    <circle cx="510" cy="120" r="8" fill="#5e81ac"/><text x="525" y="125">stored (even-index)</text>
+    <circle cx="510" cy="150" r="4" fill="#4c566a"/><text x="525" y="155">implicit (x-first)</text>
+  </g>
+  <text x="510" y="200" font-family="sans-serif" font-size="14" fill="#bf616a">cut functions receive</text>
+  <text x="510" y="220" font-family="sans-serif" font-size="14" fill="#bf616a" font-weight="bold">only the 4 stored points</text>
+  <text x="510" y="260" font-family="sans-serif" font-size="13" fill="#4c566a">2 points = rectangle</text>
+  <text x="510" y="280" font-family="sans-serif" font-size="13" fill="#4c566a">3 points = L-shape</text>
+</svg>
+</p>
+
+???
+⏱️ 0:04–0:05 — This is the slide that explains the whole bug report. The 8-point list is a full vertex list. The cut functions expect the 4 blue points. Same shape, different contract.
+
+---
+
+### 🔁 Canonical even-index encoding
+
+.mermaid[
+<pre>
+graph LR
+    A["Full vertex list\n8 points"] --> B["Remove collinear"]
+    B --> C["Rotate:\nfirst edge horizontal"]
+    C --> D["Take every other\nvertex"]
+    D --> E["Even-index\n4 stored points"]
+    E --> F["x-first\nreconstruct"]
+    F --> G["Full boundary"]
+    classDef input fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    classDef step fill:#ebcb8b,stroke:#d08770,stroke-width:3px,color:#2e3440;
+    classDef out fill:#a3be8c,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    class A input;
+    class B,C,D step;
+    class E,F,G out;
+</pre>
+]
+
+$$ S_i = \text{full}\left[(\text{start} + 2i) \bmod n\right] \qquad i = 0,\ldots,\frac{n}{2}-1 $$
+
+.pull-left[
+#### The rules
+
+- Start on a vertex whose **outgoing edge is horizontal**
+- Store every **other** corner
+- Keep the boundary order
+- Do **not** reverse the stored list
+]
+
+.pull-right[
+#### The payoff
+
+- Half the points
+- Still enough to reconstruct the boundary
+- Cut functions have a stable, checkable contract
+]
+
+???
+⏱️ 0:05–0:06 — The start vertex matters. If you start on a vertical edge, the x-first rule reconstructs a different polygon. That is exactly the phase trap we hit.
+
+---
+
+### ➡️ Reconstruct with x-first
+
+<p align="center">
+<svg width="760" height="300" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2e3440">Between two stored points: move x first, then y</text>
+  <text x="60" y="60" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e7d32">x-first ✅</text>
+  <line x1="60" y1="240" x2="260" y2="240" stroke="#5e81ac" stroke-width="4"/>
+  <line x1="260" y1="240" x2="260" y2="60" stroke="#5e81ac" stroke-width="4"/>
+  <circle cx="60" cy="240" r="8" fill="#5e81ac"/><text x="20" y="270" font-family="sans-serif" font-size="13" fill="#2e3440">S0 (x0,y0)</text>
+  <circle cx="260" cy="60" r="8" fill="#5e81ac"/><text x="278" y="55" font-family="sans-serif" font-size="13" fill="#2e3440">S1 (x1,y1)</text>
+  <circle cx="260" cy="240" r="7" fill="#a3be8c"/><text x="185" y="265" font-family="sans-serif" font-size="13" fill="#2e7d32">implicit (x1,y0)</text>
+  <text x="60" y="290" font-family="sans-serif" font-size="13" fill="#4c566a">same shape as the original full list</text>
+
+  <text x="430" y="60" font-family="sans-serif" font-size="15" font-weight="bold" fill="#bf616a">y-first ❌</text>
+  <line x1="430" y1="240" x2="430" y2="60" stroke="#bf616a" stroke-width="4" stroke-dasharray="9 6"/>
+  <line x1="430" y1="60" x2="630" y2="60" stroke="#bf616a" stroke-width="4" stroke-dasharray="9 6"/>
+  <circle cx="430" cy="240" r="8" fill="#5e81ac"/><text x="390" y="270" font-family="sans-serif" font-size="13" fill="#2e3440">S0</text>
+  <circle cx="630" cy="60" r="8" fill="#5e81ac"/><text x="648" y="55" font-family="sans-serif" font-size="13" fill="#2e3440">S1</text>
+  <circle cx="430" cy="60" r="7" fill="#bf616a"/><text x="445" y="50" font-family="sans-serif" font-size="13" fill="#bf616a">(x0,y1)</text>
+  <text x="430" y="105" font-family="sans-serif" font-size="13" fill="#bf616a">different polygon</text>
+  <text x="430" y="290" font-family="sans-serif" font-size="13" fill="#4c566a">do not do this</text>
+</svg>
+</p>
+
+$$ I_i = \left(x_{i+1},\, y_i\right) \qquad \text{full} = S_0, I_0, S_1, I_1, S_2, \ldots $$
+
+???
+⏱️ 0:06–0:07 — This is the single most important equation. The implicit vertex is (next.x, current.y). The y-first version looks similar but reconstructs a different polygon.
+
+---
+
+### 🧪 Worked example: the U-shape
+
+.pull-left[
+#### Stored even-index
+
+```text
+S0 = (0,0)
+S1 = (3,3)
+S2 = (2,1)
+S3 = (1,3)
+```
+
+#### x-first reconstruction
+
+```text
+(0,0) → (3,0) → (3,3)
+(3,3) → (2,3) → (2,1)
+(2,1) → (1,1) → (1,3)
+(1,3) → (0,3) → (0,0)
+```
+
+]
+
+.pull-right[
+#### Full boundary
+
+```text
+(0,0) (3,0) (3,3) (2,3)
+(2,1) (1,1) (1,3) (0,3)
+```
+
+#### What the cutter sees
+
+- 4 stored points
+- 8 full vertices
+- 2 convex pieces ✅
+
+> This 4-point input already works. The 8-point list is a different contract.
+
+]
+
+???
+⏱️ 0:07–0:08 — Walk through the four x-first steps. Then point out: the canonical 4-point U returns two convex pieces. The reported 8-point list is not the same input.
+
+---
+
+### 📦 2 points = rectangle, 3 points = L-shape
+
+<p align="center">
+<svg width="760" height="300" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2e3440">Pieces are already canonical even-index polygons</text>
+  <rect x="60" y="70" width="200" height="160" fill="#e5e9f0" stroke="#5e81ac" stroke-width="3" stroke-dasharray="7 5"/>
+  <circle cx="60" cy="230" r="8" fill="#5e81ac"/><circle cx="260" cy="70" r="8" fill="#5e81ac"/>
+  <text x="75" y="260" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">2 stored points</text>
+  <text x="75" y="282" font-family="sans-serif" font-size="14" fill="#2e7d32">rectangle ✅</text>
+  <text x="275" y="155" font-family="sans-serif" font-size="13" fill="#4c566a">opposite corners</text>
+
+  <polygon points="430,230 630,230 630,70 530,70 530,150 430,150" fill="#e5e9f0" stroke="#5e81ac" stroke-width="3"/>
+  <circle cx="430" cy="230" r="8" fill="#5e81ac"/><circle cx="630" cy="70" r="8" fill="#5e81ac"/><circle cx="530" cy="150" r="8" fill="#5e81ac"/>
+  <text x="445" y="260" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2e3440">3 stored points</text>
+  <text x="445" y="282" font-family="sans-serif" font-size="14" fill="#2e7d32">L-shape / orthogonally convex ✅</text>
+</svg>
+</p>
+
+---
+
+.pull-left[
+#### Valid
+
+- 2 points: opposite corners
+- 3 points: consecutive points differ in both coordinates
+- More points: larger orthogonally convex piece
+]
+
+.pull-right[
+#### Not valid
+
+- `(2,0)` and `(2,1)` as a 2-point piece
+- Same `x` → zero width
+- Same `y` → zero height
+
+> A 2-point or 3-point piece is **not** a degenerate polygon. It is the representation.
+
+]
+
+???
+⏱️ 0:08–0:09 — This is the slide that makes the invalid output obvious. A 2-point piece must be a rectangle: different x and different y. Same-x points are a zero-width line, not a polygon.
+
+---
+
+### ✅ Representation checklist
+
+| Check | Why it matters |
+|---|---|
+| At least 2 stored points | A rectangle needs two opposite corners |
+| Consecutive pts differ in `x` and `y` | This is the even-index invariant |
+| Stored order follows the boundary | Reversing changes orientation and shape |
+| Start on a horizontal outgoing edge | x-first otherwise reconstructs a different polygon |
+| x-first reconstruction is simple | The cut algorithm assumes a simple orthogonal polygon |
+
+.mermaid[
+<pre>
+graph LR
+    A["Full polygon"] --> B["Canonical even-index"]
+    B --> C["Cut functions"]
+    C --> D["Convex pieces"]
+    D --> E["Pieces are even-index again"]
+    classDef good fill:#a3be8c,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    class A,B,C,D,E step;
+    class E good;
+</pre>
+]
+
+> If `find_concave_point` never fires, check the representation before changing the concavity predicate. 🔍
+
+???
+⏱️ 0:09–0:10 — The checklist is the debugging tool. When a cut fails, first ask whether the input is canonical even-index. Only then inspect the algorithm.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — The Bug Hunt 🐛
+
+???
+⏱️ 0:10–0:20 — Ten minutes on the actual failures. The story is: representation bug first, then a real edge case in canonical inputs.
+
+---
+
+### 🐛 Issue #7: the 8-point list
+
+.mermaid[
+<pre>
+graph LR
+    I["Issue 7\n8-point list"] --> Q{"Canonical\neven-index?"}
+    Q -->|No| N["Full vertex list\nconsecutive points share axes"]
+    N --> C["Close issue 7\nrepresentation problem"]
+    Q -->|Yes| T["4-point U\n(0,0),(3,3),(2,1),(1,3)"]
+    T --> P["2 convex pieces\n✅ works"]
+    C --> R["Probe canonical inputs"]
+    R --> F["Rare degenerate cuts\n→ issue 8"]
+    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
+    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    classDef warn fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
+    class N,C,F bad;
+    class T,P good;
+    class Q,R warn;
+</pre>
+]
+
+.pull-left[
+#### What the issue showed
+
+```text
+(0,0) (3,0) (3,3) (2,3)
+(2,1) (1,1) (1,3) (0,3)
+```
+
+- 8 points
+- Consecutive points share axes
+- This is a **full vertex list**
+
+]
+
+.pull-right[
+#### What the cutter expects
+
+```text
+(0,0) (3,3) (2,1) (1,3)
+```
+
+- 4 stored points
+- Every consecutive pair differs in both coordinates
+- This is the **canonical even-index** form
+
+]
+
+???
+⏱️ 0:10–0:12 — This is the triage. Issue 7 was closed as a representation problem: the report used a full vertex list. Then we asked the harder question: do canonical inputs ever fail?
+
+---
+
+### 🔍 What the algorithm actually saw
+
+.pull-left[
+#### 8-point list → 8 stored points
+
+- The cutter treats every point as stored
+- Edges are diagonal in the stored representation
+- The concavity predicate looks at the wrong turns
+- Result: **one non-convex piece** ❌
+
+]
+
+.pull-right[
+#### 4-point even-index → 4 stored points
+
+- The implicit vertices are reconstructed x-first
+- The concavity predicate sees the real turns
+- Result: **two convex pieces** ✅
+
+]
+
+$$ \text{full list} \;\ne\; \text{even-index list} $$
+
+> Same U-shape. Different contract. Different result. 🎯
+
+???
+⏱️ 0:12–0:13 — This is the “aha” moment. The algorithm did not fail on the shape; it failed on the encoding. The 8-point list is not a valid even-index input.
+
+---
+
+### 🧨 Canonical probes found real failures
+
+.pull-left[
+#### Failing canonical input
+
+```text
+(0,-2) (1,-3) (3,-2) (2,-1)
+(4,1)  (3,0)  (2,1)
+```
+
+- 7 stored points
+- Every consecutive pair differs in `x` and `y`
+- Valid even-index input
+
+]
+
+.pull-right[
+#### Invalid output
+
+```text
+(2,0) (2,1)
+```
+
+- 2 stored points
+- Same `x`
+- Zero width
+- **Not a valid RPolygon** ❌
+
+]
+
+---
+
+<p align="center">
+<svg width="620" height="420" viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2e3440">A canonical input can still produce a degenerate cut</text>
+  <polygon points="100,350 170,400 310,350 240,300 380,200 310,250 240,200" fill="#e5e9f0" stroke="#5e81ac" stroke-width="3"/>
+  <g fill="#4c566a">
+    <circle cx="100" cy="350" r="4"/><circle cx="170" cy="400" r="4"/><circle cx="310" cy="350" r="4"/>
+    <circle cx="380" cy="200" r="4"/><circle cx="310" cy="250" r="4"/>
+  </g>
+  <circle cx="240" cy="300" r="7" fill="#5e81ac"/>
+  <circle cx="240" cy="200" r="7" fill="#bf616a"/>
+  <line x1="240" y1="300" x2="240" y2="200" stroke="#bf616a" stroke-width="4" stroke-dasharray="8 5"/>
+  <line x1="240" y1="250" x2="240" y2="200" stroke="#bf616a" stroke-width="10" opacity="0.55"/>
+  <text x="252" y="315" font-family="sans-serif" font-size="13" fill="#2e3440">v_curr (2,-1)</text>
+  <text x="252" y="192" font-family="sans-serif" font-size="13" fill="#bf616a">v_min (2,1)</text>
+  <text x="252" y="222" font-family="sans-serif" font-size="13" fill="#bf616a">p_new = (2,1) = v_min</text>
+  <text x="390" y="235" font-family="sans-serif" font-size="14" font-weight="bold" fill="#bf616a">zero-width piece ❌</text>
+  <text x="390" y="258" font-family="sans-serif" font-size="13" fill="#4c566a">(2,0) — (2,1)</text>
+  <text x="390" y="281" font-family="sans-serif" font-size="13" fill="#4c566a">same x → not a rectangle</text>
+</svg>
+</p>
+
+???
+⏱️ 0:13–0:15 — This is the real bug. The input is canonical. The output is not. The cut point collapsed onto the target vertex, so the piece has zero width.
+
+---
+
+### 🧠 Root cause: vertex-coincident cut
+
+.mermaid[
+<pre>
+graph LR
+    A["findMinDistPoint\npick v_min"] --> B["insert_cut"]
+    B --> C["vertical target\np_new=(x_min,y_curr)"]
+    B --> D["horizontal target\np_new=(x_curr,y_min)"]
+    C --> E{"p_new == p_curr\nor p_new == p_min?"}
+    D --> E
+    E -->|No| F["valid L-cut\n✅"]
+    E -->|Yes| G["degenerate cut\n❌ invalid piece"]
+    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    classDef check fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
+    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
+    class A,B step;
+    class C,D,E check;
+    class F good;
+    class G bad;
+</pre>
+]
+
+$$ {\color{#5e81ac} p_{\text{new}}} = \left(x_{\min},\, y_{\text{curr}}\right) \quad \text{or} \quad \left(x_{\text{curr}},\, y_{\min}\right) $$
+
+$$ {\color{#bf616a} p_{\text{new}} = p_{\text{curr}} \;\lor\; p_{\text{new}} = p_{\min}} \;\Longrightarrow\; \text{invalid cut} $$
+
+???
+⏱️ 0:15–0:17 — The implementation is trying to make an L-shaped cut. If the corner of the L lands on either endpoint, the L collapses to a straight segment. That is the root cause.
+
+---
+
+### ❌ Why `{(2,0),(2,1)}` is nonsense
+
+.pull-left[
+#### A 2-point piece is a rectangle
+
+$$ x_0 \ne x_1 \;\land\; y_0 \ne y_1 $$
+
+- `(2,0)` and `(2,1)` share `x`
+- Width = 0
+- Area = 0
+- It is not a valid RPolygon for cutting
+
+]
+
+.pull-right[
+#### Why the predicate did not catch it
+
+- `rpolygon_is_convex` returns `true` for `size <= 3`
+- That is a shortcut, not a validity check
+- A zero-width “piece” can slip through
+- The assertion must check the actual coordinates
+
+]
+
+$$ {\color{#bf616a} \text{same } x} \;\Longrightarrow\; \text{zero width} \;\Longrightarrow\; \text{not a rectangle} $$
+
+> Invalid output must never be fed back as input. 🚫
+
+???
+⏱️ 0:17–0:18 — This is the user’s key objection, and it is correct. The pair is not a polygon. The predicate’s small-size shortcut made it look convex, which is why we need explicit coordinate assertions.
+
+---
+
+### 🧵 Second failure: non-convex leftover
+
+.pull-left[
+#### Another canonical input
+
+```text
+(-1,1) (0,0) (1,-1) (3,0)
+(4,1) (6,2) (5,5) (4,4)
+(3,2) (2,3) (1,2) (0,3)
+```
+
+#### Bad cut
+
+- Cut from `(3,2)` to target `(1,2)`
+- `p_new = (1,2) = v_min`
+- Result: a self-touching / non-convex piece ❌
+
+]
+
+.pull-right[
+<p align="center">
+<svg width="360" height="300" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+  <polygon points="20,240 320,240 320,180 220,180 220,240 120,240 120,180 20,180" fill="#f8bbd0" stroke="#bf616a" stroke-width="3"/>
+  <circle cx="220" cy="240" r="7" fill="#bf616a"/>
+  <circle cx="120" cy="240" r="7" fill="#bf616a"/>
+  <line x1="20" y1="240" x2="320" y2="240" stroke="#bf616a" stroke-width="3" stroke-dasharray="7 5"/>
+  <text x="228" y="266" font-family="sans-serif" font-size="12" fill="#bf616a">self-touch</text>
+  <text x="30" y="285" font-family="sans-serif" font-size="12" fill="#4c566a">bottom edge overlaps notch</text>
+  <text x="30" y="40" font-family="sans-serif" font-size="13" font-weight="bold" fill="#bf616a">non-convex leftover ❌</text>
+</svg>
+</p>
+
+> A point-level guard is not enough: the whole L-shaped cut path must be valid. 🔬
+
+]
+
+???
+⏱️ 0:18–0:19 — The second failure is subtler. The cut point collapses to the target, and the resulting piece touches itself along a boundary. A single-point check catches one case; a full cut-path check is the next step.
+
+---
+
+### 🧰 What we tried — and did not ship
+
+.mermaid[
+<pre>
+graph TD
+    A["Attempt 1\nPython-exact scan"] -->|2 pieces on 7-point| B["❌ 100-point\nstress hangs"]
+    C["Attempt 2\nO(1) assertions"] -->|loud failures| D["❌ rejected by user"]
+    E["Attempt 3\nreplace the algorithm"] -->|works, but too large| F["❌ rejected"]
+    G["Shipped\nstandalone + original scan"] --> H["✅ zero-area\noutput filter"]
+    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
+    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    class B,D,F bad;
+    class H good;
+</pre>
+]
+
+.pull-left[
+#### Why Python-exact was rejected
+
+- Matched the 7-point fixture
+- Empty scan on small subpolygons
+- 100-point stress did not terminate
+- C++ needs neighbor-inclusive scan
+
+]
+
+.pull-right[
+#### What actually shipped
+
+- Standalone convex path, no Policy
+- Original C++ half-open scan
+- Zero-area pieces removed at output
+- No assertions, no repair pass
+
+]
+
+???
+⏱️ 0:19–0:20 — We tried Python-exact selection and dense assertions. Both were rejected. The shipped fix is smaller: keep the original scan, make the path standalone, and drop zero-area pieces at the output boundary.
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — Zero-Area Filter &amp; Standalone Cut 🧹
+
+???
+⏱️ 0:20–0:28 — The fix has two parts: make the convex path standalone, and filter zero-area pieces at the output boundary. No Policy, no new scan, no assertions.
+
+---
+
+### 🧹 Standalone convex cut (no Policy)
+
+.pull-left[
+#### Before
+
+.font-sm[
+```cpp
+rpolygon_cut_convex(...)
+  -> rpolygon_cut_impl<
+       T, ConvexCutPolicy<T>>(...)
+  -> shared Policy skeleton
+```
+]
+
+- One skeleton for convex / explicit / implicit
+- Convex behavior hidden in `ConvexCutPolicy`
+- Hard to trace the convex path alone
+
+]
+
+.pull-right[
+#### After
+
+.font-sm[
+```cpp
+rpolygon_cut_convex(...)
+  -> rpolygon_cut_convex_recur(...)
+     -> find_concave_point_convex(...)
+     -> find_min_dist_point_convex(...)
+     -> insert_cut_convex(...)
+```
+]
+
+- Convex path is self-contained
+- Explicit / implicit keep their Policy code
+- Same output, easier to review
+
+]
+
+???
+⏱️ 0:21–0:23 — This is a structural refactor, not an algorithm change. The convex path no longer goes through Policy, while explicit and implicit keep their existing implementation.
+
+---
+
+### ➡️ Keep the original C++ scan
+
+.font-sm[
+```cpp
+auto result = _find_min_dist_point<T>(
+    lst, vcurr, vcurr->next, lst[vcurr->data]);
+```
+]
+
+.pull-left[
+#### Original C++
+
+- Start at `vcurr->next`
+- Stop at `vcurr`
+- Half-open range tests
+- Includes `vnext` and `vprev`
+
+]
+
+.pull-right[
+#### Why it matters
+
+- Small subpolygons still have candidates
+- No empty-scan degenerate cut
+- 100-point stress terminates
+- 7-point fixture still works
+
+]
+
+$$ \text{start} = v_{\text{curr.next}} \;\longrightarrow\; \text{stop} = v_{\text{curr}} $$
+
+???
+⏱️ 0:23–0:25 — Python's inclusive scan excludes the two neighbors. On a 4-node subpolygon that leaves no candidate, and the 100-point stress hangs. The original C++ scan includes those neighbors, so it terminates.
+
+---
+
+### 🧹 Drop zero-area pieces at output
+
+.font-sm[
+```cpp
+for (const auto& indices : index_lists) {
+    if (even_index_signed_area(lst, indices) == T{0}) {
+        continue;  // no vector allocated for the dropped piece
+    }
+    std::vector<Point<T>> polygon;
+    polygon.reserve(indices.size());
+    for (auto index : indices) {
+        polygon.emplace_back(lst[index]);
+    }
+    result.emplace_back(std::move(polygon));
+}
+```
+]
+
+.pull-left[
+#### `even_index_signed_area`
+
+```cpp
+prev = lst[indices[1]] - origin;
+result = prev.x() * prev.y();
+for (k = 2; k < indices.size(); ++k) {
+    curr = lst[indices[k]] - origin;
+    result += curr.x() * (curr.y() - prev.y());
+    prev = curr;
+}
+```
+
+]
+
+.pull-right[
+#### Effect on the fixture
+
+- Raw pieces: `3 + 0 + 8`
+- Zero-area `{(2,0),(2,1)}` dropped
+- Emitted pieces: `3 + 8`
+- Dropped piece never allocates
+- No assertions, no repair pass
+
+]
+
+???
+⏱️ 0:25–0:27 — The filter runs before the point vector is allocated. It computes the signed area from the index list, so the degenerate piece costs no extra allocation and never reaches the output.
+
+---
+
+### 🐍 Python follows C++
+
+.pull-left[
+#### Same scan
+
+```python
+vstop = vcurr
+vi = vcurr.next
+...
+if (prev.y < pcurr.y <= curr.y) or (
+    curr.y <= pcurr.y < prev.y
+):
+    ...
+```
+
+- Original half-open C++ scan
+- Neighbor-inclusive
+- No `is_valid_cut` guard
+
+]
+
+.pull-right[
+#### Same output filter
+
+```python
+def _even_index_signed_area(points):
+    ...
+
+pieces = rpolygon_cut_impl(...)
+return [
+    p for p in pieces
+    if _even_index_signed_area(p) != 0
+]
+```
+
+- Zero-area pieces dropped
+- 7-point fixture: `3 + 8`
+- Cut tests: 7 passed
+- Full suite: 616 passed, 1 unrelated Vector2 failure
+
+]
+
+???
+⏱️ 0:27–0:28 — Python now mirrors the C++ version: original scan, same signed-area helper, same zero-area filter. The two implementations return the same 3 + 8 result for the shared fixture.
+
+---
+
+### ✅ Filter at the output boundary
+
+.mermaid[
+<pre>
+graph LR
+    A["concave polygon"] --> B["recursive cut"]
+    B --> C["raw pieces"]
+    C --> D{"area == 0?"}
+    D -->|yes| E["drop"]
+    D -->|no| F["emit"]
+    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
+    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    class A,B,C,D step;
+    class E bad;
+    class F good;
+</pre>
+]
+
+.pull-left[
+#### Why here?
+
+- The recursion stays unchanged
+- The invalid piece never escapes
+- No assumptions about why it appeared
+- One check per emitted piece
+
+]
+
+.pull-right[
+#### What it does not do
+
+- It does not repair the cut
+- It does not change the scan
+- It does not hide a crash
+- It does not weaken the stress test
+
+]
+
+$$ \text{piece} \;\longrightarrow\; \begin{cases} \text{drop} & A = 0 \\ \text{emit} & A \neq 0 \end{cases} $$
+
+???
+⏱️ 0:28 — The output boundary is the right place: the recursion keeps its original behavior, and the invalid piece is removed before it becomes part of the result.
+
+---
+
+### 🧪 Shared fixture: 7-point even-index
+
+.pull-left[
+#### Before: full vertex list
+
+```cpp
+{0,0}, {0,2}, {1,2},
+{1,1}, {2,1}, {2,0}
+```
+
+- 6 points
+- First edge shares `x`
+- Not canonical even-index
+- Not a cut input
+
+]
+
+.pull-right[
+#### After: canonical even-index
+
+```cpp
+{0,-2}, {1,-3}, {3,-2},
+{2,-1}, {4,1}, {3,0}, {2,1}
+```
+
+- 7 stored points
+- Derived from the full boundary by `step_by(2)`
+- Result: 2 pieces, `3 + 8`
+- Same fixture in Python and C++
+
+]
+
+$$ \text{full boundary} \;\longrightarrow\; \text{step\_by(2)} \;\longrightarrow\; 3 + 8 $$
+
+> The zero-area filter removes the raw `0` piece; the test sees only the two clean pieces. 🎯
+
+???
+⏱️ 0:29 — This is the fixture shared by the Python and C++ tests. It is canonical even-index, it cuts into the familiar 3 + 8 pieces, and the zero-area filter keeps the result clean.
+
+---
+
+class: nord-light, middle, center
+
+## Part 4 — Verification &amp; Lessons 🧪
+
+???
+⏱️ 0:29–0:30 — Two minutes on results, status, and takeaways.
+
+---
+
+### 📊 Verification
+
+.font-sm[
+```bash
+xmake f -m debug -y && xmake build test_recti && xmake run test_recti
+xmake f -m release -y && xmake build test_recti && xmake run test_recti
+```
+]
+
+.font-sm[
+| Check | Result |
+|---|---|
+| Debug + release | **135 / 135 each** ✅ |
+| Assertions | **733 / 733 passed** ✅ |
+| 100-point stress | passes ✅ |
+| 7-point fixture | 2 pieces, `3 + 8` ✅ |
+| Python | cut 7 passed; full 616 passed, 1 unrelated Vector2 ⚠️ |
+]
+
+.pull-left[
+#### What “green” means
+
+- Original scan retained
+- Zero-area pieces filtered
+- Stress test passes
+- Python matches C++
+
+]
+
+.pull-right[
+#### What “green” does not mean
+
+- No full L-cut validity guard
+- Vector2 failure is unrelated
+- Rust cut is still a stub
+
+]
+
+???
+⏱️ 0:29–0:30 — Debug and release are green. The 100-point stress passes, the shared fixture is 3 + 8, and Python matches C++. The only red test is an unrelated Vector2 property failure.
+
+---
+
+### 📌 Status &amp; next steps
+
+.mermaid[
+<pre>
+graph LR
+    A["Issue 7\nrepresentation"] --> B["Canonical even-index\ndocumented"]
+    B --> C["Issue 8\nzero-area piece"]
+    C --> D["Filter at output\nno assertions"]
+    D --> E["Standalone C++\noriginal scan"]
+    E --> F["Python parity"]
+    F --> G["Next: Rust cut\nimplementation"]
+    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
+    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
+    classDef next fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
+    class A,B,C,D,E,F step;
+    class G next;
+</pre>
+]
+
+.pull-left[
+#### Closed
+
+- Issue #7: representation / input contract
+- Issue #8: zero-area piece
+- 100-point stress passes
+- Python now matches C++
+
+]
+
+.pull-right[
+#### Next
+
+- Implement Rust convex cut and fixture
+- Keep the zero-area output filter
+- Add more structured stress fixtures
+- Investigate the unrelated Vector2 test
+
+> The bug is filtered at the boundary, not asserted inside the recursion. 🚀
+
+]
+
+???
+⏱️ 0:30 — Issue 8 is resolved by the output filter, not by asserting inside the cut. The next engineering step is the Rust implementation and more stress coverage.
+
+---
+
+### 🧠 Lessons learned
+
+.pull-left[
+#### Representation first
+
+- Full list → even-index
+- x-first is not y-first
+- Start on a horizontal edge
+- 2 points = rectangle, not a line
+
+#### Filter at the boundary
+
+- Keep the original algorithm
+- Drop zero-area pieces before allocation
+- No assertions in the recursion
+- No repair pass
+
+]
+
+.pull-right[
+#### Tests must obey the contract
+
+- A fixture is an input
+- Invalid fixtures hide invalid paths
+- Share the same fixture across languages
+- Stress tests protect the fix
+
+#### Review checklist
+
+- Is the input canonical even-index?
+- Does the output contain zero-area pieces?
+- Did the original scan change?
+- Do Python and C++ agree?
+
+> “It works on my polygon” is not a contract. 📝
+
+]
+
+???
+⏱️ 0:30 — Close with the lessons: representation first, filter at the boundary, keep the algorithm, and make the tests speak the same contract across languages.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&amp;A
+
+### Questions? Discussion? 🤔
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 Thank You
+
+Slides built with Remark.js · KaTeX · Mermaid · Nord Theme
+
+### Keep your polygons canonical. 🧩
+</textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

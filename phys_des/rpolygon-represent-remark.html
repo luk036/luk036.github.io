@@ -29,12 +29,12 @@ class: nord-dark, middle, center
 # 📐 RPolygon Representation
 ## &amp; Robust Rectilinear Cutting
 
-### Even-index · x-first · zero-area filtering · 2-node split
+### Even-index · x-first · 2-node split
 
 @luk036 · PhysDes C++ / Recti · 2026
 
 ???
-⏱️ 0:00–0:01 — Welcome. This is a 30-minute tour of a representation bug that looked like a cutting bug, and the standalone rewrite, zero-area output filter, and degenerate 2-node split that fixed it.
+⏱️ 0:00–0:01 — Welcome. This is a 30-minute tour of a representation bug that looked like a cutting bug, and the standalone rewrite plus degenerate 2-node split that fixed it.
 
 ---
 
@@ -50,18 +50,15 @@ class: nord-dark, middle, center
 
 **Part 2 — The Bug Hunt** 🐛
 - Issue #7 and the 8-point list
-- Real canonical failures
-- Vertex-coincident cuts
-- What we tried and rejected
+- What the algorithm actually saw
 
 ]
 
 .pull-right[
 
-**Part 3 — Standalone Cut, Zero-Area Filter &amp; 2-Node Split** 🧹
+**Part 3 — Standalone Cut &amp; 2-Node Split** 🧹
 - Standalone C++ without Policy
 - Keep the original scan
-- Drop zero-area pieces at output
 - Degenerate 2-node split
 - Python follows C++
 
@@ -74,7 +71,7 @@ class: nord-dark, middle, center
 ]
 
 ???
-⏱️ 0:01–0:02 — Four parts. The key idea: keep the original algorithm, make the convex path standalone, filter zero-area pieces at the output boundary, and split the existing 2-node piece when the cut point duplicates the target.
+⏱️ 0:01–0:02 — Four parts. The key idea: keep the original algorithm, make the convex path standalone, and split the existing 2-node piece when the cut point duplicates the target.
 
 ---
 
@@ -408,7 +405,7 @@ class: nord-light, middle, center
 ## Part 2 — The Bug Hunt 🐛
 
 ???
-⏱️ 0:10–0:20 — Ten minutes on the actual failures. The story is: representation bug first, then a real edge case in canonical inputs.
+⏱️ 0:10–0:20 — Ten minutes on the representation bug: a full vertex list was fed to the even-index cutter.
 
 ---
 
@@ -422,14 +419,12 @@ graph LR
     N --> C["Close issue 7\nrepresentation problem"]
     Q -->|Yes| T["4-point U\n(0,0),(3,3),(2,1),(1,3)"]
     T --> P["2 convex pieces\n✅ works"]
-    C --> R["Probe canonical inputs"]
-    R --> F["Rare degenerate cuts\n→ issue 8"]
     classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
     classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
     classDef warn fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
-    class N,C,F bad;
+    class N,C bad;
     class T,P good;
-    class Q,R warn;
+    class Q warn;
 </pre>
 ]
 
@@ -461,7 +456,7 @@ graph LR
 ]
 
 ???
-⏱️ 0:10–0:12 — This is the triage. Issue 7 was closed as a representation problem: the report used a full vertex list. Then we asked the harder question: do canonical inputs ever fail?
+⏱️ 0:10–0:12 — This is the triage. Issue 7 was closed as a representation problem: the report used a full vertex list, while the cutter expects canonical even-index.
 
 ---
 
@@ -495,225 +490,12 @@ $$ \text{full list} \;\ne\; \text{even-index list} $$
 
 ---
 
-### 🧨 Canonical probes found real failures
-
-.pull-left[
-#### Failing canonical input
-
-```text
-(0,-2) (1,-3) (3,-2) (2,-1)
-(4,1)  (3,0)  (2,1)
-```
-
-- 7 stored points
-- Every consecutive pair differs in `x` and `y`
-- Valid even-index input
-
-]
-
-.pull-right[
-#### Invalid output
-
-```text
-(2,0) (2,1)
-```
-
-- 2 stored points
-- Same `x`
-- Zero width
-- **Not a valid RPolygon** ❌
-
-]
-
----
-
-<p align="center">
-<svg width="620" height="420" viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
-  <text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2e3440">A canonical input can still produce a degenerate cut</text>
-  <polygon points="100,350 170,400 310,350 240,300 380,200 310,250 240,200" fill="#e5e9f0" stroke="#5e81ac" stroke-width="3"/>
-  <g fill="#4c566a">
-    <circle cx="100" cy="350" r="4"/><circle cx="170" cy="400" r="4"/><circle cx="310" cy="350" r="4"/>
-    <circle cx="380" cy="200" r="4"/><circle cx="310" cy="250" r="4"/>
-  </g>
-  <circle cx="240" cy="300" r="7" fill="#5e81ac"/>
-  <circle cx="240" cy="200" r="7" fill="#bf616a"/>
-  <line x1="240" y1="300" x2="240" y2="200" stroke="#bf616a" stroke-width="4" stroke-dasharray="8 5"/>
-  <line x1="240" y1="250" x2="240" y2="200" stroke="#bf616a" stroke-width="10" opacity="0.55"/>
-  <text x="252" y="315" font-family="sans-serif" font-size="13" fill="#2e3440">v_curr (2,-1)</text>
-  <text x="252" y="192" font-family="sans-serif" font-size="13" fill="#bf616a">v_min (2,1)</text>
-  <text x="252" y="222" font-family="sans-serif" font-size="13" fill="#bf616a">p_new = (2,1) = v_min</text>
-  <text x="390" y="235" font-family="sans-serif" font-size="14" font-weight="bold" fill="#bf616a">zero-width piece ❌</text>
-  <text x="390" y="258" font-family="sans-serif" font-size="13" fill="#4c566a">(2,0) — (2,1)</text>
-  <text x="390" y="281" font-family="sans-serif" font-size="13" fill="#4c566a">same x → not a rectangle</text>
-</svg>
-</p>
-
-???
-⏱️ 0:13–0:15 — This is the real bug. The input is canonical. The output is not. The cut point collapsed onto the target vertex, so the piece has zero width.
-
----
-
-### 🧠 Root cause: vertex-coincident cut
-
-.mermaid[
-<pre>
-graph LR
-    A["findMinDistPoint\npick v_min"] --> B["insert_cut"]
-    B --> C["vertical target\np_new=(x_min,y_curr)"]
-    B --> D["horizontal target\np_new=(x_curr,y_min)"]
-    C --> E{"p_new == p_curr\nor p_new == p_min?"}
-    D --> E
-    E -->|No| F["valid L-cut\n✅"]
-    E -->|p_new == p_curr| G["zero-width piece\n❌ invalid"]
-    E -->|p_new == p_min\n2-node piece valid| H["2-node split\nno new point ✅"]
-    E -->|p_new == p_min\n2-node piece bad| I["invalid cut\n❌"]
-    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
-    classDef check fill:#ffe0b2,stroke:#d08770,stroke-width:3px,color:#2e3440;
-    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
-    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
-    class A,B step;
-    class C,D,E check;
-    class F,H good;
-    class G,I bad;
-</pre>
-]
-
-$$ {\color{#5e81ac} p_{\text{new}}} = \left(x_{\min},\, y_{\text{curr}}\right) \quad \text{or} \quad \left(x_{\text{curr}},\, y_{\min}\right) $$
-
-$$ {\color{#bf616a} p_{\text{new}} = p_{\text{curr}}} \;\Longrightarrow\; \text{zero-width piece} $$
-
-$$ {\color{#2e7d32} p_{\text{new}} = p_{\min} \;\land\; \text{2-node piece valid}} \;\Longrightarrow\; \text{split existing nodes} $$
-
-???
-⏱️ 0:15–0:17 — If the L-corner lands on p_curr, the cut collapses to a zero-width piece. If it lands on p_min and the adjacent 2-node piece is non-degenerate, the correct response is to split that existing piece; no new point is needed.
-
----
-
-### ❌ Why `{(2,0),(2,1)}` is nonsense
-
-.pull-left[
-#### A 2-point piece is a rectangle
-
-$$ x_0 \ne x_1 \;\land\; y_0 \ne y_1 $$
-
-- `(2,0)` and `(2,1)` share `x`
-- Width = 0
-- Area = 0
-- It is not a valid RPolygon for cutting
-
-]
-
-.pull-right[
-#### Why the predicate did not catch it
-
-- `rpolygon_is_convex` returns `true` for `size <= 3`
-- That is a shortcut, not a validity check
-- A zero-width “piece” can slip through
-- The assertion must check the actual coordinates
-
-]
-
-$$ {\color{#bf616a} \text{same } x} \;\Longrightarrow\; \text{zero width} \;\Longrightarrow\; \text{not a rectangle} $$
-
-> Invalid output must never be fed back as input. 🚫
-
-???
-⏱️ 0:17–0:18 — This is the user’s key objection, and it is correct. The pair is not a polygon. The predicate’s small-size shortcut made it look convex, which is why we need explicit coordinate assertions.
-
----
-
-### 🧵 Second failure: non-convex leftover
-
-.pull-left[
-#### Another canonical input
-
-```text
-(-1,1) (0,0) (1,-1) (3,0)
-(4,1) (6,2) (5,5) (4,4)
-(3,2) (2,3) (1,2) (0,3)
-```
-
-#### Bad cut
-
-- Cut from `(3,2)` to target `(1,2)`
-- `p_new = (1,2) = v_min`
-- Result: a self-touching / non-convex piece ❌
-
-]
-
-.pull-right[
-<p align="center">
-<svg width="360" height="300" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" style="background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
-  <polygon points="20,240 320,240 320,180 220,180 220,240 120,240 120,180 20,180" fill="#f8bbd0" stroke="#bf616a" stroke-width="3"/>
-  <circle cx="220" cy="240" r="7" fill="#bf616a"/>
-  <circle cx="120" cy="240" r="7" fill="#bf616a"/>
-  <line x1="20" y1="240" x2="320" y2="240" stroke="#bf616a" stroke-width="3" stroke-dasharray="7 5"/>
-  <text x="228" y="266" font-family="sans-serif" font-size="12" fill="#bf616a">self-touch</text>
-  <text x="30" y="285" font-family="sans-serif" font-size="12" fill="#4c566a">bottom edge overlaps notch</text>
-  <text x="30" y="40" font-family="sans-serif" font-size="13" font-weight="bold" fill="#bf616a">non-convex leftover ❌</text>
-</svg>
-</p>
-
-> The cut point duplicates `v_min`; Part 3 splits the existing 2-node piece instead of appending a duplicate. 🧷
-
-]
-
-???
-⏱️ 0:18–0:19 — The second failure is subtler. The cut point duplicates the target, and appending it leaves a non-convex leftover. The fix is not a point-level guard; it is a 2-node split that reuses the existing nodes.
-
----
-
-### 🧰 What we tried — and did not ship
-
-.mermaid[
-<pre>
-graph TD
-    A["Attempt 1\nPython-exact scan"] -->|2 pieces on 7-point| B["❌ 100-point\nstress hangs"]
-    C["Attempt 2\nO(1) assertions"] -->|loud failures| D["❌ rejected by user"]
-    E["Attempt 3\nreplace the algorithm"] -->|works, but too large| F["❌ rejected"]
-    G["Shipped\nstandalone + original scan"] --> H["✅ zero-area\noutput filter"]
-    H --> I["✅ degenerate\n2-node split"]
-    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
-    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
-    class B,D,F bad;
-    class H,I good;
-</pre>
-]
-
-.font-sm[
-.pull-left[
-#### Why Python-exact was rejected
-
-- Matched the 7-point fixture
-- Empty scan on small subpolygons
-- 100-point stress did not terminate
-- C++ needs neighbor-inclusive scan
-
-]
-
-.pull-right[
-#### What actually shipped
-
-- Standalone convex path, no Policy
-- Original C++ half-open scan
-- Zero-area pieces removed at output
-- **Degenerate 2-node split, no new point**
-- No assertions, no general repair pass
-
-]
-]
-
-???
-⏱️ 0:19–0:20 — We tried Python-exact selection and dense assertions. Both were rejected. The shipped fix is smaller: keep the original scan, make the path standalone, drop zero-area pieces, and split the existing 2-node piece on a duplicate cut.
-
----
-
 class: nord-light, middle, center
 
-## Part 3 — Standalone Cut, Zero-Area Filter &amp; 2-Node Split 🧹
+## Part 3 — Standalone Cut &amp; 2-Node Split 🧹
 
 ???
-⏱️ 0:20–0:29 — The fix has three parts: make the convex path standalone, filter zero-area pieces at the output boundary, and split the existing 2-node piece when the cut point duplicates the target. No Policy, no new scan, no general repair pass.
+⏱️ 0:20–0:29 — The fix has two parts: make the convex path standalone and split the existing 2-node piece when the cut point duplicates the target. No Policy, no new scan, no general repair pass.
 
 ---
 
@@ -895,55 +677,6 @@ $$ p_{\text{new}} = p_{\min} \;\land\; \text{2-node piece valid} \;\Longrightarr
 
 ---
 
-### 🧹 Drop zero-area pieces at output
-
-.font-sm[
-```cpp
-for (const auto& indices : index_lists) {
-    if (even_index_signed_area(lst, indices) == T{0}) {
-        continue;  // no vector allocated for the dropped piece
-    }
-    std::vector<Point<T>> polygon;
-    polygon.reserve(indices.size());
-    for (auto index : indices) {
-        polygon.emplace_back(lst[index]);
-    }
-    result.emplace_back(std::move(polygon));
-}
-```
-]
-
-.pull-left[
-#### `even_index_signed_area`
-
-```cpp
-prev = lst[indices[1]] - origin;
-result = prev.x() * prev.y();
-for (k = 2; k < indices.size(); ++k) {
-    curr = lst[indices[k]] - origin;
-    result += curr.x() * (curr.y() - prev.y());
-    prev = curr;
-}
-```
-
-]
-
-.pull-right[
-#### Effect on the 7-point fixture
-
-- Raw pieces: `3 + 0 + 8`
-- Zero-area `{(2,0),(2,1)}` dropped
-- Emitted pieces: `3 + 8`
-- Dropped piece never allocates
-- Complementary to the 2-node split
-
-]
-
-???
-⏱️ 0:25–0:27 — The filter runs before the point vector is allocated. On the 7-point fixture it drops the zero-width piece. On the 12-point fixture the 2-node split prevents the duplicate cut in the first place, so the two guards are complementary.
-
----
-
 ### 🐍 Python follows C++
 
 .pull-left[
@@ -966,74 +699,29 @@ if (prev.y < pcurr.y <= curr.y) or (
 ]
 
 .pull-right[
-#### Same 2-node split + filter
+#### Same 2-node split
 
+.font-sm[
 ```python
 if vertical and v_min.prev is vcurr.next:
     first, rest = vcurr.next, v_min.next
     ...
 ```
+]
 
-- Zero-area pieces dropped
 - 12-point fixture: 3 pieces, `1 + 10 + 9`
-- 7-point fixture: `3 + 8`
+- 7-point fixture: `3 + 0 + 8` (raw)
 - Cut tests: 8 passed
 - Full suite: 606 passed, 1 unrelated Vector2 failure
 
 ]
 
 ???
-⏱️ 0:27–0:28 — Python now mirrors the C++ version: the same scan, the same 2-node split, and the same zero-area filter. The 12-point fixture returns 1 + 10 + 9 in both languages.
+⏱️ 0:27–0:28 — Python now mirrors the C++ version: the same scan and the same 2-node split. The 12-point fixture returns 1 + 10 + 9 in both languages; the 7-point fixture now exposes its raw zero-area piece.
 
 ---
 
-### ✅ Filter at the output boundary
-
-.mermaid[
-<pre>
-graph LR
-    A["concave polygon"] --> B["recursive cut"]
-    B --> C["raw pieces"]
-    C --> D{"area == 0?"}
-    D -->|yes| E["drop"]
-    D -->|no| F["emit"]
-    classDef step fill:#88c0d0,stroke:#5e81ac,stroke-width:3px,color:#2e3440;
-    classDef bad fill:#f8bbd0,stroke:#bf616a,stroke-width:3px,color:#2e3440;
-    classDef good fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440;
-    class A,B,C,D step;
-    class E bad;
-    class F good;
-</pre>
-]
-
-.pull-left[
-#### Why here?
-
-- The recursion stays unchanged
-- The invalid piece never escapes
-- No assumptions about why it appeared
-- One check per emitted piece
-
-]
-
-.pull-right[
-#### What it does not do
-
-- It does not repair the cut
-- It does not change the scan
-- It does not hide a crash
-- It does not weaken the stress test
-
-]
-
-$$ \text{piece} \;\longrightarrow\; \begin{cases} \text{drop} & A = 0 \\ \text{emit} & A \neq 0 \end{cases} $$
-
-???
-⏱️ 0:28 — The output boundary is the right place: the recursion keeps its original behavior, and the invalid piece is removed before it becomes part of the result.
-
----
-
-### 🧪 Shared fixture: 7-point even-index
+### 🧪 Shared fixture: 7-point raw output
 
 .pull-left[
 #### Before: full vertex list
@@ -1060,17 +748,17 @@ $$ \text{piece} \;\longrightarrow\; \begin{cases} \text{drop} & A = 0 \\ \text{e
 
 - 7 stored points
 - Derived from the full boundary by `step_by(2)`
-- Result: 2 pieces, `3 + 8`
+- Result: 3 raw pieces, `3 + 0 + 8`
 - Same fixture in Python and C++
 
 ]
 
-$$ \text{full boundary} \;\longrightarrow\; \text{step\_by(2)} \;\longrightarrow\; 3 + 8 $$
+$$ \text{full boundary} \;\longrightarrow\; \text{step\_by(2)} \;\longrightarrow\; 3 + 0 + 8 $$
 
-> The zero-area filter removes the raw `0` piece; the test sees only the two clean pieces. 🎯
+> The raw zero-area piece is no longer filtered; the output keeps `3 + 0 + 8`. 🎯
 
 ???
-⏱️ 0:29 — This is the fixture shared by the Python and C++ tests. It is canonical even-index, it cuts into the familiar 3 + 8 pieces, and the zero-area filter keeps the result clean.
+⏱️ 0:29 — This is the fixture shared by the Python and C++ tests. It is canonical even-index, and its raw output is 3 + 0 + 8. The zero-area piece is no longer filtered; the 2-node split is the fix for the 12-point case.
 
 ---
 
@@ -1096,18 +784,19 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 | Check | Result |
 |---|---|
 | Debug + release | **137 / 137 each** ✅ |
-| Assertions | **777 / 777 passed** ✅ |
+| Assertions | **778 / 778 passed** ✅ |
 | 100-point stress | passes ✅ |
 | 12-point fixture | 3 pieces, `1 + 10 + 9` ✅ |
-| 7-point fixture | 2 pieces, `3 + 8` ✅ |
+| 7-point fixture | 3 raw pieces, `3 + 0 + 8` ✅ |
 | Python | cut 8 passed; full 606 passed, 1 unrelated Vector2 ⚠️ |
 ]
 
+.font-sm[
 .pull-left[
 #### What “green” means
 
 - Original scan retained
-- Zero-area pieces filtered
+- Raw pieces kept, no filter
 - 2-node split, no new point
 - Stress test passes
 - Python matches C++
@@ -1122,9 +811,10 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 - Rust cut is still a stub
 
 ]
+]
 
 ???
-⏱️ 0:29–0:30 — Debug and release are green. The 100-point stress passes, the 12-point fixture is 1 + 10 + 9, the 7-point fixture is 3 + 8, and Python matches C++. The only red test is an unrelated Vector2 property failure.
+⏱️ 0:29–0:30 — Debug and release are green. The 100-point stress passes, the 12-point fixture is 1 + 10 + 9, the 7-point fixture is the raw 3 + 0 + 8, and Python matches C++. The only red test is an unrelated Vector2 property failure.
 
 ---
 
@@ -1135,7 +825,7 @@ xmake f -m release -y && xmake build test_recti && xmake run test_recti
 graph LR
     A["Issue 7\nrepresentation"] --> B["Canonical even-index\ndocumented"]
     B --> C["Issue 8\nzero-area piece"]
-    C --> D["Filter at output\nno assertions"]
+    C --> D["Remove filter\nraw pieces visible"]
     D --> E["Standalone C++\noriginal scan"]
     E --> F["Degenerate 2-node split\nno new point"]
     F --> G["Python parity"]
@@ -1149,10 +839,10 @@ graph LR
 ]
 
 .pull-left[
-#### Closed
+#### Changes
 
 - Issue #7: representation / input contract
-- Issue #8: zero-area piece
+- Issue #8: filter removed; zero-area piece visible
 - 12-point non-convex leftover
 - 100-point stress passes
 - Python now matches C++
@@ -1163,16 +853,16 @@ graph LR
 #### Next
 
 - Implement Rust convex cut and fixture
-- Keep the 2-node split + zero-area filter
+- Keep the 2-node split; no zero-area filter
 - Add more structured stress fixtures
 - Investigate the unrelated Vector2 test
 
-> The bug is filtered at the boundary, not asserted inside the recursion. 🚀
+> The cut is fixed at the source; the zero-area piece is visible, not filtered. 🚀
 
 ]
 
 ???
-⏱️ 0:30 — Issue 8 is resolved by the output filter plus the 2-node split, not by asserting inside the cut. The next engineering step is the Rust implementation and more stress coverage.
+⏱️ 0:30 — The zero-area filter is removed. The 2-node split fixes the 12-point cut, while the 7-point zero-area piece remains visible in the raw output. The next engineering step is the Rust implementation and more stress coverage.
 
 ---
 
@@ -1186,12 +876,12 @@ graph LR
 - Start on a horizontal edge
 - 2 points = rectangle, not a line
 
-#### Filter at the boundary
+#### Fix the cut, not the output
 
 - Keep the original algorithm
-- Drop zero-area pieces before allocation
 - Split the existing 2-node piece on a duplicate cut
 - No new point for a collinear duplicate
+- Keep raw pieces visible; do not hide them
 - No assertions in the recursion
 
 ]
@@ -1209,7 +899,6 @@ graph LR
 - Is the input canonical even-index?
 - Does the cut duplicate `v_min`?
 - Is the 2-node piece non-degenerate?
-- Does the output contain zero-area pieces?
 - Do Python and C++ agree?
 
 > “It works on my polygon” is not a contract. 📝
@@ -1217,7 +906,7 @@ graph LR
 ]
 
 ???
-⏱️ 0:30 — Close with the lessons: representation first, filter at the boundary, split the existing 2-node piece instead of synthesizing a duplicate, and make the tests speak the same contract across languages.
+⏱️ 0:30 — Close with the lessons: representation first, split the existing 2-node piece instead of synthesizing a duplicate, keep the raw output visible, and make the tests speak the same contract across languages.
 
 ---
 

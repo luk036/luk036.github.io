@@ -1,0 +1,621 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rectilinear Polygon Decomposition</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Rectilinear Polygon Decomposition
+
+### Convex · Explicit · Implicit Cuts
+
+<br/>
+
+**Wai-Shing Luk**
+
+`recti` / `physdes-cpp`
+
+October 2026
+
+
+---
+
+### What we will cover
+
+- **Representation** — why every other vertex is enough
+- **Convex cut** — cut a polygon into orthogonally convex pieces
+- **Explicit cut** — the same recursion without the monotone shortcut
+- **Implicit cut** — cut at the corners that were never stored
+- **Rectangle cut** — the corrected convex → slab pipeline
+- **Correctness, complexity, and the tests that catch regressions**
+
+<br/>
+
+> A decomposition is only as good as the invariants you assert on its output.
+
+
+---
+
+### Why rectilinear decomposition?
+
+.pull-left[
+
+
+- VLSI layout is **Manhattan**: wires, cells, blockages
+- Rectangles are DRC-clean and cheap to store/query
+- Decomposition feeds:
+  - floorplan blocks
+  - routing regions
+  - mask fracture
+  - area / timing estimates
+- Rectilinear polygons are everywhere in physical design
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 350" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto"><polygon points="63.0,309.0 423.0,309.0 423.0,249.0 63.0,249.0" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.4" stroke-linejoin="round"/><text x="239.0" y="284.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">6</text><polygon points="63.0,249.0 123.0,249.0 123.0,129.0 63.0,129.0" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.4" stroke-linejoin="round"/><text x="89.0" y="194.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">2</text><polygon points="183.0,249.0 243.0,249.0 243.0,189.0 183.0,189.0" fill="#EBCB8B" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.4" stroke-linejoin="round"/><text x="209.0" y="224.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><polygon points="303.0,249.0 363.0,249.0 363.0,69.0 303.0,69.0" fill="#B48EAD" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.4" stroke-linejoin="round"/><text x="329.0" y="164.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">3</text><polygon points="63.0,309.0 423.0,309.0 423.0,249.0 363.0,249.0 363.0,69.0 303.0,69.0 303.0,249.0 243.0,249.0 243.0,189.0 183.0,189.0 183.0,249.0 123.0,249.0 123.0,129.0 63.0,129.0" fill="none" fill-opacity="1" stroke="#2E3440" stroke-width="2.8" stroke-linejoin="round"/><text x="45" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4C566A" text-anchor="start" font-weight="normal">Manhattan geometry → 4 rectangles, area 12</text></svg>
+]
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 · Representation
+
+
+---
+
+### Rectilinear (orthogonal) polygons
+
+.pull-left[
+
+
+- Every edge is **horizontal or vertical**
+- Consecutive edges are perpendicular
+- Interior angles are $90^\circ$ or $270^\circ$
+- The boundary has an **even** number of vertices
+- Simple closed curve; no holes in this talk
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 355" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto"><line x1="63.0" y1="320.0" x2="423.0" y2="320.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="423.0" y1="320.0" x2="423.0" y2="260.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="423.0" y1="260.0" x2="363.0" y2="260.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="363.0" y1="260.0" x2="363.0" y2="80.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="363.0" y1="80.0" x2="303.0" y2="80.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="303.0" y1="80.0" x2="303.0" y2="260.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="303.0" y1="260.0" x2="243.0" y2="260.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="243.0" y1="260.0" x2="243.0" y2="200.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="243.0" y1="200.0" x2="183.0" y2="200.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="183.0" y1="200.0" x2="183.0" y2="260.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="183.0" y1="260.0" x2="123.0" y2="260.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="123.0" y1="260.0" x2="123.0" y2="140.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="123.0" y1="140.0" x2="63.0" y2="140.0" stroke="#88C0D0" stroke-width="4" stroke-linecap="round" opacity="1.0"/><line x1="63.0" y1="140.0" x2="63.0" y2="320.0" stroke="#D08770" stroke-width="4" stroke-linecap="round" opacity="1.0"/><polygon points="63.0,320.0 423.0,320.0 423.0,260.0 363.0,260.0 363.0,80.0 303.0,80.0 303.0,260.0 243.0,260.0 243.0,200.0 183.0,200.0 183.0,260.0 123.0,260.0 123.0,140.0 63.0,140.0" fill="none" fill-opacity="1" stroke="#2E3440" stroke-width="1.2" stroke-linejoin="round"/><text x="239.0" y="338.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5E81AC" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">H</text><text x="435.0" y="294.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">V</text><text x="45" y="335" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4C566A" text-anchor="start" font-weight="normal">blue = horizontal edge   ·   orange = vertical edge</text></svg>
+]
+
+
+---
+
+### Even-index (compressed) storage
+
+.pull-left[
+
+Store **every other** vertex:
+
+$$S_0, S_1, \ldots, S_{k-1}$$
+
+The omitted vertex is implicit:
+
+$$
+c_i = (x_{i+1},\, y_i)
+$$
+
+- move x first, then y
+- 50% fewer points than the full boundary
+- consecutive stored points differ in **both** coordinates
+- the full boundary is reconstructed on demand
+
+]
+.pull-right[
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 400" style="width:100%;max-width:430px;height:auto;display:block;margin:0 auto"><polygon points="111.8,367.0 387.8,367.0 387.8,91.0 295.8,91.0 295.8,275.0 203.8,275.0 203.8,91.0 111.8,91.0" fill="#88C0D0" fill-opacity="0.35" stroke="#2E3440" stroke-width="2.4" stroke-linejoin="round"/><line x1="111.8" y1="367.0" x2="387.8" y2="91.0" stroke="#4C566A" stroke-width="1.4" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 5"/><line x1="387.8" y1="91.0" x2="295.8" y2="275.0" stroke="#4C566A" stroke-width="1.4" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 5"/><line x1="295.8" y1="275.0" x2="203.8" y2="91.0" stroke="#4C566A" stroke-width="1.4" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 5"/><line x1="203.8" y1="91.0" x2="111.8" y2="367.0" stroke="#4C566A" stroke-width="1.4" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 5"/><circle cx="111.8" cy="367.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="120.8" y="358.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5E81AC" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S0</text><circle cx="387.8" cy="91.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="396.8" y="82.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5E81AC" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S1</text><circle cx="295.8" cy="275.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="304.8" y="266.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5E81AC" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S2</text><circle cx="203.8" cy="91.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="212.8" y="82.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5E81AC" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S3</text><circle cx="387.8" cy="367.0" r="6" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="396.8" y="383.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">c0</text><circle cx="295.8" cy="91.0" r="6" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="304.8" y="107.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">c1</text><circle cx="203.8" cy="275.0" r="6" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="212.8" y="291.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">c2</text><circle cx="111.8" cy="91.0" r="6" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="120.8" y="107.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">c3</text></svg></p>
+]
+
+
+---
+
+### Reconstructing the boundary
+
+.pull-left[
+
+
+For each stored pair:
+
+$$
+S_i \;\longrightarrow\; (x_{i+1}, y_i) \;\longrightarrow\; S_{i+1}
+$$
+
+- First move **horizontally**, then **vertically**
+- The inserted corner makes the edge rectilinear
+- Do **not** use the y-first form: it reconstructs a different polygon
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 390" style="width:100%;max-width:510px;height:auto;display:block;margin:0 auto"><polygon points="130.0,360.0 400.0,360.0 400.0,90.0 310.0,90.0 310.0,270.0 220.0,270.0 220.0,90.0 130.0,90.0" fill="#88C0D0" fill-opacity="0.3" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><line x1="130.0" y1="360.0" x2="393.6" y2="360.0" stroke="#5E81AC" stroke-width="4" stroke-linecap="round"/><polygon points="400.0,360.0 392.0,356.4 392.0,363.6" fill="#5E81AC"/><line x1="400.0" y1="360.0" x2="400.0" y2="96.4" stroke="#D08770" stroke-width="4" stroke-linecap="round"/><polygon points="400.0,90.0 396.4,98.0 403.6,98.0" fill="#D08770"/><circle cx="130.0" cy="360.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="400.0" cy="90.0" r="7" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="400.0" cy="360.0" r="7" fill="#FFFFFF" stroke="#D08770" stroke-width="2.8"/><text x="126.0" y="384.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#5E81AC" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S0</text><text x="412.0" y="80.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#5E81AC" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">S1</text><text x="388.0" y="384.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#D08770" text-anchor="end" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">c0</text><text x="200" y="330" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#5E81AC" text-anchor="start" font-weight="normal">move x first: (x1, y0)</text><text x="410" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="start" font-weight="normal">then y</text></svg>
+]
+
+
+---
+
+### Base cases are not degenerate
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 310" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto"><polygon points="72.0,192.5 237.0,192.5 237.0,82.5 72.0,82.5" fill="#88C0D0" fill-opacity="0.5" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><circle cx="72.0" cy="192.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="237.0" cy="82.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="50" y="270" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">2 stored points</text><text x="50" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4C566A" text-anchor="start" font-weight="normal">rectangle</text><polygon points="382.0,192.5 492.0,192.5 492.0,137.5 437.0,137.5 437.0,82.5 382.0,82.5" fill="#88C0D0" fill-opacity="0.5" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><circle cx="382.0" cy="192.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="492.0" cy="137.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="437.0" cy="82.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="360" y="270" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">3 stored points</text><text x="360" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4C566A" text-anchor="start" font-weight="normal">L / monotone</text><polygon points="712.0,247.5 877.0,247.5 877.0,82.5 822.0,82.5 822.0,192.5 767.0,192.5 767.0,82.5 712.0,82.5" fill="#88C0D0" fill-opacity="0.5" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><circle cx="712.0" cy="247.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="877.0" cy="82.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="822.0" cy="192.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="767.0" cy="82.5" r="6" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><text x="690" y="270" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">4 stored points</text><text x="690" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4C566A" text-anchor="start" font-weight="normal">orthogonally convex</text></svg></p>
+
+- **2 stored points** — a rectangle (four corners after expansion)
+- **3 stored points** — an L-shape / monotone piece
+- **4+ stored points** — a larger orthogonally convex polygon
+- The algorithms below return these compressed pieces directly
+
+
+---
+
+### When is a rectilinear polygon "convex"?
+
+.pull-left[
+
+
+Orthogonal convexity = **x-monotone** and **y-monotone**:
+
+- every vertical line meets the polygon in one interval
+- every horizontal line meets it in one interval
+
+$$
+\text{convex} \;\Longleftrightarrow\; \text{xmonotone} \land \text{ymonotone}
+$$
+
+This is **not** geometric convexity: an L-shape is convex in this sense.
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 335" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto"><polygon points="85.0,310.0 310.0,310.0 310.0,85.0 235.0,85.0 235.0,235.0 160.0,235.0 160.0,85.0 85.0,85.0" fill="#88C0D0" fill-opacity="0.45" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><line x1="85.0" y1="160.0" x2="310.0" y2="160.0" stroke="#BF616A" stroke-width="2" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 4"/><line x1="85.0" y1="160.0" x2="160.0" y2="160.0" stroke="#BF616A" stroke-width="5" stroke-linecap="round" opacity="1.0"/><line x1="235.0" y1="160.0" x2="310.0" y2="160.0" stroke="#BF616A" stroke-width="5" stroke-linecap="round" opacity="1.0"/><text x="170" y="285" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#BF616A" text-anchor="start" font-weight="normal">two intervals at y = 2</text><text x="40" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">not y-monotone → not convex</text><polygon points="530.0,310.0 830.0,310.0 830.0,235.0 680.0,235.0 680.0,85.0 530.0,85.0" fill="#88C0D0" fill-opacity="0.45" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><line x1="530.0" y1="197.5" x2="680.0" y2="197.5" stroke="#BF616A" stroke-width="5" stroke-linecap="round" opacity="1.0"/><text x="560" y="285" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#BF616A" text-anchor="start" font-weight="normal">one interval at y = 1.5</text><text x="480" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">x- and y-monotone → convex</text></svg>
+]
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 · Convex cut
+
+
+---
+
+### One skeleton, three policies
+
+Explicit and implicit share a **Template Method**; convex uses the same recipe standalone:
+
+```cpp
+recur(v):
+    if 2 nodes: return rectangle            // 2 stored points
+    if 3 nodes and policy allows: return monotone piece
+    v = find_concave_point(...)
+    if none: return whole polygon           // convex
+    (v_min, vertical) = find_min_dist_point(v)
+    p_new = insert_cut(v, v_min, vertical)
+    return recur(left) + recur(right)
+```
+
+- **Convex** — stops at 3-node monotone pieces
+- **Explicit** — no 3-node shortcut; may recurse further
+- **Implicit** — finds concave corners at the *implicit* vertices
+
+
+---
+
+### Finding the cut
+
+.pull-left[
+
+
+**Concave test** — a direction reversal plus an area-sign test:
+
+$$
+(v_{1x}v_{2x} < 0)\;\lor\;(v_{1y}v_{2y} < 0)
+$$
+
+$$
+(y_i-y_{i-1})(x_{i+1}-x_i) \gtrless 0
+$$
+
+**Nearest edge** — project the reflex vertex vertically and
+horizontally; take the minimum distance.
+
+**Insert** — splice a new point into the circular linked list,
+then recurse on the two pieces.
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 410" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto"><polygon points="122.5,339.0 462.5,339.0 462.5,254.0 292.5,254.0 292.5,84.0 122.5,84.0" fill="#88C0D0" fill-opacity="0.4" stroke="#2E3440" stroke-width="2.4" stroke-linejoin="round"/><line x1="292.5" y1="254.0" x2="292.5" y2="339.0" stroke="#BF616A" stroke-width="2.6" stroke-linecap="round" opacity="1.0" stroke-dasharray="7 5"/><circle cx="292.5" cy="254.0" r="7" fill="#BF616A" stroke="#BF616A" stroke-width="2.2"/><circle cx="292.5" cy="339.0" r="6.5" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="304.5" y="244.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#BF616A" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">v (reflex)</text><text x="282.5" y="359.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#D08770" text-anchor="end" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">p_new</text><text x="377.5" y="361.0" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4C566A" text-anchor="middle" font-weight="normal" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">nearest edge</text><text x="40" y="395" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4C566A" text-anchor="start" font-weight="normal">cut = perpendicular from the reflex vertex to the nearest edge</text></svg>
+]
+
+
+---
+
+### ConvexCutPolicy
+
+- Base cases: **2 nodes → rectangle**, **3 nodes → monotone piece**
+- Concave vertex requires:
+  - a direction reversal, **and**
+  - the signed area test `cmp(area_diff)` (sign depends on orientation)
+- Cuts from the concave vertex to the nearest edge
+- Output: a partition into **orthogonally convex** pieces
+
+<br/>
+
+```cpp
+auto area_diff = (p1.y - p0.y) * (p2.x - p1.x);
+auto v1 = p1 - p0, v2 = p2 - p1;
+if ((v1.x * v2.x < 0 || v1.y * v2.y < 0) && cmp(area_diff))
+    return vcurr;
+```
+
+
+---
+
+### Convex cut: worked example
+
+The twelve-point even-index fixture has area **20**:
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 345" style="width:100%;max-width:960px;height:auto;display:block;margin:0 auto"><polygon points="55.2,243.2 97.2,243.2 97.2,285.2 139.2,285.2 139.2,327.2 223.2,327.2 223.2,285.2 265.2,285.2 265.2,243.2 349.2,243.2 349.2,201.2 307.2,201.2 307.2,75.2 265.2,75.2 265.2,117.2 223.2,117.2 223.2,201.2 181.2,201.2 181.2,159.2 139.2,159.2 139.2,201.2 97.2,201.2 97.2,159.2 55.2,159.2" fill="#88C0D0" fill-opacity="0.4" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="30" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="start" font-weight="bold">input: 24-vertex boundary (area 20)</text><polygon points="525.2,243.2 567.2,243.2 567.2,285.2 609.2,285.2 609.2,327.2 693.2,327.2 693.2,285.2 735.2,285.2 735.2,243.2 819.2,243.2 819.2,201.2 777.2,201.2 777.2,75.2 735.2,75.2 735.2,117.2 693.2,117.2 693.2,201.2 651.2,201.2 651.2,159.2 609.2,159.2 609.2,201.2 567.2,201.2 567.2,159.2 525.2,159.2" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="693.2,201.2 567.2,201.2 567.2,159.2 525.2,159.2 525.2,243.2 567.2,243.2 567.2,285.2 609.2,285.2 609.2,327.2 693.2,327.2 693.2,285.2" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="598.6" y="252.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">10</text><polygon points="693.2,285.2 735.2,285.2 735.2,243.2 819.2,243.2 819.2,201.2 777.2,201.2 777.2,75.2 735.2,75.2 735.2,117.2 693.2,117.2" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="749.0" y="189.4" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">9</text><polygon points="651.2,159.2 609.2,159.2 609.2,201.2 651.2,201.2" fill="#D08770" fill-opacity="0.55" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="627.2" y="185.2" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><text x="500" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="start" font-weight="bold">convex cut: 3 pieces (1 + 9 + 10)</text></svg></p>
+
+- Output: **3** orthogonally convex pieces
+- Areas: **1 + 9 + 10 = 20** ✓
+- Piece count is deterministic for this fixture
+
+
+---
+
+### What convex cut does **not** do
+
+- A 3-point L-shape is returned **whole** — it is already convex
+- Convexity does not imply rectangularity
+- A rectangle decomposition needs a **second stage**
+- This is the gap that the old `rpolygon_cut_rectangle` fell into
+
+<br/>
+
+> "Convex" in this library means x- and y-monotone, not "a rectangle".
+
+<br/>
+
+- 2-point piece → rectangle
+- 3+ point piece → orthogonally convex, still to be rectangularized
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 · Explicit cut
+
+
+---
+
+### ExplicitCutPolicy
+
+Same recursion, two differences:
+
+| | Convex | Explicit |
+|---|---|---|
+| 3-node base case | yes | **no** |
+| Concave test | reversal + area sign | reversal + area sign |
+| Typical output | convex pieces | convex pieces |
+
+- Without the 3-node shortcut, the policy may recurse **further**
+- It inserts new vertices explicitly into the polygon
+- It is still a **convex** decomposition, not a rectangle decomposition
+
+<br/>
+
+```cpp
+template <typename T> struct ExplicitCutPolicy : ConvexCutPolicy<T> {
+    static constexpr bool has_triangle_base_case = false;
+};
+```
+
+
+---
+
+### Explicit vs convex: a U-shape
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 930 340" style="width:100%;max-width:930px;height:auto;display:block;margin:0 auto"><polygon points="70.0,322.5 295.0,322.5 295.0,97.5 220.0,97.5 220.0,247.5 145.0,247.5 145.0,97.5 70.0,97.5" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="220.0,247.5 145.0,247.5 145.0,97.5 70.0,97.5 70.0,322.5 220.0,322.5" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="142.0" y="227.5" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">4</text><polygon points="220.0,322.5 295.0,322.5 295.0,97.5 220.0,97.5" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="254.5" y="215.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">3</text><text x="40" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">convex cut</text><polygon points="530.0,322.5 755.0,322.5 755.0,97.5 680.0,97.5 680.0,247.5 605.0,247.5 605.0,97.5 530.0,97.5" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="680.0,247.5 605.0,247.5 605.0,97.5 530.0,97.5 530.0,322.5 680.0,322.5" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="602.0" y="227.5" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">4</text><polygon points="680.0,322.5 755.0,322.5 755.0,97.5 680.0,97.5" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="714.5" y="215.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">3</text><text x="500" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="start" font-weight="bold">explicit cut</text></svg></p>
+
+- Both policies return the same **2 pieces** here: areas 4 and 3
+- The difference is the *stopping rule*, not the geometric criterion
+- Explicit is useful as an alternative partition, not as a rectangularizer
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 4 · Implicit cut
+
+
+---
+
+### ImplicitCutPolicy
+
+.pull-left[
+
+
+The implicit cut works directly on **stored pairs**:
+
+- corner under test: the implicit vertex (move x first)
+- sign test:
+
+$$
+-(y_{i+1}-y_i)(x_{i+1}-x_i) \gtrless 0
+$$
+
+- cut from that corner to the nearest edge
+- recurse first on the **nearest-edge** side, then on the new node
+
+]
+
+.pull-right[
+
+```cpp
+auto d = -(p2.y - p1.y) * (p2.x - p1.x);
+if (cmp(d)) return vcurr;  // reflex corner
+```
+
+- No direction-reversal guard: the implicit vertex is always a 90° corner
+- Only **implicit** reflex corners can be found
+
+]
+
+
+---
+
+### Implicit cut: worked example
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 335" style="width:100%;max-width:720px;height:auto;display:block;margin:0 auto"><polygon points="98.0,292.5 288.0,292.5 288.0,197.5 193.0,197.5 193.0,102.5 98.0,102.5" fill="#88C0D0" fill-opacity="0.45" stroke="#2E3440" stroke-width="2.4" stroke-linejoin="round"/><line x1="193.0" y1="197.5" x2="98.0" y2="197.5" stroke="#BF616A" stroke-width="2.4" stroke-linecap="round" opacity="1.0" stroke-dasharray="7 5"/><circle cx="193.0" cy="197.5" r="7" fill="#FFFFFF" stroke="#D08770" stroke-width="2.6"/><text x="203.0" y="187.5" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#D08770" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">implicit corner</text><text x="40" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4C566A" text-anchor="start" font-weight="normal">L-shape: one implicit reflex corner</text><polygon points="468.0,292.5 658.0,292.5 658.0,197.5 468.0,197.5" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><polygon points="468.0,197.5 563.0,197.5 563.0,102.5 468.0,102.5" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.2" stroke-linejoin="round"/><text x="560.0" y="250.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">2</text><text x="512.5" y="155.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><text x="410" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4C566A" text-anchor="start" font-weight="normal">implicit cut → 2 rectangles (area 3)</text></svg></p>
+
+- L-shape stored as `(0,0) (2,1) (1,2)`
+- The implicit corner `(1,1)` is reflex
+- Cut horizontally to the nearest edge → **2 rectangles**
+- Areas: **2 + 1 = 3** ✓
+
+
+---
+
+### Implicit cut: the blind spot
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 325" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto"><polygon points="78.0,307.0 123.0,307.0 123.0,262.0 213.0,262.0 213.0,217.0 168.0,217.0 168.0,82.0 123.0,82.0 123.0,127.0 78.0,127.0" fill="#88C0D0" fill-opacity="0.4" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><circle cx="78.0" cy="307.0" r="4.5" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="123.0" cy="262.0" r="4.5" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="213.0" cy="217.0" r="4.5" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="168.0" cy="82.0" r="4.5" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="123.0" cy="127.0" r="4.5" fill="#5E81AC" stroke="#5E81AC" stroke-width="2.2"/><circle cx="123.0" cy="262.0" r="8" fill="none" stroke="#BF616A" stroke-width="2.2"/><circle cx="123.0" cy="127.0" r="8" fill="none" stroke="#BF616A" stroke-width="2.2"/><text x="40" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="start" font-weight="bold">convex piece, area 9</text><polygon points="583.0,262.0 628.0,262.0 628.0,82.0 583.0,82.0 583.0,127.0 538.0,127.0 538.0,307.0 583.0,307.0" fill="#D08770" fill-opacity="0.45" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><polygon points="628.0,262.0 673.0,262.0 673.0,217.0 628.0,217.0" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="602.5" y="177.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">8</text><text x="647.5" y="244.5" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><text x="500" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#BF616A" text-anchor="start" font-weight="bold">implicit cut: 8 + 1, not rectangles</text></svg></p>
+
+- A reflex corner can be a **stored** vertex, not an implicit one
+- The implicit policy never tests stored corners
+- On this area-9 convex piece it returns an **8-area 4-point piece**
+  (an octagon after expansion, not a rectangle) plus a 1-area rectangle
+- Area is preserved, but the output is **not** a rectangle decomposition
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 5 · Rectangle cut
+
+
+---
+
+### The corrected pipeline
+
+```cpp
+rpolygon_cut_rectangle(P):
+    C = rpolygon_cut_convex(P)                  // 1. convex pieces
+    out = []
+    for piece in C:                             // 2. rectangularize
+        out += cut_convex_into_rectangles(piece)
+    return out
+
+cut_convex_into_rectangles(piece):
+    xs = sorted(unique(x-coordinates of piece))
+    for each slab [xs[k], xs[k+1]]:
+        ys = y of horizontal edges spanning the slab
+        emit rectangle [xs[k], xs[k+1]] x [ys[0], ys[1]]
+```
+
+<br/>
+
+- A convex piece is **x-monotone** ⇒ one rectangle per slab
+- Slabs are aligned with the piece's own vertices
+
+
+---
+
+### Slab decomposition of a convex piece
+
+.pull-left[
+
+
+Take the area-9 convex piece:
+
+- $x$-monotone ⇒ every vertical slab meets it in one interval
+- Slab $[3,4]$ → height $0 \ldots 4$
+- Slab $[4,5]$ → height $1 \ldots 5$
+- Slab $[5,6]$ → height $1 \ldots 2$
+
+Result: **3 rectangles**, areas $4+4+1 = 9$ ✓
+
+]
+
+.pull-right[
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 355" style="width:100%;max-width:430px;height:auto;display:block;margin:0 auto"><polygon points="88.6,402.2 150.6,402.2 150.6,340.2 274.6,340.2 274.6,278.2 212.6,278.2 212.6,92.2 150.6,92.2 150.6,154.2 88.6,154.2" fill="#E5E9F0" fill-opacity="1" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><polygon points="88.6,402.2 150.6,402.2 150.6,154.2 88.6,154.2" fill="#A3BE8C" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="116.6" y="283.2" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">4</text><polygon points="150.6,340.2 212.6,340.2 212.6,92.2 150.6,92.2" fill="#5E81AC" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="178.6" y="221.2" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">4</text><polygon points="212.6,340.2 274.6,340.2 274.6,278.2 212.6,278.2" fill="#D08770" fill-opacity="0.55" stroke="#2E3440" stroke-width="2.0" stroke-linejoin="round"/><text x="240.6" y="314.2" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><line x1="150.6" y1="402.2" x2="150.6" y2="92.2" stroke="#BF616A" stroke-width="1.8" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 4"/><line x1="212.6" y1="340.2" x2="212.6" y2="92.2" stroke="#BF616A" stroke-width="1.8" stroke-linecap="round" opacity="1.0" stroke-dasharray="6 4"/><text x="40" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4C566A" text-anchor="start" font-weight="normal">vertical slabs: x ∈ [3,4], [4,5], [5,6]</text></svg>
+]
+
+
+---
+
+### Rectangle cut: the twelve-point fixture
+
+.pull-left[
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" style="width:100%;max-width:500px;height:auto;display:block;margin:0 auto"><polygon points="81.2,279.2 133.2,279.2 133.2,331.2 185.2,331.2 185.2,383.2 289.2,383.2 289.2,331.2 341.2,331.2 341.2,279.2 445.2,279.2 445.2,227.2 393.2,227.2 393.2,71.2 341.2,71.2 341.2,123.2 289.2,123.2 289.2,227.2 237.2,227.2 237.2,175.2 185.2,175.2 185.2,227.2 133.2,227.2 133.2,175.2 81.2,175.2" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="185.2,383.2 289.2,383.2 289.2,227.2 185.2,227.2" fill="#BF616A" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="234.2" y="309.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R1</text><polygon points="133.2,331.2 185.2,331.2 185.2,227.2 133.2,227.2" fill="#5E81AC" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="156.2" y="283.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R2</text><polygon points="185.2,227.2 237.2,227.2 237.2,175.2 185.2,175.2" fill="#D08770" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="208.2" y="205.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R3</text><polygon points="81.2,279.2 133.2,279.2 133.2,175.2 81.2,175.2" fill="#B48EAD" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="104.2" y="231.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R4</text><polygon points="289.2,331.2 341.2,331.2 341.2,123.2 289.2,123.2" fill="#8FBCBB" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="312.2" y="231.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R5</text><polygon points="341.2,279.2 393.2,279.2 393.2,71.2 341.2,71.2" fill="#A3BE8C" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="364.2" y="179.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R6</text><polygon points="393.2,279.2 445.2,279.2 445.2,227.2 393.2,227.2" fill="#B48EAD" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.8" stroke-linejoin="round"/><text x="416.2" y="257.2" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">R7</text></svg></p>
+]
+.pull-right[
+.font-sm[
+| piece | stored corners | area |
+|---|---|---|
+| R1 | `(1,-1) → (3,2)` | 6 |
+| R2 | `(0,0) → (1,2)` | 2 |
+| R3 | `(1,2) → (2,3)` | 1 |
+| R4 | `(-1,1) → (0,3)` | 2 |
+| R5 | `(3,0) → (4,4)` | 4 |
+| R6 | `(4,1) → (5,5)` | 4 |
+| R7 | `(5,1) → (6,2)` | 1 |
+]
+**7 rectangles · area 20** ✓
+]
+
+
+---
+
+### Before vs after
+
+<p align="center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 330" style="width:100%;max-width:940px;height:auto;display:block;margin:0 auto"><polygon points="54.0,239.0 94.0,239.0 94.0,279.0 134.0,279.0 134.0,319.0 214.0,319.0 214.0,279.0 254.0,279.0 254.0,239.0 334.0,239.0 334.0,199.0 294.0,199.0 294.0,79.0 254.0,79.0 254.0,119.0 214.0,119.0 214.0,199.0 174.0,199.0 174.0,159.0 134.0,159.0 134.0,199.0 94.0,199.0 94.0,159.0 54.0,159.0" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="134.0,319.0 214.0,319.0 214.0,279.0 134.0,279.0" fill="#BF616A" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="171.0" y="303.0" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">2</text><polygon points="174.0,159.0 134.0,159.0 134.0,199.0 174.0,199.0" fill="#5E81AC" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="151.0" y="183.0" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><polygon points="94.0,279.0 254.0,279.0 254.0,239.0 294.0,239.0 294.0,79.0 254.0,79.0 254.0,119.0 214.0,119.0 214.0,199.0 94.0,199.0" fill="#D08770" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="219.0" y="187.0" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">14</text><polygon points="294.0,239.0 334.0,239.0 334.0,199.0 294.0,199.0" fill="#A3BE8C" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="311.0" y="223.0" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">1</text><polygon points="94.0,159.0 54.0,159.0 54.0,239.0 94.0,239.0" fill="#B48EAD" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="71.0" y="203.0" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#2E3440" text-anchor="middle" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">2</text><line x1="94.0" y1="199.0" x2="94.0" y2="159.0" stroke="#BF616A" stroke-width="8" stroke-linecap="round" opacity="0.85"/><text x="102.0" y="175.0" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#BF616A" text-anchor="start" font-weight="bold" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round">0</text><text x="30" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#BF616A" text-anchor="start" font-weight="bold">old: implicit → explicit (6 pieces)</text><polygon points="534.0,239.0 574.0,239.0 574.0,279.0 614.0,279.0 614.0,319.0 694.0,319.0 694.0,279.0 734.0,279.0 734.0,239.0 814.0,239.0 814.0,199.0 774.0,199.0 774.0,79.0 734.0,79.0 734.0,119.0 694.0,119.0 694.0,199.0 654.0,199.0 654.0,159.0 614.0,159.0 614.0,199.0 574.0,199.0 574.0,159.0 534.0,159.0" fill="none" fill-opacity="1" stroke="#B0BEC5" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="6 4"/><polygon points="614.0,319.0 694.0,319.0 694.0,199.0 614.0,199.0" fill="#BF616A" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="574.0,279.0 614.0,279.0 614.0,199.0 574.0,199.0" fill="#5E81AC" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="614.0,199.0 654.0,199.0 654.0,159.0 614.0,159.0" fill="#D08770" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="534.0,239.0 574.0,239.0 574.0,159.0 534.0,159.0" fill="#B48EAD" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="694.0,279.0 734.0,279.0 734.0,119.0 694.0,119.0" fill="#8FBCBB" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="734.0,239.0 774.0,239.0 774.0,79.0 734.0,79.0" fill="#A3BE8C" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><polygon points="774.0,239.0 814.0,239.0 814.0,199.0 774.0,199.0" fill="#B48EAD" fill-opacity="0.5" stroke="#2E3440" stroke-width="1.6" stroke-linejoin="round"/><text x="510" y="35" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#A3BE8C" text-anchor="start" font-weight="bold">new: convex → slabs (7 rectangles)</text></svg></p>
+
+- **Old** `implicit → explicit`: 6 pieces, including a **zero-width** `(0,2)-(0,3)`
+  and a **5-point, area-14 piece** that is not a rectangle
+- **New** `convex → slabs`: 7 proper rectangles, same total area 20
+- Area preservation alone would have accepted the old output
+
+
+---
+
+### Why the old composition failed
+
+1. **Wrong domain** — implicit cut was applied to a possibly non-convex polygon
+2. **Blind spot** — stored reflex corners are invisible to the implicit test
+3. **No rectangularization** — the explicit policy does not turn convex pieces into rectangles
+4. **Degenerate output** — a zero-width 2-point piece slipped through area checks
+5. **Weak invariant** — "convex pieces + area sum" does not imply "rectangles"
+
+<br/>
+
+> The fix is structural: convex cut first, then a slab rectangularization.
+
+
+---
+
+### Invariants and complexity
+
+**Invariants of a correct rectangle decomposition**
+
+- every piece is stored as **2 points** with both coordinates distinct
+- pieces are **disjoint** interiors
+- the sum of the piece areas equals the original area
+- orientation is preserved: signed piece areas keep the input's sign
+
+<br/>
+
+**Cost**
+
+- nearest-edge scan is $O(n)$ per cut; recursion depth $O(n)$
+- worst case $O(n^2)$ for the cut stage
+- slab stage: sort $k$ x-coordinates, scan $k$ stored edges → $O(k^2)$ per convex piece
+
+
+---
+
+### Tests that would have caught it
+
+```cpp
+const auto pieces = rpolygon_cut_rectangle<int>(P, is_anticlockwise);
+REQUIRE_EQ(pieces.size(), 7U);
+for (const auto& piece : pieces) {
+    REQUIRE_EQ(piece.size(), 2U);            // compressed rectangle
+    CHECK_NE(piece[0].xcoord(), piece[1].xcoord());
+    CHECK_NE(piece[0].ycoord(), piece[1].ycoord());
+    CHECK_GT(RPolygon<int>(piece).signed_area(), 0);
+}
+CHECK_EQ(total_area, original_area);         // necessary, not sufficient
+```
+
+- Fixture: `twelve_point_even_index_fixture()`, area 20
+- Assert the **output class**, not just the area sum
+
+
+---
+
+### Takeaways
+
+- The **compressed representation** drives every cut: stored corners vs implicit corners
+- **Convex ≠ rectangle**; a second rectangularization stage is mandatory
+- **Explicit** is an alternative convex decomposition, not a rectangle algorithm
+- **Implicit** only sees implicit reflex corners — a real blind spot
+- **Rectangle = convex cut + vertical slabs** (for x-monotone convex pieces)
+- Tests must assert **2-point pieces and positive area**, not just area preservation
+
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q & A
+
+<br/>
+
+### Thank you
+
+<br/>
+
+`include/recti/rpolygon_cut.hpp` · `source/rpolygon_cut.cpp`
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

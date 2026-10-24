@@ -1,0 +1,1468 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rectilinear Polygon Creation and Decomposition</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Rectilinear Polygon Creation and Decomposition
+
+### From full vertex lists to x-first even-index
+
+📐 Points → Monotone → Hull → Cut → Rectangles
+
+@luk036 · 2026 · 45 min
+
+---
+
+### 🗺️ Agenda
+
+.pull-left[
+
+**Part 1 — Representation**
+- Why rectilinear?
+- Full list vs even-index
+- x-first expansion
+- Canonical form
+
+**Part 2 — Creation & Hulls**
+- Template method
+- `create_xmono` / `create_ymono`
+- Monotone hulls
+- Collinear cleanup
+
+]
+.pull-right[
+
+**Part 3 — Decomposition**
+- Three-step plan
+- Explicit vs implicit 270°
+- Recursive convex cut
+- Base cases & complexity
+
+**Part 4 — Verification & Lessons**
+- Area + canonical checks
+- Python / C++ results
+- Engineering lessons
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — Representation 📐
+
+---
+
+### 🎯 Why rectilinear polygons?
+
+- **VLSI physical design** is overwhelmingly Manhattan geometry.
+- **L-shaped obstacles** must be fractured into rectangles.
+- **Layout fracturing** for mask writing and DRC.
+- **Integer coordinates** avoid floating-point predicates.
+- Typical polygon size is small: **n &lt; 100**.
+- Therefore **O(n²) algorithms are acceptable**.
+
+> The hard part is not the asymptotics — it is keeping the representation consistent.
+
+---
+
+### 🔁 The whole pipeline
+
+.mermaid[
+<pre>
+graph LR
+    P["Point set"] --> C["create_mono"]
+    C --> H["monotone hull"]
+    H --> E["x-first even-index"]
+    E --> K["canonical check"]
+    K --> X["convex cut"]
+    X --> R["rectangle pieces"]
+    style P fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#d1c4e9,stroke:#5e35b1,stroke-width:3px
+    style K fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px
+    style X fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+</pre>
+]
+
+- **Creation** produces an ordering.
+- **Hulls** remove concavities.
+- **Decomposition** turns the result into rectangles.
+
+---
+
+### 🧩 Full vertex list vs even-index
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-0.65 -1.11 5.30 5.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="5.30" height="5.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">Full vertex list: 8 corners</text>
+<line x1="0.00" y1="4.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="4.00" x2="4.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="4.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="4.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="4.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="4.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,4.00 4.00,4.00 4.00,0.00 3.00,0.00 3.00,3.00 1.00,3.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="4.00" r="0.059" fill="#4C566A"/>
+<circle cx="4.00" cy="4.00" r="0.059" fill="#4C566A"/>
+<circle cx="4.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="4.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="4.00" cy="4.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="4.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="0.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="4.55" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">v0</text>
+<text x="4.35" y="4.55" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">v1</text>
+<text x="4.35" y="-0.15" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">v2</text>
+<text x="3.00" y="-0.35" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="middle">v3</text>
+<text x="3.35" y="3.25" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">v4</text>
+<text x="0.65" y="3.25" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">v5</text>
+<text x="0.65" y="-0.15" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">v6</text>
+<text x="-0.35" y="-0.15" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">v7</text>
+</svg><svg viewBox="-1.09 -1.11 6.18 5.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-1.09" y="-1.11" width="6.18" height="5.76" fill="#fafafa"/>
+<text x="-0.44" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">Even-index: 4 stored + 4 implicit</text>
+<line x1="0.00" y1="4.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="4.00" x2="4.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="4.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="4.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="4.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="4.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,4.00 4.00,4.00 4.00,0.00 3.00,0.00 3.00,3.00 1.00,3.00 1.00,0.00 0.00,0.00" fill="#A3BE8C" fill-opacity="0.18" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="4.00" r="0.059" fill="#4C566A"/>
+<circle cx="4.00" cy="4.00" r="0.059" fill="#4C566A"/>
+<circle cx="4.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="4.00" cy="4.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="3.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="1.00" cy="3.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="4.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="4.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="4.60" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S0</text>
+<text x="4.35" y="-0.15" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+<text x="3.40" y="3.25" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S2</text>
+<text x="0.65" y="-0.15" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S3</text>
+</svg></div>
+
+- The full boundary needs **every** corner.
+- The even-index list stores only `v0, v2, v4, …`; the omitted odd vertices are **implicit**.
+- Storage drops by roughly **50%**.
+
+---
+
+### 🪜 The x-first expansion rule
+
+<svg viewBox="-0.92 -1.11 4.85 3.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:470px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.92" y="-1.11" width="4.85" height="3.76" fill="#fafafa"/>
+<text x="-0.27" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">x-first: insert (x1, y0)</text>
+<line x1="0.00" y1="2.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="2.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="2.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,2.00 3.00,2.00 3.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="0.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<circle cx="0.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="0.20" y="2.55" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">S[i]</text>
+<text x="2.80" y="-0.30" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">S[i+1]</text>
+<text x="2.80" y="2.60" font-family="sans-serif" font-size="0.24" fill="#B48EAD" text-anchor="end">I = (x1, y0)</text>
+</svg>
+
+$$
+I_i = (x_{i+1},\; y_i)
+$$
+
+- `S[i] = (x0, y0)`, `S[i+1] = (x1, y1)`.
+- Insert `(x1, y0)`, then move vertically to `S[i+1]`.
+- Do **not** use the y-first form `(x0, y1)` — it reconstructs a different polygon.
+
+---
+
+### 🧱 Two minimal representations
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-0.65 -1.11 4.30 3.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:330px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="3.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">2 stored: rectangle</text>
+<line x1="0.00" y1="2.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="2.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="2.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,2.00 3.00,2.00 3.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="2.60" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S0</text>
+<text x="3.35" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+</svg><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:330px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">3 stored: monotone L</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,1.00 1.00,1.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="1.00" cy="1.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="1.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="3.60" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S0</text>
+<text x="3.40" y="1.10" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+<text x="0.65" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S2</text>
+</svg></div>
+
+- **2 stored points** = a rectangle (4 boundary corners).
+- **3 stored points** = a monotone / L-shaped piece (6 boundary corners).
+- These are **not degenerate** — they are the base cases of the cut algorithm.
+
+---
+
+### ✅ Canonical form and `is_canonical`
+
+A stored even-index list `S` is **canonical** when:
+
+- every cyclic consecutive pair differs in **both** `x` and `y`;
+- no stored point is duplicated.
+
+```python
+def is_canonical(S):
+    if len(S) < 2:
+        return True
+    if len(set(S)) != len(S):
+        return False
+    return all(
+        a[0] != b[0] and a[1] != b[1]
+        for a, b in zip(S, S[1:] + S[:1])
+    )
+```
+
+The same predicate exists on `RPolygon` in Python and C++.
+
+---
+
+### 🚨 Area check is not enough
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="0.89 -4.11 3.22 5.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:170px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="0.89" y="-4.11" width="3.22" height="5.76" fill="#fafafa"/>
+<text x="1.54" y="-3.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">not canonical</text>
+<line x1="2.00" y1="1.00" x2="2.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="1.00" x2="3.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-1.00" x2="3.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-2.00" x2="3.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-3.00" x2="3.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="2.00,-3.00 2.00,-2.00 3.00,-2.00 3.00,1.00 2.00,1.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<line x1="2.00" y1="-3.00" x2="2.00" y2="-2.00" stroke="#BF616A" stroke-width="0.147" stroke-linecap="round" opacity="0.85"/>
+<line x1="2.00" y1="1.00" x2="2.00" y2="-3.00" stroke="#BF616A" stroke-width="0.147" stroke-linecap="round" opacity="0.85"/>
+<circle cx="2.00" cy="-3.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="-2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="-2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="-2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="1.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="-3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="-2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="1.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="2.30" y="-3.25" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S0</text>
+<text x="2.35" y="-1.90" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+<text x="3.35" y="0.85" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S2</text>
+</svg><svg viewBox="1.18 -4.11 2.63 5.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:170px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow7" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="1.18" y="-4.11" width="2.63" height="5.76" fill="#fafafa"/>
+<text x="1.83" y="-3.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">canonical</text>
+<line x1="2.00" y1="1.00" x2="2.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="1.00" x2="3.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-1.00" x2="3.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-2.00" x2="3.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="-3.00" x2="3.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="2.00,-3.00 3.00,-3.00 3.00,1.00 2.00,1.00" fill="#A3BE8C" fill-opacity="0.2" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="2.00" cy="-3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="-3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="-3.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="1.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="-3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="1.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="2.30" y="-3.25" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S0</text>
+<text x="3.35" y="0.85" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+</svg></div>
+
+`[(2,1), (2,0), (3,-3)]` expands to a boundary with **two consecutive vertical segments**.
+
+- Area alone would happily accept it.
+- The canonical form is `[(2,1), (3,-3)]`.
+- We need an explicit **canonical check**, not just an area check.
+
+---
+
+### 🧪 Canonical regression matrix
+
+| Input `S` | Canonical? | Why |
+|:----------|:----------:|:----|
+| `[(2,1), (2,0)]` | ❌ | same `x` |
+| `[(2,1), (3,-3)]` | ✅ | rectangle corners |
+| `[(2,1), (2,0), (3,-3)]` | ❌ | zero change in `x` |
+| `[(0,0), (0,0)]` | ❌ | duplicate |
+| `[(0,0), (0,1), (0,2)]` | ❌ | vertical run |
+| `[(0,0), (1,0), (2,0)]` | ❌ | horizontal run |
+| `[(0,0), (1,1)]` | ✅ | rectangle |
+
+> The predicate is deliberately **structural**, not geometric.
+
+---
+
+### 🧭 Orientation and signed area
+
+For a simple polygon:
+
+$$
+A = \frac{1}{2}\sum_i \left(x_i y_{i+1} - x_{i+1} y_i\right)
+$$
+
+- `A > 0`: anticlockwise; `A < 0`: clockwise.
+- The even-index representation has a compact area formula too.
+- Orientation drives the hull and cut branches.
+- The sign is also a cheap sanity check after every cut.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — Creation & Hulls 🏗️
+
+---
+
+### 🪞 Template method: write for x == write for y
+
+.mermaid[
+<pre>
+graph TD
+    T["create_mono(lst, dir, cmp)"] --> X["dir = (x, y)"]
+    T --> Y["dir = (y, x)"]
+    X --> MX["x-monotone ordering"]
+    Y --> MY["y-monotone ordering"]
+    style T fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style X fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Y fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style MX fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style MY fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
+- One implementation; two directions.
+- Same idea for hulls and cuts.
+- The orientation flag is returned as a by-product.
+
+---
+
+### 🧱 `create_mono`: partition, sort, concatenate
+
+<svg viewBox="-3.67 -3.12 7.33 6.79" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow8" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-3.67" y="-3.12" width="7.33" height="6.79" fill="#fafafa"/>
+<text x="-3.00" y="-2.80" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">partition and sort each chain</text>
+<line x1="-3.00" y1="3.00" x2="-3.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-2.00" y1="3.00" x2="-2.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-1.00" y1="3.00" x2="-1.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="0.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="-1.00" x2="3.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-3.00" y1="-2.00" x2="3.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="-3.00,1.00 -1.00,1.00 -1.00,-1.00 1.00,-1.00 1.00,-2.00 3.00,-2.00 3.00,1.00 2.00,1.00 2.00,2.00 0.00,2.00 0.00,3.00 -3.00,3.00" fill="#88C0D0" fill-opacity="0.12" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="-3.00" cy="1.00" r="0.064" fill="#4C566A"/>
+<circle cx="-1.00" cy="1.00" r="0.064" fill="#4C566A"/>
+<circle cx="-1.00" cy="-1.00" r="0.064" fill="#4C566A"/>
+<circle cx="1.00" cy="-1.00" r="0.064" fill="#4C566A"/>
+<circle cx="1.00" cy="-2.00" r="0.064" fill="#4C566A"/>
+<circle cx="3.00" cy="-2.00" r="0.064" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.064" fill="#4C566A"/>
+<circle cx="2.00" cy="1.00" r="0.064" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.064" fill="#4C566A"/>
+<circle cx="0.00" cy="2.00" r="0.064" fill="#4C566A"/>
+<circle cx="0.00" cy="3.00" r="0.064" fill="#4C566A"/>
+<circle cx="-3.00" cy="3.00" r="0.064" fill="#4C566A"/>
+<circle cx="-1.00" cy="1.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="1.00" cy="-1.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="3.00" cy="-2.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="1.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="2.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="-3.00" cy="3.00" r="0.103" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="-3.00" cy="1.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="-1.00" cy="-1.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="-2.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="1.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="2.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="0.00" cy="3.00" r="0.143" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-3.40" y="1.60" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">L</text>
+<text x="3.40" y="1.60" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">R</text>
+<text x="-2.75" y="0.80" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P0</text>
+<text x="-0.75" y="-1.20" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P1</text>
+<text x="1.25" y="-2.20" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P2</text>
+<text x="3.25" y="0.80" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P3</text>
+<text x="2.25" y="1.80" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P4</text>
+<text x="0.25" y="2.80" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">P5</text>
+<line x1="-3" y1="0" x2="3" y2="0" stroke="#D08770" stroke-width="0.06" stroke-dasharray="0.2,0.14"/><text x="0" y="0.55" font-family="sans-serif" font-size="0.32" fill="#D08770" text-anchor="middle">leftmost.y</text>
+</svg>
+
+1. Find the **leftmost** and **rightmost** points.
+2. Partition the remaining points into two chains.
+3. Sort chain 1 by `x` ascending.
+4. Sort chain 2 by `x` descending.
+5. Return `chain1 + chain2`.
+
+The output is a valid even-index **ordering**, but it may not be canonical.
+
+---
+
+### 🧬 `create_xmono` and `create_ymono`
+
+```python
+def create_xmono_rpolygon(points):
+    return create_mono_rpolygon(
+        points,
+        lambda p: (p.x, p.y),
+        lambda a, b: a &lt; b,
+    )
+
+def create_ymono_rpolygon(points):
+    return create_mono_rpolygon(
+        points,
+        lambda p: (p.y, p.x),
+        lambda a, b: a &gt; b,
+    )
+```
+
+- `create_xmono` returns an **anticlockwise** flag.
+- `create_ymono` returns a **clockwise** flag.
+- The naming is subtle; always check the sign in tests.
+
+---
+
+### 🧪 Worked example: the 12-point fixture
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-7.22 -5.97 13.44 11.19" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow21" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-7.22" y="-5.97" width="13.44" height="11.19" fill="#fafafa"/>
+<text x="-6.00" y="-5.44" font-family="sans-serif" font-size="0.44" font-weight="bold" fill="#2E3440">create_xmono ordering</text>
+<line x1="-6.00" y1="4.00" x2="-6.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-5.00" y1="4.00" x2="-5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-4.00" y1="4.00" x2="-4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-3.00" y1="4.00" x2="-3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-2.00" y1="4.00" x2="-2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-1.00" y1="4.00" x2="-1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="0.00" y1="4.00" x2="0.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="5.00" y1="4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="4.00" x2="5.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="3.00" x2="5.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="2.00" x2="5.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="1.00" x2="5.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="0.00" x2="5.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-1.00" x2="5.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-2.00" x2="5.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-3.00" x2="5.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<polygon points="-6.00,2.00 -3.00,2.00 -3.00,4.00 0.00,4.00 3.00,4.00 3.00,3.00 5.00,3.00 5.00,-1.00 2.00,-1.00 2.00,-2.00 1.00,-2.00 1.00,-4.00 0.00,-4.00 0.00,1.00 -2.00,1.00 -2.00,-4.00 -2.00,-2.00 -4.00,-2.00 -4.00,-3.00 -5.00,-3.00 -5.00,-1.00 -6.00,-1.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.098" stroke-linejoin="round"/>
+<circle cx="-6.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-3.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="3.00" cy="3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="1.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-4.00" cy="-3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+</svg><svg viewBox="-7.22 -5.97 13.44 11.19" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow22" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-7.22" y="-5.97" width="13.44" height="11.19" fill="#fafafa"/>
+<text x="-6.00" y="-5.44" font-family="sans-serif" font-size="0.44" font-weight="bold" fill="#2E3440">create_ymono ordering</text>
+<line x1="-6.00" y1="4.00" x2="-6.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-5.00" y1="4.00" x2="-5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-4.00" y1="4.00" x2="-4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-3.00" y1="4.00" x2="-3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-2.00" y1="4.00" x2="-2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-1.00" y1="4.00" x2="-1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="0.00" y1="4.00" x2="0.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="5.00" y1="4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="4.00" x2="5.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="3.00" x2="5.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="2.00" x2="5.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="1.00" x2="5.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="0.00" x2="5.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-1.00" x2="5.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-2.00" x2="5.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-3.00" x2="5.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<polygon points="-3.00,4.00 0.00,4.00 3.00,4.00 3.00,3.00 0.00,3.00 0.00,1.00 5.00,1.00 5.00,-1.00 -2.00,-1.00 -2.00,-2.00 2.00,-2.00 -2.00,-2.00 -2.00,-4.00 1.00,-4.00 -4.00,-4.00 -4.00,-3.00 -5.00,-3.00 -5.00,-1.00 -6.00,-1.00 -6.00,2.00 -3.00,2.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.098" stroke-linejoin="round"/>
+<circle cx="-3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="3.00" cy="3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="1.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-4.00" cy="-3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-6.00" cy="2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+</svg></div>
+
+- Left: `create_xmono` ordering.
+- Right: `create_ymono` ordering.
+- Both are valid even-index lists — but **not necessarily canonical**.
+- This is exactly why the tests apply a hull before `is_canonical`.
+
+---
+
+### 📏 Monotonicity predicates
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow9" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">x-monotone (not y)</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<line x1="1.5" y1="-0.5" x2="1.5" y2="3.5" stroke="#BF616A" stroke-width="0.05" stroke-dasharray="0.16,0.12"/>
+</svg><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow10" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">y-monotone (not x)</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 0.00,0.00 3.00,0.00 3.00,1.00 1.00,1.00 1.00,2.00 3.00,2.00 3.00,3.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<line x1="-0.5" y1="1.5" x2="3.5" y2="1.5" stroke="#BF616A" stroke-width="0.05" stroke-dasharray="0.16,0.12"/>
+</svg></div><br/><div style="text-align:center"><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow11" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">both -> convex</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#A3BE8C" fill-opacity="0.2" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+</svg></div>
+
+- **x-monotone**: every vertical line meets the polygon in one interval.
+- **y-monotone**: every horizontal line meets it in one interval.
+- **Rectilinear convex** = x-monotone **and** y-monotone.
+- Implemented by walking the two chains and checking coordinate violations.
+
+---
+
+### 🧹 Hull idea: remove what breaks monotonicity
+
+A monotone hull is the **minimal monotone polygon** containing the input.
+
+- Walk each chain from the minimum to the maximum.
+- Remove a vertex when it violates monotonicity or turns the wrong way.
+- Use a **circular doubly-linked list** so removal is O(1).
+- Two passes: min → max, then max → min.
+
+---
+
+### 🧮 Monotone hull algorithm
+
+For the current vertex, let `p`, `c`, `n` be previous, current, next.
+
+$$
+\Delta = (y_c - y_p)(x_n - x_c)
+$$
+
+```python
+for c in chain:
+    if dir(c) > dir(n) or dir(p) > dir(c):
+        if wrong_sign(Delta):
+            remove(c)
+            c = prev(c)
+        else:
+            c = next(c)
+    else:
+        c = next(c)
+```
+
+- The sign test depends on orientation (clockwise vs anticlockwise).
+- The result is monotone, but may still contain collinear points.
+
+---
+
+### 🖼️ Hull before and after
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-7.22 -5.97 13.44 11.19" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow12" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-7.22" y="-5.97" width="13.44" height="11.19" fill="#fafafa"/>
+<text x="-6.00" y="-5.44" font-family="sans-serif" font-size="0.44" font-weight="bold" fill="#2E3440">before: 12 stored, non-canonical</text>
+<line x1="-6.00" y1="4.00" x2="-6.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-5.00" y1="4.00" x2="-5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-4.00" y1="4.00" x2="-4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-3.00" y1="4.00" x2="-3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-2.00" y1="4.00" x2="-2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-1.00" y1="4.00" x2="-1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="0.00" y1="4.00" x2="0.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="5.00" y1="4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="4.00" x2="5.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="3.00" x2="5.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="2.00" x2="5.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="1.00" x2="5.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="0.00" x2="5.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-1.00" x2="5.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-2.00" x2="5.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-3.00" x2="5.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<polygon points="-6.00,2.00 -3.00,2.00 -3.00,4.00 0.00,4.00 3.00,4.00 3.00,3.00 5.00,3.00 5.00,-1.00 2.00,-1.00 2.00,-2.00 1.00,-2.00 1.00,-4.00 0.00,-4.00 0.00,1.00 -2.00,1.00 -2.00,-4.00 -2.00,-2.00 -4.00,-2.00 -4.00,-3.00 -5.00,-3.00 -5.00,-1.00 -6.00,-1.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.098" stroke-linejoin="round"/>
+<circle cx="-6.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-3.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="3.00" cy="3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="1.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-4.00" cy="-3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<line x1="-0.26" y1="3.74" x2="0.26" y2="4.26" stroke="#BF616A" stroke-width="0.122" stroke-linecap="round"/>
+<line x1="-0.26" y1="4.26" x2="0.26" y2="3.74" stroke="#BF616A" stroke-width="0.122" stroke-linecap="round"/>
+<line x1="-2.26" y1="-4.26" x2="-1.74" y2="-3.74" stroke="#BF616A" stroke-width="0.122" stroke-linecap="round"/>
+<line x1="-2.26" y1="-3.74" x2="-1.74" y2="-4.26" stroke="#BF616A" stroke-width="0.122" stroke-linecap="round"/>
+</svg><svg viewBox="-7.22 -5.97 13.44 11.19" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow13" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-7.22" y="-5.97" width="13.44" height="11.19" fill="#fafafa"/>
+<text x="-6.00" y="-5.44" font-family="sans-serif" font-size="0.44" font-weight="bold" fill="#2E3440">after hull + collinear cleanup: canonical</text>
+<line x1="-6.00" y1="4.00" x2="-6.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-5.00" y1="4.00" x2="-5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-4.00" y1="4.00" x2="-4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-3.00" y1="4.00" x2="-3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-2.00" y1="4.00" x2="-2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-1.00" y1="4.00" x2="-1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="0.00" y1="4.00" x2="0.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="1.00" y1="4.00" x2="1.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="2.00" y1="4.00" x2="2.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="3.00" y1="4.00" x2="3.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="4.00" y1="4.00" x2="4.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="5.00" y1="4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="4.00" x2="5.00" y2="4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="3.00" x2="5.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="2.00" x2="5.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="1.00" x2="5.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="0.00" x2="5.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-1.00" x2="5.00" y2="-1.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-2.00" x2="5.00" y2="-2.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-3.00" x2="5.00" y2="-3.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<line x1="-6.00" y1="-4.00" x2="5.00" y2="-4.00" stroke="#E5E9F0" stroke-width="0.028"/>
+<polygon points="-6.00,2.00 -3.00,2.00 -3.00,4.00 3.00,4.00 3.00,3.00 5.00,3.00 5.00,-1.00 2.00,-1.00 2.00,-2.00 1.00,-2.00 1.00,-4.00 0.00,-4.00 0.00,1.00 -2.00,1.00 -2.00,-2.00 -4.00,-2.00 -4.00,-3.00 -5.00,-3.00 -5.00,-1.00 -6.00,-1.00" fill="#A3BE8C" fill-opacity="0.2" stroke="#2E3440" stroke-width="0.098" stroke-linejoin="round"/>
+<circle cx="-6.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="4.00" r="0.118" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="3.00" r="0.118" fill="#4C566A"/>
+<circle cx="5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="1.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="-4.00" r="0.118" fill="#4C566A"/>
+<circle cx="0.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-2.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-2.00" r="0.118" fill="#4C566A"/>
+<circle cx="-4.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-3.00" r="0.118" fill="#4C566A"/>
+<circle cx="-5.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="-1.00" r="0.118" fill="#4C566A"/>
+<circle cx="-6.00" cy="2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-3.00" cy="4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="3.00" cy="3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="1.00" cy="-4.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="0.00" cy="1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-2.00" cy="-2.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-4.00" cy="-3.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+<circle cx="-5.00" cy="-1.00" r="0.262" fill="#5E81AC" stroke="#2E3440" stroke-width="0.061"/>
+</svg></div>
+
+- Red crosses: vertices removed by the hull / collinear cleanup.
+- The hull removes the reflex vertices that break monotonicity.
+- After cleanup, the stored list is **canonical**.
+- Area is preserved by the cleanup.
+
+---
+
+### 🧹 Collinear cleanup: the missing step
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-1.00 -1.11 5.00 3.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow14" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-1.00" y="-1.11" width="5.00" height="3.76" fill="#fafafa"/>
+<text x="-0.35" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">same y -> drop the second</text>
+<line x1="0.00" y1="2.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="2.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="2.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,2.00 2.00,2.00 3.00,2.00 3.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<line x1="1.87" y1="1.87" x2="2.13" y2="2.13" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<line x1="1.87" y1="2.13" x2="2.13" y2="1.87" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<text x="-0.30" y="2.55" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">A</text>
+<text x="2.00" y="2.55" font-family="sans-serif" font-size="0.24" fill="#BF616A" text-anchor="middle">B (drop)</text>
+<text x="3.30" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">C</text>
+</svg><svg viewBox="-2.65 -1.11 5.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow15" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-2.65" y="-1.11" width="5.30" height="4.76" fill="#fafafa"/>
+<text x="-2.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">same x -> drop the first</text>
+<line x1="-2.00" y1="3.00" x2="-2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-1.00" y1="3.00" x2="-1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-2.00" y1="3.00" x2="2.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-2.00" y1="2.00" x2="2.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-2.00" y1="1.00" x2="2.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="-2.00" y1="0.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="-2.00,2.00 0.00,2.00 0.00,3.00 0.00,1.00 2.00,1.00 2.00,0.00 -2.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="-2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="-2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="1.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="-2.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="-2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="0.00" cy="1.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<line x1="-0.13" y1="2.87" x2="0.13" y2="3.13" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<line x1="-0.13" y1="3.13" x2="0.13" y2="2.87" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<text x="-2.30" y="2.55" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="end">P</text>
+<text x="0.00" y="3.55" font-family="sans-serif" font-size="0.24" fill="#BF616A" text-anchor="middle">A (drop)</text>
+<text x="0.30" y="1.15" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">B</text>
+<text x="2.30" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#2E3440" text-anchor="start">C</text>
+</svg></div>
+
+- Same `y`: the **second** point lies on a horizontal edge → drop it.
+- Same `x`: the **first** point lies on a vertical edge → drop it.
+- Repeat until no adjacent pair shares an axis.
+- This is exactly the fix that made the x-hull canonical.
+
+```python
+while changed and len(S) > 2:
+    for i in range(len(S)):
+        j = (i + 1) % len(S)
+        if S[i].y == S[j].y:
+            del S[j]; changed = True; break
+        if S[i].x == S[j].x:
+            del S[i]; changed = True; break
+```
+
+---
+
+### 🧪 What the tests now assert
+
+- After `create_xmono` / `create_ymono`:
+  - apply the matching hull, then `assert is_canonical(hull)`.
+- After every hull:
+  - `assert is_canonical(C)`.
+- After every cut piece:
+  - `assert is_canonical(piece)` where the algorithm guarantees it.
+- Area preservation is checked **in addition**, not instead.
+
+> Area alone is necessary but not sufficient.
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — Decomposition ✂️
+
+---
+
+### 🧩 Why decompose?
+
+- L-shaped obstacles → **rectangle pieces**.
+- Layout fracturing → mask-friendly rectangles.
+- DRC and timing analysis often prefer rectangles.
+- The guideline proposes **three steps**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Polygon with 270° vertices"] --> B["1. convex cut"]
+    B --> C["convex pieces"]
+    C --> D["2. explicit 270°"]
+    D --> E["explicit corners resolved"]
+    E --> F["3. implicit 270°"]
+    F --> G["rectangle pieces"]
+    style A fill:#f8bbd0,stroke:#c2185b,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#d1c4e9,stroke:#5e35b1,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+</pre>
+]
+
+- Convexify first: it simplifies the remaining steps.
+- Then resolve explicit corners.
+- Then resolve implicit corners.
+
+---
+
+### 🧭 Explicit vs implicit 270° vertices
+
+<svg viewBox="-2.03 -1.11 7.07 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow16" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-2.03" y="-1.11" width="7.07" height="4.76" fill="#fafafa"/>
+<text x="-1.38" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">stored and reconstructed reflex corners</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="2.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="1.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="2.35" y="2.45" font-family="sans-serif" font-size="0.24" fill="#BF616A" text-anchor="start">explicit 270</text>
+<text x="0.65" y="1.80" font-family="sans-serif" font-size="0.24" fill="#B48EAD" text-anchor="end">implicit 270</text>
+<circle cx="2" cy="1" r="0.26" fill="none" stroke="#BF616A" stroke-width="0.07"/><circle cx="1" cy="1" r="0.26" fill="none" stroke="#B48EAD" stroke-width="0.07"/>
+</svg>
+
+- **Explicit** 270°: a stored even-index vertex, e.g. `(2,1)`.
+- **Implicit** 270°: a corner created by the x-first expansion, e.g. `(1,1)`.
+- A single U-shape contains both kinds.
+- Convex cut handles the shape; explicit/implicit cuts handle the corner types.
+
+---
+
+### ✂️ The cut primitive
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-0.92 -1.11 4.85 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow17" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.92" y="-1.11" width="4.85" height="4.76" fill="#fafafa"/>
+<text x="-0.27" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">1. find concave vertices</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<line x1="1.87" y1="1.87" x2="2.13" y2="2.13" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<line x1="1.87" y1="2.13" x2="2.13" y2="1.87" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<line x1="0.87" y1="1.87" x2="1.13" y2="2.13" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+<line x1="0.87" y1="2.13" x2="1.13" y2="1.87" stroke="#BF616A" stroke-width="0.070" stroke-linecap="round"/>
+</svg><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow18" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">2. min-distance cut</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="3.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<line x1="2.00" y1="2.00" x2="1.00" y2="2.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<line x1="1.00" y1="2.00" x2="1.00" y2="3.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="3.00" r="0.123" fill="#D08770" stroke="#2E3440" stroke-width="0.032"/>
+</svg></div><br/><div style="text-align:center"><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow19" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">3. split, recurse</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 2.00,3.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#A3BE8C" fill-opacity="0.35" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<polygon points="2.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00" fill="#B48EAD" fill-opacity="0.4" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="3.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="3.00" r="0.123" fill="#D08770" stroke="#2E3440" stroke-width="0.032"/>
+</svg></div>
+
+1. **Find a concave vertex**:
+   - direction reversal, plus the correct area sign.
+2. **Find the nearest vertex** by Manhattan distance:
+   - horizontal or vertical connection.
+3. **Insert the cut point** and split the circular list.
+4. **Recurse** on the two smaller polygons.
+
+---
+
+### 🧱 Base cases
+
+<div style="display:flex;gap:12px;justify-content:center;align-items:flex-start;flex-wrap:wrap;"><svg viewBox="-0.65 -1.11 4.30 3.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:330px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="3.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">2 stored: rectangle</text>
+<line x1="0.00" y1="2.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="2.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="2.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,2.00 3.00,2.00 3.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="2.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="2.60" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S0</text>
+<text x="3.35" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+</svg><svg viewBox="-0.65 -1.11 4.30 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:330px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-0.65" y="-1.11" width="4.30" height="4.76" fill="#fafafa"/>
+<text x="0.00" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">3 stored: monotone L</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 3.00,3.00 3.00,1.00 1.00,1.00 1.00,0.00 0.00,0.00" fill="#88C0D0" fill-opacity="0.22" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="1.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="1.00" cy="1.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="0.00" r="0.094" fill="#B48EAD" stroke="#2E3440" stroke-width="0.028"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="1.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<text x="-0.35" y="3.60" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S0</text>
+<text x="3.40" y="1.10" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="start">S1</text>
+<text x="0.65" y="-0.20" font-family="sans-serif" font-size="0.24" fill="#5E81AC" text-anchor="end">S2</text>
+</svg></div>
+
+- **2 stored points** = rectangle → stop.
+- **3 stored points** = monotone / L-shaped → stop (convex variant).
+- The explicit variant has no 3-point base case; continue until no concave vertex remains.
+- The 2/3-node cases are not degenerate — they are the representation.
+
+---
+
+### 🔁 Recursive convex cut
+
+```python
+def cut(v1):
+    v2, v3 = v1.next, v1.next.next
+    if v3 == v1:                 # 2 stored points
+        return [v1, v2]
+    if triangle_base and v3.next == v1:   # 3 stored points
+        return [v1, v2, v3]
+
+    conc = find_concave(v1)
+    if conc is None:
+        return all_vertices(v1)  # already convex
+
+    vmin, vertical = find_min_dist(conc)
+    new = insert_cut(conc, vmin, vertical)
+    return cut(conc) + cut(new)
+```
+
+- Each cut adds one vertex and splits the cycle.
+- Recursion depth is O(n); each scan is O(n).
+- Total **O(n²)** — acceptable for n &lt; 100.
+
+---
+
+### 🖼️ Convex cut on the U-shape
+
+<svg viewBox="-1.44 -1.11 5.88 4.76" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;height:auto;background:#fafafa;border:1px solid #d0d0d0;border-radius:8px">
+<defs><marker id="arrow20" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5E81AC"/></marker></defs>
+<rect x="-1.44" y="-1.11" width="5.88" height="4.76" fill="#fafafa"/>
+<text x="-0.79" y="-0.78" font-family="sans-serif" font-size="0.27" font-weight="bold" fill="#2E3440">convex cut: L-shape + rectangle</text>
+<line x1="0.00" y1="3.00" x2="0.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="1.00" y1="3.00" x2="1.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="2.00" y1="3.00" x2="2.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="3.00" y1="3.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="3.00" x2="3.00" y2="3.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="2.00" x2="3.00" y2="2.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="1.00" x2="3.00" y2="1.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<line x1="0.00" y1="0.00" x2="3.00" y2="0.00" stroke="#E5E9F0" stroke-width="0.016"/>
+<polygon points="0.00,3.00 2.00,3.00 2.00,2.00 1.00,2.00 1.00,0.00 0.00,0.00" fill="#A3BE8C" fill-opacity="0.35" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<polygon points="2.00,3.00 3.00,3.00 3.00,0.00 2.00,0.00 2.00,2.00" fill="#B48EAD" fill-opacity="0.4" stroke="#2E3440" stroke-width="0.056" stroke-linejoin="round"/>
+<line x1="2.00" y1="2.00" x2="2.00" y2="3.00" stroke="#D08770" stroke-width="0.077" stroke-dasharray="0.35,0.21" stroke-linecap="round"/>
+<circle cx="0.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="3.00" r="0.059" fill="#4C566A"/>
+<circle cx="3.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="2.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="2.00" r="0.059" fill="#4C566A"/>
+<circle cx="1.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="0.00" r="0.059" fill="#4C566A"/>
+<circle cx="0.00" cy="3.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="3.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="2.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="1.00" cy="0.00" r="0.130" fill="#5E81AC" stroke="#2E3440" stroke-width="0.035"/>
+<circle cx="2.00" cy="3.00" r="0.123" fill="#D08770" stroke="#2E3440" stroke-width="0.032"/>
+<text x="0.90" y="0.60" font-family="sans-serif" font-size="0.24" fill="#2E7D32" text-anchor="middle">L-shape</text>
+<text x="2.50" y="1.20" font-family="sans-serif" font-size="0.24" fill="#6B4A8A" text-anchor="middle">rectangle</text>
+</svg>
+
+| Piece | Stored vertices | Area |
+|:------|:----------------|:----:|
+| L-shape | `(2,1), (1,3), (0,0)` | 4 |
+| Rectangle | `(2,0), (3,3)` | 3 |
+
+- Total area = **7** = original.
+- Both pieces are convex.
+- Both pieces are canonical.
+
+---
+
+### 🪓 Explicit cut: same skeleton, different corner test
+
+- The recursion is the same; only the **concave-vertex hook** changes.
+- Explicit test: direction reversal **and** the area sign.
+- No 3-point monotone base case: continue until no concave vertex remains.
+- This resolves **explicit 270° vertices** left by the convex cut.
+
+```python
+if vec1.x * vec2.x < 0 or vec1.y * vec2.y < 0:
+    area = (curr.y - prev.y) * (next.x - curr.x)
+    if area_has_wrong_sign(area):
+        return curr
+```
+
+- Python: `rpolygon_cut_convex`, `rpolygon_cut_explicit`.
+- C++ sibling also has `rpolygon_cut_implicit` and `rpolygon_cut_rectangle`.
+
+---
+
+### 🧩 Implicit cut and rectangle cut
+
+- **Implicit 270°** corners are created by the x-first expansion.
+- The implicit cut resolves those corners.
+- **Rectangle cut** outputs pieces with **2 stored points**:
+  - two opposite corners,
+  - different `x` and different `y`,
+  - each piece is trivially canonical.
+- The C++ tests assert `piece.size() == 2` and `x`/`y` differences.
+
+> Same template method: convex → explicit → implicit → rectangle.
+
+---
+
+### ⏱️ Complexity
+
+| Step | Cost | Note |
+|:-----|:-----|:-----|
+| find concave vertex | O(n) | scan the cycle |
+| find min-distance vertex | O(n) | Manhattan distance |
+| insert cut / split | O(1) | circular linked list |
+| recursion | O(n) cuts | each cut adds one vertex |
+| **total** | **O(n²)** | fine for n &lt; 100 |
+
+- Integer coordinates keep the predicates exact.
+- No floating-point orientation tests.
+- The linked list avoids O(n) array deletion.
+
+---
+
+### 🧪 Verification
+
+.pull-left[
+
+**Python**
+- Full suite: **627 passed**
+- New canonical tests
+- Hull-before-check assertions
+- Area + canonical checks on cut pieces
+
+**C++ (xmake)**
+- `xmake build test_recti`
+- `xmake run test_recti`
+- **139 test cases**
+- **934 assertions**
+- **0 failures**
+
+]
+.pull-right[
+
+**What is checked**
+- `is_canonical` on hulls and valid cut pieces
+- area preservation on every cut
+- base cases (2-point rectangle, 3-point monotone)
+- sibling parity: Python ↔ C++
+
+**Caveat**
+- Three even-index fixture cut tests do **not** assert canonicality: their pieces can still contain implicit collinear points.
+- That is a cut-algorithm limitation, not a representation bug.
+
+]
+
+---
+
+### 💡 Engineering lessons
+
+- **Representation is the contract.** Know what is stored before touching an algorithm.
+- **Area is not enough.** Add a structural canonical check.
+- **Collinear cleanup matters.** Even-index hulls can leave same-axis pairs.
+- **Copy mutable inputs.** Python's cut mutates the working list.
+- **Keep siblings aligned.** Python and C++ should pass the same tests and figures.
+- **Small n changes the trade-off.** O(n²) simplicity beats O(n log n) complexity here.
+
+---
+
+### 🏭 Where this is used
+
+- **L-shaped obstacles** in placement and routing.
+- **Layout fracturing** for mask writing.
+- **DRC-friendly** rectangle decomposition.
+- **Rectilinear Steiner / routing** with obstacle keepouts.
+- **Clock-tree and global-router** geometry kernels.
+
+> The same representation and predicates appear across the physdes family.
+
+---
+
+### 📌 Summary
+
+- Points → `create_mono` → monotone hull → canonical even-index → recursive cut → rectangles.
+- **x-first expansion**: `(x1, y0)` is the implicit corner.
+- **Canonical form**: every cyclic consecutive pair differs in both `x` and `y`; no duplicates.
+- **Collinear cleanup**: same `y` drops the second point; same `x` drops the first.
+- **Cut**: find concave vertex → min-distance cut → split → recurse.
+- **O(n²)** is acceptable for n &lt; 100.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 💬
+
+### Questions? Discussion?
+
+📐 Representation · 🏗️ Hulls · ✂️ Decomposition
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 Thank you!
+
+### Rectilinear geometry, one canonical piece at a time.
+
+`physdes-py` · `physdes-cpp` · `physdes-rs`
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

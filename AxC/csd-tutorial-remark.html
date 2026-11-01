@@ -1,0 +1,542 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CSD Tutorial: Controllable Hardware Approximation</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# CSD Tutorial
+
+## Controllable Hardware Approximation
+
+### From 9/5 to shift-add: a temperature-conversion case study
+
+@luk036 · 2026
+
+---
+
+## Agenda
+
+.pull-left[
+
+### Part I — The approximation problem
+
+1. Spec and three approaches
+2. Control vs accuracy
+
+### Part II — CSD fundamentals
+
+3. Constant multiplication
+4. CSD representation
+5. NNZ and adder cost
+
+]
+
+.pull-right[
+
+### Part III — AC case study
+
+6. Integer °F over −9…30 °C
+7. Error budget and NNZ sweep
+8. RTL and verification
+
+### Part IV — Extreme range
+
+9. 0.001 °F over −60…300 °C
+10. Why scaling beats approximation
+
+### Part V — Methodology
+
+11. Design flow and DSE
+12. Lessons
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part I — The Approximation Problem
+
+---
+
+### The design problem
+
+$$F = \frac{9}{5}C + 32 = 1.8C + 32$$
+
+Air-conditioner panel: $C \in [-9, 30]$ °C, display integer °F.
+
+Three ways to make it cheap:
+
+| Approach | Control knob | What we can bound |
+|:---------|:-------------|:------------------|
+| Integer-only arithmetic | word length | exact, 9 NNZ baseline |
+| Approximate multiplier | deleted gates, DSE | empirical max error |
+| CSD multiplier | NNZ | NNZ − 1 adders, provable max error |
+
+> The problem is not accuracy, but how to **control** it.
+
+---
+
+### Control, not average accuracy
+
+MAE and MSE hide the worst case: a single bad reading is averaged away.
+
+| Design | MAE | MSE | Max error | Wrong readings |
+|:-------|----:|----:|----------:|---------------:|
+| A | 0.006 | 0.0010 | 0.20 | 1 |
+| B | 0.050 | 0.0025 | 0.05 | 0 |
+
+Design A: 39 readings at 0.001 °F and one at 0.20 °F. Design B: every reading at 0.05 °F.
+
+The display only fails where the **worst case** crosses the 0.1 °F margin.
+
+Optimize the maximum error, not MAE or MSE.
+
+---
+
+class: nord-light, middle, center
+
+## Part II — CSD Fundamentals
+
+---
+
+### Replace the multiplier with shifts
+
+$$y = a\cdot x$$
+
+Binary: $a = \sum_p b_p 2^p$ with $b_p \in \{0, 1\}$.
+
+CSD: $a = \sum_p d_p 2^p$ with $d_p \in \{-1, 0, +1\}$.
+
+$$115 = 2^7 - 2^4 + 2^2 - 2^0$$
+
+$$y = (x \ll 7) - (x \ll 4) + (x \ll 2) - x$$
+
+Four non-zero digits → three adders, no multiplier.
+
+---
+
+### Canonical Signed Digit
+
+| Property | CSD |
+|:---------|:----|
+| Digit set | $\{-1, 0, +1\}$ |
+| Adjacent non-zeros | never |
+| Weight | minimal for a given integer |
+| Form | unique canonical form |
+
+$$28.5 = \texttt{+00-00.+} = 2^5 - 2^2 + 2^{-1} = 32 - 4 + 0.5$$
+
+Fewer non-zero digits → fewer adders and subtractors.
+
+---
+
+### Binary vs CSD
+
+| Value | Binary | Ones | CSD | NNZ | Adders |
+|:------|:-------|-----:|:----|----:|-------:|
+| 28.5 | `11100.1` | 4 | `+00-00.+` | 3 | 2 |
+| 115 | `1110011` | 5 | `+00-0+0-` | 4 | 3 |
+| 1800 | `11100001000` | 4 | `+00-0000+000` | 3 | 2 |
+
+$$\text{adders} = \text{NNZ} - 1$$
+
+---
+
+### The `csdigit` toolbox
+
+```python
+from csdigit.csd import to_csd, to_csd_i, to_csdnnz, to_csdnnz_i, to_decimal
+from csdigit.csd_multiplier import generate_csd_multiplier, MultiplierSpec
+```
+
+| Call | Result |
+|:-----|:-------|
+| `to_csd(28.5, 2)` | `'+00-00.+0'` |
+| `to_csd_i(115)` | `'+00-0+0-'` |
+| `to_csdnnz(28.5, 4)` | `'+00-00.+'` |
+| `to_decimal('+00-0+0-')` | `115` |
+| `generate_csd_multiplier('+00-0+0-', 8, 7)` | Verilog string |
+
+Multiplier input must be dot-free, with `max_power = len(csd) - 1`.
+
+---
+
+### From CSD to Verilog
+
+```python
+csd = to_csd_i(115)                 # '+00-0+0-'
+verilog = generate_csd_multiplier(csd, input_width=8, max_power=len(csd) - 1)
+```
+
+```verilog
+module csd_multiplier (
+    input  signed [7:0]  x,
+    output signed [14:0] result
+);
+    wire signed [14:0] x_shift7 = x <<< 7;
+    wire signed [14:0] x_shift4 = x <<< 4;
+    wire signed [14:0] x_shift2 = x <<< 2;
+    wire signed [14:0] x_shift0 = x <<< 0;
+
+    assign result = x_shift7 - x_shift4 + x_shift2 - x_shift0;
+endmodule
+```
+
+LCSRe factors repeated patterns into a `_pat` wire and reuses it with `>>>`.
+
+---
+
+class: nord-light, middle, center
+
+## Part III — AC Case Study
+
+---
+
+### Baseline: integer-only C
+
+```c
+#define K 117965   // round(1.8 * 2^16)
+int c2f(int c) {
+    return (int)(((int64_t)c * K + (1 << 15)) >> 16) + 32;
+}
+```
+
+- $K/2^{16} = 1.800003052$ → 9 non-zero CSD digits
+- Realized as CSD: 8 adders for $K$ + 1 for the offset = 9 adders
+- Exact for $-9 \le C \le 30$: max error $9.2\times10^{-5}$ °F
+
+Can we meet the same spec with fewer NNZ?
+
+---
+
+### Fixed-point model
+
+$$F \approx \frac{a}{2^k}C + 32,\qquad \varepsilon(C)=\left(\frac{a}{2^k}-1.8\right)C$$
+
+$a$ is an integer CSD coefficient; $2^{-k}$ is an implicit binary point.
+
+Round-to-nearest datapath:
+
+$$F = \left\lfloor \frac{aC + 32\cdot 2^k + 2^{k-1}}{2^k}\right\rfloor$$
+
+Design variables: $a$, $k$, and $\mathrm{NNZ}(a)$.
+
+---
+
+### The 0.1 °F margin
+
+$1.8C + 32$ is never exactly halfway between two integers:
+
+| $C \bmod 5$ | Fractional part |
+|:-----------:|----------------:|
+| 0 | .0 |
+| 1 | .8 |
+| 2 | .6 |
+| 3 | .4 |
+| 4 | .2 |
+
+The closest rounding boundary is $0.1$ away, not $0.5$.
+
+$$\lvert\delta\rvert = \left\lvert\frac{a}{2^k}-1.8\right\rvert < \frac{0.1}{30} = \frac{1}{300} \approx 3.33\times10^{-3}$$
+
+That is five times looser than a naive half-LSB analysis.
+
+---
+
+### NNZ sweep over $[-9, 30]$
+
+| NNZ | $a/2^k$ | Value | $\max\lvert\varepsilon\rvert$ | Wrong / 40 |
+|----:|:--------|------:|------------------------------:|-----------:|
+| 1 | 2 / 1 | 2.0 | 6.0 | 35 |
+| 2 | 7 / 4 | 1.75 | 1.5 | 21 |
+| 3 | 29 / 16 | 1.8125 | 0.375 | 7 |
+| **4** | **115 / 64** | **1.796875** | **0.09375** | **0** |
+| 5 | 461 / 256 | 1.80078125 | 0.0234 | 0 |
+| 6 | 1843 / 1024 | 1.79980469 | 0.00586 | 0 |
+
+Four NNZ is the first exact design.
+
+---
+
+### Why 3 fails and 4 wins
+
+.pull-left[
+
+#### 3 NNZ: $29/16 = 1.8125$
+
+$$\delta = +0.0125,\qquad \max\lvert\varepsilon\rvert = 0.375$$
+
+Even with a tuned offset: 5 of 40 readings wrong.
+
+]
+
+.pull-right[
+
+#### 4 NNZ: $115/64 = 1.796875$
+
+$$\delta = -0.003125,\qquad \max\lvert\varepsilon\rvert = 0.09375 < 0.1$$
+
+0 of 40 readings wrong.
+
+]
+
+$$115 = 2^7 - 2^4 + 2^2 - 2^0 \;\Longrightarrow\; \texttt{+00-0+0-}$$
+
+---
+
+### The AC datapath
+
+$$F = \frac{115C + 2080}{64},\qquad 2080 = 32\cdot 2^6 + 2^5$$
+
+.mermaid[
+
+<pre>
+graph LR
+  C["Celsius\nC"] --> M["CSD x115\n3 adders"]
+  M --> A["+2080\n1 adder"]
+  A --> S[">>> 6\nfree"]
+  S --> F["Fahrenheit\nF"]
+  style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style M fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style A fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+  style S fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+  style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+```verilog
+wire signed [14:0] product;
+csd_multiplier mul (.x(celsius), .result(product));
+localparam signed [15:0] OFFSET = 16'sd2080;
+assign fahrenheit = (product + OFFSET) >>> 6;
+```
+
+---
+
+### Verify the RTL, not just the model
+
+| Check | Result |
+|:------|:-------|
+| Python exhaustive, 40 inputs | 0 mismatches |
+| iverilog testbench | PASS |
+| yosys `stat`: multiplier | 1 add + 2 sub |
+| yosys `stat`: top level | +1 add |
+| Arithmetic cells | **4** |
+
+The Python search only proves the arithmetic model.
+
+The Verilog simulation proves the generated RTL.
+
+---
+
+class: nord-light, middle, center
+
+## Part IV — Extreme Range
+
+---
+
+### Extreme range, three decimals
+
+| Requirement | AC case | Extreme case |
+|:------------|:--------|:-------------|
+| Range | −9…30 °C | −60…300 °C |
+| Display | integer °F | 0.001 °F |
+| Worst $\lvert C\rvert$ | 30 | 300 |
+| Max multiplier error | $< 0.1$ °F | $< 0.0005$ °F |
+
+$$\lvert\delta\rvert\cdot 300 < 0.0005 \;\Longrightarrow\; \lvert\delta\rvert < 1.67\times10^{-6}$$
+
+If the offset is also tuned:
+
+$$\lvert\delta\rvert\cdot 360 < 0.001 \;\Longrightarrow\; \lvert\delta\rvert < 2.78\times10^{-6}$$
+
+---
+
+### Direct binary approximation
+
+$$1.8 = 2 - 2^{-2} + 2^{-4} - 2^{-6} + \cdots$$
+
+| NNZ | Partial sum | $\delta$ | Max error at 300 °C | Wrong / 361 |
+|----:|:------------|---------:|--------------------:|------------:|
+| 9 | 1.800003052 | $3.05\times10^{-6}$ | $5.49\times10^{-4}$ | 34 |
+| **10** | **1.799999237** | **$7.63\times10^{-7}$** | **$1.37\times10^{-4}$** | **0** |
+
+Nine NNZ misses the 0.001 rounding on 34 readings.
+
+Ten NNZ is sufficient: 9 adders for the multiplier, plus 1 for the offset.
+
+---
+
+### Scale by the display unit
+
+For a thousandths display, keep integer thousandths:
+
+$$1000F = 1800C + 32000$$
+
+$$1800 = 2^{11} - 2^{8} + 2^{3} \;\Longrightarrow\; \texttt{+00-0000+000}$$
+
+Three NNZ → two adders. Exact for every integer $C$.
+
+The same trick at 0.1 °F: $10F = 18C + 320$, and $18 = 2^4 + 2^1$ (2 NNZ).
+
+> Decimal scaling removes the $1/5$ denominator.
+
+---
+
+### Exact 3-NNZ design
+
+```verilog
+// CSD multiplier for 1800
+assign result = x_shift11 - x_shift8 + x_shift3;
+
+// top level
+assign f_milli = product + 21'sd32000;
+```
+
+| Item | Value |
+|:-----|:------|
+| Input | 10-bit signed, −60…300 °C |
+| Product | 21-bit signed |
+| Output | 21-bit thousandths, −76000…572000 |
+| Adders | 3 |
+| iverilog | **PASS all 361 readings** |
+
+No approximation error.
+
+---
+
+### Trade-off summary
+
+| Case | Design | NNZ | Adders | Max error | Rounding |
+|:-----|:-------|----:|-------:|----------:|:---------|
+| AC | baseline $K$ | 9 | 9 | $9.2\times10^{-5}$ | exact |
+| AC | CSD 115/64 | 4 | 4 | 0.094 | exact |
+| Extreme | binary 9 | 9 | 9 | $5.49\times10^{-4}$ | 34 wrong |
+| Extreme | binary 10 | 10 | 10 | $1.37\times10^{-4}$ | exact |
+| Extreme | scaled 1800 | **3** | **3** | **0** | exact |
+
+The exact scaled design uses 3 adders instead of 10.
+
+---
+
+class: nord-light, middle, center
+
+## Part V — Methodology and Lessons
+
+---
+
+### Design flow
+
+.mermaid[
+
+<pre>
+graph LR
+  S["Spec\nrange + display unit"] --> E["Error budget\nmax error"]
+  E --> R{"Exact decimal\nscaling?"}
+  R -->|yes| X["1800C + 32000\n3 NNZ"]
+  R -->|no| F["Binary fixed point\nDSE over NNZ and k"]
+  X --> H["Max-error sweep\n+ emit Verilog"]
+  F --> H
+  H --> T["iverilog + yosys"]
+  style S fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+  style E fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+  style X fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+  style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+  style H fill:#fff3e0,stroke:#e65100,stroke-width:3px
+  style T fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### Design-space exploration
+
+| Knob | Effect |
+|:-----|:-------|
+| NNZ | adders = NNZ − 1 |
+| $k$ | binary-point precision |
+| $a$ | coefficient shape |
+| Offset | centers the maximum error |
+| Shared patterns | LCSRe and cross-CSE |
+
+Small spaces: exhaustive sweep, as in this tutorial.
+
+Objective: minimize adders subject to a hard **max-error** bound.
+
+---
+
+### Lessons
+
+1. The hard part is control, not raw accuracy.
+2. Optimize the maximum error, not MAE or MSE.
+3. Choose the representation before optimizing it.
+4. NNZ is a direct hardware cost knob.
+5. Decimal scaling can turn an approximation into an exact design.
+6. Verify the generated RTL with a simulator and synthesis.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&amp;A
+
+**CSD Tutorial: Controllable Hardware Approximation**
+
+Demo: `examples/temperature_c_to_f.py`
+
+Library: [github.com/luk036/csdigit](https://github.com/luk036/csdigit)
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

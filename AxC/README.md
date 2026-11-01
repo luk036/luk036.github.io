@@ -101,6 +101,7 @@ graph TD
 | [csdigit Package](csdigit-remark.html)                 | Python package for CSD conversion          |
 | [CSD Optimization: C++ & Python](csd-remark.html)      | Performance optimization (C++ fixes, ports) |
 | [CSD Multiplier: Shift-Add Synthesis](csd_multiplier-remark.html) | LCSRe-based optimization for FIR filters   |
+| [CSD Tutorial: Controllable Hardware Approximation](csd-tutorial-remark.html) | NNZ-controlled CSD multipliers for temperature conversion and Gaussian blur |
 
 **What is CSD?**
 

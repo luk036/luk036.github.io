@@ -17,8 +17,6 @@ Integer coordinates
 
 Write for x == Write for y
 
-## Design Patterns
-
 ## The Power of Canonical Form
 
 - Simplify complicated algorithms
@@ -26,7 +24,12 @@ Write for x == Write for y
 ## New proposal
 
 - Usual representation: Full-vertex list
-- our: x-first, even-index list
+- Our: x-first, even-index list
+
+Other assumptions in the work:
+
+- Simple (non-crossing)
+- No redundant points. 
 
 ## x-monotone, y-monotone, convexity
 

@@ -1,0 +1,553 @@
+<!doctype html>
+<html>
+  <head>
+    <title>A Fix for Softmax and Cross-Entropy — Replication and Hardware</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# A Fix for Softmax &amp; Cross-Entropy
+
+## Floating-point cliffs, grokking, and CORDIC fixed point
+
+@luk036 · 2026
+
+---
+
+## Outline
+
+.pull-left[
+
+### Part 1 — Two bugs
+
+1. Softmax Collapse
+2. Softmax Cancellation
+3. The log-space fix
+4. Verification
+
+]
+
+.pull-right[
+
+### Part 2 — Replication
+
+5. Seven experiments, 180 runs
+6. What reproduced
+7. What did not
+
+### Part 3 — Hardware
+
+8. int8: where the bug lives
+9. CORDIC fixed point
+10. An effective fix
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — Two Numerical Bugs
+
+---
+
+## Standard softmax and its max-shift
+
+$$ \tilde z_k = z_k - z_{\max}, \qquad
+   \mathrm{softmax}(z)_k = \frac{e^{\tilde z_k}}{\sum_j e^{\tilde z_j}} $$
+
+$$ L(z,t) = -\log \mathrm{softmax}(z)_t,
+   \qquad \nabla_z L = q - e_t $$
+
+- subtracting $z_{\max}$ prevents overflow, not collapse
+- the mathematics below is exact; the bugs are *representational*
+- every framework (JAX, PyTorch, TensorFlow) does this
+
+---
+
+## The logit margin
+
+$$ m \;=\; z_t - \log \sum_{j \neq t} e^{z_j} $$
+
+With $z_t = z_{\max}$ the denominator becomes $1 + e^{-m}$:
+
+$$ g_t = \frac{1}{1+e^{-m}} - 1 = -\frac{e^{-m}}{1+e^{-m}},
+   \qquad g_j = \frac{e^{z_j - z_t}}{1+e^{-m}} $$
+
+$$ \sum_k g_k = 0 \quad \text{exactly, in exact arithmetic} $$
+
+---
+
+## Bug 1 — Softmax Collapse
+
+When $e^{-m} < 2^{-p}$ for a $p$-bit significand:
+
+- $1 + e^{-m}$ rounds to $1.0$, so $q_t$ rounds to $1$
+- the framework forms $g_t = q_t - 1 = 0$
+- the non-target $g_j$ never add $1$, so they stay positive
+
+$$ \sum_k \tilde g_k \;=\; \frac{e^{-m}}{1+e^{-m}} \;>\; 0 $$
+
+The gradient no longer sums to zero — and the loss reads exactly $0$.
+
+---
+
+## The cliff is a bit-width law
+
+$$ c \;=\; \ln 2^{p} \;=\; p \ln 2 $$
+
+| format | significand bits | $p \ln 2$ | measured |
+|---|---|---|---|
+| bf16 | 8 | 5.55 | 5.49 |
+| fp32 | 24 | 16.64 | 15.75 |
+| fp64 | 53 | 36.74 | 36.0 |
+
+The "precision cliff" is not a constant: it is the number of bits.
+
+---
+
+## Why collapse breaks training
+
+.mermaid[
+<pre>
+graph LR
+    A["margin m grows"] --> B["m passes the cliff"]
+    B --> C["g_t = 0, g_j positive"]
+    C --> D["Adam second moment decays"]
+    D --> E["weight decay shrinks weights"]
+    E --> F["m falls back below the cliff"]
+    F --> G["gradients return"]
+    G --> A
+</pre>
+]
+
+- adaptive optimizers normalize per coordinate, so a *missing* gradient is as damaging as a large one
+- the result is the "slingshot": flat plateaus interrupted by loss spikes
+
+---
+
+## Bug 2 — Softmax Cancellation
+
+Distillation computes $p = \mathrm{softmax}(z_T)$, $q = \mathrm{softmax}(z_S)$, $g = q - p$.
+
+As $z_S \to z_T$:
+
+- the true gradient goes to zero
+- but $q$ (backward log-softmax) and $p$ (forward softmax) use different op sequences
+- subtracting two nearly equal probabilities leaves a noise floor
+
+At $z_S = z_T$, measured $\lVert g \rVert$:
+
+| bf16 | fp32 | fp64 |
+|---|---|---|
+| $1.0 \times 10^{-1}$ | $3.5 \times 10^{-6}$ | $5.7 \times 10^{-15}$ |
+
+With the fix: exactly $0$ in all three.
+
+---
+
+## The fix — never add 1 to $e^{-m}$
+
+$$ \tilde z_k = \mathbf{1}[k \neq i_{\max}]\,(z_k - z_{i_{\max}}), \qquad
+   m = -\mathrm{LSE}_{j \neq i_{\max}} \tilde z_j $$
+
+$$ \log\mathrm{softmax}(z)_k = \tilde z_k - \mathrm{softplus}(-m) $$
+
+For soft targets, with $\delta = z_S - z_T$:
+
+$$ d_k = \delta_k - \sum_i p_i \delta_i $$
+
+$$ s_k = d_k - \log\Big(1 + \sum_i p_i (e^{d_i} - 1)\Big),
+   \qquad u_k = p_k (e^{s_k} - 1) $$
+
+$$ g_k = u_k - q_k \sum_i u_i \quad \text{(force } \sum g = 0\text{)} $$
+
+---
+
+## The fix — PyTorch
+
+```python
+def cross_entropy(z, target):
+    z_t = z.gather(-1, target[..., None])
+    is_t = one_hot(target, z.shape[-1], dtype=bool)
+    others = where(is_t, -inf, z - z_t)
+    m = -logsumexp(others, dim=-1)
+    return softplus(-m)
+```
+
+```python
+def soft_target_cross_entropy(z_s, z_t):
+    log_q = log_softmax(z_s)
+    q, p = exp(log_q), softmax(z_t)
+    d = delta - (p * delta).sum(-1, keepdim=True)
+    s = d - log1p((p * expm1(d)).sum(-1, keepdim=True))
+    u = where(abs(s) < 1, p * expm1(s), q - p)
+    g = u - q * u.sum(-1, keepdim=True)
+    return (-(p * log_q.detach()).sum(-1)
+            + (g.detach() * (z_s - z_s.detach())).sum(-1))
+```
+
+---
+
+## Verification — the paper's own example
+
+$z = [9, -9, -9]$, target $0$:
+
+| quantity | standard | fixed |
+|---|---|---|
+| log-softmax | $[0, -18, -18]$ | $[-3.046\text{e-}8, -18, -18]$ |
+| softmax grad | $[0, -1.523\text{e-}8, -1.523\text{e-}8]$ | $[3.046\text{e-}8, -1.523\text{e-}8, -1.523\text{e-}8]$ |
+| CE loss | $0.0$ | $3.046\text{e-}8$ |
+| CE grad | $[0, 1.523\text{e-}8, 1.523\text{e-}8]$ | $[-3.046\text{e-}8, 1.523\text{e-}8, 1.523\text{e-}8]$ |
+
+Reproduced to every printed digit.
+
+---
+
+## Verification — cancellation
+
+$z_T = [2,1,0]$, $z_S = z_T + [-10^{-7}, 10^{-7}, 0]$:
+
+| implementation | gradient |
+|---|---|
+| standard | $[-5.960\text{e-}8,\; 4.470\text{e-}8,\; 7.451\text{e-}9]$ |
+| fixed | $[-4.596\text{e-}8,\; 4.144\text{e-}8,\; 4.513\text{e-}9]$ |
+| exact fp64 | $[-4.596\text{e-}8,\; 4.144\text{e-}8,\; 4.513\text{e-}9]$ |
+
+The fixed gradient *is* the exact gradient; the standard one is wrong in sign
+and does not sum to zero.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — Replication
+
+---
+
+## Setup
+
+- 1-layer, 4-head, width-64 Transformer, no LayerNorm
+- 2-layer ReLU MLP, hidden 256
+- tasks: $a+b \bmod 31/53/113$, $a^2+b^2 \bmod 97$, $a^3+b \bmod 97$
+- full-batch AdamW, $\beta = (0.9, 0.98)$, weight decay $1$
+- loss dtype varied over bf16 / fp32 / fp64
+- 180 runs; 5 seeds for Figure 2, 3 elsewhere
+
+---
+
+## Figure 1a — measuring the cliff
+
+![](softmax-figs/fig1a.png)
+
+Measured 5.49 / 15.75 / 36.0 against the paper's 5.5 / 16.6 / 36.7.
+
+---
+
+## Figures 1b and 3
+
+.pull-left[
+![](softmax-figs/fig1b.png)
+
+standard plateaus at $3\cdot10^{-4}$ / $10^{-7}$ / $10^{-16}$;
+fixed tracks the exact gradient and is exactly $0$ at $z_S = z_T$.
+]
+
+.pull-right[
+![](softmax-figs/fig3.png)
+
+normalized Adam step $|g_t|/(|g_t|+\epsilon)$: standard switches off at each
+cliff; fixed decays through $\log(1/\epsilon) \approx 18.4$.
+]
+
+---
+
+## Figure 2 — the slingshot is the collapse
+
+![](softmax-figs/fig2.png)
+
+5 seeds, $a+b \bmod 31$: fixed CE reaches 100% on 4/5 seeds (margin 17.1);
+standard CE spikes 6–8 times per run and its margin is pinned at 7–16.
+On $a^2+b^2 \bmod 97$: fixed 92–94% with margin 37.9; standard 41–45%.
+
+---
+
+## Figure 4 — margin equilibria
+
+![](softmax-figs/fig4.png)
+
+With weight decay the margin levels off at $\log(1/\epsilon)$ up to a constant
+offset (7.4 vs 9.2 at $\epsilon=10^{-4}$; 36.3 vs 36.8 at $\epsilon=10^{-16}$).
+Without weight decay it overshoots.
+
+---
+
+## Table 1 — precision versus epsilon
+
+| variant | $10^{-8}$ | $10^{-12}$ | $10^{-16}$ | margins |
+|---|---|---|---|---|
+| fp32 fixed | 100.0 | 99.9 | 99.4 | 17.1 / 26.7 / 31.1 |
+| fp32 standard | 99.1 | 99.8 | 99.2 | 11.3 / 15.6 / 13.4 |
+| fp64 fixed | 100.0 | 100.0 | 98.3 | 17.1 / 26.7 / 34.1 |
+| fp64 standard | 100.0 | 100.0 | 99.8 | 17.1 / 23.9 / 16.5 |
+| *paper fp32 fixed* | *100.0* | *99.6* | *99.0* | *17.9 / 27.4 / 36.8* |
+| *paper fp32 std* | *94.3* | *96.4* | *96.5* | *13.0 / 15.1 / 12.7* |
+
+Margins reproduce; the standard loss recovers better than reported because of
+the learning-rate adjustment on the next slide.
+
+---
+
+## Figure 6 — four grokking benchmarks
+
+![](softmax-figs/fig6.png)
+
+$\epsilon = 10^{-12}$: fixed fp32 matches fp64 standard on all four tasks
+(99.9–100%); standard fp32 breaks on $a^2+b^2 \bmod 97$ (93.3%) and
+$a^3+b \bmod 97$ (82.4%), with margins stuck at 10.5–15.7.
+
+---
+
+## Figure 7 — soft-target distillation
+
+![](softmax-figs/fig7.png)
+
+Student initialised from the teacher, $T = 4$: fixed CE returns KL $= 0$ in
+bf16/fp32/fp64 and keeps 100% accuracy; standard drifts to $2.4\cdot10^{-5}$
+(bf16) and $4.3\cdot10^{-6}$ (fp32) with a $3.6\cdot10^{-5}$ initial spike.
+
+---
+
+## What did not reproduce
+
+The paper's 10k-epoch budget at $\eta = 10^{-3}$:
+
+| steps | 10k | 20k | 100k |
+|---|---|---|---|
+| test accuracy | 19.5% | 20.6% | 99.6% |
+| margin | 16.5 | 16.6 | 17.4 |
+
+- the same happens with an **fp64** standard loss, so it is not a precision effect
+- at $\eta = 3\cdot10^{-3}$ the model groks inside 10k steps with the paper's
+  outcome (100%, margin 17.1)
+- the Transformer experiments therefore use $\eta = 3\cdot10^{-3}$ — a documented deviation
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — Hardware
+
+---
+
+## Does int8 save us?
+
+The bug lives in the **loss arithmetic**, not in the storage format.
+
+| where the softmax / CE runs | is the fix needed? |
+|---|---|
+| int8 weights, fp32 loss (all QAT, most inference) | yes, unchanged |
+| int8 fixed-point softmax (NPU LUT kernels) | the formula cannot help — widen the accumulator |
+| inference, argmax only | no |
+| log-probs, calibration, beam scores, distillation | yes |
+
+---
+
+## int8 logits, fp32 loss: cliff unchanged
+
+Int8-quantised logits, loss evaluated in fp32:
+
+| true $m$ | std $\lvert g_t \rvert$ | fixed $\lvert g_t \rvert$ | std $\sum g$ | fixed $\sum g$ |
+|---|---|---|---|---|
+| 12 | $6.2\cdot10^{-6}$ | $6.1\cdot10^{-6}$ | $-5.5\cdot10^{-8}$ | $0$ |
+| 16 | $0$ | $1.1\cdot10^{-7}$ | $1.1\cdot10^{-7}$ | $0$ |
+| 22 | $0$ | $2.8\cdot10^{-10}$ | $2.8\cdot10^{-10}$ | $0$ |
+
+Storage precision does not move the arithmetic cliff.
+
+---
+
+## CORDIC fixed point: the datapath
+
+.mermaid[
+<pre>
+graph LR
+    Z["logits Q0.12"] --> M["margin m"]
+    M --> E["CORDIC exp\nexp(-m) Q0.12"]
+    E --> A["1 + exp(-m)"]
+    A --> Q["q_t"]
+    Q --> S["q_t - 1"]
+    S --> G["g_t = 0"]
+    E --> N["g_j = exp(d_j) / denom"]
+</pre>
+]
+
+Both the target gradient and the non-target gradients die together: fixed point
+has no exponent to keep the small term alive.
+
+---
+
+## The cliff in fixed point
+
+$$ c = p \ln 2 \quad \text{for a } p\text{-bit fraction} $$
+
+| fraction bits | cliff | word |
+|---|---|---|
+| 8 | 5.5 | same as bf16 |
+| 12 | 8.3 | 16-bit fixed point |
+| 16 | 11.1 | |
+| 24 | 16.6 | same as fp32 |
+| 32 | 22.2 | |
+
+A 16-bit fixed-point softmax collapses **earlier** than fp32, not later.
+
+---
+
+## Bit-accurate CORDIC simulation
+
+- int64 Q-format for every value; exp by hyperbolic CORDIC (shift-add only)
+- ln2 range reduction, 22 iterations, 10 guard bits
+- validated against `exp`: max abs error $2.9\cdot10^{-4}$ (Q0.12), $2.0\cdot10^{-6}$ (Q0.24)
+- the network trains through the chip's quantised gradient (custom autograd)
+- task: $a+b \bmod 53$, MLP hidden 256, $\lambda = 1$, 6000 steps
+
+---
+
+## Figure 8 — fixed-point cliff and training
+
+![](softmax-figs/fig8.png)
+
+Q0.12 cliffs at $12\ln 2 = 8.3$; the wide numerator tracks fp32 to $16.6$.
+
+---
+
+## On-chip training result
+
+| datapath | margin | test acc | $\max \lvert \sum g \rvert$ |
+|---|---|---|---|
+| fp32 fixed (reference) | 12.12 | 100.0% | $2.5\cdot10^{-7}$ |
+| Q0.12 standard | 4.04 | 57.5% | $5.9\cdot10^{-3}$ |
+| Q0.12 algebraic fix, same width | 4.04 | 57.5% | $5.9\cdot10^{-3}$ |
+| **Q0.12 denominator + Q0.24 numerator** | **13.73** | **100.0%** | **0** |
+
+Training stalls at margin $\approx 4$, well before the 8.3 cliff: the gradient is
+quantised to a few LSB long before it underflows, and Adam turns that noise into
+a random walk.
+
+---
+
+## Why the algebra alone fails
+
+$$ g_t = -\frac{s}{1+s} $$
+
+- in floating point, $s$ carries an **exponent**: it survives far below $2^{-p}$
+- in fixed point, $s$ and $1+s$ share the same LSB: both die at $p\ln 2$
+- measured: Q0.12 standard and Q0.12 "formula fix" are **bit-identical**
+  (same margin, same accuracy, same gradient)
+
+The fix must change the *width*, not the formula.
+
+---
+
+## The effective fix
+
+```python
+s     = cordic_exp(d, num_frac)          # Q0.24, with guard bits
+denom = (1 << frac) + (sum_s >> shift)   # Q0.12 -> rounds to 1.0
+g_t   = -(sum_s * (1 << frac)) // denom  # wide numerator
+g_j   =  (s_j   * (1 << frac)) // denom
+```
+
+- denominator stays narrow: it is always near 1
+- numerator keeps its own scale; the division by the rounded denominator preserves it
+- cost: one wider CORDIC exp and a 32-bit gradient register
+
+---
+
+## Design rule
+
+$$ \text{numerator fraction bits} \;\ge\; \log_2(1/\epsilon) $$
+
+| target $\epsilon$ | equilibrium $m^\star$ | bits needed |
+|---|---|---|
+| $10^{-4}$ | 9.2 | 14 |
+| $10^{-8}$ | 18.4 | 27 |
+| $10^{-12}$ | 27.6 | 40 |
+
+- 24-bit numerator covers $\epsilon \approx 10^{-7}$; at the end of the run 33%
+  of examples had already passed 16.6
+- alternatives: block floating point (shared exponent), or a log-domain datapath
+
+---
+
+## Takeaways
+
+- The collapse threshold is $\ln 2^{p}$; measured 5.49 / 15.75 / 36.0 for bf16 / fp32 / fp64
+- The fix is "never add the small term to 1.0 in the same word" — in float it is
+  `softplus` and `expm1`; in fixed point it is a **width split**
+- Replication: 180 runs; margins and dtypes match the paper, grokking needs more
+  compute than the paper reports
+- int8 does not remove the bug; it only moves where the arithmetic happens
+- In hardware, spend the extra bits on the **numerator**, not the denominator
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q &amp; A
+
+## Thank you
+
+Slides: `luk036.github.io/AxC/softmax-hardware-remark.html`
+
+Replication artifacts: `py/softmax` in this workspace (180 runs, all cached)
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

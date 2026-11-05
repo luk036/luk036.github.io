@@ -48,6 +48,8 @@ Write a demo program to illustrate how to use CSD multiplier technique to hardwa
 
 Suppose now the hardware is used for a more extreme environment. So the accuracy is up to three decimal places. The temperature range is from -60c to +300c. How many nnz (number of non-zero) is sufficient?
 
+Low discrepancy Sequence
+q
 ## divmod
 
 divmod(x, k),      x, k positive integer
@@ -64,6 +66,8 @@ log(), exp()
 
 inv()    Table-lookup + Newton-Raphson
 
+## Cholesky Factorization -> LDLT
 
+## QR factorization
 
-
+## FIR filter

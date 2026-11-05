@@ -39,3 +39,18 @@ jobs:
 
       - name: Check links
         run: npm run check-links
+
+  external-links:
+    runs-on: ubuntu-latest
+    # External sites can be flaky or slow; keep this non-blocking until the
+    # backlog is clean, then remove continue-on-error.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check external links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config lychee.toml --no-progress --exclude-path node_modules './**/*.html' './**/*.md'
+          fail: true

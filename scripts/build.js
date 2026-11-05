@@ -122,24 +122,19 @@ function buildFromReadme(rootDir, dirName) {
     return false;
   }
 
-  const mdStats = fs.statSync(readmePath);
-  let needsBuild = true;
-
-  if (fs.existsSync(indexPath)) {
-    const htmlStats = fs.statSync(indexPath);
-    needsBuild = mdStats.mtimeMs > htmlStats.mtimeMs;
-  }
-
-  if (!needsBuild) {
-    console.log(`  ${dirName}: index.html up to date`);
-    return false;
-  }
-
   const content = fs.readFileSync(readmePath, 'utf-8');
   const title = extractTitle(content);
   const ratio = RATIO_OVERRIDES[dirName] || DEFAULT_RATIO;
 
   const html = REMARK_TEMPLATE.replace('{{title}}', title).replace('{{ratio}}', ratio);
+
+  // Compare content instead of mtimes: git does not preserve timestamps, so an
+  // mtime-based check could skip regenerating a stale file in CI.
+  if (fs.existsSync(indexPath) && fs.readFileSync(indexPath, 'utf-8') === html) {
+    console.log(`  ${dirName}: index.html up to date`);
+    return false;
+  }
+
   fs.writeFileSync(indexPath, html);
   console.log(`  ${dirName}: index.html generated`);
   return true;

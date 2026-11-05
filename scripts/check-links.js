@@ -22,6 +22,13 @@ const KNOWN_ASSETS = [
   '.ttf',
   '.ico',
   '.pdf',
+  '.dot',
+  '.gv',
+  '.csv',
+  '.txt',
+  '.bib',
+  '.tex',
+  '.pptx',
 ];
 
 const CODE_PATTERNS = [
@@ -86,7 +93,6 @@ function checkInternalLinks(rootDir) {
   );
 
   for (const filePath of pageFiles) {
-    if (!filePath.endsWith('.html')) continue;
     const content = fs.readFileSync(filePath, 'utf-8');
     const relPath = path.relative(rootDir, filePath).replace(/\\/g, '/');
     const dir = path.dirname(relPath);
@@ -114,7 +120,7 @@ function checkInternalLinks(rootDir) {
     for (const rawHref of hrefs) {
       if (isAssetLink(rawHref)) continue;
       if (isCodePattern(rawHref)) continue;
-      const href = decodeHref(rawHref);
+      const href = decodeHref(rawHref).replace(/[?#].*$/, '');
 
       let targetPath;
       if (href.startsWith('/')) {
@@ -148,7 +154,7 @@ function checkInternalLinks(rootDir) {
 function main() {
   const rootDir = process.cwd();
 
-  console.log('Checking internal HTML links...\n');
+  console.log('Checking internal HTML/Markdown links...\n');
 
   const internalErrors = checkInternalLinks(rootDir);
 

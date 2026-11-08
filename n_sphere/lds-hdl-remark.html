@@ -1,0 +1,538 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Hardware Low-Discrepancy Sequences</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Hardware Low-Discrepancy Sequences
+
+### van der Corput → CORDIC → Disk · Sphere · 3-Sphere
+
+**From RTL to a trustworthy regression**
+
+@luk036 · 2026-11
+
+---
+
+## Agenda (30 min)
+
+| Part | Topic | Time |
+|:-----|:------|-----:|
+| 1 | LDS and CORDIC mathematics | 8 min |
+| 2 | RTL architecture and fixed point | 7 min |
+| 3 | Bugs found and fixed in this session | 10 min |
+| 4 | Verification, synthesis, lessons | 5 min |
+
+The goal: make the 32-bit design **correct**, **reproducible**, and **honestly tested**.
+
+---
+
+## The Problem
+
+Generate **low-discrepancy points** on a disk, a sphere, and a 3-sphere in hardware.
+
+- Deterministic and incremental, unlike random sampling
+- Uniform coverage of the domain
+- Fixed-point arithmetic, no floating point
+- CORDIC for trigonometry and square root
+
+.mermaid[
+<pre>
+graph LR
+    V2["VdC base 2\nUQ0.32"] --> A["angle"]
+    V3["VdC base 3\nVdC × 3^20"] --> R["radius"]
+    V7["VdC base 7\nVdC × 7^11"] --> L["LUT + angle"]
+    A --> C["CORDIC\ncos / sin"]
+    R --> S["CORDIC sqrt"]
+    L --> C
+    C --> P["Disk / Sphere / 3-Sphere"]
+    S --> P
+    style V2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style V3 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style V7 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style S fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+The RTL mirrors the C++ `lds` templates: `VdCorput<2>`, `Circle<3>`, `Sphere<2,3>`, `Sphere3([7,2,3])`.
+
+---
+
+## van der Corput in Hardware
+
+The radical inverse reverses the base-$b$ digits of an integer:
+
+$$ n=\sum_{k\ge 0} a_k b^k
+   \qquad\longrightarrow\qquad
+   \phi_b(n)=\sum_{k\ge 0} a_k b^{-(k+1)} $$
+
+**Base 2** is pure wiring: reverse the counter bits.
+
+```verilog
+assign vdc_out = {
+    cnt[ 0], cnt[ 1], cnt[ 2], cnt[ 3],
+    cnt[ 4], cnt[ 5], cnt[ 6], cnt[ 7],
+    cnt[ 8], cnt[ 9], cnt[10], cnt[11],
+    cnt[12], cnt[13], cnt[14], cnt[15]
+};
+```
+
+| Base | Hardware method | Output scale |
+|:----:|:----------------|:-------------|
+| 2 | bit reversal | UQ0.32 |
+| 3 | 20 digits, `mod3` + `div3` | VdC × $3^{20}$ |
+| 7 | 11 digits, `mod7` + `div7` | VdC × $7^{11}$ |
+
+Base-3/7 use the $2^n-1$ trick: sum 2-bit or 3-bit chunks for modulo, and a magic multiply-high for division. No 64K-entry ROM.
+
+---
+
+## Circular CORDIC
+
+Rotation mode: drive the residual angle $z$ to zero.
+
+$$ \begin{aligned}
+x_{i+1} &= x_i - d_i\,y_i\,2^{-i} \\
+y_{i+1} &= y_i + d_i\,x_i\,2^{-i} \\
+z_{i+1} &= z_i - d_i\arctan(2^{-i})
+\end{aligned} $$
+
+where $d_i=\operatorname{sign}(z_i)$ and
+$K=\prod_i\sqrt{1+2^{-2i}}\approx 1.64676$.
+With $x_0=1/K$, after 31 iterations:
+
+$$ (x,y) \approx (\cos z_0,\sin z_0). $$
+
+```verilog
+if (!z[31]) begin
+    x_next = x - (y >>> iter);
+    y_next = y + (x >>> iter);
+    z <= z - atan[iter];
+end else begin
+    x_next = x + (y >>> iter);
+    y_next = y - (x >>> iter);
+    z <= z + atan[iter];
+end
+```
+
+The initial $x$ is pre-scaled by $1/K$; the result is Q1.31. Only shift-add, plus the $1/K$ constant.
+
+---
+
+## Hyperbolic CORDIC for Square Root
+
+Vectoring mode: drive $y$ to zero.
+
+$$ \begin{aligned}
+x_{i+1} &= x_i + d_i\,y_i\,2^{-i} \\
+y_{i+1} &= y_i + d_i\,x_i\,2^{-i}
+\end{aligned} $$
+
+with repeated shifts at $i=4$ and $i=13$. Initialize
+
+$$ x_0=w+\tfrac14,\qquad y_0=w-\tfrac14,
+   \qquad \sqrt w = x_\infty/K_h. $$
+
+The input $w$ must be normalized into a well-conditioned range:
+
+$$ \text{shift }w\text{ into }[0.0625,0.25),
+   \qquad \text{then undo by }2^{-\text{norm shift}}. $$
+
+```verilog
+if (x_in < 32'h00004000) begin
+    norm_val <= x_in << 16; norm_shift <= 8;
+end else if (x_in < 32'h00010000) begin
+    norm_val <= x_in << 14; norm_shift <= 7;
+end
+```
+
+The normalization buckets are part of the contract, not an implementation detail.
+
+---
+
+## Module Hierarchy
+
+.mermaid[
+<pre>
+graph TD
+    S3["sphere3_32"] --> V7["u_vdc7\nvdc_7_ilds_32"]
+    S3 --> SP["u_sphere\nsphere_32"]
+    S3 --> CR["u_cordic\ncordic_32"]
+    SP --> V2["u_vdc\nvdc_32"]
+    SP --> C3["u_circle\ncircle_3_32"]
+    SP --> SQ["u_sqrt\ncordic_sqrt_32"]
+    C3 --> V3["u0\nvdc_3_ilds_32"]
+    C3 --> CR2["u1\ncordic_32"]
+    D["disk_32"] --> C2["u_circle\ncircle_2_32"]
+    D --> V3D["u_vdc3\nvdc_3_ilds_32"]
+    D --> SQD["u_sqrt\ncordic_sqrt_32"]
+    C2 --> V2D["u0\nvdc_32"]
+    C2 --> CRD["u1\ncordic_32"]
+    style S3 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style SP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+Naming is overloaded:
+
+- `_32` and `_16` are widths.
+- `_23` means bases $\langle 2,3\rangle$, not 23 bits.
+- `vdc_3_ilds` and `vdc_7_ilds` are 16-bit despite having no width suffix.
+- Width variants are **duplicated files**, not parameterized modules.
+
+---
+
+## Fixed-Point Contract
+
+| Signal | Format | Meaning |
+|:-------|:------:|:--------|
+| VdC output | UQ0.16 / UQ0.32 | fraction of full scale, in $[0,1)$ |
+| CORDIC angle | full turn $=2^N$ | quadrant in the top 2 bits |
+| cos / sin | Q1.15 / Q1.31 | range $[-1,1)$ |
+| sqrt input/output | UQ0.16 / UQ0.32 | unsigned fraction |
+| disk / sphere coordinates | Q1.15 / Q1.31 | signed coordinates |
+
+Exception: `vdc_3_ilds_32` and `vdc_7_ilds_32` emit integer-scaled values (`VdC × 3^20`, `VdC × 7^11`), not direct UQ fractions.
+
+Handshake:
+
+- `en` starts or advances a sample.
+- `valid` is a **one-cycle** completion strobe.
+- CORDIC and sqrt take many cycles: always wait for `valid`.
+
+Every mixed-width product is explicitly sign-extended and shifted. The arithmetic is bit-exact, and the tests compare against the same contract.
+
+---
+
+## Verification Stack
+
+.mermaid[
+<pre>
+graph LR
+    RTL["RTL\nrtl/*.v"] --> IV["Icarus\nmake all / all32"]
+    RTL --> CO["cocotb 2\n9 modules"]
+    CO --> REF["Python reference\nVdC + LUT + float math"]
+    RTL --> YO["Yosys\nsynth/*.ys"]
+    YO --> JS["JSON netlist\nschema check"]
+    style RTL fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style REF fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CO fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+Reference models are independent of the RTL:
+
+- exact bit-reversal and ILDS for bases 2, 3, 7
+- the 257-entry LUT rebuilt in Python
+- floating-point $\cos$, $\sin$, and square root used as the accuracy target
+
+Norm-only tests are not enough. A point can lie on the sphere with the wrong angle.
+
+---
+
+## What Changed in This Session
+
+| Area | Change |
+|:-----|:-------|
+| Base-3 scale | corrected to $2^{64}/3^{20}$ in circle and disk |
+| CORDIC output | saturate $+1.0$ instead of wrapping to $-1.0$ |
+| sqrt normalization | full-range buckets, zero handled at fixed latency |
+| sphere3 LUT | 9-bit index for the last interval |
+| tests | reference vectors, full-range sweep, contiguous sequence |
+| runner | parse the results file returned by cocotb 2 |
+| repo | untrack generated artifacts, fix `.gitignore` |
+| synthesis | local `yosys_sphere_tech.lib` in every script |
+
+The rest of the talk is the story behind these changes.
+
+---
+
+## Bug 1: The Base-3 Scale Was Wrong
+
+`vdc_3_ilds_32` does **not** emit a UQ0.32 fraction. It emits
+
+$$ \text{raw} = 3^{20}\,\phi_3(n),\qquad \text{raw}\in[0,3^{20}). $$
+
+The correct conversion is therefore
+
+$$ \text{angle} = \frac{\text{raw}\cdot 2^{32}}{3^{20}}
+   \quad\Longleftrightarrow\quad
+   \text{angle} = (\text{raw}\cdot 2^{64}/3^{20}) \gg 32. $$
+
+$$ \operatorname{round}\!\left(\frac{2^{64}}{3^{20}}\right)=5{,}290{,}474{,}532. $$
+
+The old code used the **16-bit** ratio, copied into 32 bits:
+
+$$ 72736 \times 65536 = 4{,}766{,}826{,}496,
+   \qquad 72736 \approx \frac{2^{16}}{3^{10}}\cdot 2^{16}. $$
+
+Effect: angle and radius covered only $0.9009$ of the intended range. The disk radius topped out near $0.949$ instead of $1.0$. The RTL tests used the same wrong constant, so they were self-consistent and green.
+
+Fix: one constant, used by RTL, tests, and tools; regenerate the expected vectors.
+
+---
+
+## Bug 2: Q1.31 Cannot Represent +1.0
+
+Q1.31 represents $[-1,1)$. The value $+1.0$ is $2^{31}$, which is `0x80000000` and is interpreted as $-1.0$.
+
+The CORDIC output was
+
+```verilog
+cos <= to_q31(x, neg_x);
+sin <= to_q31(y, neg_y);
+```
+
+where the positive branch now saturates:
+
+```verilog
+else if (v[33:2] >= 32'h80000000)
+    to_q31 = 32'h7FFFFFFF;
+```
+
+Symptom before the fix:
+
+- `cordic_32` failed at $0$ and $\pi/2$
+- `circle_2_32` failed only at $n=2$ (90 degrees)
+
+Saturate the endpoint; do not wrap it.
+
+---
+
+## Bug 3: The Test References Were Wrong Too
+
+Two "failures" were not RTL failures.
+
+**Sphere norm.** For Q1.31 components,
+
+$$ (x^2+y^2+z^2)\gg 30 \approx 2^{32}, $$
+
+not $2^{30}$. The test shifted by 30 and compared to $2^{30}$. The RTL was already unit length.
+
+**Square-root endpoint.** At $x=1$:
+
+$$ \operatorname{round}\!\left(\sqrt{1.0}\cdot 2^{32}\right)=2^{32}, $$
+
+and masking with `0xFFFFFFFF` produced zero. The expected value must clamp to `0xFFFFFFFF`.
+
+Lesson: a wrong reference can make correct RTL look broken, and a self-consistent wrong reference can hide a real RTL bug.
+
+---
+
+## Bug 4: The sqrt Normalization Buckets Were Too Low
+
+The full-range sweep exposed errors up to about 50 percent.
+
+- The old lower buckets produced normalized inputs in $[0,0.0156)$.
+- The hyperbolic CORDIC needs $[0.0625,0.25)$.
+- Example: `0x4000` should give `0x800000`; the RTL gave `0xBFD5DA`.
+
+The fix:
+
+- 14 buckets covering the full 32-bit input
+- left shifts from 28 down to 0, `norm_shift` from 14 down to 0
+- `norm_shift` widened from 3 to 4 bits
+- $x=0$ handled by a flag, still at the normal latency
+
+| Input range | Shift | `norm_shift` |
+|:------------|------:|-------------:|
+| $[2^{12},2^{14})$ | 16 | 8 |
+| $[2^{14},2^{16})$ | 14 | 7 |
+| $[2^{16},2^{18})$ | 12 | 6 |
+| $[2^{28},2^{32})$ | 0 | 0 |
+
+Result: the full-range test passes 27 of 27 vectors.
+
+---
+
+## Bug 5: The Last LUT Interval Wrapped to Zero
+
+`lut_idx` is 8 bits. The next-entry index was computed as
+
+```verilog
+wire [31:0] angle1 = angle_lut[lut_idx + 8'd1];
+```
+
+At `lut_idx = 255`, the 8-bit addition wraps:
+
+$$ 255+1 \bmod 256 = 0. $$
+
+So the last interval read `angle_lut[0] = 0` instead of `angle_lut[256] = 0x80000000`.
+
+Symptom at $n=342$: the angle was about 127 degrees instead of 168 degrees, and $w=\cos\xi$ was $-0.609$ instead of $-0.979$.
+
+The norm test still passed: a wrong angle on the 3-sphere still produces a unit 4D point. Only the reference-vector test caught it.
+
+Fix:
+
+```verilog
+wire [31:0] angle1 = angle_lut[lut_idx + 9'd1];
+```
+
+Verilog expression width is context-sensitive. `8'd1` made the addition 8 bits wide.
+
+---
+
+## Bug 6: The Runner Lied About Results
+
+cocotb 2 writes `results.xml` under the test directory, not the build directory. `run.py` looked in `build_dir` and reported
+
+```text
+FAILED (no results.xml)
+```
+
+for every module, even when cocotb printed `TESTS=1 PASS=1`.
+
+The fix:
+
+- use the path returned by `runner.test()`
+- parse `failure` and `error` elements, not only suite attributes
+- return a nonzero exit code only for real failures
+
+The runner now reports the truth:
+
+```text
+Summary: 9/9 passed
+```
+
+---
+
+## Repo Hygiene
+
+Generated files were tracked and stale:
+
+- `cocotb/sim_build_sphere3_32/sim.vvp` (Icarus 12, unreadable by Icarus 14)
+- `cocotb/tests/results.xml`
+- `sim/dbg*` and `sim/tc*`
+- `synth/*.rpt`
+
+They are now untracked, and `.gitignore` uses paths relative to each `.gitignore` file:
+
+```text
+sim_build*/
+tests/__pycache__/
+tests/results.xml
+```
+
+The technology library is local:
+
+- `yosys_sphere_tech.lib` at the repo root
+- all 11 `synth/*.ys` scripts read `../yosys_sphere_tech.lib`
+- no dependency on an external netlistx checkout for synthesis
+
+`synth_vdc3.ys` still references the deleted `rtl/vdc_3.v`; that is the remaining cleanup item.
+
+---
+
+## Synthesis Results
+
+Yosys 0.9 with the local `yosys_sphere_tech.lib`:
+
+| Design | Result |
+|:-------|:-------|
+| `vdc_16` | 120 mapped cells, area 103 |
+| `cordic_32` | 6,748 mapped cells, area 6,575 |
+| `sphere3_32` | 68,300 internal cells after `synth` and flatten |
+
+`synth_vdc_16.ys` originally used a legacy ABC `map` command; the new library's timing tables triggered an ABC assertion. Switching to the default `abc -liberty` flow maps correctly to the library cells.
+
+The DFF limitation remains: the library has no asynchronous-reset flop, so in `vdc_16` the 17 asynchronous-reset DFFs stay internal and their area is reported as unknown.
+
+---
+
+## Final Regression
+
+| Module | Reference checks |
+|:-------|-----------------:|
+| `vdc_32` | 20 |
+| `vdc_3_ilds_32` | 12 |
+| `cordic_32` | 9 |
+| `cordic_sqrt_32` | 27 |
+| `circle_2_32` | 12 |
+| `circle_3_32` | 12 |
+| `disk_32` | 20 |
+| `sphere_32` | 20 |
+| `sphere3_32` | 14 |
+| **Total** | **146** |
+
+- cocotb: `Summary: 9/9 passed`, exit code 0
+- Icarus: `make all` and `make all32` pass
+- `python validate_yosys_json.py`: schema check passes
+
+The suite is green from a clean tree, with no manual build-directory cleanup.
+
+---
+
+## Lessons
+
+- **Reference models beat norm checks.** A wrong angle still lies on the sphere. Only expected coordinates catch it.
+- **Derive fixed-point constants per width.** Copying the 16-bit base-3 ratio into 32 bits silently lost 10 percent of the range.
+- **Verilog expression width is context-sensitive.** `lut_idx + 8'd1` is an 8-bit add. Use `9'd1`.
+- **Saturate unrepresentable endpoints.** Q1.31 cannot encode $+1.0$.
+- **Generated artifacts do not belong in git.** Build directories, result XML, debug binaries, and area reports.
+- **Sequential DUTs need contiguous stimuli.** The design has no index input; the test must pulse `en` for every $n$ it wants to reach.
+
+The most valuable test is the one that knows the **expected coordinates**, not just the expected shape.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&amp;A
+
+### github.com/luk036/lds-hdl
+
+**Slides:** `n_sphere/lds-hdl-remark.html`
+
+Questions?
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

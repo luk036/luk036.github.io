@@ -1,0 +1,604 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Multiplierless FIR Filters: From Python and C++ to Verified Verilog</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Multiplierless FIR Filters
+
+## From Python and C++ to Verified Verilog
+
+@luk036 · 2026
+
+A cross-language audit: CSD, spectral factorization, ellipsoid optimization, and HDL correctness
+
+---
+
+## Outline
+
+.pull-left[
+
+### The problem
+
+1. Why multiplierless?
+2. The optimization pipeline
+3. CSD and spectral factorization
+
+### Two implementations
+
+4. Shared architecture
+5. Python and C++ sides
+
+]
+
+.pull-right[
+
+### The HDL contract
+
+6. Transpose and direct forms
+7. The scaling bug
+8. Value/CSD single source
+9. RTL repair and headroom
+
+### Verification
+
+10. Tests, simulation, CI
+11. Lessons learned
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## The Problem
+
+---
+
+### Why multiplierless?
+
+A generic multiplier per tap is expensive in area and power. A **CSD** coefficient uses only shifts and a few adders:
+
+$$
+x = \sum_i s_i\,2^i, \qquad s_i \in \{-1,\,0,\,+1\}
+$$
+
+- Canonical CSD has **no adjacent non-zero digits**
+- For `nnz` non-zero digits, a tap needs at most `nnz − 1` adders/subtractors
+- For a 32-tap filter with `nnz = 4`, that is at most 3 adders per tap
+
+| Approach | Per tap | 32-tap cost |
+|:---------|:--------|:------------|
+| Generic multiplier | 1 multiplier | 32 multipliers |
+| CSD (`nnz = 4`) | 3 adders | 96 adders |
+| CSD + cross-CSE | 2–3 adders | ~60 adders |
+
+---
+
+### The design pipeline
+
+.mermaid[
+
+<pre>
+graph LR
+    J["JSON spec"] --> O["Lowpass oracle"]
+    O --> E["Ellipsoid method"]
+    E --> R["Autocorrelation r"]
+    R --> S["Spectral factorization"]
+    S --> H["Minimum-phase h"]
+    H --> Q["CSD quantization"]
+    Q --> F["Fixed-point alignment"]
+    F --> V["Verilog RTL"]
+    V --> T["iverilog / cocotb"]
+</pre>
+
+]
+
+The optimizer works on the **squared-magnitude** response; spectral factorization recovers a minimum-phase impulse response; CSD turns that response into shift-add hardware.
+
+---
+
+### The optimization problem
+
+For autocorrelation coefficients $r_0,\dots,r_{N-1}$:
+
+$$
+R(\omega) = r_0 + 2\sum_{k=1}^{N-1} r_k \cos(k\omega)
+$$
+
+Minimize the peak stopband response:
+
+$$
+\min \max_{\omega \in \Omega_s} R(\omega)
+\quad \text{s.t.} \quad
+L^2 \le R(\omega) \le U^2 \;\; (\omega \in \Omega_p),
+\qquad R(\omega) \ge 0
+$$
+
+The ellipsoid method needs only a cutting-plane oracle: passband, stopband, and non-negativity constraints. Spectral factorization then gives the filter taps.
+
+---
+
+class: nord-light, middle, center
+
+## Two Implementations, One Contract
+
+---
+
+### Shared architecture
+
+.mermaid[
+
+<pre>
+graph TD
+    S["Filter spec JSON"] --> P["Python CLI: fir-design"]
+    S --> C["C++ CLI: FirDesign"]
+    P --> A["Oracle + spectral + CSD"]
+    C --> B["Oracle + spectral + CSD"]
+    A --> J["Result JSON + CSD"]
+    B --> J
+    J --> F["One fixed-point contract"]
+    F --> T["Transpose RTL"]
+    F --> D["Direct RTL"]
+    T --> V["Impulse simulation"]
+    D --> V
+</pre>
+
+]
+
+The two codebases are independent, but the **artifact contract** is the same: numeric value, CSD string, shared fixed-point scale, and synthesizable RTL.
+
+---
+
+### Python side
+
+- Package `multiplierless`, CLI `fir-design`
+- Core modules: `spectral_fact`, `lowpass_oracle`, `lowpass_oracle_q`, `fir_design`
+- FFT and Aberth root spectral factorization
+- CSD helpers: `csd_quantize_parts()` + `format_csd()`
+- Validation: 62 pytest tests, 94% coverage
+- Lint/type gates: `flake8`, `black`, `isort`, `mypy`
+- Verilog simulation: Icarus Verilog + cocotb
+
+```bash
+fir-design sample_filter.json -o result.json --verilog-out fir_filter.v
+```
+
+---
+
+### C++ side
+
+- C++20 library + CLI, built with **xmake** or CMake
+- Dependencies pinned: EllAlgo, csd-cpp, ginger-cpp, FFTW, nlohmann_json
+- Core modules: `spectral_fact`, `lowpass_oracle`, `lowpass_oracle_q`
+- New shared helpers: `csd_quantize.hpp`, `verilog_utils.hpp`
+- Verification: 70 doctest cases, 241 assertions
+- `tools/test_verilog.py`: compile + impulse-simulate both forms
+
+```bash
+xmake f -m release
+xmake -y -j8
+xmake test
+```
+
+---
+
+class: nord-light, middle, center
+
+## The HDL Contract
+
+---
+
+### Transpose form: a complete FIR filter
+
+- Pipeline registers implement the delays
+- Coefficients applied in reverse order
+- One output `y`, ready to instantiate
+- Accumulator headroom matters
+
+```verilog
+module fir_filter (
+    input clk,
+    input rst_n,
+    input signed [15:0] x,
+    output signed [45:0] y
+);
+
+wire signed [45:0] x_shift17 = x <<< 17;
+wire signed [45:0] _cse_0 = x_shift17 - x_shift15;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        sum0 <= 0; sum1 <= 0; /* ... */
+    end else begin
+        sum0 <= _cse_0 + x_shift10;
+        sum1 <= sum0 + x_shift8;
+        /* ... */
+    end
+end
+
+assign y = sum31;
+endmodule
+```
+
+---
+
+### Direct form: a multiplier bank
+
+- One output per tap: `h0 ... hN`
+- No accumulator chain
+- Useful when the caller wants to control accumulation
+- The generated RTL must still be valid Verilog
+
+```verilog
+module fir_filter_direct (
+    input signed [15:0] x,
+    output signed [40:0] h0,
+    output signed [40:0] h1,
+    /* ... */
+    output signed [40:0] h31
+);
+
+wire signed [40:0] x_shift17 = x <<< 17;
+wire signed [40:0] _cse_0 = x_shift17 - x_shift15;
+
+assign h0 = (_cse_0 >>> 6) + x_shift4 + x_shift0;
+assign h1 = (_cse_0 >>> 5) + x_shift3 + x_shift0;
+endmodule
+```
+
+---
+
+### The scaling bug: symptom
+
+Both codebases generated **variable-length fractional CSD strings** and then stripped the decimal point and **left-padded** to a common width.
+
+| tap | value | generated integer | expected integer | implicit scale |
+|:----|:------|:------------------|:-----------------|:---------------|
+| 0 | 0.0098953 | 1297 | 5188 | $2^{17}$ |
+| 4 | 0.0732422 | 75 | 38400 | $2^{10}$ |
+| 6 | 0.1152306 | 30207 | 60414 | $2^{18}$ |
+
+Every tap used a **different power of two**. The C++ CLI reproduced the same failure: worst relative error **99.998%**.
+
+The self-checking testbench missed it because it reproduced the same broken conversion.
+
+---
+
+### The scaling bug: root cause and fix
+
+.pull-left[
+
+**Before**
+
+```text
+csd = "0.000000+0+000+000+"
+raw = strip(".") then left-pad
+     = "0000000+0+000+000+"
+
+scale depends on string length
+=> each tap gets a different 2^k
+```
+
+]
+
+.pull-right[
+
+**After**
+
+```text
+int_width  = max integer digits
+frac_width = max fractional digits
+
+raw = left-pad(integer)
+    + right-pad(fraction)
+
+all taps share 2^frac_width
+```
+
+]
+
+The fix is a **right-alignment** rule: fractional digits must be padded on the right, and the integer part on the left. For filter taps below 1, the common scale is simply $2^{F}$.
+
+---
+
+### Single source of truth: value and CSD
+
+Before, the numeric value and the CSD string came from two different quantizers:
+
+```cpp
+auto value = csd_quantize(h(i), nnz);   // greedy quantizer
+auto csd   = to_csdnnz(h(i), nnz);      // csdigit string
+```
+
+Those two implementations can disagree. The fix is one digit set for both:
+
+```cpp
+auto parts = csd_quantize_parts(h(i), nnz);
+auto value = parts.value;               // exact sum of the digits
+auto csd   = format_csd(parts.digits);  // same digits, rendered
+```
+
+Now the invariant is testable and exact:
+
+$$
+\text{value} = \operatorname{parse}(\text{csd})
+$$
+
+The same idea exists in Python as `csd_quantize_parts()` + `format_csd()`.
+
+---
+
+### Direct-form RTL repair
+
+The direct-form Verilog did **not compile**:
+
+```verilog
+output signed [40:0] h31,   // trailing comma
+);
+...
+wire signed [40:0] h0 = ...; // redeclares the output port
+```
+
+Two repairs:
+
+1. Remove the trailing comma before `);`
+2. Turn output redeclarations into continuous assignments
+
+```verilog
+output signed [40:0] h31
+);
+...
+assign h0 = (_cse_0 >>> 6) + x_shift4 + x_shift0;
+```
+
+Both the Python and C++ generators now emit compilable direct-form RTL.
+
+---
+
+### Accumulator headroom
+
+Summing $N$ products can grow by $\lceil \log_2 N \rceil$ bits beyond a single product:
+
+$$
+W_{\text{transpose}} = W_x + P + \lceil \log_2 N \rceil
+$$
+
+where $P$ is the most significant CSD power. For the 32-tap, `nnz=4` example:
+
+| form | width |
+|:-----|:------|
+| transpose | $16 + 25 + 5 = 46$ bits |
+| direct | $16 + 25 = 41$ bits per tap |
+
+Without headroom, a full-scale input can overflow the accumulator.
+
+---
+
+class: nord-light, middle, center
+
+## Robustness
+
+---
+
+### Retry state and spectral validation
+
+.pull-left[
+
+**Oracle retry bug**
+
+- A feasibility cut returned early
+- `rcsd` was never populated
+- The retry path then used an empty array
+
+Fix: track `_rcsd_valid` and quantize on demand. A regression test now retries after a feasibility cut.
+
+]
+
+.pull-right[
+
+**Silent spectral clamping**
+
+- Old code clamped every non-positive $R(\omega)$ to `1e-10`
+- Genuinely invalid inputs silently produced garbage
+
+Fix: validate input, clamp only small negatives relative to the spectrum magnitude, and throw on significant negatives.
+
+]
+
+---
+
+### CLI and artifact hygiene
+
+**CLI**
+
+- `-o/--output` and `--verilog-out`
+- Validate JSON types, `filter_order`, `csd_nnz`, `spectral_method`, `root_tolerance`
+- Validate `verilog.form`, `input_width`, and module name
+- Return exit code 1 with a message instead of throwing
+
+**Repository**
+
+- Removed tracked build artifacts, `.tpy` copies, logs, temp files
+- Removed stale/uncompilable generated Verilog
+- Regenerated the canonical examples with the fixed generator
+- Pinned dependencies; both xmake and CMake builds are reproducible
+
+---
+
+class: nord-light, middle, center
+
+## Verification
+
+---
+
+### Verification flow
+
+.mermaid[
+
+<pre>
+graph TD
+    U["CSD round-trip"] --> A["Fixed-point alignment"]
+    A --> B["value == parse(csd)"]
+    B --> C["iverilog compile"]
+    C --> D["Impulse response"]
+    D --> E["cocotb: transpose + direct"]
+    E --> F["xmake test / pytest"]
+</pre>
+
+]
+
+We test the **artifact**, not just the return code.
+
+---
+
+### Numbers that matter
+
+.pull-left[
+
+**Python**
+
+- 62 pytest tests passed
+- 94% coverage
+- `flake8`, `black`, `isort`, `mypy` clean
+- Wheel builds; clean-venv install works
+
+**C++**
+
+- `xmake test`: 70 cases, 241 assertions
+- `tools/test_verilog.py`: transpose + direct PASS
+- `xmake` release build, self-contained
+
+]
+
+.pull-right[
+
+**Before**
+
+- Fixed-point worst error: **99.998%**
+- Direct-form Verilog: **did not compile**
+- Spectral invalid input: **silently clamped**
+
+**After**
+
+- Fixed-point error: **0**
+- Both RTL forms: **compile + simulate**
+- Invalid input: **explicit error**
+
+]
+
+---
+
+### Build systems and CI
+
+.pull-left[
+
+**xmake (local)**
+
+```bash
+xmake f -m release
+xmake -y -j8
+xmake test
+python tools/test_verilog.py
+```
+
+- Uses sibling checkouts
+- Self-contained version header
+- Same compiler warnings-as-errors
+
+]
+
+.pull-right[
+
+**CMake (CI)**
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j4
+ctest --test-dir build --output-on-failure
+python3 tools/test_verilog.py
+```
+
+- Pinned CPM dependencies
+- Ubuntu / macOS / Windows matrix
+- Coverage upload via codecov
+
+]
+
+---
+
+### Lessons learned
+
+1. **Test the artifact.** A successful exit code does not mean the Verilog is correct.
+2. **One source of truth.** Two quantizers will eventually disagree; derive both views from one digit set.
+3. **Fixed-point is a contract.** Shared scale, right alignment, explicit headroom.
+4. **HDL belongs in CI.** Compile and simulate every generated module.
+5. **State machines need tests.** The retry path only failed after a feasibility cut.
+6. **The same bug can cross languages.** The Python and C++ generators had the same left-padding mistake.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A
+
+## Thank you
+
+The code, tests, and regenerated Verilog examples are in:
+
+- `luk036/multiplierless` (Python)
+- `luk036/multiplierless-cpp` (C++)
+
+Questions and feedback are welcome.
+
+        </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

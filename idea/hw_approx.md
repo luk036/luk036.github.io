@@ -31,3 +31,16 @@ k = 3, 7, (15), 5
 
 CORDIC = Table-lookup + FSM
 
+## FIR filter Design
+
+Butterworth filter
+
+Convexity
+taps
+
+direct form, transposed form
+
+Multiplierless
+
+NNZ
+

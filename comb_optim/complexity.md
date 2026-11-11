@@ -3,6 +3,7 @@ class: typo, typo-selection
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 # Lecture 2d: Complexity Theory & Algorithmic Paradigms
@@ -11,7 +12,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Throughout this lecture, we'll examine how computational problems are classified based on their inherent difficulty 🧠, with special attention to NP-completeness and approximation algorithms.
 
@@ -19,7 +20,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 ---
 
-### Overview 📋
+### 📋 Overview
 
 -   Complexity theory 🧮
 -   NP-completeness 🚧
@@ -48,7 +49,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 ---
 
-### The Challenge of NP-Hard
+### 🚧 The Challenge of NP-hard
 
 -   NP-Hard Problems 🧩
 
@@ -73,10 +74,6 @@ For deeper insights, refer to "Complexity and Approximation: Combinatorial Optim
 
 This hierarchy represents the relationship between different approximation classes, with P being the easiest problems and NPO-hard being the most difficult. The relationship can be expressed as: P < FPTAS < PTAS < APX < NPO.
 
----
-
-### Complexity Classes Hierarchy
-
 .mermaid[
 <pre>
 graph LR
@@ -84,11 +81,11 @@ graph LR
     APX --> PTAS[PTAS]
     PTAS --> FPTAS[FPTAS]
     FPTAS --> P[P]
-    style NPO fill:#f44336,color:#fff
-    style APX fill:#ff9800,color:#fff
-    style PTAS fill:#2196f3,color:#fff
-    style FPTAS fill:#4caf50,color:#fff
-    style P fill:#4caf50,color:#fff
+    style NPO fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style APX fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style PTAS fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style FPTAS fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -114,23 +111,23 @@ graph LR
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$).
 -   Solution: A maximal matching ${\color{lime}E'}$, i.e., a subset ${\color{lime}E'}$ such that no
-  two edges in ${\color{lime}E'}$ shares a common endpoint and every edge in
+  two edges in ${\color{lime}E'}$ share a common endpoint and every edge in
   ${\color{lime}E} - {\color{lime}E'}$ shares a common endpoint with some edge in ${\color{lime}E'}$. ↔️
--   Measure: Cardinality of the matching, i.e. $|{\color{lime}E'}|$. 🔢
+-   Measure: Cardinality of the matching, i.e., $|{\color{lime}E'}|$. 🔢
 -   Bad News: APX-complete \[Yannakakis and Gavril, 1980\] 😟
 -   Comment: Transformation from Minimum Vertex Cover (HW: Implement the algorithm) 💻
 -   Garey and Johnson: GT10
 
 ---
 
-### Minimum Steiner Tree
+### 🌳 Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
   weights ${\color{royalblue}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
   vertices. 🌳
--   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
+-   Solution: A Steiner tree, i.e., a subtree of $G$ that includes all
   the vertices in ${\color{salmon}S}$.
--   Measure: The sum of the weights of the edges in the sub-tree. ⚖️
+-   Measure: The sum of the weights of the edges in the subtree. ⚖️
 -   Bad News: APX-complete. 😟
 -   Garey and Johnson: ND12
 
@@ -143,7 +140,7 @@ graph LR
   ${\color{salmon}Q} \subset Z \times Z$
 -   Good News: Admits a PTAS \[Arora, 1996\] ✅
 -   Comment: Admits a PTAS for any _geometric space_ of constant
-  dimension ${\color{royalblue}d}$, e.g. in the rectilinear metric \[Arora, 1997\].
+  dimension ${\color{royalblue}d}$, e.g., the rectilinear metric \[Arora, 1997\].
 -   Garey and Johnson: ND13
 
 ---
@@ -175,10 +172,10 @@ graph LR
 
 -   Instance: Set ${\color{salmon}C}$ of ${\color{royalblue}m}$ cities, distances ${\color{royalblue}d}(c_i, c_j) \in N$
   satisfying the _triangle inequality_
-  (i.e. ${\color{royalblue}d}(a, b) + {\color{royalblue}d}(b, c) \geq {\color{royalblue}d}(a, c)$) 📐
+  (i.e., ${\color{royalblue}d}(a, b) + {\color{royalblue}d}(b, c) \geq {\color{royalblue}d}(a, c)$) 📐
 -   Solution: A permutation $\pi : [1..{\color{royalblue}m}] \mapsto [1..{\color{royalblue}m}]$. 🔄
 -   Measure: The length of the tour. 📏
--   Good news: Approximable within 3/2 \[Christofides 76\] ✅
+-   Good news: Approximable within 3/2 \[Christofides, 1976\] ✅
 -   Bad News: APX-complete. 😟
 -   Comment: A variation in which vertices can be revisited and the goal
   is to minimize the sum of the latencies of all vertices, where the
@@ -249,7 +246,7 @@ class: nord-light, middle, center
 
 ---
 
-### Overview 📋
+### 📋 Overview
 
 -   Greedy approach 🤑
 -   Mathematical programming ➗
@@ -277,7 +274,7 @@ class: nord-light, middle, center
 
 ---
 
-### Knapsack 🎒 Problem
+### 🎒 Knapsack Problem
 
 .pull-left[
 
@@ -294,7 +291,7 @@ class: nord-light, middle, center
 
 ---
 
-### 🤑 Greedy Approach
+### 🤑 Greedy Knapsack
 
 -   Take as much of the item with the highest value per pound
   (${\color{royalblue}p_i}$/${\color{royalblue}a_i}$) as you can. If you run out of that item, take from the
@@ -389,7 +386,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights; 📥
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$; 📤
--   Let ILP<sub>VC</sub> be the linear integer
+-   Let ILP<sub>VC</sub> be the integer linear
   programming formulation of the problem; ➗
 -   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
@@ -401,7 +398,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Linear Programming
+### ➗ Linear Programming
 
 -   Theorem 2.15. Given a graph $G$ with non-negative vertex weights,
   Program 2.6 finds a feasible solution of MWVC with value
@@ -412,7 +409,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### ☯ Primal-dual WVC
+### ☯ Program 2.7: Primal-dual WVC
 
 -   **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights; 📥
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$; 📤
@@ -449,7 +446,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Program - Random WVC
+### 🎲 Program: Random WVC
 
 -   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{royalblue}w}: {\color{salmon}V} \mapsto N$; 📥
 -   **Output** Vertex cover ${\color{salmon}U}$; 📤
@@ -472,8 +469,8 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   However, it does not guarantee that the algorithm always finds a
   good approximation solution. 🎰
 
--   Theorem 5.1. The expect measure of the solution returned by the
-  previous algorithm satisfied the following inequality:
+-   Theorem 5.1. The expected weight of the solution returned by the
+  previous algorithm satisfies the following inequality:
 
     $$E[m_\text{RWVC}({\color{green}x})] \leq 2 m^*({\color{green}x})$$
 
@@ -482,7 +479,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Dynamic Programming (I)
+### 🗺️ Dynamic Programming (I)
 
 -   One passenger wants to go from city A to city H through the
   _shortest path_ according to the map on the right, where number of
@@ -531,7 +528,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Local Search
+### 🔍 Local Search
 
 -   **Input**: Instance ${\color{green}x}$; 📥
 -   **Output**: Solution ${\color{green}s}$ 📤
@@ -547,7 +544,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Simulated Annealing
+### ❄️ Simulated Annealing
 
 -   **Input**: Instance ${\color{green}x}$; 📥
 -   **Output**: Solution ${\color{green}s}$ 📤
@@ -567,19 +564,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Other Heuristic Methods
+### 🧰 Other Heuristic Methods
 
 -   🧗 Hill Climbing
-  -   Reference: _Hill Climbing_ by R. A. Sutton and A. G. Barto, MIT Press, 1983 📚
+    -   Reference: S. Russell and P. Norvig, _Artificial Intelligence: A Modern Approach_, 4th ed., Pearson, 2020 📚
 -   🐜 Ant Colony Optimization (ACO)
-  -   Reference: _Ant Colony Optimization_, D. E. Kirkpatrick, C.
-    Storn, Journal of Global Optimization, 1992 📚
+    -   Reference: M. Dorigo, V. Maniezzo, and A. Colorni, _Ant system_, IEEE Trans. SMC-B, 1996 📚
 -   🧬 Genetic Algorithm (GA)
-  -   Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989 📚
+    -   Reference: D. E. Goldberg, _Genetic Algorithms in Search, Optimization, and Machine Learning_, Addison-Wesley, 1989 📚
 -   🙅 Tabu Search (TS)
-  -   Reference: _Tabu search_, Kirkpatrick, Storn, 1983 📚
--   Variable Neighborhood Descent (VND)
-  -   Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983 📚
+    -   Reference: F. Glover, _Tabu search—Part I_, ORSA Journal on Computing, 1989 📚
+-   🔀 Variable Neighborhood Descent (VND)
+    -   Reference: N. Mladenović and P. Hansen, _Variable neighborhood search_, Computers & Operations Research, 1997 📚
 
 ---
 
@@ -595,6 +591,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Pablo Pedregal. Introduction to Optimization. Springer, 2003 (O224
   P371) 📖
 
+-   S. Kirkpatrick, C. D. Gelatt, and M. P. Vecchi. Optimization by
+  Simulated Annealing. Science, 1983. 📖
+
 ---
 
 count: false
@@ -602,7 +601,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## Q&A 🎤
+## 🙋 Q&A
 
 ] .pull-right[
 

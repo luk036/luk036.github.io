@@ -24,6 +24,7 @@ class: nord-dark, center, middle
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
 - [low-energy computing](low_energy-remark.html)
+- [modern terminal environment](lubuntu-env-remark.html)
 
 ] .pull-right[
 

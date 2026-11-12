@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+  <head>
+    <title>A Modern Terminal on Lubuntu</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# A 30-Minute Modern Terminal ⚡
+
+### fzf · fd · bat · eza · zoxide · delta · tmux · starship
+
+Lubuntu 24.04 + Homebrew, wired and verified
+
+---
+
+## 🗺️ Agenda
+
+- **Part 1 — Why bother** (5 min): the baseline, the constraints
+- **Part 2 — The stack** (7 min): what talks to what, load order
+- **Part 3 — Wiring it up** (12 min): the eight tools, one by one
+- **Part 4 — War stories** (6 min): bugs found, how they were caught
+
+Every claim below was verified in a real pty, not assumed.
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — Why bother?
+
+---
+
+### 😩 The baseline
+
+Stock Lubuntu gives you bash + coreutils. It works, but:
+
+- `find` is slow and ignores `.gitignore`
+- `cat` dumps raw bytes at you
+- no fuzzy jump to files, history, or directories
+- `git diff` is a wall of monochrome `+` and `-`
+- one terminal, one job, no sessions across SSH
+- prompt tells you nothing about git state
+
+Nothing here is *broken* — it is just friction, paid many times a day.
+
+---
+
+### 🎯 Design constraints
+
+We are not starting from a clean, friendly Linux:
+
+- **Homebrew only** — apt versions lag; `HOMEBREW_NO_AUTO_UPDATE=1` is set
+- **Restricted network** — git-over-HTTPS to GitHub is blocked; bottle API works
+- **Scripts must keep working** — no alias may silently break pipes
+- **No silent breakage** — every integration tested in a pty, not just "it sourced"
+- **Reversible** — every `.bashrc` edit backed up first
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — The stack
+
+---
+
+### 🧰 The toolbox
+
+.mermaid[
+<pre>
+graph TD
+    SH["bash"] --> PR["starship prompt"]
+    SH --> FZ["fzf picker"]
+    SH --> EZ["eza ls"]
+    SH --> ZO["zoxide cd"]
+    SH --> GT["delta and lazygit"]
+    SH --> TM["tmux"]
+    FZ --> SR["fd and ripgrep"]
+    FZ --> VW["bat and glow"]
+    TM --> PU["fzf popup"]
+</pre>
+]
+
+One picker, many sources; one viewer, many callers.
+
+---
+
+### 🔌 Load order is the whole trick
+
+.mermaid[
+<pre>
+graph TD
+    A["bash starts"] --> B["conda init"]
+    B --> C["fzf env vars FZF_*_OPTS"]
+    C --> D["eval fzf --bash"]
+    D --> E["zoxide init"]
+    E --> F["starship init LAST"]
+</pre>
+]
+
+- `fzf --bash` reads its options **at source time** to decide the bindings
+- starship must be last so it can read the previous exit code
+- get this order wrong and things appear to work, but with the wrong behavior
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — Wiring it up
+
+---
+
+### ⌨️ fzf: three keys that pay for themselves
+
+| Key | What it does | Source of the list |
+| --- | --- | --- |
+| `CTRL-T` | paste selected paths | `fd` |
+| `CTRL-R` | paste a command from history | bash history |
+| `ALT-C` | `cd` into a selected directory | `fd` (dirs only) |
+
+Plus fuzzy completion: `vim **<TAB>`, `cd **<TAB>`, `kill **<TAB>`.
+
+- **78** command groups got completion wired automatically
+- `**` is the trigger; change it with `FZF_COMPLETION_TRIGGER`
+
+---
+
+### 🔍 The picker pipeline
+
+.mermaid[
+<pre>
+graph LR
+    FD["fd files"] --> FZ["fzf"]
+    HI["history"] --> FZ
+    RG["ripgrep hits"] --> FZ
+    FZ --> PV["bat preview"]
+    FZ --> CL["command line"]
+</pre>
+]
+
+- `CTRL-/` toggles the preview pane
+- inside tmux, the same picker opens as a **popup** (tmux 3.3+; we have 3.8)
+
+---
+
+### ⚠️ The ordering pitfall (the important slide)
+
+`fzf --bash` generates bindings based on the environment **at source time**:
+
+```bash
+# WRONG: options set after sourcing have no effect on the bindings
+eval "$(fzf --bash)"
+export FZF_CTRL_T_COMMAND='fd --type f'
+
+# RIGHT: configure first, source second
+export FZF_CTRL_T_COMMAND='fd --type f'
+eval "$(fzf --bash)"
+```
+
+Corollary: `FZF_DEFAULT_COMMAND` is deliberately **not** used by the
+integration; `CTRL-T` and `ALT-C` use their own variables.
+
+---
+
+### 🚀 fd: the quiet upgrade
+
+`fd` replaces `find` for our purposes: faster, respects `.gitignore`, sane defaults.
+
+```bash
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix \
+  --hidden --follow --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+```
+
+**Bug found:** `--strip-cwd-prefix` is rejected together with an explicit path:
+
+```bash
+fd --strip-cwd-prefix . /some/dir
+# error: the argument '--strip-cwd-prefix' cannot be used with '[path]...'
+```
+
+The `**<TAB>` completion hooks always pass a path, so they must drop that flag.
+Otherwise completion silently returns nothing.
+
+---
+
+### 🦇 bat: a `cat` you can read
+
+```bash
+alias cat='bat --paging=never'
+export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers \
+  --color=always --line-range :500 {}'"
+```
+
+- syntax highlighting, line numbers, git markers in the margin
+- `--paging=never` keeps it alias-safe for scripts and pipes
+- `--line-range :500` keeps previews instant on large files
+- `glow` does the same job for Markdown (`md README.md`)
+
+---
+
+### 🧭 zoxide: `cd` with memory
+
+```bash
+eval "$(zoxide init bash)"     # provides z and zi
+```
+
+- `z proj` jumps to the most frecent match
+- `zi` opens the fzf picker over known directories
+
+**War story:** I suspected `FZF_DEFAULT_COMMAND` was hijacking `zi`.
+I built a stub `fzf` that logged its argv and stdin — zoxide feeds directories
+via **stdin** with `--read0`, which takes precedence. Assumption disproved,
+no fix needed. The "empty picker" was my test harness, not the tool.
+
+---
+
+### 📁 eza: `ls` with taste — and three traps
+
+```text
+ls   ll   la   lt   l
+```
+
+Three bugs, all real:
+
+1. **No path + non-TTY = empty output.** `ls | head` printed nothing, because
+   eza 0.23.5 returns no rows when it has no path argument and stdout is a pipe.
+2. **`ls() { ... }` is a syntax error** while `alias ls=...` is active —
+   the alias expands at parse time.
+3. **`--icons` takes an optional value**, so `--icons "$@"` swallowed the path.
+
+Fix: small functions that append `.` when no path was given, defined with
+`function` after `unalias`, plus `--icons=auto`.
+
+---
+
+### 🎨 delta: readable diffs
+
+```ini
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+[merge]
+	conflictstyle = diff3
+```
+
+- `git add -p` keeps working: colored hunks, prompt intact
+- `n` / `N` jump between files in the pager
+- non-TTY output stays plain, so scripts are unaffected
+
+**Bug found:** `git blame` inherited `core.pager` and got mangled — delta
+parsed blame lines as diff hunks. Blame is not a diff:
+
+```ini
+[pager]
+	blame = less -RF
+```
+
+---
+
+### 🪟 tmux: the force multiplier
+
+```text
+Ctrl-a prefix   mouse on      vi copy-mode
+`|` / `-`       split, inheriting the current directory
+prefix + r      reload config
+```
+
+- sessions survive SSH drops
+- 50k scrollback, truecolor, 5s status refresh
+- unlocks fzf `--popup`: the picker floats over your work
+
+---
+
+### 🌟 starship + quick wins
+
+**starship** — one binary, any shell:
+
+- git branch, dirty marker, language versions, exit codes
+- kept last in `.bashrc` so `$?` is still meaningful
+
+Small tools, real value:
+
+| Tool | Use |
+| --- | --- |
+| `lazygit` | stage hunks, rebase, browse log in a TUI |
+| `glow` | render Markdown in the terminal |
+| `yq` / `jq` | YAML / JSON, one-liners |
+| `btop` | CPU, memory, network with graphs |
+| `tldr` | example-first man pages |
+
+---
+
+class: nord-light, middle, center
+
+## Part 4 — War stories
+
+---
+
+### 🧪 How we verified, not assumed
+
+.mermaid[
+<pre>
+graph LR
+    A["edit .bashrc"] --> B["bash -n syntax gate"]
+    B --> C["pty or tmux session"]
+    C --> D{"expected output?"}
+    D -- "no" --> A
+    D -- "yes" --> E["ship it"]
+</pre>
+]
+
+- `bash -n` catches syntax errors before they cost a login shell
+- `script`, a Python `pty`, and `tmux send-keys` drive real interactive sessions
+- reading a pty transcript caught what static review never would
+
+---
+
+### 🍺 Homebrew under a locked-down network
+
+- `HOMEBREW_NO_AUTO_UPDATE=1` — auto-update hung on blocked git remotes
+- bottle downloads work; `brew install` still stalls sometimes
+- **Stuck-lock recovery:** one install was orphaned mid-postinstall, holding
+  `Cellar/bat` for ten minutes with no progress
+
+```bash
+ps -eo pid,etime,stat,cmd | grep brew.rb    # find the orphan
+kill <pid>                                  # its parent timeout was already gone
+brew install --quiet bat zoxide             # clean re-run
+```
+
+- `tldr` could not fetch its page cache: `raw.githubusercontent.com` is blocked.
+  The binary is fine — it just has nothing to show until it can reach the network.
+
+---
+
+### 📊 Before and after
+
+| Task | Before | After |
+| --- | --- | --- |
+| find a file | `find . -name '*.py'` | `CTRL-T`, type 3 letters |
+| re-run a command | scroll, retype | `CTRL-R`, fuzzy match |
+| change directory | `cd ../../long/path` | `z proj` |
+| inspect a file | `cat`, lose it to scrollback | `bat`, syntax highlighted |
+| list files | `ls -la` | `ll` — icons, git status |
+| read a diff | monochrome wall | side-by-side, line numbers |
+| keep state | one terminal, one job | tmux sessions |
+
+---
+
+### 🎓 Lessons that generalize
+
+- **Order matters.** Config-before-source is not a detail; it is the contract.
+- **Guard every integration** with `command -v` so a missing tool is inert,
+  not a broken shell.
+- **Pipes are a contract too.** An alias that breaks `ls | head` is a bug,
+  even if it looks fine in the terminal.
+- **Interrogate your assumptions.** The zoxide "bug" was a test-harness
+  artifact; a stub binary answered it in minutes.
+- **Verify in the medium that matters.** Shell integration lives in a tty.
+
+---
+
+### 🛣️ Next steps
+
+- `lazydocker` when Docker arrives (skipped today — no daemon to drive)
+- `zellij` as a modern alternative to tmux
+- `atuin` for searchable, syncable shell history
+- `ble.sh` / `fzf-tab` for richer completion in bash
+- starship modules for the languages you actually use
+- `tldr --update` once the network allows it
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# 🙋 Q&A
+
+### Thanks!
+
+`CTRL-T` your way to the next question.
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      // KaTeX pre-renders on the raw textarea, BEFORE remark.create() parses it.
+      // Deliberately no single-dollar inline delimiter: the deck is full of shell
+      // code containing $ (command substitution), which must stay literal text.
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

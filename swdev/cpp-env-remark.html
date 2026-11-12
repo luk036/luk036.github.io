@@ -1,0 +1,614 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bootstrapping a C++20 Dev Environment</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧰 Bootstrapping a C++20 Dev Environment
+
+### conda + CMake + xmake on a low-ISA machine
+
+From an empty environment to green tests on `lds-cpp`
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 🗺️ Agenda — a 30-minute tour
+
+**1️⃣ Starting point** — an empty conda env, one system compiler · ≈ 2 min
+
+**2️⃣ Provisioning** — cmake, ninja, xmake, GCC 15.3, fmt, spdlog · ≈ 6 min
+
+**3️⃣ The ISA trap** — why the conda compiler crashed instantly · ≈ 8 min
+
+**4️⃣ CMake** — configure, build, test, format · ≈ 4 min
+
+**5️⃣ xmake** — targets, linkers, rpaths · ≈ 4 min
+
+**6️⃣ Verification & lessons** — what worked, what to avoid · ≈ 6 min
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Part 1 — Provisioning
+
+### ≈ 8 minutes
+
+An empty `cpp2027` environment, a missing toolchain, and one surprise.
+
+---
+
+## 🧭 Starting Point
+
+- Repository: `lds-cpp` — a C++20 low-discrepancy sequence library
+- Branch switched from `master` to `dev`
+- The developer machine had only a system `g++ 15.2`
+
+### What was missing
+
+```
+cmake:         not found
+xmake:         not found
+ninja:         not found
+clang-format:  not found
+clang-tidy:    not found
+doxygen:       not found
+```
+
+**Goal:** both build systems work inside the `cpp2027` conda environment.
+
+---
+
+## 🎯 Target Environment
+
+.mermaid[
+<pre>
+graph TD
+    subgraph ENV["conda env: cpp2027"]
+        T["Build tools\ncmake 4.4 · ninja · xmake 3.1"]
+        G["Compiler suite\nGCC 15.3 + sysroot"]
+        L["Libraries\nfmt 12.1 · spdlog 1.17 · doctest 2.5"]
+        F["Formatters\nclang-format · clang-tidy"]
+    end
+    SRC["lds-cpp source\ndev branch"] --> CM["CMake + CTest"]
+    SRC --> XM["xmake"]
+    T --> CM
+    T --> XM
+    G --> CM
+    G --> XM
+    L --> CM
+    L --> XM
+    CM --> OUT["Lds · LdsTests · LdsStandalone"]
+    XM --> OUT
+    F --> CM
+
+    style SRC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ENV fill:#fafafa,stroke:#616161,stroke-width:3px
+    style T fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style G fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style L fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style CM fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style XM fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style OUT fill:#fff3e0,stroke:#e65100,stroke-width:3px
+</pre>
+]
+
+**One environment** provides compilers, build tools, libraries, and formatters.
+
+---
+
+## 🐍 Why conda for C++?
+
+- **No sudo drift** — install and remove tools per project
+- **Prebuilt C++ libraries** — fmt, spdlog, doctest, cxxopts
+- **Versioned toolchain** — compiler, linker, and libraries move together
+- **Reproducible** — one environment name, one activation command
+- **Cross-platform** — same package names on Linux, macOS, and Windows
+
+### The caveat
+
+> A conda compiler is more than a compiler: it also ships **binutils, headers, startup objects, and a sysroot**.
+
+That last part will matter in a few slides. 😉
+
+---
+
+## 📦 Provisioning `cpp2027`
+
+The environment existed but was empty. One install populated it:
+
+```
+conda install -n cpp2027 -c conda-forge \
+  cmake ninja make xmake pkg-config \
+  cxx-compiler clang-tools doxygen \
+  fmt spdlog doctest cxxopts
+```
+
+- `cxx-compiler` pulls in **GCC 15.3** and binutils
+- `clang-tools` provides **clang-format** and **clang-tidy**
+- Libraries are shared builds, ready for `find_package`
+
+**Result:** a reproducible toolchain without touching the system package manager.
+
+---
+
+## 🧱 The Stack at a Glance
+
+.font-sm[
+| Tool | Version | Purpose |
+|------|---------|---------|
+| CMake | 4.4.5 | build configuration |
+| Ninja | 1.13.2 | fast generator backend |
+| xmake | 3.1.2 | alternative build system |
+| GCC / G++ | 15.3.0 | C++20 compiler |
+| clang-format / clang-tidy | 23.1.5 | style and static analysis |
+| Doxygen | 1.18.0 | API documentation |
+| fmt | 12.1.0 | formatting library |
+| spdlog | 1.17.0 | logging library |
+| doctest | 2.5.3 | unit-test framework |
+| cxxopts | 3.2.1 | CLI parsing |
+]
+
+---
+
+class: nord-light, middle, center
+
+## 💥 Part 2 — The ISA Trap
+
+### ≈ 8 minutes
+
+The build that worked, and the download that did not.
+
+---
+
+## 💥 First Surprise: It Compiles, Then Aborts
+
+The conda compiler accepted the code, linked a binary, and then:
+
+```
+./build/LdsTests
+# CPU ISA level is lower than required
+```
+
+Even the smallest program failed:
+
+```
+g++ hello.cpp -o hello
+./hello
+# CPU ISA level is lower than required
+```
+
+- The **system** `g++ 15.2` produced a working binary
+- The **conda** `g++ 15.3` did not
+
+**The error happens before `main`.** That points at the toolchain, not the code.
+
+---
+
+## 🔍 Diagnosis: The CPU Is Older Than the Binary
+
+`lscpu` on this machine:
+
+```
+Intel Celeron N4000 @ 1.10GHz
+flags: sse4_2 popcnt ...   (no avx, no avx2)
+```
+
+.font-sm[
+| ISA level | Requires | This CPU |
+|-----------|----------|----------|
+| `x86-64-baseline` | SSE2 | ✅ |
+| `x86-64-v2` | SSE4.2, POPCNT | ✅ |
+| `x86-64-v3` | AVX2, BMI | ❌ |
+]
+
+Then `readelf` explained the abort:
+
+```
+readelf -n ./build/LdsTests
+# x86 ISA needed: x86-64-baseline, x86-64-v2, x86-64-v3
+```
+
+---
+
+## 🧠 Root Cause: A Sysroot Built for v3
+
+.mermaid[
+<pre>
+graph LR
+    A["conda g++ 15.3"] --> B["sysroot_linux-64 2.39"]
+    B --> C["crt1.o\nbuilt for x86-64-v3"]
+    C --> D["ELF note\nISA needed: v2 + v3"]
+    D --> E["glibc loader\nCPU supports v2 only"]
+    E --> F["abort before main"]
+
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c62828,stroke:#7f0000,stroke-width:3px,color:#ffffff
+</pre>
+]
+
+The compiler driver itself is fine — the **startup object** is not.
+
+### Key insight
+
+- `g++ -print-file-name=crt1.o` points into the conda **sysroot**
+- `readelf -n` on that `crt1.o` shows the same v3 requirement
+- User-code flags such as `-march=x86-64-v2` cannot fix it
+
+---
+
+## 🔧 The Fix: Use a Baseline Sysroot
+
+Downgrade the sysroot so the startup objects target the baseline:
+
+```
+conda install -n cpp2027 -c conda-forge \
+  "sysroot_linux-64=2.17"
+```
+
+Verify with a throw-away program:
+
+```
+g++ hello.cpp -o hello
+./hello
+readelf -n ./hello | grep "ISA needed"
+# x86 ISA needed: x86-64-baseline
+```
+
+- The downgrade also moved `kernel-headers` from 6.12 to 3.10
+- That is harmless for userspace C++ builds
+- The conda compiler now runs natively on this CPU ✅
+
+---
+
+## ✅ Lesson: A Toolchain Is More Than a Compiler
+
+- A compiler = **driver + libstdc++ + startup objects + headers + sysroot**
+- `-march` only changes code you compile, not prebuilt startup objects
+- Conda exposes the CPU class as a virtual package: `__archspec=westmere`
+- If a binary fails **before `main`**, check the ELF notes first
+
+### Useful one-liners
+
+```
+readelf -n BINARY | grep "ISA needed"
+g++ -print-file-name=crt1.o
+```
+
+> Fix the **toolchain**, not your source code.
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Part 3 — CMake
+
+### ≈ 4 minutes
+
+The same project, a second build system, and two integration traps.
+
+---
+
+## ⚙️ CMake: The Working Workflow
+
+Configure, build, test, format:
+
+```
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+ctest --test-dir build --output-on-failure
+cmake --build build --target format
+```
+
+- No `CMAKE_PREFIX_PATH` required while `cpp2027` is active
+- CMake discovers the conda `fmt` and `spdlog` config packages
+- Result: `1/1` CTest passed
+
+### Targets produced
+
+- `Lds` — the static library
+- `LdsTests` — doctest suite
+- `LdsStandalone` — the `Lds` CLI executable
+
+---
+
+## 🧩 CMake: What It Found and What It Fetched
+
+**Found in the conda environment**
+
+- `fmt 12.1.0` at `[conda-prefix]/lib/cmake/fmt`
+- `spdlog 1.17.0` at `[conda-prefix]/lib/cmake/spdlog`
+- `doctest 2.5.3` and `cxxopts 3.2.1` alongside them
+
+**Fetched through CPM**
+
+- `Format.cmake 1.7.3` for style targets
+- fallback sources only if a package is absent
+
+**Build settings worth noticing**
+
+- `-Wall -Wextra -Wpedantic -Werror`
+- Interprocedural optimization (LTO) on library and tests
+- `SPDLOG_FMT_EXTERNAL` so spdlog reuses the external fmt
+
+---
+
+## 🌐 The CPM Download Caveat
+
+`CMakeLists.txt` downloads CPM 0.38.5 from a GitHub **release** URL.
+
+On this network:
+
+- The release download timed out
+- `raw.githubusercontent.com` reset the connection
+- Plain `git clone` worked fine
+
+.mermaid[
+<pre>
+graph LR
+    A["file(DOWNLOAD)\nGitHub release"] -->|timeout| B["git clone\nv0.38.5"]
+    B --> C["build/cmake/\nCPM_0.38.5.cmake"]
+    C --> D["configure\ncontinues"]
+
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
+**Trick:** seed the expected path. CMake skips the download when the file exists.
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Part 4 — xmake & Verification
+
+### ≈ 10 minutes
+
+---
+
+## 🛠️ xmake: The Working Workflow
+
+```
+xmake f -c -y -o build-xmake -m debug
+xmake
+xmake test
+xmake run verify_basic
+```
+
+### What `xmake.lua` declares
+
+- `Lds` — static library from `source/*.cpp`
+- `test_lds` — doctest suite with `add_tests`
+- `verify_basic` — a runnable example
+- `bench_all` — nanobench benchmark
+- Several logger probes used during spdlog experiments
+
+Packages come from **xmake-repo** or from **pkg-config** when already installed.
+
+---
+
+## ⚠️ xmake: Three Integration Traps
+
+.font-sm[
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Link used conda `g++` | `--cc` / `--cxx` set compile only | set `--ld` too, or clear overrides |
+| `libfmt.so.12` not found at runtime | no rpath for conda libraries | add `--ldflags=-Wl,-rpath,[conda-prefix]/lib` |
+| CMake and xmake overwrite each other | both default to `build/` | configure xmake with `-o build-xmake` |
+]
+
+### Why it matters
+
+- xmake stores its configuration in `.xmake`
+- After that, plain `xmake` commands reuse `build-xmake`
+- The two build systems coexist **without deleting either build tree**
+
+---
+
+## 🔁 CMake vs xmake in This Repo
+
+.font-sm[
+| Aspect | CMake | xmake |
+|--------|-------|-------|
+| Project file | `CMakeLists.txt` + CPM | `xmake.lua` + xmake-repo |
+| Backend | Ninja | internal builder |
+| Tests | CTest | `add_tests` |
+| Build directory | `build/` | `build-xmake/` |
+| Dependency discovery | `find_package` | pkg-config + xmake-repo |
+| Formatting | `Format.cmake` targets | external tools |
+| Verified result | `1/1` passed | `1/1` passed |
+]
+
+**Both are first-class.** Pick per workflow, not per project.
+
+---
+
+## 🧹 Repository Hygiene
+
+- `build*` and `.xmake` are already **gitignored**
+- Do **not** delete `build/` to “start fresh”
+- Use the provided clean targets instead
+
+```
+cmake --build build --target clean
+xmake clean
+```
+
+- Keep one build directory per build system
+- Run formatting before committing
+- Check `git status` after provisioning — build output must stay untracked
+
+**A clean tree makes the environment reproducible.**
+
+---
+
+## 🎨 Formatting: One Tool Works, One Does Not
+
+**Working**
+
+```
+cmake --build build --target format
+cmake --build build --target fix-format
+```
+
+- Uses `clang-format 23.1.5`
+- Covers all C++ sources and headers
+
+**Broken**
+
+- `cmake-format 0.6.13` is PyPI-only and fails on Python 3.15
+- Error: `ValueError: Cannot use capturing groups in re.Scanner`
+
+**Workaround**
+
+```
+cmake -S . -B build -DFORMAT_SKIP_CMAKE=ON
+```
+
+C++ formatting remains fully covered; CMake formatting is skipped.
+
+---
+
+## ✅ Verification: Green on Both Sides
+
+### CMake
+
+```
+ctest --test-dir build --output-on-failure
+# 100% tests passed, 0 tests failed out of 1
+```
+
+### xmake
+
+```
+xmake test
+# test_lds/default  passed
+# 100% tests passed, 0 test(s) failed out of 1
+```
+
+### Runtime check
+
+```
+xmake run verify_basic
+# Halton, Circle, Sphere, Sphere3, SphereN samples
+# every point reports radius: 1.000000000000000
+```
+
+Binaries now advertise **baseline ISA** and run on the Celeron. 🎉
+
+---
+
+## 🚑 Troubleshooting Cookbook
+
+.font-sm[
+| Symptom | First check | Fix |
+|---------|-------------|-----|
+| `CPU ISA level is lower than required` | `readelf -n` on binary and `crt1.o` | align the sysroot to the CPU baseline |
+| CMake download timeout | test `git clone` on the same host | seed `build/cmake/CPM_0.38.5.cmake` |
+| `find_package(fmt)` misses | is the conda env active? | `conda activate cpp2027` |
+| xmake relinks with the wrong compiler | `xmake f -v` | set or clear `cc`, `cxx`, `ld` |
+| Runtime library not found | `ldd BINARY` | add an rpath or set `LD_LIBRARY_PATH` |
+| `format` target fails | which formatter? | use `FORMAT_SKIP_CMAKE=ON` |
+]
+
+---
+
+## 💡 Takeaways
+
+**1️⃣ conda gives a reproducible C++ toolchain without sudo**
+
+**2️⃣ the sysroot and `crt1.o` are part of the ABI** — check ELF ISA notes
+
+**3️⃣ CMake and xmake coexist** with separate build directories
+
+**4️⃣ seed CPM** when the GitHub release CDN is blocked
+
+**5️⃣ prebuilt libraries need rpath** outside their package manager
+
+**6️⃣ verify with tests** — “it compiles” is not enough
+
+> A 30-minute setup that saves hours of mysterious loader errors.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Reproduce the environment
+
+```
+conda activate cpp2027
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+ctest --test-dir build --output-on-failure
+
+xmake test
+xmake run verify_basic
+```
+
+**Repository:** `luk036/lds-cpp` · branch `dev`
+
+**Q&A** 🤔
+
+        </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

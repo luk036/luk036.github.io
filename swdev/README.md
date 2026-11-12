@@ -42,11 +42,19 @@ class: nord-dark, center, middle
 
 ## 📚 Overview
 
-This section covers software development workflows and tooling: version control and CI automation, AI-era development practices, code quality, video processing pipelines, and verification tools like Cocotb.
+This section covers software development workflows and tooling: environment provisioning, version control and CI automation, AI-era development practices, code quality, video processing pipelines, and verification tools like Cocotb.
 
 ---
 
-### 1. Git & CI Workflows
+### 1. Development Environment
+
+| Topic                                                      | Description                                                    |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| [Bootstrapping a C++20 Dev Environment](cpp-env-remark.html) | conda toolchain, CPU ISA traps, CMake · CPM, xmake, verification |
+
+---
+
+### 2. Git & CI Workflows
 
 | Topic                                              | Description                     |
 | -------------------------------------------------- | ------------------------------- |
@@ -55,7 +63,7 @@ This section covers software development workflows and tooling: version control 
 
 ---
 
-### 2. AI-Era Development
+### 3. AI-Era Development
 
 | Topic                                              | Description                     |
 | -------------------------------------------------- | ------------------------------- |
@@ -64,7 +72,7 @@ This section covers software development workflows and tooling: version control 
 
 ---
 
-### 3. Code Quality & Best Practices
+### 4. Code Quality & Best Practices
 
 | Topic                                              | Description                     |
 | -------------------------------------------------- | ------------------------------- |
@@ -79,7 +87,7 @@ This section covers software development workflows and tooling: version control 
 
 ---
 
-### 4. Video Processing & Verification
+### 5. Video Processing & Verification
 
 | Topic                                              | Description                     |
 | -------------------------------------------------- | ------------------------------- |
@@ -101,6 +109,7 @@ swdev/
 ├── ### Remark.js HTML Slides
 ├── ai-validate-remark.html                # Validation in AI Era
 ├── cocotb-hdl-remark.html                 # Cocotb HDL Verification
+├── cpp-env-remark.html                    # Bootstrapping a C++20 Dev Environment
 ├── design-tradeoff-remark.html            # Design is a Trade-off (Part 6)
 ├── ec-gen-remark.html                     # EC Generator
 ├── git-gh-ci-remark.html                  # Git & GitHub CI

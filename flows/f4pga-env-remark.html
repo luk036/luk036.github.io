@@ -1,0 +1,708 @@
+<!doctype html>
+<html>
+  <head>
+    <title>F4PGA Development Environment in One Afternoon</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# F4PGA in One Afternoon ⚡
+
+### A reproducible FPGA toolchain on a 2-core, 5.6 GB laptop
+
+Artix-7 · Yosys · VPR · Project X-Ray · Conda
+
+Verified end to end with a real bitstream
+
+---
+
+## 🗺️ Agenda
+
+- **Part 1 — Framing** (4 min): what "setup" actually means
+- **Part 2 — The stack** (7 min): repos, envs, assets, activation
+- **Part 3 — The build** (9 min): install steps and the first bitstream
+- **Part 4 — War stories** (7 min): slow mirrors, flaky git, false alarms
+- **Part 5 — Reproduce & extend** (3 min): exact commands and next steps
+
+Every result in this deck came from a command that was actually run.
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — Framing
+
+---
+
+### 🎯 The goal
+
+Set up the F4PGA development environment **according to the official guide**:
+
+- <https://f4pga.readthedocs.io/en/latest/getting-started.html>
+- Repository: `chipsalliance/f4pga`
+- Target family: **Xilinx 7-Series** (`xc7`)
+- Board used for verification: **Arty A7-35T**
+
+"Done" does not mean "the script exited". Done means:
+
+- the CLI starts,
+- the Python tests run,
+- and a Verilog design becomes a **valid `.bit` file**.
+
+---
+
+### 🧱 Starting point
+
+The working directory was empty; the machine was not.
+
+.font-sm[
+
+| Resource | State at start |
+| --- | --- |
+| `/home/lubuntu/Documents/github/f4pga` | empty |
+| Miniconda | installed at `~/miniconda3`, Python 3.14 base |
+| `conda` | 26.10.0, default solver `rattler` |
+| Conda envs | `f4pga2027` existed but was **empty** |
+| CPU / RAM | 2 cores / 5.6 GB, 2.8 GB swap |
+| Disk | 93 GB free |
+| FPGA tools | none: no yosys, vpr, nextpnr |
+
+]
+
+The temptation was to install a second Miniconda. We did not.
+
+---
+
+### 🧭 Decisions made up front
+
+- **Reuse the existing Miniconda** — one package manager, less duplication.
+- **Install into `~/opt/f4pga`** — no `sudo`, no system-wide mutation.
+- **Follow the "intermediate contributor" path** — the arch-def tarballs
+  include the minimal env and requirements files, exactly as the CI uses.
+- **Track the latest arch-def release**, not the repo's pinned 2022 snapshot.
+- **Do not delete `f4pga2027`** — it is user state; create a separate `xc7` env.
+- **Leave `~/.bashrc` reversible** — exports only, no automatic activation.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — The stack
+
+---
+
+### 🏗️ What talks to what
+
+.mermaid[
+<pre>
+graph TD
+    ACT["activate.sh"] --> ENV["conda env: xc7"]
+    ACT --> ASSETS["~/opt/f4pga/xc7\narch defs 2.7 GB"]
+    REPO["f4pga repo\neditable install"] --> ENV
+    ENV --> YOSYS["yosys"]
+    ENV --> VPR["vpr"]
+    ENV --> PRJ["prjxray"]
+    ENV --> PLUG["symbiflow-yosys-plugins"]
+    ASSETS --> FLOW["f4pga build"]
+    YOSYS --> FLOW
+    VPR --> FLOW
+    PRJ --> FLOW
+    PLUG --> FLOW
+    FLOW --> BIT["top.bit"]
+</pre>
+]
+
+Four pieces: one repo, one env, one asset tree, one activation script.
+
+---
+
+### 📦 The two-step installation
+
+F4PGA splits the install because the architecture data is too large for Conda:
+
+.mermaid[
+<pre>
+graph LR
+    A["Conda packages\ntools: yosys, vpr, prjxray"] --> C["working toolchain"]
+    B["Arch-def tarballs\ndevice data: routing, pinmaps, techmaps"] --> C
+    C --> D["f4pga CLI"]
+    D --> E["bitstream"]
+</pre>
+]
+
+- Conda supplies **executables**.
+- Tarballs supply **device-specific data**.
+- The `f4pga` Python package is the glue.
+
+---
+
+### 🔑 Three environment variables
+
+.font-sm[
+
+| Variable | Value in this install | Why it matters |
+| --- | --- | --- |
+| `F4PGA_INSTALL_DIR` | `~/opt/f4pga` | root of the toolchain tree |
+| `FPGA_FAM` | `xc7` | selects the device family |
+| `F4PGA_SHARE_DIR` | `~/opt/f4pga/xc7/share/f4pga` | where arch data is found |
+
+]
+
+The helper computes all three:
+
+```bash
+export F4PGA_INSTALL_DIR="${F4PGA_INSTALL_DIR:-$HOME/opt/f4pga}"
+export FPGA_FAM="${FPGA_FAM:-xc7}"
+export F4PGA_SHARE_DIR="${F4PGA_SHARE_DIR:-$F4PGA_INSTALL_DIR/$FPGA_FAM/share/f4pga}"
+```
+
+---
+
+### 📥 The architecture packages
+
+Downloaded from the **latest** release pointer:
+
+```bash
+https://github.com/SymbiFlow/f4pga-arch-defs/releases/download/latest/symbiflow-${PKG}-latest
+```
+
+.font-sm[
+
+| Package | Role | Size |
+| --- | --- | --- |
+| `install-xc7` | common Xilinx 7-Series techmaps + env files | 48 KB compressed |
+| `xc7a50t_test` | A35T routing graph, timing, pinmaps | 97.6 MB compressed |
+
+]
+
+Resolved release: timestamp `20230411-180123`, commit `5e974a8`.
+
+Extracted footprint: **2.7 GB**, dominated by the routing resource graph.
+
+---
+
+### 🐍 What is inside the Conda env
+
+The env file comes from the tarball itself (`xc7_env/xc7_environment.yml`):
+
+.font-sm[
+
+| Component | Version / note |
+| --- | --- |
+| Python | 3.7.15 (pinned by the 2022 build) |
+| Yosys | `0.19_21_ga82eff2e2` |
+| symbiflow-yosys-plugins | `1.0.0_7_1027_g52cdcc4` |
+| VPR | `8.0.0_5699_g25e723a24` (`vtr-optimized`) |
+| prjxray-tools / prjxray-db | `20220708_203356` |
+| pip extras | `prjxray`, `xc-fasm`, `fasm`, `numpy`, `lxml` |
+
+]
+
+Channel: `litex-hub`. Env name: `xc7`.
+
+---
+
+### 🧑‍💻 The repository
+
+```bash
+git clone https://github.com/chipsalliance/f4pga.git .
+git submodule update --init --recursive
+```
+
+- HEAD: `0723f9ca` (CI: Pipeline: add write permissions…, Oct 2024)
+- Submodule: `third_party/make-env` checked out at `bc9ec7f`
+- Python package lives in `f4pga/`, not at the repo root
+
+Development install, not a copy:
+
+```bash
+pip install -e ./f4pga
+```
+
+Editable install means `git pull` is immediately reflected in the CLI.
+
+---
+
+### 🚀 Activation, without surprises
+
+`~/opt/f4pga/activate.sh`:
+
+```bash
+. "$HOME/miniconda3/etc/profile.d/conda.sh"
+export F4PGA_INSTALL_DIR="${F4PGA_INSTALL_DIR:-$HOME/opt/f4pga}"
+export FPGA_FAM="${FPGA_FAM:-xc7}"
+export F4PGA_SHARE_DIR="${F4PGA_SHARE_DIR:-$F4PGA_INSTALL_DIR/$FPGA_FAM/share/f4pga}"
+conda activate "$FPGA_FAM"
+```
+
+`~/.bashrc` gets the variables, but **not** an automatic `conda activate`:
+
+```bash
+source ~/opt/f4pga/activate.sh   # explicit, per shell
+```
+
+Why: changing every new shell's default env is a side effect, not a feature.
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — The build
+
+---
+
+### ⏱️ How the afternoon went
+
+Approximate wall-clock timeline; downloads and solves dominate.
+
+.mermaid[
+<pre>
+gantt
+    title Setup and verification timeline
+    dateFormat HH:mm
+    axisFormat %H:%M
+    section Bootstrap
+    Clone repo              :a1, 11:13, 2m
+    Fetch arch defs         :a2, 11:15, 25m
+    Create conda env        :a3, 11:22, 50m
+    section Dependencies
+    Pip retry               :a4, 12:12, 18m
+    Editable install        :a5, 12:30, 5m
+    section Verify
+    Repo tests              :b1, 12:36, 6m
+    Build bitstream         :b2, 12:46, 44m
+    Cached re-run           :b3, 13:31, 1m
+</pre>
+]
+
+---
+
+### 1️⃣ Clone and initialize
+
+```bash
+cd ~/Documents/github/f4pga
+git clone https://github.com/chipsalliance/f4pga.git .
+git submodule update --init --recursive
+```
+
+Why into `.`?
+
+- the session workspace was already the intended repo directory;
+- no nested `f4pga/f4pga` surprise;
+- submodules are needed by the docs build, not by the CLI.
+
+Result: repo at `0723f9ca`, submodule initialized.
+
+---
+
+### 2️⃣ Fetch the device data — and survive slow mirrors
+
+The first `curl` ran at roughly **80 KB/s** and was killed at 45%:
+
+$$\text{time} = \frac{100\ \text{MB}}{80\ \text{KB/s}} \approx 21\ \text{minutes}$$
+
+The fix is not heroism; it is HTTP resume:
+
+```bash
+curl -fL -C - --retry 5 "$URL" -o xc7a50t_test.tar.xz
+xz -t xc7a50t_test.tar.xz
+tar -xJf xc7a50t_test.tar.xz
+```
+
+On the resumed attempt the mirror moved at ~1.5 MB/s: under 70 seconds.
+
+Lesson: **download state is a file**, so the operation is resumable.
+
+---
+
+### 3️⃣ Create the Conda environment
+
+```bash
+cd ~/opt/f4pga/xc7/xc7_env
+conda env create --solver libmamba -f xc7_environment.yml
+```
+
+- The env file must be read **from its own directory**: its pip section uses
+  a relative `-r xc7_requirements.txt`.
+- The default `rattler` solver spent over 30 minutes collecting the large
+  `litex-hub` metadata; `libmamba` completed the solve.
+- Exact build strings are requested, so the result is reproducible.
+
+Outcome: `~/miniconda3/envs/xc7`, Python 3.7.15, all FPGA tools present.
+
+---
+
+### 4️⃣ Finish the pip dependencies
+
+The Conda transaction succeeded; the pip phase did not:
+
+```text
+fatal: unable to access 'https://github.com/SymbiFlow/prjxray.git/':
+Failed to connect to github.com port 443 after 135809 ms
+```
+
+The retry was deliberately boring:
+
+```bash
+pip install -r xc7_requirements.txt   # repeated until it worked
+```
+
+Installed: `prjxray @ ae546d6`, `xc-fasm @ 25dc605`, `fasm`, `numpy`,
+`lxml`, `pyyaml`, `python-constraint`.
+
+The second attempt connected normally. Flaky is not the same as unavailable.
+
+---
+
+### 5️⃣ Install the glue and the test tools
+
+```bash
+pip install -e ./f4pga
+pip install -r test/requirements.txt
+```
+
+Result:
+
+- `f4pga 0.0.0+0723f9ca` in editable mode
+- `pytest 7.4.4`, `black 23.3.0`
+
+Smoke test:
+
+```text
+$ f4pga -h
+usage: f4pga [-h] [-v] [-s] {build,showd} ...
+```
+
+`showd` is not a typo; it is the second subcommand in this revision.
+
+---
+
+### 🧪 The repository test suite
+
+```bash
+pytest --verbose --capture=no -rA test/
+```
+
+```text
+24 xfailed in 5.80s
+```
+
+Every wrapper test is decorated with `@mark.xfail` in `test/test_wrappers.py`.
+These wrappers are the **deprecated** `symbiflow_*` shell entry points, and the
+modern arch-def packages no longer ship the scripts they call.
+
+So: 24 xfail is the expected result for this revision. A green "24 passed"
+would be suspicious, not reassuring.
+
+---
+
+### 🔄 The flow that actually runs
+
+.mermaid[
+<pre>
+graph LR
+    V["counter.v"] --> S["synth\nyosys"]
+    S --> E["top.eblif"]
+    E --> P["pack + place + route\nVPR"]
+    P --> F["top.fasm"]
+    F --> B["xc7frames2bit"]
+    B --> T["top.bit\n2.1 MB"]
+</pre>
+]
+
+The command used for verification:
+
+```bash
+cd test/verilog/counter
+f4pga -vv build --flow arty_35.json
+```
+
+Target part: `xc7a35tcpg236-1`, exposed to the flow as
+`XC7A35TCSG324-1`.
+
+---
+
+### 🧠 Running VPR on 5.6 GB of RAM
+
+VPR loads the routing resource graph, places, and routes:
+
+- peak RSS reported by VPR: **3007.7 MiB**
+- route graph on disk: 2.7 GB
+- entire VPR stage: **69.3 s** of computation
+- wall clock: much longer, because loading and swapping dominate
+
+A compatibility warning appeared and was harmless:
+
+```text
+Warning 830: This architecture version is for VPR 8.1.0-dev+c012f19d3
+while your current VPR version is 8.1.0-dev+25e723a24-dirty
+```
+
+The correct response is to read it, not panic: the build completed.
+
+---
+
+### ✅ Proof, not vibes
+
+```text
+Target bitstream -> test/verilog/counter/build/arty_35/top.bit
+f4pga: DONE
+exit=0
+```
+
+Artifact checks:
+
+```text
+-rw-rw-r--  2.1M  top.bit
+00000000: 0009 0ff0 0ff0 0ff0 0ff0 0000 0161 ...
+00000010: 2f74 6d70 2f74 6d70 7134 6335 7731 ...
+```
+
+- valid Xilinx bitstream header
+- `Generator=xc7frames2bit`
+- a cached re-run lists every stage as `[O]` and returns exit code 0
+- `pcf: MISSING` is expected for the XC7 flow, not an error
+
+---
+
+class: nord-light, middle, center
+
+## Part 4 — War stories
+
+---
+
+### 🌐 War story: the download that stalled
+
+Symptoms:
+
+- 97.6 MB package, transfer rate around 80 KB/s
+- job killed by the tool's 10-minute timeout at 44.5 MB
+- no error from the server; just no progress
+
+Diagnosis:
+
+- the mirror was slow, not broken
+- the partial file was still on disk
+- tar extraction had never started
+
+Fix:
+
+1. `curl -C -` to resume from byte 46,641,152
+2. `xz -t` to verify integrity before extraction
+3. extract, then delete the archive
+
+General rule: **make every long transfer resumable and verifiable.**
+
+---
+
+### 🧩 War story: solver and network are different failures
+
+Two failures looked similar; they were not.
+
+.font-sm[
+
+| Symptom | Real cause | Fix |
+| --- | --- | --- |
+| Conda "collecting metadata" forever | default `rattler` solver + huge `litex-hub` repodata | `--solver libmamba` |
+| pip clone fails after 135 s | transient GitHub connection failure | retry; second attempt succeeded |
+
+]
+
+The important distinction:
+
+- a solver problem needs a **different solver**
+- a network problem needs **retry and resume**, not a different tool
+
+Blurring the two wastes the most time.
+
+---
+
+### 🐚 War story: `conda` is not `conda activate`
+
+The first activation script only sourced `conda.sh` when `conda` was missing
+from `PATH`. In a non-interactive shell, `conda` was present, but the shell
+function was not:
+
+```text
+CondaError: Run 'conda init' before 'conda activate'
+```
+
+The fix is one line of policy — **always load the shell hook**:
+
+```bash
+. "$HOME/miniconda3/etc/profile.d/conda.sh"
+```
+
+This matters for scripts, CI, and any tool that starts a fresh `bash -c`.
+Presence on `PATH` is not initialization.
+
+---
+
+### 🧨 War story: the process died, the artifacts did not
+
+A long-running build was cancelled when the execution environment restarted.
+
+- the shell job was gone
+- the log file looked empty
+- `top.bit` existed, timestamped minutes earlier
+
+What settled it:
+
+```bash
+ls -lh build/arty_35/top.bit
+xxd -l 64 build/arty_35/top.bit
+grep -riE '^ERROR|error:' build/arty_35/*.log
+```
+
+Then a fresh `f4pga build` re-ran the flow in cached mode and exited 0.
+
+Lesson: **verify artifacts, not process state.** A dead parent process does
+not imply a failed output.
+
+---
+
+### 🟡 War story: xfail is the expected color
+
+`pytest` reported:
+
+```text
+24 xfailed in 5.80s
+```
+
+That looks like 24 warnings and zero successes. The source says otherwise:
+
+```python
+@mark.xfail
+@mark.parametrize("wrapper", wrappers)
+def test_shell_wrapper(wrapper):
+    ...
+```
+
+The tests exercise deprecated wrappers that the current arch-def packages
+intentionally no longer support. The repository encodes that expectation.
+
+Rule: **read the test markers before "fixing" the result.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 5 — Reproduce and extend
+
+---
+
+### 📋 Exact reproduction
+
+```bash
+# 1. Tools and device data
+export F4PGA_INSTALL_DIR="$HOME/opt/f4pga"
+export FPGA_FAM=xc7
+mkdir -p "$F4PGA_INSTALL_DIR/$FPGA_FAM"
+
+# 2. Conda env from the tarball's own env file
+cd "$F4PGA_INSTALL_DIR/$FPGA_FAM/xc7_env"
+conda env create --solver libmamba -f xc7_environment.yml
+
+# 3. Repo, editable package, tests
+cd ~/Documents/github/f4pga
+pip install -e ./f4pga
+pip install -r test/requirements.txt
+
+# 4. Activate and build
+source ~/opt/f4pga/activate.sh
+cd test/verilog/counter
+f4pga -vv build --flow arty_35.json
+```
+
+Everything is idempotent except the initial downloads.
+
+---
+
+### 🔭 What to do next
+
+- **More devices:** add `xc7a100t_test`, `xc7a200t_test`, `xc7z010_test`
+  from the same release.
+- **Other families:** `eos-s3` via `install-ql` + `ql-eos-s3_wlcsp`.
+- **Real designs:** clone `chipsalliance/f4pga-examples` and build
+  `xc7/counter_test` with `TARGET=arty_35`.
+- **Program hardware:** install `openFPGALoader` and use
+  `openFPGALoader -b arty top.bit`.
+- **Docs and lint:** `make -C docs env html`, `black --check f4pga`.
+- **Housekeeping:** the empty `f4pga2027` env can be removed with
+  `conda env remove -n f4pga2027`.
+
+Pinned vs latest: pin when you need reproducibility; track `latest` when you
+need fixes. This install chose **latest** and recorded the exact release.
+
+---
+
+### 🎓 Five lessons that generalize
+
+1. **Two-phase installs are normal.** Tools and data have different lifecycles.
+2. **Slow is not broken.** Resume, verify, and keep going.
+3. **Read the failure class.** Solver, network, and activation errors look alike.
+4. **Artifacts outlive processes.** Check outputs, not PIDs.
+5. **Expected warnings are not bugs.** A passing suite can be mostly yellow.
+
+The environment is now reproducible, editable, and proven by a bitstream.
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# 🙋 Q&A
+
+### Thanks!
+
+Ask about the flow, the versions, or the next device family.
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      // KaTeX pre-renders on the raw textarea, BEFORE remark.create() parses it.
+      // Single-dollar delimiters are disabled: the deck contains shell code
+      // with $HOME, $URL, and command substitution that must stay literal.
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -98,7 +98,6 @@ class: nord-light, middle, center
 
 ### 🖨️ Lithography Process
 
-.pull-left[
 
 1. **Photo-resist coating** (光阻涂层) 🎨
 2. **Illumination** (光照) 💡
@@ -107,13 +106,10 @@ class: nord-light, middle, center
 5. **Impurities doping** (杂质掺杂) 🧪
 6. **Metal connection** 🔗
 
-]
-
-.pull-right[
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A["🎨 Photo-resist\ncoating"] --> B["💡 Illumination"]
     B --> C["📸 Exposure"]
     C --> D["⚒️ Etching"]
@@ -129,7 +125,7 @@ graph TD
 ]
 
 **The wafer's image quality is set at the *exposure* step 📸**
-]
+
 
 ---
 
@@ -137,7 +133,6 @@ graph TD
 
 .pull-left[
 
-- Feature size (**45nm**) much smaller than wavelength (**193nm**) 📏
 - Resolution limit (Rayleigh criterion):
 
   **$R = k_1 \dfrac{\lambda}{\mathrm{NA}}$**
@@ -152,6 +147,7 @@ graph TD
 
 .pull-right[
 
+- Feature size (**45nm**) much smaller than wavelength (**193nm**) 📏
 - Mask layout ≠ final chip 😱
   - Features distort 🌀
   - Yields decline 📉
@@ -165,7 +161,6 @@ graph TD
 
 ### ⚙️ Lithography's DFM Impact
 
-Lithography critically defines IC physical features. DFM techniques like **phase shifting masks** address manufacturing issues 🛠️
 
 **Main challenges:**
 - Variations in feature dimensions/shapes 📉
@@ -193,7 +188,6 @@ class: nord-light, middle, center
 
 ### 🔍 The Diffraction Problem
 
-.pull-left[
 
 **Light doesn't play fair** 🌊
 - Edges of the mask pattern **diffract** light
@@ -201,9 +195,6 @@ class: nord-light, middle, center
 - Adjacent features bleed into each other
 - Result: **wafer ≠ mask** 😱
 
-]
-
-.pull-right[
 
 .mermaid[
 <pre>
@@ -221,7 +212,7 @@ graph LR
 </pre>
 ]
 
-]
+
 
 ---
 
@@ -246,20 +237,16 @@ graph LR
 
 ### 🛠️ OPC + SRAF
 
-.pull-left[
 
-**Sub-Resolution Assist Features (SRAF)**:
-- Tiny bars too small to print ⚙️
-- Sculpt the light field to sharpen main features 🎯
-- Combined with OPC for maximum fidelity
 
-]
 
-.pull-right[
+
+
+
 
 ![image](lec08.files/F18.png)
 
-]
+
 
 ---
 
@@ -360,20 +347,14 @@ graph TD
 
 ### ⚖️ Phase Conflict Graph
 
-.pull-left[
 
 - **Nodes** = features on the mask 🧩
 - **Edges** connect features with separation $\leq b$ (dark field) ⚫
 - Similar logic for bright field ⚪
 - Construction: **Plane sweeping** + **dynamic priority search tree** 🌳
 
-]
-
-.pull-right[
 
 ![image](lec08.files/005.jpg)
-
-]
 
 ---
 
@@ -622,7 +603,7 @@ class: nord-light, middle, center
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     G["📊 Graph G"] --> D1["🪓 Biconnected\ndecomposition"]
     D1 --> D2["🏞️ Planar\napproximation\nO(n²)"]
     D2 --> D3["🏗️ Planar\nembedding"]

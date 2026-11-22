@@ -109,7 +109,7 @@ One picker, many sources; one viewer, many callers.
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A["bash starts"] --> B["conda init"]
     B --> C["fzf env vars FZF_*_OPTS"]
     C --> D["eval fzf --bash"]
@@ -306,6 +306,7 @@ prefix + r      reload config
 
 Small tools, real value:
 
+.font-sm[
 | Tool | Use |
 | --- | --- |
 | `lazygit` | stage hunks, rebase, browse log in a TUI |
@@ -313,6 +314,7 @@ Small tools, real value:
 | `yq` / `jq` | YAML / JSON, one-liners |
 | `btop` | CPU, memory, network with graphs |
 | `tldr` | example-first man pages |
+]
 
 ---
 

@@ -37,7 +37,7 @@ From an empty environment to green tests on `lds-cpp`
 
 ---
 
-## 🗺️ Agenda — a 30-minute tour
+### 🗺️ Agenda — a 30-minute tour
 
 **1️⃣ Starting point** — an empty conda env, one system compiler · ≈ 2 min
 
@@ -55,7 +55,7 @@ From an empty environment to green tests on `lds-cpp`
 
 class: nord-light, middle, center
 
-## 🐍 Part 1 — Provisioning
+### 🐍 Part 1 — Provisioning
 
 ### ≈ 8 minutes
 
@@ -63,7 +63,7 @@ An empty `cpp2027` environment, a missing toolchain, and one surprise.
 
 ---
 
-## 🧭 Starting Point
+### 🧭 Starting Point
 
 - Repository: `lds-cpp` — a C++20 low-discrepancy sequence library
 - Branch switched from `master` to `dev`
@@ -84,7 +84,7 @@ doxygen:       not found
 
 ---
 
-## 🎯 Target Environment
+### 🎯 Target Environment
 
 .mermaid[
 <pre>
@@ -123,7 +123,7 @@ graph TD
 
 ---
 
-## 🐍 Why conda for C++?
+### 🐍 Why conda for C++?
 
 - **No sudo drift** — install and remove tools per project
 - **Prebuilt C++ libraries** — fmt, spdlog, doctest, cxxopts
@@ -139,7 +139,7 @@ That last part will matter in a few slides. 😉
 
 ---
 
-## 📦 Provisioning `cpp2027`
+### 📦 Provisioning `cpp2027`
 
 The environment existed but was empty. One install populated it:
 
@@ -158,7 +158,7 @@ conda install -n cpp2027 -c conda-forge \
 
 ---
 
-## 🧱 The Stack at a Glance
+### 🧱 The Stack at a Glance
 
 .font-sm[
 | Tool | Version | Purpose |
@@ -179,7 +179,7 @@ conda install -n cpp2027 -c conda-forge \
 
 class: nord-light, middle, center
 
-## 💥 Part 2 — The ISA Trap
+### 💥 Part 2 — The ISA Trap
 
 ### ≈ 8 minutes
 
@@ -187,7 +187,7 @@ The build that worked, and the download that did not.
 
 ---
 
-## 💥 First Surprise: It Compiles, Then Aborts
+### 💥 First Surprise: It Compiles, Then Aborts
 
 The conda compiler accepted the code, linked a binary, and then:
 
@@ -211,7 +211,7 @@ g++ hello.cpp -o hello
 
 ---
 
-## 🔍 Diagnosis: The CPU Is Older Than the Binary
+### 🔍 Diagnosis: The CPU Is Older Than the Binary
 
 `lscpu` on this machine:
 
@@ -237,7 +237,7 @@ readelf -n ./build/LdsTests
 
 ---
 
-## 🧠 Root Cause: A Sysroot Built for v3
+### 🧠 Root Cause: A Sysroot Built for v3
 
 .mermaid[
 <pre>
@@ -267,7 +267,7 @@ The compiler driver itself is fine — the **startup object** is not.
 
 ---
 
-## 🔧 The Fix: Use a Baseline Sysroot
+### 🔧 The Fix: Use a Baseline Sysroot
 
 Downgrade the sysroot so the startup objects target the baseline:
 
@@ -291,7 +291,7 @@ readelf -n ./hello | grep "ISA needed"
 
 ---
 
-## ✅ Lesson: A Toolchain Is More Than a Compiler
+### ✅ Lesson: A Toolchain Is More Than a Compiler
 
 - A compiler = **driver + libstdc++ + startup objects + headers + sysroot**
 - `-march` only changes code you compile, not prebuilt startup objects
@@ -311,7 +311,7 @@ g++ -print-file-name=crt1.o
 
 class: nord-light, middle, center
 
-## ⚙️ Part 3 — CMake
+### ⚙️ Part 3 — CMake
 
 ### ≈ 4 minutes
 
@@ -319,7 +319,7 @@ The same project, a second build system, and two integration traps.
 
 ---
 
-## ⚙️ CMake: The Working Workflow
+### ⚙️ CMake: The Working Workflow
 
 Configure, build, test, format:
 
@@ -342,7 +342,7 @@ cmake --build build --target format
 
 ---
 
-## 🧩 CMake: What It Found and What It Fetched
+### 🧩 CMake: What It Found and What It Fetched
 
 **Found in the conda environment**
 
@@ -363,7 +363,7 @@ cmake --build build --target format
 
 ---
 
-## 🌐 The CPM Download Caveat
+### 🌐 The CPM Download Caveat
 
 `CMakeLists.txt` downloads CPM 0.38.5 from a GitHub **release** URL.
 
@@ -393,13 +393,13 @@ graph LR
 
 class: nord-light, middle, center
 
-## 🛠️ Part 4 — xmake & Verification
+### 🛠️ Part 4 — xmake & Verification
 
 ### ≈ 10 minutes
 
 ---
 
-## 🛠️ xmake: The Working Workflow
+### 🛠️ xmake: The Working Workflow
 
 ```
 xmake f -c -y -o build-xmake -m debug
@@ -420,7 +420,7 @@ Packages come from **xmake-repo** or from **pkg-config** when already installed.
 
 ---
 
-## ⚠️ xmake: Three Integration Traps
+### ⚠️ xmake: Three Integration Traps
 
 .font-sm[
 | Symptom | Cause | Fix |
@@ -438,7 +438,7 @@ Packages come from **xmake-repo** or from **pkg-config** when already installed.
 
 ---
 
-## 🔁 CMake vs xmake in This Repo
+### 🔁 CMake vs xmake in This Repo
 
 .font-sm[
 | Aspect | CMake | xmake |
@@ -456,7 +456,7 @@ Packages come from **xmake-repo** or from **pkg-config** when already installed.
 
 ---
 
-## 🧹 Repository Hygiene
+### 🧹 Repository Hygiene
 
 - `build*` and `.xmake` are already **gitignored**
 - Do **not** delete `build/` to “start fresh”
@@ -475,7 +475,7 @@ xmake clean
 
 ---
 
-## 🎨 Formatting: One Tool Works, One Does Not
+### 🎨 Formatting: One Tool Works, One Does Not
 
 **Working**
 
@@ -502,7 +502,7 @@ C++ formatting remains fully covered; CMake formatting is skipped.
 
 ---
 
-## ✅ Verification: Green on Both Sides
+### ✅ Verification: Green on Both Sides
 
 ### CMake
 
@@ -531,7 +531,7 @@ Binaries now advertise **baseline ISA** and run on the Celeron. 🎉
 
 ---
 
-## 🚑 Troubleshooting Cookbook
+### 🚑 Troubleshooting Cookbook
 
 .font-sm[
 | Symptom | First check | Fix |
@@ -546,7 +546,7 @@ Binaries now advertise **baseline ISA** and run on the Celeron. 🎉
 
 ---
 
-## 💡 Takeaways
+### 💡 Takeaways
 
 **1️⃣ conda gives a reproducible C++ toolchain without sudo**
 

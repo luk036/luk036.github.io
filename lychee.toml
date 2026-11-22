@@ -8,7 +8,12 @@ exclude = [
   'www\.sciencedirect\.com',
   # PlantUML server returns transient 502s.
   'www\.plantuml\.com',
+  # cppreference serves 403 to non-browser user agents.
+  'en\.cppreference\.com',
 ]
+
+# Resolve root-relative links (e.g. href="/" in 404.html) against the repo root.
+root_dir = '.'
 
 max_retries = 2
 timeout = 20

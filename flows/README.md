@@ -25,6 +25,7 @@ class: nord-dark, center, middle
 - [pandoc flow](pandocFlow.html)
 - [low-energy computing](low_energy-remark.html)
 - [modern terminal environment](lubuntu-env-remark.html)
+- [auditing a live-USB system](lubuntu-usb-remark.html)
 
 ] .pull-right[
 

@@ -1,0 +1,473 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Auditing a Live-USB Linux System</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# Auditing a Live-USB Linux System 🔍
+
+### Measure first · three risks · one change set · one honest verdict
+
+Lubuntu 26.04.1 LTS · Celeron N4000 · 30 minutes
+
+---
+
+## 🗺️ Agenda
+
+- **Part 1 — What we found** (5 min): the machine, and the plot twist
+- **Part 2 — Measure first** (5 min): throughput and kernel drift
+- **Part 3 — Three risks** (4 min): exposure, durability, memory
+- **Part 4 — Choosing a path** (4 min): three options, one decision
+- **Part 5 — What changed** (5 min): the applied change set, verified
+- **Part 6 — What it's for** (7 min): ceilings, use, upgrades, lessons
+
+Every number in this deck was measured on the machine, not estimated.
+
+---
+
+class: nord-light, middle, center
+
+## Part 1 — What we found
+
+---
+
+### 🖥️ The machine, as reported
+
+| Item | Value |
+| --- | --- |
+| OS | Ubuntu 26.04.1 LTS (Resolute Raccoon) |
+| Desktop | Lubuntu / LXQt on X11 |
+| Kernel | 7.0.0-30-generic |
+| CPU | Intel Celeron N4000, 2 cores |
+| RAM | 5.6 GiB |
+| GPU | Intel UHD Graphics 600 |
+| Internal disk | 238 GB SATA, Windows NTFS on sda3 |
+| Uptime | 13 days 19 hours |
+
+A modest, working laptop. Nothing here looks alarming.
+
+---
+
+### 😮 The plot twist
+
+The root filesystem is not on that internal disk. It is an **overlay on a USB stick**.
+
+.mermaid[
+<pre>
+graph TD
+    USB["USB /dev/sdb, 114.6 GB"] --> FAT["sdb1, 8.6 GB FAT32, read-only /cdrom"]
+    USB --> EXT["sdb2, 106 GB ext3, persistence"]
+    FAT --> SQ["casper minimal.squashfs"]
+    EXT --> COW["overlay upper layer, 14 GB used"]
+    SQ --> OV["/ overlay"]
+    COW --> OV
+</pre>
+]
+
+Boot line: `BOOT_IMAGE=/casper/vmlinuz ... persistent`
+
+---
+
+### 🗃️ Where your writes actually go
+
+- `/` is an overlay: read-only squashfs **below**, writable ext3 **above**
+- 14 GB of session state has accumulated in the upper layer
+- casper does **not** fsck the persistence layer at boot
+- an unclean shutdown mid-write can take the overlay with it
+- `/cow` is **not** a path you can browse — the upper dir is internal to the mount
+
+**Implication:** this is a single copy of everything you have done in 13 days.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2 — Measure first
+
+---
+
+### 📉 The measurement that changed the plan
+
+USB 3 link negotiated at **5 Gbps**, so the interface was never the problem:
+
+| Test | Result |
+| --- | --- |
+| Sequential write, 128 MB, fsync'd | **5.9 MB/s** |
+| Sequential read, 128 MB, cold cache | **118 MB/s** |
+
+- reads are fine; writes are ~20x slower than the link
+- the bottleneck is the **flash**, not the port, and not casper
+- so "install it properly and it will be fast" is only half true:
+  installing to the *same stick* fixes correctness, not speed
+
+Performance and correctness turn out to be two separate arguments.
+
+---
+
+### ⚠️ The correctness problem, measured
+
+```
+Installed:  linux-image-7.0.0-30-generic
+            linux-image-7.0.0-44-generic   <- apt pulled this in
+Running:    7.0.0-30-generic               <- still booting the old one
+```
+
+.mermaid[
+<pre>
+graph LR
+    ISO["/casper/vmlinuz 7.0.0-30 on read-only FAT"] --> BOOT["booted kernel"]
+    APT["apt upgrade"] --> IMG["7.0.0-44 in overlay"]
+    IMG -.-> BOOT
+</pre>
+]
+
+casper never reads the overlay's kernel: the boot files live on a read-only partition.
+
+---
+
+### 🚨 Why drift is worse than slowness
+
+- Every kernel security update lands where it can never be booted
+- Each upgrade adds ~150 MB of dead weight to a 5.9 MB/s drive
+- Modules and running kernel slowly diverge — a classic source of "it worked yesterday"
+- This is a **correctness** bug, and it silently reports success
+
+Not a reason to panic. A reason to stop paying for kernels you cannot use.
+
+---
+
+class: nord-light, middle, center
+
+## Part 3 — Three risks
+
+---
+
+### 🔓 Risk 1: the exposure was real
+
+| Finding | State |
+| --- | --- |
+| `sudo` for the session user | **no password required** |
+| sshd listening | `0.0.0.0:22` and `[::]:22` |
+| `PasswordAuthentication` | yes |
+| `PermitRootLogin` | prohibit-password |
+| Firewall | **inactive** |
+| Non-loopback listeners | 22 only |
+
+Account had a password set — but one guessable password was standing between the network and root.
+
+---
+
+### 🕳️ War story: `ufw enable` would not have helped
+
+The firewall already contained rules while inactive:
+
+```
+To            Action    From
+--            ------    ----
+22/tcp        ALLOW     Anywhere
+OpenSSH       ALLOW     Anywhere
+```
+
+- `ufw delete allow 22/tcp` removed the **port** rule
+- the **app-profile** rule `OpenSSH` kept the port open
+- `ufw enable` alone would have preserved both
+
+Fix: delete the app profile too, then re-add as `limit`.
+
+---
+
+### 💾 Risk 2: durability is a single copy
+
+- Persistence is one ext3 partition on one consumer stick
+- No journal replay safety net at boot — casper mounts it, it does not repair it
+- Power loss during a write is the classic corruption path
+- The 14 GB of state includes browser profiles, automation scripts, notes
+- A backup target **on the same stick** is not a backup
+
+The stick can also simply stop being readable. Flash does that.
+
+---
+
+### 🧮 Risk 3: there is no disk swap at all
+
+Only zram, so memory exhaustion ends in the OOM killer rather than slow paging:
+
+$$\text{allocatable} = \text{RAM} + \text{zram}_{\text{logical}}$$
+
+with 5.6 GiB RAM and 3.0 GiB zram, running Firefox (~500 MB) plus opencode (~750 MB).
+
+No disk fallback is the **right** choice here — a 5.9 MB/s swapfile would be worse than OOM — but the ceiling needs to be higher.
+
+---
+
+class: nord-light, middle, center
+
+## Part 4 — Choosing a path
+
+---
+
+### 🛣️ Three honest options
+
+| Option | Speed | Internal SSD touched | Verdict |
+| --- | --- | --- | --- |
+| A. External SSD, full install | fast | no | best, costs money |
+| B. Second fast USB, full install | varies | no | needs a 2nd stick |
+| C. Keep live + harden | 5.9 MB/s | no | cheapest, kernel drift stays |
+
+Key constraint from the owner: **no dual-boot**, the internal disk stays untouched.
+
+---
+
+### 🛡️ Making option A genuinely zero-risk
+
+If you do buy an external SSD, it can be a normal install with none of the dual-boot fear:
+
+- Boot the installer, choose **"Something else"**
+- Put `/` and a small ESP on the **external** disk only
+- Bootloader device = the external disk, e.g. `/dev/sdc` — never `/dev/sda`
+- Set `GRUB_DISABLE_OS_PROBER=true` so GRUB never scans the internal disk
+- Boot with **F12** and pick the drive
+
+Unplug the drive and Windows boots exactly as before. Isolation is physical, not contractual.
+
+---
+
+### ✅ The decision: option C, with eyes open
+
+Constraints accepted:
+
+- Keep the existing stick and its 14 GB of state
+- Do not touch the internal SSD or its EFI partition
+- Accept **no kernel upgrades** for the life of this install
+- Reduce writes so the slow flash stops being the bottleneck
+
+Goal of the change set: **fewer writes, more headroom, closed ports, real backups.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 5 — What changed
+
+---
+
+### 🧾 The applied change set
+
+| Change | Before | After |
+| --- | --- | --- |
+| journald | persistent file | volatile, 64 MB cap |
+| `vm.swappiness` | 60 | 150 |
+| zram size | 3.0 GB | `ram` (~5.6 GB, next boot) |
+| kernel packages | auto-upgrade | held |
+| Firefox | disk cache on | RAM cache, VAAPI on |
+| ufw | inactive | deny incoming, 22 rate-limited |
+| fstrim.timer | enabled | verified, unchanged |
+
+Every item reversible; nothing touched the internal disk.
+
+---
+
+### ✍️ Fewer writes: the three big ones
+
+- **journald → volatile**: logs now live in `/run`, capped at 64 MB. Previously every log line was a write to flash.
+- **Firefox → RAM cache**: `browser.cache.disk.enable=false`, 256 MB memory cache, tab unloading on low memory, VAAPI + WebRender on.
+- **Kernel meta held**: `linux-image-generic` and `linux-headers-generic` pinned, so apt stops downloading images casper can never boot.
+
+Skipped, deliberately: `packagekit` is D-Bus-activated (masking breaks update notifications) and `mlocate` is not installed.
+
+---
+
+### 📈 More headroom: sizing zram
+
+$$\text{zram}_{\text{physical}} \approx \frac{\text{zram}_{\text{logical}}}{\rho}, \qquad \rho \in [2, 3]$$
+
+- logical size set to `ram` (5.6 GB), zstd compression
+- physical cost typically 2–3 GB, which fits
+- swappiness 150 tells the kernel to prefer compression over dropping cache
+
+**Not applied live.** Resizing needs `swapoff` on 600 MB of in-use swap with no disk fallback — an OOM risk under Firefox + opencode. It applies at next boot.
+
+---
+
+### 🔒 Closed ports, honestly
+
+```
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw delete allow OpenSSH
+sudo ufw limit 22/tcp
+sudo ufw --force enable
+```
+
+Result: only `22/tcp LIMIT IN` remains, IPv4 and IPv6.
+
+Kept rather than deleted, because the rules looked deliberate — but rate-limited, and the remaining root exposure is the passwordless sudo, which still needs `sudo passwd`.
+
+---
+
+### 🧰 Backups with guardrails
+
+`~/backup-live.sh` refuses to be useless:
+
+- exits if the target is on the **same device** as `/`
+- space-checks against the actual size of `/`
+- excludes `/proc`, `/sys`, `/dev`, `/run`, `/tmp`, `/media`, `/snap`
+- supports `--dry-run`
+
+```
+./backup-live.sh --dry-run /media/lubuntu/extdisk
+./backup-live.sh /media/lubuntu/extdisk
+```
+
+Target must be an external disk or network share.
+
+---
+
+### 🔎 Verification snapshot
+
+| Check | Value |
+| --- | --- |
+| journald path | `/run/log/journal` (volatile) |
+| swappiness | 150 |
+| zram now / next | 3.0 GB / `ram` |
+| held packages | linux-image-generic, linux-headers-generic |
+| ufw | active, 22 LIMIT only |
+| Firefox user.js | 5 prefs |
+| fstrim.timer | enabled |
+| backup script | syntax OK, executable |
+
+Every change confirmed in the live system. The changes are sound — but they do not make this a workstation.
+
+---
+
+class: nord-light, middle, center
+
+## Part 6 — What it's for
+
+---
+
+### 🧱 The four hard ceilings
+
+| Ceiling | Reality | Upgradeable? |
+| --- | --- | --- |
+| CPU | 2 cores / 2 threads, 1.1 GHz base | no |
+| RAM | ~6 GB usable, LPDDR4 | **no — soldered** |
+| Writes | 5.9 MB/s nano flash stick | only by changing media |
+| Screen | 1366 × 768 | external monitor, yes |
+
+Network is fine (1170 Mbit/s link). Battery is healthy (29.6 Wh, full design capacity).
+
+Of the four ceilings, only the screen is worth spending on.
+
+---
+
+### 🎯 Best use: a thin client, not a workstation
+
+The right workload has its bottleneck in the network and in your eyes, not in the CPU or the disk.
+
+| Rank | Use | Why it fits |
+| --- | --- | --- |
+| 1 | Remote workspace over SSH / tmux | a thin client writes almost nothing locally |
+| 2 | Authoring and reference | slides, Markdown, PDFs, commits |
+| 3 | Rescue and teaching kit | what casper is genuinely good at |
+| 4 | Light always-on service | fine on 2 cores — after a real install |
+| 5 | Second screen | docs, chat, dashboards |
+
+**Not here:** local C++ or Rust builds, Docker, local LLMs, 40-tab browsing, video editing, 4K.
+
+---
+
+### 🔧 Two upgrades that actually help
+
+CPU, RAM and flash are locked, so spend where it changes the experience:
+
+- **An external 1080p monitor (~USD 80)** — 768 px of vertical space is the most limiting part of daily use
+- **A real host for heavy work**
+  - a used N100 mini PC (~USD 150): ~4x the multicore throughput, 16 GB RAM, NVMe
+  - or **WSL2** on the existing Windows install, if it is 10 or 11: real Linux, fast storage, zero partitioning
+
+The stick then retires from daily duty to rescue duty.
+
+---
+
+class: nord-dark, middle, center
+
+## The verdict
+
+### Keep it as a quiet, portable SSH-and-writing terminal
+
+External monitor. Compilers on a real host.
+The USB stick back in the drawer, as a rescue kit.
+
+---
+
+### 🎓 Seven lessons
+
+1. **Measure the bottleneck.** "USB is slow" was wrong; this drive writes at 5.9 MB/s.
+2. **A live session can silently skip kernel security updates** — and report success.
+3. **`ufw enable` does not clear pre-existing allows.** Enabling is not closing.
+4. **App-profile rules and port rules are different objects.** Delete the one that matches.
+5. **Resize zram at boot, not under load.** No disk swap means no undo.
+6. **A backup on the same device is not a backup.** Check the device, not the path.
+7. **Match the workload to the bottleneck.** On a write-starved 2-core box, a thin client is not a compromise — it is the correct answer.
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+## Q&A
+
+### Questions, objections, and better numbers
+
+The stick still writes at 5.9 MB/s. Pick work where that does not matter.
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>
